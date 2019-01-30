@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Your future depends on your dreams">
+    <meta name="keyword" content="小炒肉, 运维工程师, Jicki, DevOps, Docker, Kubernetes">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          k8s 1.13.1 to kubespray - 小炒肉 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://www.jicki.me/2019/01/30/2018-12-21-k8s-1.13.1-kubespray/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('img/pexels/triangular.jpeg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header">
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#kubernetes" title="kubernetes">kubernetes</a>
+                            
+                              <a class="tag" href="/tags/#docker" title="docker">docker</a>
+                            
+                        </div>
+                        <h1>k8s 1.13.1 to kubespray</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 小炒肉 on
+                            2019-01-30
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">小炒肉</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1><span id="kubernetes-1131">Kubernetes 1.13.1</span></h1>
+<blockquote>
+<p>kubespray Deploy a Production Ready Kubernetes Cluster</p>
+<p>kubespray 利用 Ansible 自动部署 更新 kubernetes 集群</p>
+</blockquote>
+<h2><span id="环境说明">环境说明</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubernetes-1: 192.168.0.247</span><br><span class="line">kubernetes-2: 192.168.0.248</span><br><span class="line">kubernetes-3: 192.168.0.249</span><br></pre></td></tr></table></figure>
+<h2><span id="初始化环境">初始化环境</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl --static set-hostname hostname</span><br><span class="line"></span><br><span class="line">kubernetes-1: 192.168.0.247</span><br><span class="line">kubernetes-2: 192.168.0.248</span><br><span class="line">kubernetes-3: 192.168.0.249</span><br></pre></td></tr></table></figure>
+<h2><span id="配置ssh-key-认证">配置ssh key 认证</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 确保本机也可以 ssh 连接，否则下面部署失败</span><br><span class="line"></span><br><span class="line">ssh-keygen -t rsa -N &quot;&quot;</span><br><span class="line"></span><br><span class="line">ssh-copy-id -i /root/.ssh/id_rsa.pub 192.168.0.247</span><br><span class="line"></span><br><span class="line">ssh-copy-id -i /root/.ssh/id_rsa.pub 192.168.0.248</span><br><span class="line"></span><br><span class="line">ssh-copy-id -i /root/.ssh/id_rsa.pub 192.168.0.249</span><br></pre></td></tr></table></figure>
+<h2><span id="更新内核">更新内核</span></h2>
+<blockquote>
+<p>更新内核为 4.4.x , CentOS 默认为3.10.x</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 导入 Key</span><br><span class="line"></span><br><span class="line">rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 安装 Yum 源</span><br><span class="line"></span><br><span class="line">rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更新 kernel</span><br><span class="line"></span><br><span class="line">yum --enablerepo=elrepo-kernel install -y kernel-lt kernel-lt-devel </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 配置 内核优先</span><br><span class="line"></span><br><span class="line">grub2-set-default 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 重启系统</span><br></pre></td></tr></table></figure>
+<h2><span id="增加内核配置">增加内核配置</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line"># docker</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br></pre></td></tr></table></figure>
+<h1><span id="kubespray">kubespray</span></h1>
+<h2><span id="安装依赖">安装依赖</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 安装 centos 额外的yum源</span><br><span class="line">rpm -ivh https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># make 缓存</span><br><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 安装 git</span><br><span class="line"></span><br><span class="line">yum -y install git</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># ansible 必须 &gt;= 2.7</span><br><span class="line"></span><br><span class="line"># 安装 软件</span><br><span class="line">yum install -y python-pip python34 python-netaddr python34-pip ansible</span><br></pre></td></tr></table></figure>
+<h2><span id="下载源码">下载源码</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># git clone 源码</span><br><span class="line"></span><br><span class="line">cd /opt/</span><br><span class="line"></span><br><span class="line">git clone https://github.com/kubernetes-sigs/kubespray</span><br></pre></td></tr></table></figure>
+<h2><span id="安装-kubespray-依赖">安装 kubespray 依赖</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/kubespray</span><br><span class="line"></span><br><span class="line"># 安装依赖</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Successfully installed MarkupSafe-1.1.0 hvac-0.7.1 jinja2-2.10 netaddr-0.7.19 pbr-5.1.1</span><br></pre></td></tr></table></figure>
+<h2><span id="配置-kubespray">配置 kubespray</span></h2>
+<h3><span id="hosts-配置">hosts 配置</span></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"># 复制一份 自己的配置</span><br><span class="line"></span><br><span class="line">cd /opt/kubespray</span><br><span class="line"></span><br><span class="line">cp -rfp inventory/sample inventory/jicki</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 修改配置 hosts.ini</span><br><span class="line"></span><br><span class="line">cd /opt/kubespray/inventory/jicki</span><br><span class="line"></span><br><span class="line">rm -rf hosts.ini</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vi hosts.ini</span><br><span class="line"></span><br><span class="line">[all]</span><br><span class="line">kubernetes-1 ansible_host=kubernetes-1 ansible_port=32 ip=192.168.0.247 etcd_member_name=etcd1</span><br><span class="line">kubernetes-2 ansible_host=kubernetes-2 ansible_port=32 ip=192.168.0.248 etcd_member_name=etcd2</span><br><span class="line">kubernetes-3 ansible_host=kubernetes-3 ansible_port=32 ip=192.168.0.249 etcd_member_name=etcd3</span><br><span class="line"></span><br><span class="line">[kube-master]</span><br><span class="line">kubernetes-1</span><br><span class="line">kubernetes-2</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">kubernetes-1</span><br><span class="line">kubernetes-2</span><br><span class="line">kubernetes-3</span><br><span class="line"></span><br><span class="line">[kube-node]</span><br><span class="line">kubernetes-2</span><br><span class="line">kubernetes-3</span><br><span class="line"></span><br><span class="line">[k8s-cluster:children]</span><br><span class="line">kube-master</span><br><span class="line">kube-node</span><br><span class="line"></span><br><span class="line">[calico-rr]</span><br></pre></td></tr></table></figure>
+<h3><span id="etcd-配置">etcd 配置</span></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/kubespray/inventory/jicki/group_vars</span><br><span class="line"></span><br><span class="line">rm -rf etcd.yml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vi etcd.yml </span><br><span class="line"></span><br><span class="line">etcd_compaction_retention: 1</span><br><span class="line">#etcd_metrics: basic</span><br><span class="line"># etcd 内存限制 默认 512M</span><br><span class="line">etcd_memory_limit: &quot;2G&quot;</span><br><span class="line"># etcd data 文件大小，默认2G</span><br><span class="line">etcd_quota_backend_bytes: &quot;8G&quot;</span><br><span class="line"># etcd ssl 认证</span><br><span class="line"># etcd_peer_client_auth: true</span><br></pre></td></tr></table></figure>
+<h3><span id="全局配置-allyaml">全局配置 all.yaml</span></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/kubespray/inventory/jicki/group_vars/all</span><br><span class="line"></span><br><span class="line">vi all.yml</span><br><span class="line"></span><br><span class="line"># 修改如下配置:</span><br><span class="line"></span><br><span class="line">loadbalancer_apiserver_localhost: true</span><br><span class="line"></span><br><span class="line"># 加载内核模块，否则 ceph, gfs 等无法挂载客户端</span><br><span class="line">kubelet_load_modules: true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vi docker.yml</span><br><span class="line"></span><br><span class="line"># 修改如下配置: </span><br><span class="line"></span><br><span class="line">docker_daemon_graph: &quot;/opt/docker&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker_registry_mirrors:</span><br><span class="line">   - https://registry.docker-cn.com</span><br><span class="line">   - https://mirror.aliyuncs.com</span><br></pre></td></tr></table></figure>
+<h3><span id="k8s-功能配置">k8s 功能配置</span></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/kubespray/inventory/jicki/group_vars/k8s-cluster</span><br><span class="line"></span><br><span class="line">vi k8s-cluster.yml</span><br><span class="line"></span><br><span class="line"># 按照自己的需求修改</span><br></pre></td></tr></table></figure>
+<h3><span id="修改镜像">修改镜像</span></h3>
+<blockquote>
+<p>默认镜像 从 <a href="http://gcr.io/google-containers" target="_blank" rel="noopener">gcr.io/google-containers</a> 下载, 修改为国内的地址</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 下载国内镜像</span><br><span class="line"></span><br><span class="line">docker pull jicki/kube-proxy:v1.13.1</span><br><span class="line">docker pull jicki/kube-controller-manager:v1.13.1</span><br><span class="line">docker pull jicki/kube-scheduler:v1.13.1</span><br><span class="line">docker pull jicki/kube-apiserver:v1.13.1</span><br><span class="line">docker pull jicki/coredns:1.2.6</span><br><span class="line">docker pull jicki/cluster-proportional-autoscaler-amd64:1.3.0</span><br><span class="line">docker pull jicki/kubernetes-dashboard-amd64:v1.10.0</span><br><span class="line">docker pull jicki/etcd:3.2.24</span><br><span class="line">docker pull jicki/node:v3.1.3</span><br><span class="line">docker pull jicki/ctl:v3.1.3</span><br><span class="line">docker pull jicki/kube-controllers:v3.1.3</span><br><span class="line">docker pull jicki/cni:v3.1.3</span><br><span class="line">docker pull jicki/pause:3.1</span><br><span class="line">docker pull jicki/pause-amd64:3.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 修改下载的url</span><br><span class="line"></span><br><span class="line">inventory/jicki/group_vars/k8s-cluster/k8s-cluster.yml</span><br><span class="line"></span><br><span class="line">kube_image_repo: &quot;gcr.io/google-containers&quot;</span><br><span class="line">修改为</span><br><span class="line">kube_image_repo: &quot;jicki&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sed -i &apos;s/gcr\.io\/google_containers/jicki/g&apos; roles/download/defaults/main.yml</span><br><span class="line">sed -i &apos;s/quay\.io\/coreos/jicki/g&apos; roles/download/defaults/main.yml</span><br><span class="line">sed -i &apos;s/quay\.io\/calico/jicki/g&apos; roles/download/defaults/main.yml</span><br></pre></td></tr></table></figure>
+<h2><span id="安装k8s集群">安装k8s集群</span></h2>
+<blockquote>
+<p>注： 创建集群会需要从 <a href="http://storage.googleapis.com" target="_blank" rel="noopener">storage.googleapis.com</a> 下载 二进制文件 如 kubeadm, hyperkube 等</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/kubespray</span><br><span class="line"></span><br><span class="line">ansible-playbook -i inventory/jicki/hosts.ini --become --become-user=root cluster.yml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PLAY RECAP ****************************************************************************************************************************************************************************************</span><br><span class="line">kubernetes-1               : ok=355  changed=72   unreachable=0    failed=0   </span><br><span class="line">kubernetes-2               : ok=343  changed=70   unreachable=0    failed=0   </span><br><span class="line">kubernetes-3               : ok=285  changed=50   unreachable=0    failed=0   </span><br><span class="line">localhost                  : ok=1    changed=0    unreachable=0    failed=0   </span><br><span class="line"></span><br><span class="line">Friday 21 December 2018  13:48:23 +0800 (0:00:00.059)       0:09:56.520 ******* </span><br><span class="line">=============================================================================== </span><br><span class="line">kubernetes/preinstall : Update package management cache (YUM) ---------------------------------------------------------------------------------------------------------------------------- 108.02s</span><br><span class="line">download : container_download | download images for kubeadm config images ----------------------------------------------------------------------------------------------------------------- 90.71s</span><br><span class="line">bootstrap-os : Install pip for bootstrap -------------------------------------------------------------------------------------------------------------------------------------------------- 46.12s</span><br><span class="line">gather facts from all instances ----------------------------------------------------------------------------------------------------------------------------------------------------------- 26.64s</span><br><span class="line">kubernetes/master : kubeadm | Initialize first master ------------------------------------------------------------------------------------------------------------------------------------- 23.33s</span><br><span class="line">kubernetes/master : kubeadm | Init other uninitialized masters ---------------------------------------------------------------------------------------------------------------------------- 21.14s</span><br><span class="line">etcd : reload etcd ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 10.83s</span><br><span class="line">kubernetes/kubeadm : Restart all kube-proxy pods to ensure that they load the new configmap ------------------------------------------------------------------------------------------------ 9.07s</span><br><span class="line">etcd : wait for etcd up -------------------------------------------------------------------------------------------------------------------------------------------------------------------- 7.29s</span><br><span class="line">etcd : Gen_certs | Write etcd master certs ------------------------------------------------------------------------------------------------------------------------------------------------- 6.76s</span><br><span class="line">kubernetes-apps/ansible : Kubernetes Apps | Start Resources -------------------------------------------------------------------------------------------------------------------------------- 5.10s</span><br><span class="line">etcd : Refresh Time Fact ------------------------------------------------------------------------------------------------------------------------------------------------------------------- 4.52s</span><br><span class="line">container-engine/docker : Ensure old versions of Docker are not installed. | RedHat -------------------------------------------------------------------------------------------------------- 3.91s</span><br><span class="line">kubernetes/master : kubeadm | write out kubeadm certs -------------------------------------------------------------------------------------------------------------------------------------- 3.89s</span><br><span class="line">kubernetes/preinstall : Install packages requirements -------------------------------------------------------------------------------------------------------------------------------------- 3.74s</span><br><span class="line">kubernetes-apps/ansible : Kubernetes Apps | Lay Down CoreDNS Template ---------------------------------------------------------------------------------------------------------------------- 3.50s</span><br><span class="line">network_plugin/calico : Calico | Copy cni plugins ------------------------------------------------------------------------------------------------------------------------------------------ 3.09s</span><br><span class="line">etcd : Gen_certs | Gather etcd master certs ------------------------------------------------------------------------------------------------------------------------------------------------ 2.54s</span><br><span class="line">kubernetes-apps/network_plugin/calico : Start Calico resources ----------------------------------------------------------------------------------------------------------------------------- 2.51s</span><br><span class="line">container-engine/docker : ensure docker packages are installed ----------------------------------------------------------------------------------------------------------------------------- 2.08s</span><br></pre></td></tr></table></figure>
+<h2><span id="验证k8s集群">验证k8s集群</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"># 查看集群状态</span><br><span class="line"></span><br><span class="line">[root@kubernetes-1 ~]# kubectl get nodes -o wide</span><br><span class="line">NAME           STATUS   ROLES         AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION                CONTAINER-RUNTIME</span><br><span class="line">kubernetes-1   Ready    master        20m   v1.13.1   192.168.0.247   &lt;none&gt;        CentOS Linux 7 (Core)   4.4.168-1.el7.elrepo.x86_64   docker://18.6.1</span><br><span class="line">kubernetes-2   Ready    master,node   19m   v1.13.1   192.168.0.248   &lt;none&gt;        CentOS Linux 7 (Core)   4.4.168-1.el7.elrepo.x86_64   docker://18.6.1</span><br><span class="line">kubernetes-3   Ready    node          19m   v1.13.1   192.168.0.249   &lt;none&gt;        CentOS Linux 7 (Core)   4.4.168-1.el7.elrepo.x86_64   docker://18.6.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看集群组件</span><br><span class="line"></span><br><span class="line">[root@kubernetes-1 ~]# kubectl get all --all-namespaces</span><br><span class="line">NAMESPACE     NAME                                           READY   STATUS    RESTARTS   AGE</span><br><span class="line">kube-system   pod/calico-kube-controllers-7c499f67b4-tldlj   1/1     Running   0          18m</span><br><span class="line">kube-system   pod/calico-node-6psl6                          1/1     Running   0          18m</span><br><span class="line">kube-system   pod/calico-node-dh5rv                          1/1     Running   0          18m</span><br><span class="line">kube-system   pod/calico-node-mhb2m                          1/1     Running   0          18m</span><br><span class="line">kube-system   pod/coredns-6fd7dbf94c-vvf5h                   1/1     Running   0          18m</span><br><span class="line">kube-system   pod/coredns-6fd7dbf94c-zns9w                   1/1     Running   0          17m</span><br><span class="line">kube-system   pod/dns-autoscaler-5b547856bc-t6brh            1/1     Running   0          17m</span><br><span class="line">kube-system   pod/kube-apiserver-kubernetes-1                1/1     Running   0          19m</span><br><span class="line">kube-system   pod/kube-apiserver-kubernetes-2                1/1     Running   0          19m</span><br><span class="line">kube-system   pod/kube-controller-manager-kubernetes-1       1/1     Running   0          19m</span><br><span class="line">kube-system   pod/kube-controller-manager-kubernetes-2       1/1     Running   0          19m</span><br><span class="line">kube-system   pod/kube-proxy-dgt8r                           1/1     Running   0          17m</span><br><span class="line">kube-system   pod/kube-proxy-skmf9                           1/1     Running   0          18m</span><br><span class="line">kube-system   pod/kube-proxy-wj584                           1/1     Running   0          17m</span><br><span class="line">kube-system   pod/kube-scheduler-kubernetes-1                1/1     Running   0          19m</span><br><span class="line">kube-system   pod/kube-scheduler-kubernetes-2                1/1     Running   0          19m</span><br><span class="line">kube-system   pod/kubernetes-dashboard-d7978b5cc-2s8bw       1/1     Running   0          17m</span><br><span class="line">kube-system   pod/nginx-proxy-kubernetes-3                   1/1     Running   0          19m</span><br><span class="line"></span><br><span class="line">NAMESPACE     NAME                           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                  AGE</span><br><span class="line">default       service/kubernetes             ClusterIP   10.233.0.1     &lt;none&gt;        443/TCP                  20m</span><br><span class="line">kube-system   service/coredns                ClusterIP   10.233.0.3     &lt;none&gt;        53/UDP,53/TCP,9153/TCP   18m</span><br><span class="line">kube-system   service/kubernetes-dashboard   ClusterIP   10.233.47.27   &lt;none&gt;        443/TCP                  17m</span><br><span class="line"></span><br><span class="line">NAMESPACE     NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR                 AGE</span><br><span class="line">kube-system   daemonset.apps/calico-node   3         3         3       3            3           &lt;none&gt;                        18m</span><br><span class="line">kube-system   daemonset.apps/kube-proxy    3         3         3       3            3           beta.kubernetes.io/os=linux   20m</span><br><span class="line"></span><br><span class="line">NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           18m</span><br><span class="line">kube-system   deployment.apps/coredns                   2/2     2            2           18m</span><br><span class="line">kube-system   deployment.apps/dns-autoscaler            1/1     1            1           17m</span><br><span class="line">kube-system   deployment.apps/kubernetes-dashboard      1/1     1            1           17m</span><br><span class="line"></span><br><span class="line">NAMESPACE     NAME                                                 DESIRED   CURRENT   READY   AGE</span><br><span class="line">kube-system   replicaset.apps/calico-kube-controllers-7c499f67b4   1         1         1       18m</span><br><span class="line">kube-system   replicaset.apps/coredns-6fd7dbf94c                   2         2         2       18m</span><br><span class="line">kube-system   replicaset.apps/dns-autoscaler-5b547856bc            1         1         1       17m</span><br><span class="line">kube-system   replicaset.apps/kubernetes-dashboard-d7978b5cc       1         1         1       17m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看 ipvs</span><br><span class="line"></span><br><span class="line">[root@kubernetes-1 ~]# ipvsadm -L -n</span><br><span class="line">IP Virtual Server version 1.2.1 (size=4096)</span><br><span class="line">Prot LocalAddress:Port Scheduler Flags</span><br><span class="line">  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br><span class="line">TCP  10.233.0.1:443 rr</span><br><span class="line">  -&gt; 192.168.0.247:6443           Masq    1      0          0         </span><br><span class="line">  -&gt; 192.168.0.248:6443           Masq    1      0          0         </span><br><span class="line">TCP  10.233.0.3:53 rr</span><br><span class="line">  -&gt; 10.233.90.131:53             Masq    1      0          0         </span><br><span class="line">  -&gt; 10.233.101.2:53              Masq    1      0          0         </span><br><span class="line">TCP  10.233.0.3:9153 rr</span><br><span class="line">  -&gt; 10.233.90.131:9153           Masq    1      0          0         </span><br><span class="line">  -&gt; 10.233.101.2:9153            Masq    1      0          0         </span><br><span class="line">TCP  10.233.47.27:443 rr</span><br><span class="line">  -&gt; 10.233.101.1:8443            Masq    1      0          0         </span><br><span class="line">UDP  10.233.0.3:53 rr</span><br><span class="line">  -&gt; 10.233.90.131:53             Masq    1      0          0         </span><br><span class="line">  -&gt; 10.233.101.2:53              Masq    1      0          0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个 deplpyment</span><br><span class="line"></span><br><span class="line">vi nginx-deployment.yaml </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment </span><br><span class="line">metadata: </span><br><span class="line">  name: nginx-dm</span><br><span class="line">spec: </span><br><span class="line">  replicas: 3</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      name: nginx</span><br><span class="line">  template: </span><br><span class="line">    metadata: </span><br><span class="line">      labels: </span><br><span class="line">        name: nginx </span><br><span class="line">    spec: </span><br><span class="line">      containers: </span><br><span class="line">        - name: nginx </span><br><span class="line">          image: nginx:alpine </span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          ports:</span><br><span class="line">            - containerPort: 80</span><br><span class="line">              name: http</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service</span><br><span class="line">metadata: </span><br><span class="line">  name: nginx-svc </span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - port: 80</span><br><span class="line">      name: http</span><br><span class="line">      targetPort: 80</span><br><span class="line">      protocol: TCP </span><br><span class="line">  selector: </span><br><span class="line">    name: nginx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-1 ~]# kubectl apply -f nginx-deployment.yaml </span><br><span class="line">deployment.apps/nginx-dm created</span><br><span class="line">service/nginx-svc created</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@kubernetes-1 ~]# kubectl get pods -o wide</span><br><span class="line">NAME                        READY   STATUS    RESTARTS   AGE   IP              NODE           NOMINATED NODE   READINESS GATES</span><br><span class="line">nginx-dm-799879696c-5g9m6   1/1     Running   0          20s   10.233.90.133   kubernetes-2   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">nginx-dm-799879696c-b7htm   1/1     Running   0          20s   10.233.101.4    kubernetes-3   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">nginx-dm-799879696c-hzjfm   1/1     Running   0          20s   10.233.101.3    kubernetes-3   &lt;none&gt;           &lt;none&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@kubernetes-1 ~]# kubectl get svc -o wide    </span><br><span class="line">NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE   SELECTOR</span><br><span class="line">kubernetes   ClusterIP   10.233.0.1     &lt;none&gt;        443/TCP   23m   &lt;none&gt;</span><br><span class="line">nginx-svc    ClusterIP   10.233.42.25   &lt;none&gt;        80/TCP    26s   name=nginx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-1 ~]# ipvsadm -L -n</span><br><span class="line">IP Virtual Server version 1.2.1 (size=4096)</span><br><span class="line">Prot LocalAddress:Port Scheduler Flags</span><br><span class="line">  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br><span class="line">TCP  10.233.0.1:443 rr</span><br><span class="line">  -&gt; 192.168.0.247:6443           Masq    1      0          0         </span><br><span class="line">  -&gt; 192.168.0.248:6443           Masq    1      0          0         </span><br><span class="line">TCP  10.233.0.3:53 rr</span><br><span class="line">  -&gt; 10.233.90.131:53             Masq    1      0          0         </span><br><span class="line">  -&gt; 10.233.101.2:53              Masq    1      0          0         </span><br><span class="line">TCP  10.233.0.3:9153 rr</span><br><span class="line">  -&gt; 10.233.90.131:9153           Masq    1      0          0         </span><br><span class="line">  -&gt; 10.233.101.2:9153            Masq    1      0          0         </span><br><span class="line">TCP  10.233.42.25:80 rr</span><br><span class="line">  -&gt; 10.233.90.133:80             Masq    1      0          1         </span><br><span class="line">  -&gt; 10.233.101.3:80              Masq    1      0          0         </span><br><span class="line">  -&gt; 10.233.101.4:80              Masq    1      0          1         </span><br><span class="line">TCP  10.233.47.27:443 rr</span><br><span class="line">  -&gt; 10.233.101.1:8443            Masq    1      0          0         </span><br><span class="line">UDP  10.233.0.3:53 rr</span><br><span class="line">  -&gt; 10.233.90.131:53             Masq    1      0          0         </span><br><span class="line">  -&gt; 10.233.101.2:53              Masq    1      0          0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@kubernetes-1 ~]# curl -I http://10.233.42.25</span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Server: nginx/1.15.7</span><br><span class="line">Date: Fri, 21 Dec 2018 06:10:48 GMT</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Content-Length: 612</span><br><span class="line">Last-Modified: Tue, 27 Nov 2018 22:24:28 GMT</span><br><span class="line">Connection: keep-alive</span><br><span class="line">ETag: &quot;5bfdc41c-264&quot;</span><br><span class="line">Accept-Ranges: bytes</span><br></pre></td></tr></table></figure>
+<h1><span id="upgrades-版本">upgrades 版本</span></h1>
+<blockquote>
+<p>优雅更新 版本</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin</span><br><span class="line">git checkout origin/master</span><br><span class="line"></span><br><span class="line">ansible-playbook -i inventory/jicki/hosts.ini --become --become-user=root upgrade-cluster.yml -e kube_version=v1.13.2</span><br></pre></td></tr></table></figure>
+<h1><span id="faq-问题">FAQ 问题</span></h1>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># FAQ 1:</span><br><span class="line"></span><br><span class="line">TASK [download : file_download | Download item] ***************************************************************************************************************************************************</span><br><span class="line">Friday 21 December 2018  10:37:05 +0800 (0:00:00.250)       0:03:05.805 ******* </span><br><span class="line">FAILED - RETRYING: file_download | Download item (4 retries left).</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 多试几次~ 国内~是真的没办法, 国内网络一时可以一时不行，取决于它解析的IP</span><br><span class="line"></span><br><span class="line"># 或者去其他地方下载了放过去</span><br><span class="line"></span><br><span class="line">分别是:</span><br><span class="line"></span><br><span class="line">https://storage.googleapis.com/kubernetes-release/release/v1.13.1/bin/linux/amd64/hyperkube</span><br><span class="line"></span><br><span class="line">https://storage.googleapis.com/kubernetes-release/release/v1.13.1/bin/linux/amd64/kubeadm</span><br><span class="line"></span><br><span class="line">https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz</span><br><span class="line"></span><br><span class="line"># 下载到 所有服务器的  /tmp/releases 目录下</span><br><span class="line"></span><br><span class="line"># 并且授权 执行权限 </span><br><span class="line"></span><br><span class="line">chmod +x hyperkube kubeadm cni-plugins-amd64-v0.6.0.tgz</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># 懒人~做法~人就是要懒，不想写脚本</span><br><span class="line"></span><br><span class="line">echo &quot;pull images&quot;</span><br><span class="line"></span><br><span class="line">docker pull gcr.io/google-containers/kube-proxy:v1.13.2</span><br><span class="line">docker pull gcr.io/google-containers/kube-controller-manager:v1.13.2</span><br><span class="line">docker pull gcr.io/google-containers/kube-scheduler:v1.13.2</span><br><span class="line">docker pull gcr.io/google-containers/kube-apiserver:v1.13.2</span><br><span class="line">docker pull gcr.io/google-containers/kubernetes-dashboard-amd64:v1.10.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &quot;tag images&quot;</span><br><span class="line"></span><br><span class="line">docker tag gcr.io/google-containers/kube-proxy:v1.13.2 jicki/kube-proxy:v1.13.2</span><br><span class="line">docker tag gcr.io/google-containers/kube-controller-manager:v1.13.2 jicki/kube-controller-manager:v1.13.2</span><br><span class="line">docker tag gcr.io/google-containers/kube-scheduler:v1.13.2 jicki/kube-scheduler:v1.13.2</span><br><span class="line">docker tag gcr.io/google-containers/kube-apiserver:v1.13.2 jicki/kube-apiserver:v1.13.2</span><br><span class="line">docker tag gcr.io/google-containers/kubernetes-dashboard-amd64:v1.10.1 jicki/kubernetes-dashboard-amd64:v1.10.1</span><br><span class="line"></span><br><span class="line">echo &quot;push images&quot;</span><br><span class="line"></span><br><span class="line">docker push jicki/kube-proxy:v1.13.2</span><br><span class="line">docker push jicki/kube-controller-manager:v1.13.2</span><br><span class="line">docker push jicki/kube-scheduler:v1.13.2</span><br><span class="line">docker push jicki/kube-apiserver:v1.13.2</span><br><span class="line">docker push jicki/kubernetes-dashboard-amd64:v1.10.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo &quot;rmi images&quot;</span><br><span class="line"></span><br><span class="line">docker rmi jicki/kube-proxy:v1.13.2</span><br><span class="line">docker rmi jicki/kube-controller-manager:v1.13.2</span><br><span class="line">docker rmi jicki/kube-scheduler:v1.13.2</span><br><span class="line">docker rmi jicki/kube-apiserver:v1.13.2</span><br><span class="line">docker rmi jicki/kubernetes-dashboard-amd64:v1.10.1</span><br><span class="line"></span><br><span class="line">docker rmi gcr.io/google-containers/kube-proxy:v1.13.2</span><br><span class="line">docker rmi gcr.io/google-containers/kube-controller-manager:v1.13.2</span><br><span class="line">docker rmi gcr.io/google-containers/kube-scheduler:v1.13.2</span><br><span class="line">docker rmi gcr.io/google-containers/kube-apiserver:v1.13.2</span><br><span class="line">docker rmi gcr.io/google-containers/kubernetes-dashboard-amd64:v1.10.1</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/01/30/template/" data-toggle="tooltip" data-placement="top" title="template page">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/01/30/2018-12-07-helm/" data-toggle="tooltip" data-placement="top" title="helm 包管理">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share" data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Kubernetes 1.13.1</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">环境说明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">初始化环境</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">配置ssh key 认证</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">更新内核</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">增加内核配置</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">kubespray</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">安装依赖</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">下载源码</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">安装 kubespray 依赖</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">配置 kubespray</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.1.</span> <span class="toc-nav-text">hosts 配置</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.2.</span> <span class="toc-nav-text">etcd 配置</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.3.</span> <span class="toc-nav-text">全局配置 all.yaml</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.4.</span> <span class="toc-nav-text">k8s 功能配置</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.5.</span> <span class="toc-nav-text">修改镜像</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">安装k8s集群</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">验证k8s集群</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">upgrades 版本</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">FAQ 问题</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#kubernetes" title="kubernetes">kubernetes</a>
+                        
+                          <a class="tag" href="/tags/#docker" title="docker">docker</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://www.jicki.me" target="_blank">小炒肉</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "jicki";
+    var disqus_identifier = "https://www.jicki.me/2019/01/30/2018-12-21-k8s-1.13.1-kubespray/";
+    var disqus_url = "https://www.jicki.me/2019/01/30/2018-12-21-k8s-1.13.1-kubespray/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/jicki234">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/jicki520">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 小炒肉 2019 
+                    <br>
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.jicki.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-85602329-1';
+    var _gaDomain = 'jicki.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '1b38b88e4559c6725330b8c3328e2de3';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://www.jicki.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Your future depends on your dreams">
+    <meta name="keyword" content="小炒肉, 运维工程师, Jicki, DevOps, Docker, Kubernetes">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Python 学习之路 - 小炒肉 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://www.jicki.me/2019/01/30/2016-12-01-Python-Learning/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('img/pexels/triangular.jpeg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header">
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                        </div>
+                        <h1>Python 学习之路</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 小炒肉 on
+                            2019-01-30
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">小炒肉</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>Python 学习之路，Python 学习笔记</p>
+</blockquote>
+<h1><span id="python-logging-日志模块">Python Logging 日志模块</span></h1>
+<h2><span id="屏幕与文件输出">屏幕与文件输出</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">import logging</span><br><span class="line"> </span><br><span class="line"># 创建一个 logging 对象, TEST-LOG 为定义这个LOG的 name  [ %(name)s ]</span><br><span class="line">logger = logging.getLogger(&apos;TEST-LOG&apos;)</span><br><span class="line"># 设置日志 级别为 DEBUG, 全局日志 级别 全局级别 优先级高</span><br><span class="line">logger.setLevel(logging.DEBUG)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 创建一个 用于 屏幕输出 的 StreamHandeler</span><br><span class="line">ch = logging.StreamHandler()</span><br><span class="line"># 设置日志 级别为 DEBUG</span><br><span class="line">ch.setLevel(logging.DEBUG)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 创建一个 用于 文件输出 的 FileHandler, 并输出到 access.log 文件</span><br><span class="line">fh = logging.FileHandler(&quot;access.log&quot;)</span><br><span class="line"># 设置日志 级别为 WARNING</span><br><span class="line">fh.setLevel(logging.WARNING)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 创建一个 日志格式 Formatter (</span><br><span class="line">formatter = logging.Formatter(&apos;%(asctime)s - %(name)s - %(levelname)s - %(message)s&apos;)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 让 屏幕输出，与 文件输出 都按照 formatter 这个格式生成</span><br><span class="line">ch.setFormatter(formatter)</span><br><span class="line">fh.setFormatter(formatter)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># 讲 StreamHandeler 与 FileHandler 添加到 logger 这个对象中。</span><br><span class="line">logger.addHandler(ch)</span><br><span class="line">logger.addHandler(fh)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"># &apos;application&apos; code</span><br><span class="line">logger.debug(&apos;debug message&apos;)</span><br><span class="line">logger.info(&apos;info message&apos;)</span><br><span class="line">logger.warn(&apos;warn message&apos;)</span><br><span class="line">logger.error(&apos;error message&apos;)</span><br><span class="line">logger.critical(&apos;critical message&apos;)</span><br></pre></td></tr></table></figure>
+<h2><span id="日志文件-轮转">日志文件 轮转</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import logging</span><br><span class="line"></span><br><span class="line"> from logging.handlers import RotatingFileHandler</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> #定义一个RotatingFileHandler，最多备份5个日志文件，每个日志文件最大10M</span><br><span class="line"></span><br><span class="line"> Rthandler = RotatingFileHandler(&apos;myapp.log&apos;, maxBytes=10*1024*1024,backupCount=5)</span><br><span class="line"></span><br><span class="line"> Rthandler.setLevel(logging.INFO)</span><br><span class="line"></span><br><span class="line"> formatter = logging.Formatter(&apos;%(name)-12s: %(levelname)-8s %(message)s&apos;)</span><br><span class="line"></span><br><span class="line"> Rthandler.setFormatter(formatter)</span><br><span class="line"></span><br><span class="line"> logging.getLogger(&apos;&apos;).addHandler(Rthandler)</span><br></pre></td></tr></table></figure>
+<h2><span id="handle方法">handle方法</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">logging.StreamHandler: 日志输出到流，可以是sys.stderr、sys.stdout或者文件</span><br><span class="line"></span><br><span class="line">logging.FileHandler: 日志输出到文件</span><br><span class="line"></span><br><span class="line">日志回滚方式，实际使用时用RotatingFileHandler和TimedRotatingFileHandler</span><br><span class="line"></span><br><span class="line">logging.handlers.BaseRotatingHandler</span><br><span class="line"></span><br><span class="line">logging.handlers.RotatingFileHandler</span><br><span class="line"></span><br><span class="line">logging.handlers.TimedRotatingFileHandler</span><br><span class="line"></span><br><span class="line">logging.handlers.SocketHandler: 远程输出日志到TCP/IP sockets</span><br><span class="line"></span><br><span class="line">logging.handlers.DatagramHandler:  远程输出日志到UDP sockets</span><br><span class="line"></span><br><span class="line">logging.handlers.SMTPHandler:  远程输出日志到邮件地址</span><br><span class="line"></span><br><span class="line">logging.handlers.SysLogHandler: 日志输出到syslog</span><br><span class="line"></span><br><span class="line">logging.handlers.NTEventLogHandler: 远程输出日志到Windows NT/2000/XP的事件日志</span><br><span class="line"></span><br><span class="line">logging.handlers.MemoryHandler: 日志输出到内存中的制定buffer</span><br><span class="line"></span><br><span class="line">logging.handlers.HTTPHandler: 通过&quot;GET&quot;或&quot;POST&quot;远程输出到HTTP服务器</span><br></pre></td></tr></table></figure>
+<h1><span id="python-面相对象编程">Python 面相对象编程</span></h1>
+<h2><span id="类的-实例化">类的 实例化</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 把一个抽象的类变成一个具体的对象的过程， 叫实例化。</span><br><span class="line"></span><br><span class="line">class Role(object):</span><br><span class="line">    def __init__(self,name,role,weapon,life):</span><br><span class="line">        self.name = name</span><br><span class="line">        self.role = role</span><br><span class="line">        self.weapon = weapon</span><br><span class="line">        self.life = life</span><br><span class="line"></span><br><span class="line">    def buy_weapon(self,weapon):</span><br><span class="line">        self.weapon = weapon</span><br><span class="line">        print(&quot;[%s] buy weapon [%s]&quot; %(self.name,weapon))</span><br><span class="line"></span><br><span class="line">    def info(self):</span><br><span class="line">        print(&apos;&apos;&apos;</span><br><span class="line">        ------个人信息-------</span><br><span class="line">            姓名：%s</span><br><span class="line">            身份：%s</span><br><span class="line">            武器：%s</span><br><span class="line">            生命：%s</span><br><span class="line">        ---------------------</span><br><span class="line">        &apos;&apos;&apos; %(self.name,self.role,self.weapon,self.life))</span><br><span class="line"></span><br><span class="line">p1 = Role(&apos;jicki&apos;,&apos;警察&apos;,&apos;手枪&apos;,100)</span><br><span class="line">p2 = Role(&apos;luck&apos;,&apos;匪徒&apos;,&apos;机关枪&apos;,100)</span><br><span class="line">p1.info()</span><br><span class="line">p2.info()</span><br><span class="line">p1.buy_weapon(&apos;AK47&apos;)</span><br><span class="line">p2.buy_weapon(&apos;狙击枪&apos;)</span><br><span class="line">p1.info()</span><br><span class="line">p2.info()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">打印结果：</span><br><span class="line">------个人信息-------</span><br><span class="line">姓名：jicki</span><br><span class="line">身份：警察</span><br><span class="line">武器：手枪</span><br><span class="line">生命：100</span><br><span class="line">---------------------</span><br><span class="line"></span><br><span class="line">------个人信息-------</span><br><span class="line">姓名：luck</span><br><span class="line">身份：匪徒</span><br><span class="line">武器：机关枪</span><br><span class="line">生命：100</span><br><span class="line">---------------------</span><br><span class="line"></span><br><span class="line">[jicki] buy weapon [AK47]</span><br><span class="line">[luck] buy weapon [狙击枪]</span><br><span class="line"></span><br><span class="line">------个人信息-------</span><br><span class="line">姓名：jicki</span><br><span class="line">身份：警察</span><br><span class="line">武器：AK47</span><br><span class="line">生命：100</span><br><span class="line">---------------------</span><br><span class="line"></span><br><span class="line">------个人信息-------</span><br><span class="line">姓名：luck</span><br><span class="line">身份：匪徒</span><br><span class="line">武器：狙击枪</span><br><span class="line">生命：100</span><br><span class="line">---------------------</span><br></pre></td></tr></table></figure>
+<h2><span id="类的继承">类的继承</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class ShoolMember(object):</span><br><span class="line">    def __init__(self,name,age,sex):</span><br><span class="line">        self.name = name</span><br><span class="line">        self.age = age</span><br><span class="line">        self.sex = sex</span><br><span class="line">        self.enroll()</span><br><span class="line"></span><br><span class="line">    def enroll(self):</span><br><span class="line">        print(&quot;[%s] 加入了学校&quot; %self.name)</span><br><span class="line"></span><br><span class="line">    def tell(self):                            # 所有类 公有方法</span><br><span class="line">        print(&quot;大家好，我的名字叫[%s]&quot; %self.name)</span><br><span class="line"></span><br><span class="line">class Teacher(ShoolMember):       #继承了 ShoolMember 类</span><br><span class="line">    def __init__(self,name,age,sex,coures,salary):    # 重写 ShoolMember 父类的构造方法__init__</span><br><span class="line">        super(Teacher,self).__init__(name,age,sex)    # 新式类 的继承，继承了父类的__init__</span><br><span class="line">        self.coures = coures</span><br><span class="line">        self.salary = salary</span><br><span class="line"></span><br><span class="line">    def teaching(self):                              # Tenacher 类 私有方法</span><br><span class="line">        print(&quot;[%s] 是教 [%s] 课程&quot; %(self.name,self.coures))</span><br><span class="line"></span><br><span class="line">class Student(ShoolMember):    #继承 ShoolMember 类</span><br><span class="line">    def __init__(self,name,age,sex,coures,tuition):    # 重写 ShoolMember 父类的构造方法__init__</span><br><span class="line">        super(Student,self).__init__(name,age,sex)     # 新式类 的继承，继承了父类的__init__</span><br><span class="line">        self.coures = coures</span><br><span class="line">        self.tuition = tuition</span><br><span class="line"></span><br><span class="line">    def pay_tuition(self):                           # Student 类 私有方法</span><br><span class="line">        print(&quot;[%s] 学习 [%s] 课程交了 [%s] 学费&quot; %(self.name,self.coures,self.tuition))</span><br><span class="line"></span><br><span class="line"># 实例化</span><br><span class="line">t1 = Teacher(&quot;alax&quot;,22,&apos;F&apos;,&apos;Python&apos;,10000)</span><br><span class="line">t2 = Teacher(&apos;wupeiqi&apos;,23,&apos;F&apos;,&apos;Python&apos;,10000)</span><br><span class="line">s1 = Student(&apos;jicki&apos;,22,&apos;F&apos;,&apos;Python&apos;,6000)</span><br><span class="line"></span><br><span class="line">t1.teaching()       # 调用 Teacher 私有方法</span><br><span class="line">s1.pay_tuition()    # 调用 Student 私有方法</span><br><span class="line"></span><br><span class="line">t1.tell()     # 调用共用 方法</span><br><span class="line">s1.tell()     # 调用共用 方法</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出结果：</span><br><span class="line">[alax] 加入了学校</span><br><span class="line">[wupeiqi] 加入了学校</span><br><span class="line">[jicki] 加入了学校</span><br><span class="line">[alax] 是教 [Python] 课程</span><br><span class="line">[jicki] 学习 [Python] 课程交了 [6000] 学费</span><br><span class="line">大家好，我的名字叫[alax]</span><br><span class="line">大家好，我的名字叫[jicki]</span><br></pre></td></tr></table></figure>
+<h2><span id="多态">多态</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Python 多态：</span><br><span class="line">    多态性 允许子类类型的指针赋值给父类类型的指针。</span><br><span class="line">    多态的作用是什么？  </span><br><span class="line">    我们知道，封装可以隐藏实现细节，使的代码模块化；</span><br><span class="line">    继承可以扩展已存在的代码模块（类）；</span><br><span class="line">    封装与继承的目的都是为了 代码重用。</span><br><span class="line">    而多态则是为了实现 接口重用，多态的作用就是为了类的继承和派生的时候，保证能使用类的成员中任意类的实例的某一属性时的正确调用。</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">Python 是不支持多态的，可以使用如下方法实现：</span><br><span class="line"></span><br><span class="line">class Animal(object):</span><br><span class="line">    def __init__(self,name):</span><br><span class="line">        self.name = name</span><br><span class="line">        </span><br><span class="line">    def talk(self):</span><br><span class="line">        raise NotImplementedError(&quot;Subclass must implement&quot;)</span><br><span class="line">        </span><br><span class="line">class Cat(Animal):</span><br><span class="line">    def talk(self):</span><br><span class="line">        return &apos;miao, miao !&apos;</span><br><span class="line">        </span><br><span class="line">class Dog(Animal):</span><br><span class="line">    def talk(self):</span><br><span class="line">        return &apos;wang wang !&apos;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">def animal_talk(obj):</span><br><span class="line">    print(obj.talk())</span><br><span class="line">    </span><br><span class="line">d = Dog(&quot;WangCai&quot;)</span><br><span class="line">c = Cat(&quot;BoSi&quot;)</span><br><span class="line"></span><br><span class="line">animal_talk(c)</span><br><span class="line">animal_talk(d)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出结果：</span><br><span class="line">miao, miao !</span><br><span class="line">wang wang !</span><br></pre></td></tr></table></figure>
+<h1><span id="python-反射">Python 反射</span></h1>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">class WebServer(object):</span><br><span class="line">    def __init__(self,host,port):</span><br><span class="line">        self.host = host</span><br><span class="line">        self.port = port</span><br><span class="line"></span><br><span class="line">    def start(self):</span><br><span class="line">        print(&apos;service start.....&apos;)</span><br><span class="line"></span><br><span class="line">    def stop(self):</span><br><span class="line">        print(&apos;service stop......&apos;)</span><br><span class="line"></span><br><span class="line">    def restart(self):</span><br><span class="line">        self.stop()</span><br><span class="line">        self.start()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    server = WebServer(&apos;localhost&apos;,9999)</span><br><span class="line"></span><br><span class="line">    if hasattr(server,sys.argv[1]):         #判断server这个objcet 中是否包含 sys.argv[1] ，既然用户输入的这个 方法</span><br><span class="line">        fun = getattr(server,sys.argv[1])   #获取server 中这个objcet 的 sys.argv[1] ，既用户输入的这个 方法</span><br><span class="line">        fun()         # 加上() 调用</span><br></pre></td></tr></table></figure>
+<h1><span id="python-socket">Python Socket</span></h1>
+<h2><span id="服务端例子">服务端例子</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import socket</span><br><span class="line"></span><br><span class="line">ip_port = (&apos;127.0.0.1&apos;, 9999)   # IP 与 端口，在一个 元组里面</span><br><span class="line"></span><br><span class="line">sk = socket.socket()          # socket 默认是 tcp 协议</span><br><span class="line">sk.bind(ip_port)              # 绑定 IP 与 端口</span><br><span class="line">sk.listen(5)                  # 服务端最大连接数</span><br><span class="line"></span><br><span class="line">while True:</span><br><span class="line">    print(&apos;等待连接....&apos;)</span><br><span class="line">    conn,addr = sk.accept()                           #accpet 返回两个变量 conn 是客户端连接过来时创建的实例。addr 是客户端的IP地址。</span><br><span class="line">    print(&apos;客户段连接IP &apos;, addr)                      #当客户端连接过来时，打印 客户端的IP地址。</span><br><span class="line">    client_data = conn.recv(1024)                     # client_data 这个变量等于 客户端发送的数据 (1024) = 1K 。</span><br><span class="line">    print(str(client_data,&apos;utf8&apos;))                    # 打印客户端发送过来的信息，因为是中文所以python 3.0 中要使用 str 来声明 utf8</span><br><span class="line">    conn.sendall(bytes(&apos;服务端发来消息...&apos;,&apos;utf8&apos;))   # 发送这条信息到客户端,python 3.0 要使用 bytes 来发送, 并声明 utf8</span><br><span class="line">    conn.close()</span><br></pre></td></tr></table></figure>
+<h2><span id="客户端例子">客户端例子</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import socket</span><br><span class="line"></span><br><span class="line">ip_port = (&apos;127.0.0.1&apos;, 9999)         # IP 与 端口，在一个 元组里面</span><br><span class="line">sk = socket.socket()                  # socket 默认是 tcp 协议</span><br><span class="line">sk.connect(ip_port)                   # 连接服务端 IP 与 端口</span><br><span class="line"></span><br><span class="line">sk.sendall(bytes(&apos;客户端发来消息....&apos;,&apos;utf8&apos;))            # 发送这条信息到服务端,python 3.0 要使用 bytes 来发送, 并声明 utf8</span><br><span class="line">server_reply = sk.recv(1024)                            # server_reply 这个变量等于 客户端发送的数据 (1024) = 1K 。</span><br><span class="line">print(str(server_reply,&apos;utf8&apos;))                         # 打印服务端发送过来的信息，因为是中文所以python 3.0 中要使用 str 来声明 utf8</span><br><span class="line">sk.close()                                              # 关闭连接</span><br></pre></td></tr></table></figure>
+<h1><span id="python-异常处理">Python 异常处理</span></h1>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">try:</span><br><span class="line">    pass</span><br><span class="line">except Exception as e:</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
+<h2><span id="常用的异常列表">常用的异常列表</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">AttributeError   试图访问一个对象没有的树形，比如foo.x，但是foo没有属性x</span><br><span class="line"></span><br><span class="line">IOError    输入/输出异常；基本上是无法打开文件</span><br><span class="line"></span><br><span class="line">ImportError    无法引入模块或包；基本上是路径问题或名称错误</span><br><span class="line"></span><br><span class="line">IndentationError    语法错误（的子类） ；代码没有正确对齐</span><br><span class="line"></span><br><span class="line">IndexError   下标索引超出序列边界，比如当x只有三个元素，却试图访问x[5]</span><br><span class="line"></span><br><span class="line">KeyError   试图访问字典里不存在的键</span><br><span class="line"></span><br><span class="line">KeyboardInterrupt   Ctrl+C被按下</span><br><span class="line"></span><br><span class="line">NameError   使用一个还未被赋予对象的变量</span><br><span class="line"></span><br><span class="line">SyntaxError   Python代码非法，代码不能编译(个人认为这是语法错误，写错了）</span><br><span class="line"></span><br><span class="line">TypeError   传入对象类型与要求的不符合</span><br><span class="line"></span><br><span class="line">UnboundLocalError   试图访问一个还未被设置的局部变量，基本上是由于另有一个同名的全局变量，</span><br><span class="line">导致你以为正在访问它</span><br><span class="line"></span><br><span class="line">ValueError   传入一个调用者不期望的值，即使值的类型是正确的</span><br></pre></td></tr></table></figure>
+<h2><span id="抓住特定错误">抓住特定错误</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">s1 = input(&apos;&gt;&gt;&gt;&apos;)</span><br><span class="line">try:</span><br><span class="line">    int(s1)</span><br><span class="line">except KeyError as e:</span><br><span class="line">    print(&apos;键错误&apos;)</span><br><span class="line">except ValueError as e:</span><br><span class="line">    print(&apos;Value 错误&apos;)</span><br><span class="line">except Exception as e:</span><br><span class="line">    print(&apos;错误: &apos;, e )</span><br></pre></td></tr></table></figure>
+<h2><span id="异常在程序中的应用">异常在程序中的应用</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    # 主代码块</span><br><span class="line">    pass</span><br><span class="line">except KeyError as e:</span><br><span class="line">    #出现KeyError时，执行如下程序</span><br><span class="line">    pass</span><br><span class="line">else:</span><br><span class="line">    # 主代码块执行完，执行该块</span><br><span class="line">    pass</span><br><span class="line">finally:</span><br><span class="line">    # 无论异常与否，都会执行该块</span><br><span class="line">    pass</span><br></pre></td></tr></table></figure>
+<h2><span id="主动触发异常">主动触发异常</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">try:</span><br><span class="line">    raise Exception(&apos;抛出异常&apos;)</span><br><span class="line">except Exception as e:</span><br><span class="line">    print(e)</span><br></pre></td></tr></table></figure>
+<h2><span id="自定义异常">自定义异常</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class MyException(Exception):    #创建一个类，继承 Exception</span><br><span class="line"></span><br><span class="line">    def __init__(self, msg):</span><br><span class="line">        self.message = msg</span><br><span class="line"></span><br><span class="line">    def __str__(self):</span><br><span class="line">        return self.message</span><br><span class="line"> </span><br><span class="line">try:</span><br><span class="line">    raise MyException(&apos;我的异常&apos;)   #主动触发MyException</span><br><span class="line">except MyException as e:</span><br><span class="line">    print(e)</span><br></pre></td></tr></table></figure>
+<h2><span id="异常中的断言">异常中的断言</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class MyException(Exception):    #创建一个类，继承 Exception</span><br><span class="line"></span><br><span class="line">    def __init__(self, msg):</span><br><span class="line">        self.message = msg</span><br><span class="line"></span><br><span class="line">    def __str__(self):</span><br><span class="line">        return self.message</span><br><span class="line"></span><br><span class="line">a = 1        #定义一个变量 </span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    assert a == 2        # 断言 a 是否 等于 2 ,不等于就抛出 AssertionError 这个错误</span><br><span class="line">except MyException as e:</span><br><span class="line">    print(e)</span><br></pre></td></tr></table></figure>
+<h1><span id="python-线程的调用">Python 线程的调用</span></h1>
+<blockquote>
+<p>Python 启动线程有2种方法，分别为 直接调用 与 继承调用。</p>
+</blockquote>
+<h2><span id="直接调用">直接调用</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import threading</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def sayhi(num):</span><br><span class="line">    print(&apos;运行线程号为： %s&apos; %num)</span><br><span class="line">    time.sleep(3)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    t1 = threading.Thread(target=sayhi,args=(1,)) #创建一个线程 t1</span><br><span class="line">    t2 = threading.Thread(target=sayhi,args=(2,)) #创建一个线程 t2</span><br><span class="line"></span><br><span class="line">    t1.start()        #运行线程t1</span><br><span class="line">    t2.start()        #运行线程t2</span><br><span class="line"></span><br><span class="line">    print(t1.getName())    #打印线程t1名称</span><br><span class="line">    print(t2.getName())    #打印线程t2名称</span><br><span class="line"></span><br><span class="line">    t1.join()       #join 等待线程t1运行完毕再往下走</span><br><span class="line">    t2.join()       #join 等待线程t2运行完毕再往下走</span><br><span class="line">    </span><br><span class="line">    print(&quot;运行完毕&quot;)</span><br></pre></td></tr></table></figure>
+<h2><span id="直接调用多线程">直接调用，多线程</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import threading</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def sayhi(num):</span><br><span class="line">    print(&apos;运行线程号为： %s&apos; %num)</span><br><span class="line">    time.sleep(3)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    t_list = []</span><br><span class="line">    for i in range(10):       # 循环创建 10个 线程。</span><br><span class="line">        t = threading.Thread(target=sayhi,args=[i,])</span><br><span class="line">        t.start()</span><br><span class="line">        t_list.append(t)      # 将创建的进程 写入 t_list 这个列表中。</span><br><span class="line"></span><br><span class="line">    for i in t_list:         # 循环列表，让所有线程，join ,执行完毕。</span><br><span class="line">        i.join()</span><br><span class="line"></span><br><span class="line">    print(&quot;运行完毕&quot;)</span><br></pre></td></tr></table></figure>
+<h2><span id="继承的方式">继承的方式</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import threading</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">class MyThread(threading.Thread):    #定义一个类，继承 threading.Thread 这个父类。</span><br><span class="line">    def __init__(self,num):</span><br><span class="line">        threading.Thread.__init__(self)       # 重写父类的构造函数。</span><br><span class="line">        self.num = num</span><br><span class="line"></span><br><span class="line">    def run(self):  #定义每个线程要运行的函数</span><br><span class="line">        print(&quot;线程运行号:%s&quot; %self.num)</span><br><span class="line">        time.sleep(3)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    t1 = MyThread(1)</span><br><span class="line">    t2 = MyThread(2)</span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br></pre></td></tr></table></figure>
+<h2><span id="继承方式增加join">继承方式，增加join</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import threading</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">class MyThread(threading.Thread):    #定义一个类，继承 threading.Thread 这个父类。</span><br><span class="line">    def __init__(self,num):</span><br><span class="line">        threading.Thread.__init__(self)       # 重写父类的构造函数。</span><br><span class="line">        self.num = num</span><br><span class="line"></span><br><span class="line">    def run(self):  #定义每个线程要运行的函数</span><br><span class="line">        print(&quot;线程运行号:%s&quot; %self.num)</span><br><span class="line">        time.sleep(3)</span><br><span class="line">        print(&apos;线程 %s 运行完毕&apos; %self.num)</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    t1 = MyThread(1)</span><br><span class="line">    t2 = MyThread(2)</span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()</span><br><span class="line">    t2.join()</span><br></pre></td></tr></table></figure>
+<h2><span id="多线程-events">多线程 Events</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># Event 对象用于线程间通信，它是由线程设置的信号标志，如果信号标志位真，则其他线程等待直到信号接触。</span><br><span class="line"># event = threading.Event() 生成实例</span><br><span class="line"># event.wait() 等待设定，既 线程信号标签为 假, 阻塞。</span><br><span class="line"># event.set()  设置标签，既 线程信号标签为 真，通行。</span><br><span class="line"># event.clear() 清除设定。</span><br><span class="line"># event.isSet() 判断是否有设定。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import threading</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def light():</span><br><span class="line">    if not event.isSet():</span><br><span class="line">        event.set()</span><br><span class="line">    count = 0</span><br><span class="line">    while True:</span><br><span class="line">        if count &lt; 10:</span><br><span class="line">            print(&apos;\033[42;1m --绿灯-- \033[0m&apos;)</span><br><span class="line">        elif count &lt; 13:</span><br><span class="line">            print(&apos;\033[43;1m --黄灯-- \033[0m&apos;)</span><br><span class="line">        elif count &lt; 20:</span><br><span class="line">            if event.is_set():</span><br><span class="line">                event.clear()</span><br><span class="line">            print(&apos;\033[41;1m --红灯-- \033[0m&apos;)</span><br><span class="line">        else:</span><br><span class="line">            count = 0</span><br><span class="line">            event.set()</span><br><span class="line">            print(&apos;\033[42;1m --绿灯-- \033[0m&apos;)</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        count += 1</span><br><span class="line"></span><br><span class="line">def car(n):</span><br><span class="line">    while 1:</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        if event.isSet():</span><br><span class="line">            print(&quot;汽车 [%s] 通过红绿灯 &quot; %n)</span><br><span class="line">        else:</span><br><span class="line">            print(&quot;汽车 [%s] 等待红绿灯 &quot; %n)</span><br><span class="line">            event.wait()</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    event = threading.Event()</span><br><span class="line">    Light = threading.Thread(target=light)</span><br><span class="line">    Light.start()</span><br><span class="line">    for i in range(3):</span><br><span class="line">        t = threading.Thread(target=car,args=(i,))</span><br><span class="line">        t.start()</span><br></pre></td></tr></table></figure>
+<h2><span id="多进程multiprocessing">多进程(multiprocessing)</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"># 并发 执行 一个例子:</span><br><span class="line"></span><br><span class="line">from multiprocessing import Process</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def f(name):</span><br><span class="line">    time.sleep(2)</span><br><span class="line">    print(&quot;hello&quot;, name)</span><br><span class="line"></span><br><span class="line">def f2(name):</span><br><span class="line">    time.sleep(2)</span><br><span class="line">    print(&quot;hello&quot;, name)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    p1 = Process(target=f, args=(&apos;bob1&apos;,))</span><br><span class="line">    p2 = Process(target=f, args=(&apos;bob2&apos;,))</span><br><span class="line">    p3 = Process(target=f2, args=(&apos;pop1&apos;,))</span><br><span class="line">    p4 = Process(target=f2, args=(&apos;pop2&apos;,))</span><br><span class="line">    p5 = Process(target=f2, args=(&apos;pop3&apos;,))</span><br><span class="line">    p1.start()</span><br><span class="line">    p2.start()</span><br><span class="line">    p3.start()</span><br><span class="line">    p4.start()</span><br><span class="line">    p5.start()</span><br><span class="line">    p5.join()</span><br><span class="line">	</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line"># Queue 队列</span><br><span class="line"></span><br><span class="line">## 多进程间通讯 Queues</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line"># 不同进程间内存是不共享的,要想实现进程间数据交换，可使用 Queues</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">from multiprocessing import Process,Queue</span><br><span class="line"></span><br><span class="line">def f(q):</span><br><span class="line">    q.put([1,None, &apos;hello&apos;])</span><br><span class="line">    q.put([2,None, &apos;word&apos;])</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    q = Queue()</span><br><span class="line">    p = Process(target=f, args=(q,))</span><br><span class="line">    p2 = Process(target=f, args=(q,))</span><br><span class="line">    p.start()</span><br><span class="line">    p2.start()</span><br><span class="line">    print(&apos;p-1  get :&apos; , q.get())</span><br><span class="line">    print(&apos;p-2  get :&apos; , q.get())</span><br><span class="line">    print(&apos;p2-1 get :&apos; , q.get())</span><br><span class="line">    print(&apos;p2-3 get :&apos; , q.get())</span><br><span class="line">    p.join()</span><br></pre></td></tr></table></figure>
+<h2><span id="生产者消费者模型">生产者消费者模型</span></h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> queue,threading,time</span><br><span class="line"></span><br><span class="line">q = queue.Queue()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">consumer</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        print(<span class="string">"消费者-[ %s ]， 消费了 [ %s ]"</span> % (n,q.get()))</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        q.task_done()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">profucer</span><span class="params">(n)</span>:</span></span><br><span class="line">    count = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        print(<span class="string">"生产者-[ %s ]  生产了 [ %s ] 个"</span> %(n,count))</span><br><span class="line">        q.put(count)</span><br><span class="line">        q.join()</span><br><span class="line">        print(<span class="string">"已经全部消费完毕"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c1 = threading.Thread(target=consumer,args=[<span class="string">"消费者1"</span>,])</span><br><span class="line">c2 = threading.Thread(target=consumer,args=[<span class="string">"消费者2"</span>,])</span><br><span class="line">c3 = threading.Thread(target=consumer,args=[<span class="string">"消费者3"</span>,])</span><br><span class="line"></span><br><span class="line">p1 = threading.Thread(target=profucer,args=[<span class="string">"生产者1"</span>,])</span><br><span class="line">p2 = threading.Thread(target=profucer,args=[<span class="string">"生产者2"</span>,])</span><br><span class="line">p3 = threading.Thread(target=profucer,args=[<span class="string">"生产者3"</span>,])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c1.start()</span><br><span class="line">c2.start()</span><br><span class="line">c3.start()</span><br><span class="line">p1.start()</span><br><span class="line">p2.start()</span><br><span class="line">p3.start()</span><br></pre></td></tr></table></figure>
+<h2><span id="协程">协程</span></h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gevent 模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"运行foo"</span>)</span><br><span class="line">    gevent.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">"再次运行foo"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">b1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"运行b1"</span>)</span><br><span class="line">    gevent.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">"再次运行b1"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">c1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"运行c1"</span>)</span><br><span class="line">    gevent.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">"再次运行c1"</span>)</span><br><span class="line"></span><br><span class="line">gevent.joinall([</span><br><span class="line">    gevent.spawn(foo),</span><br><span class="line">    gevent.spawn(b1),</span><br><span class="line">    gevent.spawn(c1)</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h2><span id="异步io模型">异步IO模型</span></h2>
+<blockquote>
+<ul>
+<li>select</li>
+<li>poll</li>
+<li>Epoll</li>
+</ul>
+</blockquote>
+<h2><span id="python-mysql">Python - Mysql</span></h2>
+<blockquote>
+<p>python 操作 mysql</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># MySQLdb 模块 只能在 Python 2.7 中使用 Python3 以后不支持</span></span><br><span class="line"><span class="comment"># python 3.x 请使用 pymysql 模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(host=<span class="string">'127.0.0.1'</span>, user=<span class="string">'jicki'</span>, passwd=<span class="string">'123456'</span>,db=<span class="string">'jicki'</span>)</span><br><span class="line">cur = conn.cursor()</span><br><span class="line">cur.execute(<span class="string">"INSERT INTO user (username,password,encrypt,valid) VALUES  ('raid','123456','1','2')"</span>)</span><br><span class="line">cur.execute(<span class="string">"SELECT * FROM user"</span>)</span><br><span class="line"><span class="comment"># fetchone() 取一条数据</span></span><br><span class="line"><span class="comment"># fetchamany(3) 取指定条数数据</span></span><br><span class="line"><span class="comment"># fetchall() 取所有数据</span></span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> cur.fetchall():</span><br><span class="line">           print(r)</span><br><span class="line">           cur.close()</span><br><span class="line"><span class="comment"># conn.rollback()     # 回滚</span></span><br><span class="line">conn.commit()         <span class="comment"># 写入数据库</span></span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 利用列表 与 executemany 批量插入数据</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">li = [</span><br><span class="line">    (<span class="string">'jicki'</span>, <span class="string">'1234'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>),</span><br><span class="line">    (<span class="string">'xiao'</span>, <span class="string">'3333'</span>,<span class="string">'4'</span>,<span class="string">'5'</span>),</span><br><span class="line">    (<span class="string">'dada'</span>, <span class="string">'4444'</span>, <span class="string">'6'</span>, <span class="string">'7'</span>),</span><br><span class="line">]</span><br><span class="line">conn = pymysql.connect(host=<span class="string">'127.0.0.1'</span>, user=<span class="string">'jicki'</span>, passwd=<span class="string">'123456'</span>,db=<span class="string">'jicki'</span>)</span><br><span class="line">cur = conn.cursor()</span><br><span class="line">cur.executemany(<span class="string">"INSERT INTO user(username,password,encrypt,valid) VALUES(%s,%s,%s,%s)"</span>, li)</span><br><span class="line">cur.execute(<span class="string">"SELECT * FROM user"</span>)</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> cur.fetchall():</span><br><span class="line">           print(r)</span><br><span class="line">           cur.close()</span><br><span class="line">conn.commit()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<h2><span id="事件驱动">事件驱动</span></h2>
+<blockquote>
+<p>事件驱动 分为二部分，注册事件 与 触发事件</p>
+</blockquote>
+<h2><span id="python-redis">Python Redis</span></h2>
+<blockquote>
+<p>使用 redis 模块 pip install redis</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 简单的操作</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line">r = redis.Redis(host=<span class="string">'127.0.0.1'</span>,port=<span class="number">6379</span>)</span><br><span class="line">r.set(<span class="string">"name"</span>, <span class="string">"jicki"</span>)</span><br><span class="line">print(r.get(<span class="string">"name"</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 连接池 的方式连接</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">"127.0.0.1"</span>,port=<span class="number">6379</span>)</span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line">r.set(<span class="string">"name"</span>, <span class="string">"jicki"</span>)</span><br><span class="line">print(r.get(<span class="string">"name"</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># set 操作的参数</span></span><br><span class="line">    ex  过期时间 (秒)</span><br><span class="line">    px  过期时间 (毫秒)</span><br><span class="line">    nx  为 <span class="keyword">True</span> 时 只有 键值 不存在时 才可 set</span><br><span class="line">    xx  为 <span class="keyword">True</span> 时 只有 键值 存在时 才可 set</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 例:</span></span><br><span class="line">    r.set(<span class="string">"name"</span>, <span class="string">"jicki"</span>, ex=<span class="number">3</span>)</span><br><span class="line">    r.set(<span class="string">"name"</span>, <span class="string">"jicki"</span>, px=<span class="number">100</span>)</span><br><span class="line">    r.set(<span class="string">"name"</span>, <span class="string">"jicki"</span>, nx=<span class="keyword">True</span>)</span><br><span class="line">    r.set(<span class="string">"name"</span>, <span class="string">"jicki"</span>, xx=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Hash 操作</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">pool = redis.ConnectionPool(host=<span class="string">"127.0.0.1"</span>,port=<span class="number">6379</span>)</span><br><span class="line">r = redis.Redis(connection_pool=pool)</span><br><span class="line"></span><br><span class="line">r.hmset(<span class="string">"info"</span>, &#123;<span class="string">'fo1'</span>:<span class="string">'o1'</span>,<span class="string">'fo2'</span>:<span class="string">'o2'</span>, <span class="string">'fo3'</span>:<span class="string">'o3'</span>&#125;)</span><br><span class="line"></span><br><span class="line">print(r.hget(<span class="string">"info"</span>,<span class="string">'fo1'</span>))</span><br><span class="line"></span><br><span class="line">print(r.hgetall(<span class="string">"info"</span>))</span><br></pre></td></tr></table></figure>
+<h2><span id="redis-订阅-与-发布">redis 订阅 与 发布</span></h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个类</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> redis</span><br><span class="line"></span><br><span class="line">redis_pool = redis.ConnectionPool(host=<span class="string">"127.0.0.1"</span>, port=<span class="number">6379</span>)  <span class="comment"># 创建一个连接池</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedisHelper</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.__conn = redis.Redis(connection_pool=redis_pool)   <span class="comment"># 配置连接池</span></span><br><span class="line">        self.chan_sub = <span class="string">'fm109'</span>  <span class="comment"># 订阅频道号</span></span><br><span class="line">        self.chan_pub = <span class="string">'fm109'</span>  <span class="comment"># 发布频道号</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">public</span><span class="params">(self,msg)</span>:</span>     <span class="comment"># 定义了一个发布的函数</span></span><br><span class="line">        self.__conn.publish(self.chan_pub,msg)    <span class="comment"># 发布消息</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">subscribe</span><span class="params">(self)</span>:</span>              <span class="comment"># 定义一个 订阅 的函数</span></span><br><span class="line">        pub = self.__conn.pubsub()    <span class="comment"># 生成一个 订阅的实例</span></span><br><span class="line">        pub.subscribe(self.chan_sub)  <span class="comment"># 选择订阅频道</span></span><br><span class="line">        pub.parse_response()          <span class="comment"># 接收发布的消息</span></span><br><span class="line">        <span class="keyword">return</span> pub</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 订阅端</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> redis_helper <span class="keyword">import</span> RedisHelper</span><br><span class="line"></span><br><span class="line">obj = RedisHelper()   <span class="comment"># 实例化</span></span><br><span class="line"></span><br><span class="line">redis_sub = obj.subscribe()   <span class="comment"># 订阅者调用 subscribe 这个函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:          <span class="comment"># 循环接收 发布者 发送的消息</span></span><br><span class="line">    msg = redis_sub.parse_response()      <span class="comment"># 收听 订阅频道</span></span><br><span class="line">    print(msg)                            <span class="comment"># 打印消息</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 发布端</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> redis_helper <span class="keyword">import</span> RedisHelper</span><br><span class="line"></span><br><span class="line">obj = RedisHelper()   <span class="comment"># 实例化</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    msg = input(<span class="string">"请输入发布的信息: "</span>).strip()</span><br><span class="line">    <span class="keyword">if</span> len(msg) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        redis_pub = obj.public(msg)</span><br></pre></td></tr></table></figure>
+<h2><span id="python-rabbitmq">Python - RabbitMQ</span></h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python 使用pika 模块操作 RabbitMQ</span></span><br><span class="line"><span class="comment"># RabbitMQ 发送端 (生产者)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"></span><br><span class="line"><span class="comment">#  创建认证</span></span><br><span class="line">credentials = pika.PlainCredentials(<span class="string">'jicki'</span>, <span class="string">'123456'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#  定义 rabbitmq 的连接</span></span><br><span class="line">conn = pika.BlockingConnection(pika.ConnectionParameters(<span class="string">'127.0.0.1'</span>,<span class="number">5672</span>, <span class="string">'/'</span>, credentials))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个管道</span></span><br><span class="line">channel = conn.channel()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个队列 名 (durable=True 设置为持久化队列)</span></span><br><span class="line">channel.queue_declare(queue=<span class="string">'hello'</span>, durable=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送消息</span></span><br><span class="line">channel.basic_publish(exchange=<span class="string">''</span>, routing_key=<span class="string">'hello'</span>, body=<span class="string">'hello jicki '</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">" 消息  发送成功"</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭连接</span></span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># RabbitMQ 接收端 (消费者)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"></span><br><span class="line"><span class="comment">#  创建认证</span></span><br><span class="line">credentials = pika.PlainCredentials(<span class="string">'jicki'</span>, <span class="string">'123456'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#  定义 rabbitmq 的连接</span></span><br><span class="line">conn = pika.BlockingConnection(pika.ConnectionParameters(<span class="string">'127.0.0.1'</span>,<span class="number">5672</span>, <span class="string">'/'</span>, credentials))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个管道</span></span><br><span class="line">channel = conn.channel()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个队列 名 (durable=True 设置为持久化队列)</span></span><br><span class="line">channel.queue_declare(queue=<span class="string">'hello'</span>, durable=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span><span class="params">(ch, method, properties, body)</span>:</span></span><br><span class="line">    print(<span class="string">"返回信息 %r"</span> %body)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置同时只处理一个任务(负载均衡, 如果不设置，会轮询)</span></span><br><span class="line">channel.basic_qos(prefetch_count=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 声明队列信息</span></span><br><span class="line">channel.basic_consume(callback, queue=<span class="string">'hello'</span>, no_ack=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'等待队列消息'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始接收任务</span></span><br><span class="line">channel.start_consuming()</span><br></pre></td></tr></table></figure>
+<h2><span id="rabbitmq-发布与订阅">RabbitMQ 发布与订阅</span></h2>
+<blockquote>
+<p>发布端代码</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"></span><br><span class="line"><span class="comment">#  创建认证</span></span><br><span class="line">credentials = pika.PlainCredentials(<span class="string">'jicki'</span>, <span class="string">'123456'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#  定义 rabbitmq 的连接</span></span><br><span class="line">conn = pika.BlockingConnection(pika.ConnectionParameters(<span class="string">'10.6.0.188'</span>,<span class="number">5672</span>, <span class="string">'/'</span>, credentials))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个管道</span></span><br><span class="line">channel = conn.channel()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个 exchange</span></span><br><span class="line">channel.exchange_declare(exchange=<span class="string">'logs'</span>,type=<span class="string">'fanout'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发布的消息</span></span><br><span class="line">message = <span class="string">''</span>.join(sys.argv[<span class="number">1</span>:]) <span class="keyword">or</span> <span class="string">'Hello jicki'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 往 exchange 发送消息</span></span><br><span class="line">channel.basic_publish(exchange=<span class="string">'logs'</span>, routing_key=<span class="string">''</span>, body=message)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'消息 [ %r ] 发送成功'</span> %message)</span><br><span class="line"></span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>订阅端代码</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#  创建认证</span></span><br><span class="line">credentials = pika.PlainCredentials(<span class="string">'jicki'</span>, <span class="string">'123456'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#  定义 rabbitmq 的连接</span></span><br><span class="line">conn = pika.BlockingConnection(pika.ConnectionParameters(<span class="string">'10.6.0.188'</span>,<span class="number">5672</span>, <span class="string">'/'</span>, credentials))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个管道</span></span><br><span class="line">channel = conn.channel()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 声明这个 exchange</span></span><br><span class="line">channel.exchange_declare(exchange=<span class="string">'logs'</span>, type=<span class="string">'fanout'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 声明一个 queue, 不需要指定 queue 名</span></span><br><span class="line"><span class="comment"># rabbitmq 会随机生成一个 queue , 当消费者断开后，queue 会自动删除</span></span><br><span class="line">result = channel.queue_declare(exclusive=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">queue_name = result.method.queue</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将这个 queue 与 exchange 绑定</span></span><br><span class="line">channel.queue_bind(exchange=<span class="string">'logs'</span>, queue=queue_name)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"等待消息....."</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callbak</span><span class="params">(ch, method, properties, body)</span>:</span></span><br><span class="line">    print(<span class="string">" [ %r ]"</span> %body)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 声明队列信息</span></span><br><span class="line">channel.basic_consume(callbak, queue=queue_name, no_ack=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始接受消息</span></span><br><span class="line">channel.start_consuming()</span><br></pre></td></tr></table></figure>
+<h2><span id="rabbitmq-带过滤的订阅与发布">RabbitMQ 带过滤的订阅与发布</span></h2>
+<blockquote>
+<p>topic pub 端</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="comment">#  创建认证</span></span><br><span class="line">credentials = pika.PlainCredentials(<span class="string">'jicki'</span>, <span class="string">'123456'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#  定义 rabbitmq 的连接</span></span><br><span class="line">conn = pika.BlockingConnection(pika.ConnectionParameters(<span class="string">'10.6.0.188'</span>,<span class="number">5672</span>, <span class="string">'/'</span>, credentials))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个管道</span></span><br><span class="line">channel = conn.channel()</span><br><span class="line"></span><br><span class="line">channel.exchange_declare(exchange=<span class="string">'topic_logs'</span>, type=<span class="string">'topic'</span>)</span><br><span class="line"></span><br><span class="line">routing_key = sys.argv[<span class="number">1</span>] <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="string">'anonymous.info'</span></span><br><span class="line"></span><br><span class="line">message = <span class="string">''</span>.join(sys.argv[<span class="number">2</span>:]) <span class="keyword">or</span> <span class="string">'hello jicki'</span></span><br><span class="line"></span><br><span class="line">channel.basic_publish(exchange= <span class="string">'topic_logs'</span>, routing_key=routing_key, body=message)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'发送 [ %r:%r ]'</span> %(routing_key, message))</span><br><span class="line"></span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>topic sub 端</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> pika</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="comment">#  创建认证</span></span><br><span class="line">credentials = pika.PlainCredentials(<span class="string">'jicki'</span>, <span class="string">'123456'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#  定义 rabbitmq 的连接</span></span><br><span class="line">conn = pika.BlockingConnection(pika.ConnectionParameters(<span class="string">'10.6.0.188'</span>,<span class="number">5672</span>, <span class="string">'/'</span>, credentials))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成一个管道</span></span><br><span class="line">channel = conn.channel()</span><br><span class="line"></span><br><span class="line">channel.exchange_declare(exchange=<span class="string">'topic_logs'</span>, type=<span class="string">'topic'</span>)</span><br><span class="line"></span><br><span class="line">result = channel.queue_declare(exclusive=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">queue_name = result.method.queue</span><br><span class="line"></span><br><span class="line">binding_keys = sys.argv[<span class="number">1</span>:]</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> binding_keys:</span><br><span class="line">    sys.stderr.write(<span class="string">"%s [binding_keys] \n"</span> % sys.argv[<span class="number">0</span>])</span><br><span class="line">    sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> binding_keys <span class="keyword">in</span> binding_keys:</span><br><span class="line">    channel.queue_bind(exchange=<span class="string">'topic_logs'</span>, queue=queue_name, routing_key=binding_keys)</span><br><span class="line"></span><br><span class="line">print(<span class="string">'等待消息.......'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback</span><span class="params">(ch, method, properties, body)</span>:</span></span><br><span class="line">    print(<span class="string">'消息 [ %r:%r ] 发送成功'</span> % (method.routing_key, body))</span><br><span class="line"></span><br><span class="line">channel.basic_consume(callback, queue=queue_name, no_ack=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">channel.start_consuming()</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/01/30/2016-11-04-kubernetes-application/" data-toggle="tooltip" data-placement="top" title="kubernetes 实战应用部署">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/01/30/2016-06-30-tomcat-optimised/" data-toggle="tooltip" data-placement="top" title="tomcat 优化配置 以及说明">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share" data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Python Logging 日志模块</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">屏幕与文件输出</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">日志文件 轮转</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">handle方法</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">Python 面相对象编程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">类的 实例化</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">类的继承</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">多态</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">Python 反射</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">Python Socket</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">服务端例子</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">客户端例子</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">Python 异常处理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">常用的异常列表</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.2.</span> <span class="toc-nav-text">抓住特定错误</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.3.</span> <span class="toc-nav-text">异常在程序中的应用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.4.</span> <span class="toc-nav-text">主动触发异常</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.5.</span> <span class="toc-nav-text">自定义异常</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.6.</span> <span class="toc-nav-text">异常中的断言</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">Python 线程的调用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.1.</span> <span class="toc-nav-text">直接调用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.2.</span> <span class="toc-nav-text">直接调用，多线程</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.3.</span> <span class="toc-nav-text">继承的方式</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.4.</span> <span class="toc-nav-text">继承方式，增加join</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.5.</span> <span class="toc-nav-text">多线程 Events</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.6.</span> <span class="toc-nav-text">多进程(multiprocessing)</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.7.</span> <span class="toc-nav-text">生产者消费者模型</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.8.</span> <span class="toc-nav-text">协程</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.9.</span> <span class="toc-nav-text">异步IO模型</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.10.</span> <span class="toc-nav-text">Python - Mysql</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.11.</span> <span class="toc-nav-text">事件驱动</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.12.</span> <span class="toc-nav-text">Python Redis</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.13.</span> <span class="toc-nav-text">redis 订阅 与 发布</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.14.</span> <span class="toc-nav-text">Python - RabbitMQ</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.15.</span> <span class="toc-nav-text">RabbitMQ 发布与订阅</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.16.</span> <span class="toc-nav-text">RabbitMQ 带过滤的订阅与发布</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://www.jicki.me" target="_blank">小炒肉</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "jicki";
+    var disqus_identifier = "https://www.jicki.me/2019/01/30/2016-12-01-Python-Learning/";
+    var disqus_url = "https://www.jicki.me/2019/01/30/2016-12-01-Python-Learning/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/jicki234">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/jicki520">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 小炒肉 2019 
+                    <br>
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.jicki.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-85602329-1';
+    var _gaDomain = 'jicki.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '1b38b88e4559c6725330b8c3328e2de3';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://www.jicki.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

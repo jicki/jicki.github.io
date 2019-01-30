@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Your future depends on your dreams">
+    <meta name="keyword" content="小炒肉, 运维工程师, Jicki, DevOps, Docker, Kubernetes">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Ceph RBD CephFS - 小炒肉 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://www.jicki.me/2019/01/30/2016-10-11-ceph-rbd-cephfs/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('img/pexels/triangular.jpeg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header">
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                        </div>
+                        <h1>Ceph RBD CephFS</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 小炒肉 on
+                            2019-01-30
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">小炒肉</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1><span id="ceph-rbd-cephfs">Ceph RBD  CephFS</span></h1>
+<p>##环境准备</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(这里只做基础测试, ceph-manager , ceph-mon, ceph-osd 一共三台)</span><br><span class="line"></span><br><span class="line">10.6.0.140 = ceph-manager</span><br><span class="line"></span><br><span class="line">10.6.0.187 = ceph-mon-1</span><br><span class="line"></span><br><span class="line">10.6.0.188 = ceph-osd-1</span><br><span class="line"></span><br><span class="line">10.6.0.94 = node-94</span><br></pre></td></tr></table></figure>
+<h2><span id="初始化环境">初始化环境</span></h2>
+<p>注： ceph 对时间要求很严格， 一定要同步所有的服务器时间</p>
+<p>在 manager 上面修改 /etc/hosts :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10.6.0.187 ceph-mon-1</span><br><span class="line">10.6.0.188 ceph-osd-1</span><br><span class="line">10.6.0.94 node-94</span><br></pre></td></tr></table></figure>
+<p>修改各服务器上面的 hostname (说明：ceph-deploy工具都是通过主机名与其他节点通信)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl --static set-hostname ceph-manager</span><br><span class="line">hostnamectl --static set-hostname ceph-mon-1</span><br><span class="line">hostnamectl --static set-hostname ceph-osd-1</span><br><span class="line">hostnamectl --static set-hostname node-94</span><br></pre></td></tr></table></figure>
+<p>配置manager节点与其他节点ssh key 访问</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ssh-keygen</span><br><span class="line"></span><br><span class="line"># 将key 发送到各节点中</span><br><span class="line"></span><br><span class="line">[root@ceph-manager ~]#ssh-copy-id ceph-mon-1</span><br><span class="line">[root@ceph-manager ~]#ssh-copy-id ceph-osd-1</span><br></pre></td></tr></table></figure>
+<h2><span id="安装-ceph">安装 ceph</span></h2>
+<p>在manager节点安装 ceph-deploy</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]#yum -y install centos-release-ceph</span><br><span class="line">[root@ceph-manager ~]#yum makecache</span><br><span class="line">[root@ceph-manager ~]#yum -y install ceph-deploy ntpdate</span><br></pre></td></tr></table></figure>
+<p>在其他各节点安装 ceph 的yum源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon-1 ~]# yum -y install centos-release-ceph</span><br><span class="line">[root@ceph-mon-1 ~]# yum makecache</span><br><span class="line"></span><br><span class="line">[root@ceph-osd-1 ~]# yum -y install centos-release-ceph</span><br><span class="line">[root@ceph-osd-1 ~]# yum makecache</span><br></pre></td></tr></table></figure>
+<h2><span id="创建ceph-目录">创建ceph 目录</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]#mkdir -p /etc/ceph</span><br><span class="line">[root@ceph-manager ~]#cd /etc/ceph</span><br></pre></td></tr></table></figure>
+<h2><span id="创建监控节点">创建监控节点：</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager /etc/ceph]#ceph-deploy new ceph-mon-1</span><br></pre></td></tr></table></figure>
+<p>执行完毕会生成 ceph.conf ceph.log ceph.mon.keyring 三个文件</p>
+<p>编辑 ceph.conf 增加 osd 节点数量<br>
+在最后增加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">osd pool default size = 1</span><br></pre></td></tr></table></figure>
+<p>使用ceph-deploy在所有机器安装ceph</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager /etc/ceph]# ceph-deploy install ceph-manager ceph-mon-1 ceph-osd-1</span><br></pre></td></tr></table></figure>
+<p>如果出现错误，也可以到各节点中直接 yum -y install ceph ceph-radosgw 进行安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install ceph ceph-radosgw</span><br></pre></td></tr></table></figure>
+<h2><span id="初始化监控节点">初始化监控节点</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager /etc/ceph]# ceph-deploy mon create-initial</span><br></pre></td></tr></table></figure>
+<p>osd 节点创建存储空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-osd-1 ~]# mkdir -p /opt/osd1</span><br></pre></td></tr></table></figure>
+<p>在管理节点上启动 并 激活 osd 进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-deploy osd prepare ceph-osd-1:/opt/osd1</span><br><span class="line">[root@ceph-manager ~]# ceph-deploy osd activate ceph-osd-1:/opt/osd1</span><br></pre></td></tr></table></figure>
+<p>把管理节点的配置文件与keyring同步至其它节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-deploy admin ceph-mon-1 ceph-osd-1</span><br></pre></td></tr></table></figure>
+<p>查看集群健康状态 (HEALTH_OK 表示OK)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph health</span><br><span class="line">HEALTH_OK</span><br></pre></td></tr></table></figure>
+<h2><span id="客户端配置">客户端配置</span></h2>
+<p>客户端 挂载: ceph 有多种挂载方式, rbd 块设备映射， cephfs 挂载 等</p>
+<p>注:<br>
+在生产环境中，客户端应该对应pool的权限，而不是admin 权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ssh-copy-id node-94</span><br></pre></td></tr></table></figure>
+<h2><span id="安装ceph">安装ceph</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-deploy install node-94</span><br></pre></td></tr></table></figure>
+<p>或者 登陆 node-94 执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install ceph ceph-radosgw</span><br></pre></td></tr></table></figure>
+<p>如果ssh 非22端口，会报错 可使用 scp 传</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp -P端口 ceph.conf node-94:/etc/ceph/</span><br><span class="line">scp -P端口 ceph.client.admin.keyring node-94:/etc/ceph/</span><br></pre></td></tr></table></figure>
+<h2><span id="创建pool">创建pool</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool create press 100</span><br><span class="line">pool &apos;press&apos; created</span><br></pre></td></tr></table></figure>
+<p>设置pool 的pgp_num</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set press pgp_num 100</span><br></pre></td></tr></table></figure>
+<p>查看创建的pool</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd lspools</span><br><span class="line">0 rbd,1 press,</span><br></pre></td></tr></table></figure>
+<p>设置副本数为2 (osd 必须要大于或者等于副本数，否则报错, 千万注意)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set press size 2</span><br></pre></td></tr></table></figure>
+<p>创建一个100G 名为 image 镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd create -p press --size 100000 image</span><br></pre></td></tr></table></figure>
+<p>查看一下镜像:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd -p press info image</span><br><span class="line">rbd image &apos;image&apos;:</span><br><span class="line">size 100000 MB in 25000 objects</span><br><span class="line">order 22 (4096 kB objects)</span><br><span class="line">block_name_prefix: rb.0.104b.74b0dc51</span><br><span class="line">format: 1</span><br></pre></td></tr></table></figure>
+<h2><span id="客户端块存储挂载">客户端块存储挂载：</span></h2>
+<p>在node-94 上面 map 镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node-94 ~]# rbd -p press map image</span><br><span class="line">/dev/rbd0</span><br></pre></td></tr></table></figure>
+<p>格式化 image</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node-94 ~]# mkfs.xfs /dev/rbd0</span><br></pre></td></tr></table></figure>
+<p>创建挂载目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node-94 ~]# mkdir /opt/rbd</span><br></pre></td></tr></table></figure>
+<p>挂载 rbd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node-94 ~]# mount /dev/rbd0 /opt/rbd</span><br><span class="line"></span><br><span class="line">[root@node-94 ~]# time dd if=/dev/zero of=haha bs=1M count=1000</span><br></pre></td></tr></table></figure>
+<p>取消 map 镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@node-94 ~]# umount /opt/rbd</span><br><span class="line">[root@node-94 ~]# rbd unmap /dev/rbd0</span><br></pre></td></tr></table></figure>
+<h2><span id="cephfs-文件系统">cephFS 文件系统</span></h2>
+<p>客户端 cephFS 文件系统 (cephFS 必须要有2个osd 才能运行，请注意)：</p>
+<p>使用 cephFS 集群中必须有 mds 服务</p>
+<p>创建 mds 服务 (由于机器有限就在 mon 的服务器上面 创建 mds 服务)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-deploy mds create ceph-mon-1</span><br></pre></td></tr></table></figure>
+<p>创建2个pool 做为文件系统的data 与 metadata</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool create cephfs_data 99</span><br><span class="line">pool &apos;cephfs_data&apos; created</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@ceph-manager ~]# ceph osd pool create cephfs_metadata 99</span><br><span class="line">pool &apos;cephfs_metadata&apos; created</span><br></pre></td></tr></table></figure>
+<p>创建 文件系统：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph fs new jicki cephfs_metadata cephfs_data</span><br><span class="line">new fs with metadata pool 6 and data pool 5</span><br></pre></td></tr></table></figure>
+<p>查看所有文件系统：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph fs ls</span><br><span class="line">name: jicki, metadata pool: cephfs_metadata, data pools: [cephfs_data ]</span><br></pre></td></tr></table></figure>
+<p>删除一个文件系统</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph fs rm jicki --yes-i-really-mean-it</span><br></pre></td></tr></table></figure>
+<h2><span id="客户端挂载-cephfs">客户端挂载 cephFS</span></h2>
+<p>安装 ceph-fuse：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@node-94 ~]# yum install ceph-fuse -y</span><br></pre></td></tr></table></figure>
+<p>创建挂载目录:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@node-94 ~]# mkdir -p /opt/jicki</span><br><span class="line">[root@node-94 ~]# ceph-fuse /opt/jicki</span><br><span class="line">[root@node-94 ~]# df -h|grep ceph</span><br><span class="line">ceph-fuse 1.6T 25G 1.6T 2% /opt/jicki</span><br></pre></td></tr></table></figure>
+<h1><span id="ceph-相关命令">ceph 相关命令：</span></h1>
+<h2><span id="manager-篇">manager 篇</span></h2>
+<p>查看实时的运行状态信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph -w</span><br></pre></td></tr></table></figure>
+<p>查看状态信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph -s</span><br></pre></td></tr></table></figure>
+<p>查看存储空间：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph df</span><br></pre></td></tr></table></figure>
+<p>删除某个节点的所有的ceph数据包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-deploy purge ceph-mon-1</span><br><span class="line">[root@ceph-manager ~]# ceph-deploy purgedata ceph-mon-1</span><br></pre></td></tr></table></figure>
+<p>为ceph创建一个admin用户并为admin用户创建一个密钥，把密钥保存到/etc/ceph目录下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph auth get-or-create client.admin mds &apos;allow&apos; osd &apos;allow *&apos; mon &apos;allow *&apos; -o /etc/ceph/ceph.client.admin.keyring</span><br></pre></td></tr></table></figure>
+<p>为osd.ceph-osd-1创建一个用户并创建一个key</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph auth get-or-create osd.ceph-osd-1 mon &apos;allow rwx&apos; osd &apos;allow *&apos; -o /etc/ceph/keyring</span><br></pre></td></tr></table></figure>
+<p>为mds.ceph-mon-1创建一个用户并创建一个key</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph auth get-or-create mds.ceph-mon-1 mon &apos;allow rwx&apos; osd &apos;allow *&apos; mds &apos;allow *&apos; -o /etc/ceph/keyring</span><br></pre></td></tr></table></figure>
+<p>查看ceph集群中的认证用户及相关的key</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph auth list</span><br></pre></td></tr></table></figure>
+<p>删除集群中的一个认证用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph auth del osd.0</span><br></pre></td></tr></table></figure>
+<p>查看集群健康状态详细信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph health detail</span><br></pre></td></tr></table></figure>
+<p>查看ceph log日志所在的目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-conf --name mds.ceph-manager --show-config-value log_file</span><br></pre></td></tr></table></figure>
+<h2><span id="mon-篇">mon 篇</span></h2>
+<p>查看mon的状态信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph mon stat</span><br></pre></td></tr></table></figure>
+<p>查看mon的选举状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph quorum_status --format json-pretty</span><br></pre></td></tr></table></figure>
+<p>看mon的映射信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph mon dump</span><br></pre></td></tr></table></figure>
+<p>删除一个mon节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph mon remove ceph-mon-1</span><br></pre></td></tr></table></figure>
+<p>获得一个正在运行的mon map，并保存在mon-1-map.txt文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph mon getmap -o mon-1-map.txt</span><br></pre></td></tr></table></figure>
+<p>查看mon-1-map.txt</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# monmaptool --print mon-1-map.txt</span><br></pre></td></tr></table></figure>
+<p>把上面的mon map注入新加入的节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-mon -i ceph-mon-3 --inject-monmap mon-1-map.txt</span><br></pre></td></tr></table></figure>
+<p>查看mon的socket</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph-conf --name mon.ceph-mon-1 --show-config-value admin_socket</span><br></pre></td></tr></table></figure>
+<p>查看mon的详细状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-mon-1 ~]# ceph daemon mon.ceph-mon-1 mon_status</span><br></pre></td></tr></table></figure>
+<p>删除一个mon节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph mon remove ceph-mon-1</span><br></pre></td></tr></table></figure>
+<h2><span id="msd-篇">msd 篇</span></h2>
+<p>查看msd状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph mds dump</span><br></pre></td></tr></table></figure>
+<p>删除一个mds节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph mds rm 0 mds.ceph-mds-1</span><br></pre></td></tr></table></figure>
+<h2><span id="osd-篇">osd 篇</span></h2>
+<p>查看ceph osd运行状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd stat</span><br></pre></td></tr></table></figure>
+<p>查看osd映射信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd stat</span><br></pre></td></tr></table></figure>
+<p>查看osd的目录树</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd tree</span><br></pre></td></tr></table></figure>
+<p>down掉一个osd硬盘 (ceph osd tree 可查看osd 的硬盘信息，下面为down osd.0 节点)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd down 0</span><br></pre></td></tr></table></figure>
+<p>在集群中删除一个osd硬盘</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd rm 0</span><br></pre></td></tr></table></figure>
+<p>在集群中删除一个osd 硬盘 并 crush map 清除map信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd crush rm osd.0</span><br></pre></td></tr></table></figure>
+<p>在集群中删除一个osd的host节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd crush rm ceph-osd-1</span><br></pre></td></tr></table></figure>
+<p>查看最大osd的个数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd getmaxosd</span><br></pre></td></tr></table></figure>
+<p>设置最大的osd的个数（当扩大osd节点的时候必须扩大这个值）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd setmaxosd 10</span><br></pre></td></tr></table></figure>
+<p>设置osd crush的权重 ceph osd crush set <id> <weight> <name> ID WEIGHT NAME 使用 ceph osd tree 查看</name></weight></id></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd crush set 1 3.0 host=ceph-osd-1</span><br></pre></td></tr></table></figure>
+<p>设置osd 的权重 ceph osd reweight <id> <reweight></reweight></id></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd reweight 1 0.5</span><br></pre></td></tr></table></figure>
+<p>把一个osd节点踢出集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd out osd.1</span><br></pre></td></tr></table></figure>
+<p>把踢出的osd重新加入集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd in osd.1</span><br></pre></td></tr></table></figure>
+<p>暂停osd （暂停后整个集群不再接收数据）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pause</span><br></pre></td></tr></table></figure>
+<p>再次开启osd （开启后再次接收数据）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd unpause</span><br></pre></td></tr></table></figure>
+<h2><span id="pg-篇">PG 篇</span></h2>
+<p>查看pg组的映射信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph pg dump |more</span><br></pre></td></tr></table></figure>
+<p>查看一个PG的map</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph pg map 0.3f</span><br></pre></td></tr></table></figure>
+<p>查看PG状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph pg stat</span><br></pre></td></tr></table></figure>
+<p>查询一个pg的详细信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph pg 0.39 query</span><br></pre></td></tr></table></figure>
+<p>查看pg中stuck的状态 (如有非正常pg会显示)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph pg dump_stuck unclean</span><br><span class="line">[root@ceph-manager ~]# ceph pg dump_stuck inactive</span><br><span class="line">[root@ceph-manager ~]# ceph pg dump_stuck stale</span><br></pre></td></tr></table></figure>
+<p>显示一个集群中的所有的pg统计</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph pg dump --format plain|more</span><br></pre></td></tr></table></figure>
+<p>恢复一个丢失的pg (og-id 为丢失的pg, 使用ceph pg dump_stuck inactive|unclean|stale 查找)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph pg &#123;pg-id&#125; mark_unfound_lost revert</span><br></pre></td></tr></table></figure>
+<h2><span id="pool-篇">pool 篇</span></h2>
+<p>查看ceph集群中的pool数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd lspools</span><br></pre></td></tr></table></figure>
+<p>查看 PG组 号码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool get rbd pg_num</span><br></pre></td></tr></table></figure>
+<p>在ceph集群中创建一个pool</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool create test 100 (名称为 test, 100为PG组号码)</span><br></pre></td></tr></table></figure>
+<p>为一个ceph pool配置配额</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set-quota test max_objects 10000</span><br></pre></td></tr></table></figure>
+<p>显示所有的pool</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool ls</span><br></pre></td></tr></table></figure>
+<p>在集群中删除一个pool</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool delete test test --yes-i-really-really-mean-it</span><br></pre></td></tr></table></figure>
+<p>显示集群中pool的详细信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rados df</span><br></pre></td></tr></table></figure>
+<p>给一个pool创建一个快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool mksnap test test-snap</span><br></pre></td></tr></table></figure>
+<p>删除pool的快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool rmsnap test test-snap</span><br></pre></td></tr></table></figure>
+<p>查看data池的pg数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool get test pg_num</span><br></pre></td></tr></table></figure>
+<p>设置data池的最大存储空间（默认是1T, 1T = 1000000000000, 如下为100T)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set test target_max_bytes 100000000000000</span><br></pre></td></tr></table></figure>
+<p>设置data池的副本数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set test size 3</span><br></pre></td></tr></table></figure>
+<p>设置data池能接受写操作的最小副本为2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set test min_size 2</span><br></pre></td></tr></table></figure>
+<p>查看集群中所有pool的副本尺寸</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd dump | grep &apos;replicated size&apos;</span><br></pre></td></tr></table></figure>
+<p>设置一个pool的pg数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set test pg_num 100</span><br></pre></td></tr></table></figure>
+<p>设置一个pool的pgp数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# ceph osd pool set test pgp_num 100</span><br></pre></td></tr></table></figure>
+<p>查看ceph pool中的ceph object (volumes 为pool名称)（这里的object是以块形式存储的）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rados ls -p volumes | more</span><br></pre></td></tr></table></figure>
+<p>创建一个对象object</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rados create test-object -p test</span><br></pre></td></tr></table></figure>
+<p>查看object</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rados -p test ls</span><br></pre></td></tr></table></figure>
+<p>删除一个对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rados rm test-object -p test</span><br></pre></td></tr></table></figure>
+<p>查看ceph中一个pool里的所有镜像 (volumes 为pool名称)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd ls volumes</span><br></pre></td></tr></table></figure>
+<p>在test池中创建一个命名为images的1000M的镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd create -p test --size 1000 images</span><br></pre></td></tr></table></figure>
+<p>查看刚创建的镜像信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd -p test info images</span><br></pre></td></tr></table></figure>
+<p>删除一个镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd rm -p test images</span><br></pre></td></tr></table></figure>
+<p>调整一个镜像的尺寸</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd resize -p test --size 2000 images</span><br></pre></td></tr></table></figure>
+<p>给镜像创建一个快照 (池/镜像名@快照名)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd snap create test/images@images1</span><br></pre></td></tr></table></figure>
+<p>删除一个镜像文件的一个快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd snap rm 快照池/快照镜像文件@具体快照</span><br></pre></td></tr></table></figure>
+<p>如果删除快照提示保护，需要先删除保护</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd snap unprotect 快照池/快照镜像文件@具体快照</span><br></pre></td></tr></table></figure>
+<p>删除一个镜像文件的所有快照</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd snap purge -p 快照池/快照镜像文件</span><br></pre></td></tr></table></figure>
+<p>把ceph pool中的一个镜像导出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@ceph-manager ~]# rbd export -p images --image &lt;具体镜像id&gt; /tmp/images.img</span><br></pre></td></tr></table></figure>
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/01/30/2016-10-10-docker-harbor/" data-toggle="tooltip" data-placement="top" title="docker 镜像仓库 Harbor 部署">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/01/30/2016-10-11-docker-elk-filebeat/" data-toggle="tooltip" data-placement="top" title="docker 容器日志集中 ELK + filebeat">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share" data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Ceph RBD  CephFS</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">初始化环境</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">安装 ceph</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">创建ceph 目录</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">创建监控节点：</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">初始化监控节点</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">客户端配置</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.7.</span> <span class="toc-nav-text">安装ceph</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.8.</span> <span class="toc-nav-text">创建pool</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.9.</span> <span class="toc-nav-text">客户端块存储挂载：</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.10.</span> <span class="toc-nav-text">cephFS 文件系统</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.11.</span> <span class="toc-nav-text">客户端挂载 cephFS</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">ceph 相关命令：</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">manager 篇</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">mon 篇</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">msd 篇</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">osd 篇</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">PG 篇</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">pool 篇</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://www.jicki.me" target="_blank">小炒肉</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "jicki";
+    var disqus_identifier = "https://www.jicki.me/2019/01/30/2016-10-11-ceph-rbd-cephfs/";
+    var disqus_url = "https://www.jicki.me/2019/01/30/2016-10-11-ceph-rbd-cephfs/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/jicki234">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/jicki520">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 小炒肉 2019 
+                    <br>
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.jicki.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-85602329-1';
+    var _gaDomain = 'jicki.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '1b38b88e4559c6725330b8c3328e2de3';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://www.jicki.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

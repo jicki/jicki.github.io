@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Your future depends on your dreams">
+    <meta name="keyword" content="小炒肉, 运维工程师, Jicki, DevOps, Docker, Kubernetes">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          kubernetes 1.5.3 - 小炒肉 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://www.jicki.me/2019/01/30/2017-03-03-kubernetes-1.5.3/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('img/pexels/triangular.jpeg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header">
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                        </div>
+                        <h1>kubernetes 1.5.3</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 小炒肉 on
+                            2019-01-30
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">小炒肉</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>kubernetes update 1.5.3</p>
+</blockquote>
+<h1><span id="1-初始化环境">1 初始化环境</span></h1>
+<h2><span id="11-环境">1.1 环境：</span></h2>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>node-1</td>
+<td>10.6.0.140</td>
+</tr>
+<tr>
+<td>node-2</td>
+<td>10.6.0.187</td>
+</tr>
+<tr>
+<td>node-3</td>
+<td>10.6.0.188</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="12-设置hostname">1.2 设置hostname</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl --static set-hostname hostname</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>hostname</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.6.0.140</td>
+<td>k8s-node-1</td>
+</tr>
+<tr>
+<td>10.6.0.187</td>
+<td>k8s-node-2</td>
+</tr>
+<tr>
+<td>10.6.0.188</td>
+<td>k8s-node-3</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="13-配置-hosts">1.3 配置 hosts</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/hosts</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>hostname</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.6.0.140</td>
+<td>k8s-node-1</td>
+</tr>
+<tr>
+<td>10.6.0.187</td>
+<td>k8s-node-2</td>
+</tr>
+<tr>
+<td>10.6.0.188</td>
+<td>k8s-node-3</td>
+</tr>
+</tbody>
+</table>
+<h1><span id="20-部署-kubernetes-master">2.0 部署 kubernetes master</span></h1>
+<h2><span id="21-添加yum">2.1 添加yum</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 使用我朋友的 yum 源，嘿嘿</span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF&gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[mritdrepo]</span><br><span class="line">name=Mritd Repository</span><br><span class="line">baseurl=https://yum.mritd.me/centos/7/x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://cdn.mritd.me/keys/rpm.public.key</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">yum makecache</span><br><span class="line"></span><br><span class="line">yum install -y socat kubelet kubeadm kubectl kubernetes-cni</span><br></pre></td></tr></table></figure>
+<h2><span id="22-安装docker">2.2 安装docker</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://get.docker.com/ | sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">systemctl enable docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+<h2><span id="23-下载镜像">2.3 下载镜像</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">images=(kube-proxy-amd64:v1.5.3 kube-discovery-amd64:1.0 kubedns-amd64:1.9 kube-scheduler-amd64:v1.5.3 kube-controller-manager-amd64:v1.5.3 kube-apiserver-amd64:v1.5.3 etcd-amd64:3.0.14-kubeadm kube-dnsmasq-amd64:1.4 exechealthz-amd64:1.2 pause-amd64:3.0 kubernetes-dashboard-amd64:v1.5.1 dnsmasq-metrics-amd64:1.0)</span><br><span class="line">for imageName in $&#123;images[@]&#125; ; do</span><br><span class="line">  docker pull jicki/$imageName</span><br><span class="line">  docker tag jicki/$imageName gcr.io/google_containers/$imageName</span><br><span class="line">  docker rmi jicki/$imageName</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 如果速度很慢，可配置一下加速</span><br><span class="line"></span><br><span class="line">docker 启动文件 增加 --registry-mirror=http://b438f72b.m.daocloud.io</span><br></pre></td></tr></table></figure>
+<h2><span id="24-启动-kubernetes">2.4 启动 kubernetes</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet</span><br><span class="line">systemctl start kubelet</span><br></pre></td></tr></table></figure>
+<h2><span id="25-创建集群">2.5 创建集群</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --api-advertise-addresses=10.6.0.140 \</span><br><span class="line">--use-kubernetes-version v1.5.3 \</span><br><span class="line">--pod-network-cidr 10.244.0.0/16</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">[kubeadm] WARNING: kubeadm is in alpha, please do not use it for production clusters.</span><br><span class="line">[preflight] Running pre-flight checks</span><br><span class="line">[preflight] Starting the kubelet service</span><br><span class="line">[init] Using kubernetes version: v1.5.3</span><br><span class="line">[tokens] Generated token: &quot;c53ef2.d257d49589d634f0&quot;</span><br><span class="line">[certificates] Generated Certificate Authority key and certificate.</span><br><span class="line">[certificates] Generated API Server key and certificate</span><br><span class="line">[certificates] Generated Service Account signing keys</span><br><span class="line">[certificates] Created keys and certificates in &quot;/etc/kubernetes/pki&quot;</span><br><span class="line">[kubeconfig] Wrote KubeConfig file to disk: &quot;/etc/kubernetes/kubelet.conf&quot;</span><br><span class="line">[kubeconfig] Wrote KubeConfig file to disk: &quot;/etc/kubernetes/admin.conf&quot;</span><br><span class="line">[apiclient] Created API client, waiting for the control plane to become ready</span><br><span class="line">[apiclient] All control plane components are healthy after 15.299235 seconds</span><br><span class="line">[apiclient] Waiting for at least one node to register and become ready</span><br><span class="line">[apiclient] First node is ready after 1.002937 seconds</span><br><span class="line">[apiclient] Creating a test deployment</span><br><span class="line">[apiclient] Test deployment succeeded</span><br><span class="line">[token-discovery] Created the kube-discovery deployment, waiting for it to become ready</span><br><span class="line">[token-discovery] kube-discovery is ready after 2.502881 seconds</span><br><span class="line">[addons] Created essential addon: kube-proxy</span><br><span class="line">[addons] Created essential addon: kube-dns</span><br><span class="line"></span><br><span class="line">Your kubernetes master has initialized successfully!</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:</span><br><span class="line">    http://kubernetes.io/docs/admin/addons/</span><br><span class="line"></span><br><span class="line">You can now join any number of machines by running the following on each node:</span><br><span class="line"></span><br><span class="line">kubeadm join --token=c53ef2.d257d49589d634f0 10.6.0.140</span><br></pre></td></tr></table></figure>
+<h2><span id="26-记录-token">2.6 记录 token</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">You can now join any number of machines by running the following on each node:</span><br><span class="line"></span><br><span class="line">kubeadm join --token=c53ef2.d257d49589d634f0 10.6.0.140</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 如果忘记了 token 使用如下 命令可获取</span><br><span class="line"></span><br><span class="line">kubectl -n kube-system get secret clusterinfo -o yaml | grep token-map | awk &apos;&#123;print $2&#125;&apos; | base64 --decode | sed &quot;s|&#123;||g;s|&#125;||g;s|:|.|g;s/\&quot;//g;&quot; | xargs echo</span><br></pre></td></tr></table></figure>
+<h2><span id="27-配置网络">2.7 配置网络</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 建议先下载镜像，否则容易下载不到</span><br><span class="line"></span><br><span class="line">docker pull quay.io/coreos/flannel:v0.7.0-amd64</span><br><span class="line"></span><br><span class="line"># 或者这样</span><br><span class="line"></span><br><span class="line">docker pull jicki/flannel:v0.7.0-amd64</span><br><span class="line">docker tag jicki/flannel:v0.7.0-amd64 quay.io/coreos/flannel:v0.7.0-amd64</span><br><span class="line">docker rmi jicki/flannel:v0.7.0-amd64</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># http://kubernetes.io/docs/admin/addons/  这里有多种网络模式，选择一种</span><br><span class="line"></span><br><span class="line"># 这里选择 Flannel  选择 Flannel  init 时必须配置 --pod-network-cidr</span><br><span class="line"></span><br><span class="line">kubectl create -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
+<h2><span id="28-检查-kubelet-状态">2.8 检查 kubelet 状态</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status kubelet</span><br></pre></td></tr></table></figure>
+<h1><span id="30-部署-kubernetes-node">3.0 部署 kubernetes node</span></h1>
+<h2><span id="31-安装docker">3.1 安装docker</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://get.docker.com/ | sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">systemctl enable docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+<h2><span id="32-下载镜像">3.2 下载镜像</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">images=(kube-proxy-amd64:v1.5.3 kube-discovery-amd64:1.0 kubedns-amd64:1.9 kube-scheduler-amd64:v1.5.3 kube-controller-manager-amd64:v1.5.3 kube-apiserver-amd64:v1.5.3 etcd-amd64:3.0.14-kubeadm kube-dnsmasq-amd64:1.4 exechealthz-amd64:1.2 pause-amd64:3.0 kubernetes-dashboard-amd64:v1.5.1 dnsmasq-metrics-amd64:1.0)</span><br><span class="line">for imageName in $&#123;images[@]&#125; ; do</span><br><span class="line">  docker pull jicki/$imageName</span><br><span class="line">  docker tag jicki/$imageName gcr.io/google_containers/$imageName</span><br><span class="line">  docker rmi jicki/$imageName</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<h2><span id="33-启动-kubernetes">3.3 启动 kubernetes</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet</span><br><span class="line">systemctl start kubelet</span><br></pre></td></tr></table></figure>
+<h2><span id="34-加入集群">3.4 加入集群</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm join --token=c53ef2.d257d49589d634f0 10.6.0.140</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Node join complete:</span><br><span class="line">* Certificate signing request sent to master and response</span><br><span class="line">  received.</span><br><span class="line">* Kubelet informed of new secure connection details.</span><br><span class="line"></span><br><span class="line">Run &apos;kubectl get nodes&apos; on the master to see this machine join.</span><br></pre></td></tr></table></figure>
+<h2><span id="35-查看集群状态">3.5 查看集群状态</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node-1 ~]#kubectl get node</span><br><span class="line">NAME         STATUS         AGE</span><br><span class="line">k8s-node-1   Ready,master   27m</span><br><span class="line">k8s-node-2   Ready          6s</span><br><span class="line">k8s-node-3   Ready          9s</span><br></pre></td></tr></table></figure>
+<h2><span id="36-查看服务状态">3.6 查看服务状态</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node-1 ~]#kubectl get pods --all-namespaces</span><br><span class="line">NAMESPACE     NAME                                 READY     STATUS    RESTARTS   AGE</span><br><span class="line">kube-system   dummy-2088944543-qrp68               1/1       Running   1          1h</span><br><span class="line">kube-system   kube-apiserver-k8s-node-1            1/1       Running   2          1h</span><br><span class="line">kube-system   kube-controller-manager-k8s-node-1   1/1       Running   2          1h</span><br><span class="line">kube-system   kube-discovery-1769846148-g2lpc      1/1       Running   1          1h</span><br><span class="line">kube-system   kube-dns-2924299975-xbhv4            4/4       Running   3          1h</span><br><span class="line">kube-system   kube-flannel-ds-39g5n                2/2       Running   2          1h</span><br><span class="line">kube-system   kube-flannel-ds-dwc82                2/2       Running   2          1h</span><br><span class="line">kube-system   kube-flannel-ds-qpkm0                2/2       Running   2          1h</span><br><span class="line">kube-system   kube-proxy-16c50                     1/1       Running   2          1h</span><br><span class="line">kube-system   kube-proxy-5rkc8                     1/1       Running   2          1h</span><br><span class="line">kube-system   kube-proxy-xwrq0                     1/1       Running   2          1h</span><br><span class="line">kube-system   kube-scheduler-k8s-node-1            1/1       Running   2          1h</span><br></pre></td></tr></table></figure>
+<h1><span id="40-设置-kubernetes">4.0 设置 kubernetes</span></h1>
+<h2><span id="41-其他主机控制集群">4.1 其他主机控制集群</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 备份master节点的 配置文件</span><br><span class="line"></span><br><span class="line">/etc/kubernetes/admin.conf</span><br><span class="line"></span><br><span class="line"># 保存至 其他电脑, 通过执行配置文件控制集群</span><br><span class="line"></span><br><span class="line">kubectl --kubeconfig ./admin.conf get nodes</span><br></pre></td></tr></table></figure>
+<h2><span id="42-配置dashboard">4.2 配置dashboard</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#下载 yaml 文件, 直接导入会去官方拉取images</span><br><span class="line"></span><br><span class="line">curl -O https://rawgit.com/kubernetes/dashboard/master/src/deploy/kubernetes-dashboard.yaml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#编辑 yaml 文件</span><br><span class="line"></span><br><span class="line">imagePullPolicy: Always</span><br><span class="line"></span><br><span class="line">修改为</span><br><span class="line"></span><br><span class="line">imagePullPolicy: IfNotPresent</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f ./kubernetes-dashboard.yaml</span><br><span class="line"></span><br><span class="line">deployment &quot;kubernetes-dashboard&quot; created</span><br><span class="line">service &quot;kubernetes-dashboard&quot; created</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 查看 NodePort ，既外网访问端口</span><br><span class="line"></span><br><span class="line">kubectl describe svc kubernetes-dashboard --namespace=kube-system</span><br><span class="line"></span><br><span class="line">NodePort:               &lt;unset&gt; 31736/TCP</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 访问 dashboard</span><br><span class="line"></span><br><span class="line">http://10.6.0.140:31736</span><br></pre></td></tr></table></figure>
+<p><img src="http://jicki.me/img/posts/kubernetes/1.png" alt="此处输入图片的描述"></p>
+<h1><span id="50-kubernetes-应用部署">5.0 kubernetes 应用部署</span></h1>
+<h2><span id="51-部署一个-nginx-rc">5.1 部署一个 nginx  rc</span></h2>
+<blockquote>
+<p>编写 一个 nginx yaml</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1 </span><br><span class="line">kind: ReplicationController </span><br><span class="line">metadata: </span><br><span class="line">  name: nginx-rc </span><br><span class="line">spec: </span><br><span class="line">  replicas: 2 </span><br><span class="line">  selector: </span><br><span class="line">    name: nginx </span><br><span class="line">  template: </span><br><span class="line">    metadata: </span><br><span class="line">      labels: </span><br><span class="line">        name: nginx </span><br><span class="line">    spec: </span><br><span class="line">      containers: </span><br><span class="line">        - name: nginx </span><br><span class="line">          image: nginx:alpine</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          ports: </span><br><span class="line">            - containerPort: 80</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node-1 ~]#kubectl get rc</span><br><span class="line">NAME       DESIRED   CURRENT   READY     AGE</span><br><span class="line">nginx-rc   2         2         2         2m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-node-1 ~]#kubectl get pod -o wide</span><br><span class="line">NAME             READY     STATUS    RESTARTS   AGE       IP          NODE</span><br><span class="line">nginx-rc-2s8k9   1/1       Running   0          10m       10.32.0.3   k8s-node-1</span><br><span class="line">nginx-rc-s16cm   1/1       Running   0          10m       10.40.0.1   k8s-node-2</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>编写一个 nginx service 让集群内部容器可以访问 (ClusterIp)</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service </span><br><span class="line">metadata: </span><br><span class="line">  name: nginx-svc </span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - port: 80</span><br><span class="line">      targetPort: 80</span><br><span class="line">      protocol: TCP </span><br><span class="line">  selector: </span><br><span class="line">    name: nginx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node-1 ~]#kubectl create -f nginx-svc.yaml </span><br><span class="line">service &quot;nginx-svc&quot; created</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-node-1 ~]#kubectl get svc -o wide</span><br><span class="line">NAME         CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE       SELECTOR</span><br><span class="line">kubernetes   10.0.0.1      &lt;none&gt;        443/TCP   2d        &lt;none&gt;</span><br><span class="line">nginx-svc    10.6.164.79   &lt;none&gt;        80/TCP    29s       name=nginx</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>编写一个 curl 的pods</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: curl</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: curl</span><br><span class="line">    image: radial/busyboxplus:curl</span><br><span class="line">    command:</span><br><span class="line">    - sh</span><br><span class="line">    - -c</span><br><span class="line">    - while true; do sleep 1; done</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 测试pods 内部通信</span><br><span class="line">[root@k8s-node-1 ~]#kubectl exec curl curl nginx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 在任何node节点中，可使用ip访问</span><br><span class="line"></span><br><span class="line">[root@k8s-node-2 ~]# curl 10.6.164.79</span><br><span class="line">[root@k8s-node-3 ~]# curl 10.6.164.79</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>编写一个 nginx service 让外部可以访问 (NodePort)</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-svc-node</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">    - port: 80</span><br><span class="line">      targetPort: 80</span><br><span class="line">      protocol: TCP</span><br><span class="line">  type: NodePort</span><br><span class="line">  selector:</span><br><span class="line">    name: nginx</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node-1 ~]#kubectl get svc -o wide</span><br><span class="line">NAME             CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE       SELECTOR</span><br><span class="line">kubernetes       10.0.0.1       &lt;none&gt;        443/TCP   2d        &lt;none&gt;</span><br><span class="line">nginx-svc        10.6.164.79    &lt;none&gt;        80/TCP    29m       name=nginx</span><br><span class="line">nginx-svc-node   10.12.95.227   &lt;nodes&gt;       80/TCP    17s       name=nginx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-node-1 ~]#kubectl describe svc nginx-svc-node |grep NodePort</span><br><span class="line">Type:                   NodePort</span><br><span class="line">NodePort:               &lt;unset&gt; 32669/TCP</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 使用 ALL node节点物理IP + 端口访问</span><br><span class="line"></span><br><span class="line">http://10.6.0.140:32669</span><br><span class="line"></span><br><span class="line">http://10.6.0.187:32669</span><br><span class="line"></span><br><span class="line">http://10.6.0.188:32669</span><br></pre></td></tr></table></figure>
+<h2><span id="52-部署一个-zookeeper-集群">5.2 部署一个 zookeeper 集群</span></h2>
+<blockquote>
+<p>编写 一个 zookeeper-cluster.yaml</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment </span><br><span class="line">metadata: </span><br><span class="line">  name: zookeeper-1</span><br><span class="line">spec: </span><br><span class="line">  replicas: 1</span><br><span class="line">  template: </span><br><span class="line">    metadata: </span><br><span class="line">      labels: </span><br><span class="line">        name: zookeeper-1 </span><br><span class="line">    spec: </span><br><span class="line">      containers: </span><br><span class="line">        - name: zookeeper-1</span><br><span class="line">          image: zk:alpine </span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          env:</span><br><span class="line">          - name: NODE_ID</span><br><span class="line">            value: &quot;1&quot;</span><br><span class="line">          - name: NODES</span><br><span class="line">            value: &quot;0.0.0.0,zookeeper-2,zookeeper-3&quot;</span><br><span class="line">          ports:</span><br><span class="line">          - containerPort: 2181</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1 </span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: zookeeper-2</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        name: zookeeper-2</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">        - name: zookeeper-2</span><br><span class="line">          image: zk:alpine</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          env:</span><br><span class="line">          - name: NODE_ID</span><br><span class="line">            value: &quot;2&quot;</span><br><span class="line">          - name: NODES</span><br><span class="line">            value: &quot;zookeeper-1,0.0.0.0,zookeeper-3&quot;</span><br><span class="line">          ports:</span><br><span class="line">          - containerPort: 2181</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: zookeeper-3</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        name: zookeeper-3</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">        - name: zookeeper-3</span><br><span class="line">          image: zk:alpine</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          env:</span><br><span class="line">          - name: NODE_ID</span><br><span class="line">            value: &quot;3&quot;</span><br><span class="line">          - name: NODES</span><br><span class="line">            value: &quot;zookeeper-1,zookeeper-2,0.0.0.0&quot;</span><br><span class="line">          ports:</span><br><span class="line">          - containerPort: 2181</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service </span><br><span class="line">metadata: </span><br><span class="line">  name: zookeeper-1 </span><br><span class="line">  labels:</span><br><span class="line">    name: zookeeper-1</span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - name: client</span><br><span class="line">      port: 2181</span><br><span class="line">      protocol: TCP</span><br><span class="line">    - name: followers</span><br><span class="line">      port: 2888</span><br><span class="line">      protocol: TCP</span><br><span class="line">    - name: election</span><br><span class="line">      port: 3888</span><br><span class="line">      protocol: TCP</span><br><span class="line">  selector: </span><br><span class="line">    name: zookeeper-1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service </span><br><span class="line">metadata: </span><br><span class="line">  name: zookeeper-2</span><br><span class="line">  labels:</span><br><span class="line">    name: zookeeper-2</span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - name: client</span><br><span class="line">      port: 2181</span><br><span class="line">      protocol: TCP</span><br><span class="line">    - name: followers</span><br><span class="line">      port: 2888</span><br><span class="line">      protocol: TCP</span><br><span class="line">    - name: election</span><br><span class="line">      port: 3888</span><br><span class="line">      protocol: TCP</span><br><span class="line">  selector: </span><br><span class="line">    name: zookeeper-2</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service </span><br><span class="line">metadata: </span><br><span class="line">  name: zookeeper-3</span><br><span class="line">  labels:</span><br><span class="line">    name: zookeeper-3</span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - name: client</span><br><span class="line">      port: 2181</span><br><span class="line">      protocol: TCP</span><br><span class="line">    - name: followers</span><br><span class="line">      port: 2888</span><br><span class="line">      protocol: TCP</span><br><span class="line">    - name: election</span><br><span class="line">      port: 3888</span><br><span class="line">      protocol: TCP</span><br><span class="line">  selector: </span><br><span class="line">    name: zookeeper-3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node-1 ~]#kubectl create -f zookeeper-cluster.yaml --record</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-node-1 ~]#kubectl get pods -o wide</span><br><span class="line">NAME                           READY     STATUS    RESTARTS   AGE       IP          NODE</span><br><span class="line">zookeeper-1-2149121414-cfyt4   1/1       Running   0          51m       10.32.0.3   k8s-node-2</span><br><span class="line">zookeeper-2-2653289864-0bxee   1/1       Running   0          51m       10.40.0.1   k8s-node-3</span><br><span class="line">zookeeper-3-3158769034-5csqy   1/1       Running   0          51m       10.40.0.2   k8s-node-3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-node-1 ~]#kubectl get deployment -o wide    </span><br><span class="line">NAME          DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">zookeeper-1   1         1         1            1           51m</span><br><span class="line">zookeeper-2   1         1         1            1           51m</span><br><span class="line">zookeeper-3   1         1         1            1           51m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-node-1 ~]#kubectl get svc -o wide</span><br><span class="line">NAME          CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE       SELECTOR</span><br><span class="line">zookeeper-1   10.8.111.19    &lt;none&gt;        2181/TCP,2888/TCP,3888/TCP   51m       name=zookeeper-1</span><br><span class="line">zookeeper-2   10.6.10.124    &lt;none&gt;        2181/TCP,2888/TCP,3888/TCP   51m       name=zookeeper-2</span><br><span class="line">zookeeper-3   10.0.146.143   &lt;none&gt;        2181/TCP,2888/TCP,3888/TCP   51m       name=zookeeper-3</span><br></pre></td></tr></table></figure>
+<h2><span id="53-部署一个-kafka-集群">5.3 部署一个 kafka 集群</span></h2>
+<blockquote>
+<p>编写 一个 kafka-cluster.yaml</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment </span><br><span class="line">metadata: </span><br><span class="line">  name: kafka-deployment-1</span><br><span class="line">spec: </span><br><span class="line">  replicas: 1</span><br><span class="line">  template: </span><br><span class="line">    metadata: </span><br><span class="line">      labels: </span><br><span class="line">        name: kafka-1 </span><br><span class="line">    spec: </span><br><span class="line">      containers: </span><br><span class="line">        - name: kafka-1</span><br><span class="line">          image: kafka:alpine </span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          env:</span><br><span class="line">          - name: NODE_ID</span><br><span class="line">            value: &quot;1&quot;</span><br><span class="line">          - name: ZK_NODES</span><br><span class="line">            value: &quot;zookeeper-1,zookeeper-2,zookeeper-3&quot;</span><br><span class="line">          ports:</span><br><span class="line">          - containerPort: 9092</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1 </span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: kafka-deployment-2</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        name: kafka-2  </span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">        - name: kafka-2</span><br><span class="line">          image: kafka:alpine</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          env:</span><br><span class="line">          - name: NODE_ID</span><br><span class="line">            value: &quot;2&quot;</span><br><span class="line">          - name: ZK_NODES</span><br><span class="line">            value: &quot;zookeeper-1,zookeeper-2,zookeeper-3&quot;</span><br><span class="line">          ports:</span><br><span class="line">          - containerPort: 9092</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: kafka-deployment-3</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        name: kafka-3  </span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">        - name: kafka-3</span><br><span class="line">          image: kafka:alpine</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          env:</span><br><span class="line">          - name: NODE_ID</span><br><span class="line">            value: &quot;3&quot;</span><br><span class="line">          - name: ZK_NODES</span><br><span class="line">            value: &quot;zookeeper-1,zookeeper-2,zookeeper-3&quot;</span><br><span class="line">          ports:</span><br><span class="line">          - containerPort: 9092</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service </span><br><span class="line">metadata: </span><br><span class="line">  name: kafka-1 </span><br><span class="line">  labels:</span><br><span class="line">    name: kafka-1</span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - name: client</span><br><span class="line">      port: 9092</span><br><span class="line">      protocol: TCP</span><br><span class="line">  selector: </span><br><span class="line">    name: kafka-1</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service </span><br><span class="line">metadata: </span><br><span class="line">  name: kafka-2</span><br><span class="line">  labels:</span><br><span class="line">    name: kafka-2</span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - name: client</span><br><span class="line">      port: 9092</span><br><span class="line">      protocol: TCP</span><br><span class="line">  selector: </span><br><span class="line">    name: kafka-2</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service </span><br><span class="line">metadata: </span><br><span class="line">  name: kafka-3</span><br><span class="line">  labels:</span><br><span class="line">    name: kafka-3</span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - name: client</span><br><span class="line">      port: 9092</span><br><span class="line">      protocol: TCP</span><br><span class="line">  selector: </span><br><span class="line">    name: kafka-3</span><br></pre></td></tr></table></figure>
+<h1><span id="faq">FAQ:</span></h1>
+<h2><span id="kube-discovery-error">kube-discovery error</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">	failed to create &quot;kube-discovery&quot; deployment [deployments.extensions &quot;kube-discovery&quot; already exists]</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">kubeadm reset</span><br><span class="line"></span><br><span class="line">kubeadm init</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/01/30/2017-02-15-Ubuntu-Desktop/" data-toggle="tooltip" data-placement="top" title="Ubuntu Desktop">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/01/30/2017-03-13-kargo-kubernetes-1.5.4/" data-toggle="tooltip" data-placement="top" title="kargo kubernetes 1.5.4">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share" data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">1 初始化环境</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.1 环境：</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">1.2 设置hostname</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">1.3 配置 hosts</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">2.0 部署 kubernetes master</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">2.1 添加yum</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">2.2 安装docker</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">2.3 下载镜像</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.4.</span> <span class="toc-nav-text">2.4 启动 kubernetes</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.5.</span> <span class="toc-nav-text">2.5 创建集群</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.6.</span> <span class="toc-nav-text">2.6 记录 token</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.7.</span> <span class="toc-nav-text">2.7 配置网络</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">2.8.</span> <span class="toc-nav-text">2.8 检查 kubelet 状态</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">3.0 部署 kubernetes node</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">3.1 安装docker</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">3.2 下载镜像</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">3.3 启动 kubernetes</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">3.4 加入集群</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.5.</span> <span class="toc-nav-text">3.5 查看集群状态</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">3.6.</span> <span class="toc-nav-text">3.6 查看服务状态</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">4.0 设置 kubernetes</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">4.1 其他主机控制集群</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">4.2 配置dashboard</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">5.0 kubernetes 应用部署</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.1.</span> <span class="toc-nav-text">5.1 部署一个 nginx  rc</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.2.</span> <span class="toc-nav-text">5.2 部署一个 zookeeper 集群</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">5.3.</span> <span class="toc-nav-text">5.3 部署一个 kafka 集群</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">FAQ:</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">6.1.</span> <span class="toc-nav-text">kube-discovery error</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://www.jicki.me" target="_blank">小炒肉</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "jicki";
+    var disqus_identifier = "https://www.jicki.me/2019/01/30/2017-03-03-kubernetes-1.5.3/";
+    var disqus_url = "https://www.jicki.me/2019/01/30/2017-03-03-kubernetes-1.5.3/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/jicki234">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/jicki520">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 小炒肉 2019 
+                    <br>
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.jicki.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-85602329-1';
+    var _gaDomain = 'jicki.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '1b38b88e4559c6725330b8c3328e2de3';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://www.jicki.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Your future depends on your dreams">
+    <meta name="keyword" content="小炒肉, 运维工程师, Jicki, DevOps, Docker, Kubernetes">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          kubernetes jenkins - 小炒肉 | Blog
+        
+    </title>
+
+    <link rel="canonical" href="https://www.jicki.me/2019/01/30/2018-02-08-kubernetes-jenkins/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+
+    <link rel="stylesheet" href="/css/donate.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('img/pexels/triangular.jpeg')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header">
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                        </div>
+                        <h1>kubernetes jenkins</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by 小炒肉 on
+                            2019-01-30
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">小炒肉</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>jenkins 所有的资源全部在 kubernetes 中进行，并配置 kubernetes 云<br>
+针对 jenkins slave 做动态资源伸缩，构建时申请 pod, 操作完毕后自动删除 pod</p>
+</blockquote>
+<h1><span id="基于-kubernetes-jenkins-slave-动态资源伸缩-pod">基于 Kubernetes Jenkins slave 动态资源伸缩 pod</span></h1>
+<h2><span id="环境说明">环境说明</span></h2>
+<blockquote>
+<p>请自行配置 kubernetes 集群, kubernetes 版本为 1.9.1</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">172.16.1.64 - kubernetes master</span><br><span class="line">172.16.1.65 - kubernetes master or node</span><br><span class="line">172.16.1.66 - kubernetes node</span><br></pre></td></tr></table></figure>
+<h2><span id="先决条件">先决条件</span></h2>
+<blockquote>
+<p>后端存储, 用于存放 jenkins home 目录，以及 slave 构建依赖包目录</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 配置jenkins 后端存储, 如 nfs, gfs, cephfs 等， 请自行配置，或者参考 之前的文章。</span><br><span class="line"></span><br><span class="line"># 基于单独的 nfs 最为后端 文档在这里 https://jicki.me/2017/01/01/kubernetes-nfs/</span><br></pre></td></tr></table></figure>
+<h2><span id="创建-jenkins-master">创建 jenkins master</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 首先创建一个 namespace</span><br><span class="line"></span><br><span class="line">vi jenkins-namespace.yaml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Namespace</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 导入文件</span><br><span class="line"></span><br><span class="line">kubectl apply -f jenkins-namespace.yaml </span><br><span class="line">namespace &quot;jenkins&quot; created</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line"></span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl get namespace</span><br><span class="line">NAME            STATUS    AGE</span><br><span class="line">default         Active    26d</span><br><span class="line">ingress-nginx   Active    15d</span><br><span class="line">jenkins         Active    23s</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># 创建 jenkins 的 rbac , jenkins 与 api-service 通讯必须要 rabc 认证</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vi jenkins-rbac.yaml</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: jenkins</span><br><span class="line">  name: jenkins-admin</span><br><span class="line">  namespace: jenkins</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1beta1</span><br><span class="line">kind: ClusterRoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-admin</span><br><span class="line">  namespace: jenkins</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: jenkins</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: ClusterRole</span><br><span class="line">  name: cluster-admin</span><br><span class="line">subjects:</span><br><span class="line">- kind: ServiceAccount</span><br><span class="line">  name: jenkins-admin</span><br><span class="line">  namespace: jenkins</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 导入文件</span><br><span class="line"></span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl apply -f jenkins-rbac.yaml </span><br><span class="line">serviceaccount &quot;jenkins-admin&quot; created</span><br><span class="line">clusterrolebinding &quot;jenkins-admin&quot; created</span><br><span class="line"></span><br><span class="line"># 查看</span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl get serviceaccount -n jenkins</span><br><span class="line">NAME            SECRETS   AGE</span><br><span class="line">default         1         3h</span><br><span class="line">jenkins-admin   1         1m</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">vi jenkins-deployment.yaml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">apiVersion: apps/v1beta1</span><br><span class="line">kind: Deployment  </span><br><span class="line">metadata:  </span><br><span class="line">  name: jenkins</span><br><span class="line">  namespace: jenkins</span><br><span class="line">spec:  </span><br><span class="line">  replicas: 1  </span><br><span class="line">  strategy:  </span><br><span class="line">    type: RollingUpdate  </span><br><span class="line">    rollingUpdate:  </span><br><span class="line">      maxSurge: 2  </span><br><span class="line">      maxUnavailable: 0  </span><br><span class="line">  template:  </span><br><span class="line">    metadata:  </span><br><span class="line">      labels:  </span><br><span class="line">        app: jenkins  </span><br><span class="line">    spec:</span><br><span class="line">      securityContext:</span><br><span class="line">        fsGroup: 1000</span><br><span class="line">      serviceAccount: &quot;jenkins-admin&quot;</span><br><span class="line">      containers:  </span><br><span class="line">      - name: jenkins</span><br><span class="line">        image: jenkins/jenkins</span><br><span class="line">        imagePullPolicy: IfNotPresent  </span><br><span class="line">        ports:  </span><br><span class="line">        - containerPort: 8080  </span><br><span class="line">          name: web  </span><br><span class="line">          protocol: TCP  </span><br><span class="line">        - containerPort: 50000  </span><br><span class="line">          name: agent  </span><br><span class="line">          protocol: TCP  </span><br><span class="line">        volumeMounts:  </span><br><span class="line">        - name: jenkinshome</span><br><span class="line">          mountPath: /var/jenkins_home</span><br><span class="line">        env:  </span><br><span class="line">        - name: JAVA_OPTS  </span><br><span class="line">          value: &quot;-Xms512m -Xmx1024m -XX:PermSize=512m -XX:MaxPermSize=1024m -Duser.timezone=Asia/Shanghai&quot;</span><br><span class="line">        - name: TRY_UPGRADE_IF_NO_MARKER</span><br><span class="line">          value: &quot;true&quot;</span><br><span class="line">      volumes:  </span><br><span class="line">      - name: jenkinshome</span><br><span class="line">        nfs:  </span><br><span class="line">          server: 172.16.1.66</span><br><span class="line">          path: &quot;/opt/data/jenkins&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">kind: Service  </span><br><span class="line">apiVersion: v1  </span><br><span class="line">metadata:  </span><br><span class="line">  labels:  </span><br><span class="line">      app: jenkins  </span><br><span class="line">  name: jenkins</span><br><span class="line">  namespace: jenkins</span><br><span class="line">spec:  </span><br><span class="line">  ports:  </span><br><span class="line">  - port: 8080  </span><br><span class="line">    targetPort: 8080  </span><br><span class="line">    name: web  </span><br><span class="line">  - port: 50000  </span><br><span class="line">    targetPort: 50000  </span><br><span class="line">    name: agent  </span><br><span class="line">  selector:</span><br><span class="line">    app: jenkins</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">---</span><br><span class="line">apiVersion: extensions/v1beta1  </span><br><span class="line">kind: Ingress  </span><br><span class="line">metadata:  </span><br><span class="line">  name: jenkins</span><br><span class="line">  namespace: jenkins</span><br><span class="line">spec:  </span><br><span class="line">  rules:  </span><br><span class="line">  - host: jenkins.jicki.me</span><br><span class="line">    http:  </span><br><span class="line">      paths:  </span><br><span class="line">      - path: /  </span><br><span class="line">        backend:  </span><br><span class="line">          serviceName: jenkins  </span><br><span class="line">          servicePort: 8080</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"># 导入 文件</span><br><span class="line"></span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl apply -f jenkins-deployment.yaml </span><br><span class="line">deployment &quot;jenkins&quot; created</span><br><span class="line">service &quot;jenkins&quot; created</span><br><span class="line">ingress &quot;jenkins&quot; created</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看 服务</span><br><span class="line"></span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl get pods -n jenkins</span><br><span class="line">NAME                     READY     STATUS    RESTARTS   AGE</span><br><span class="line">jenkins-c5f45c84-8vlcp   1/1       Running   0          6m</span><br><span class="line">[root@kubernetes-64 jenkins]# </span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl get svc -n jenkins</span><br><span class="line">NAME      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)              AGE</span><br><span class="line">jenkins   ClusterIP   10.254.47.35   &lt;none&gt;        8080/TCP,50000/TCP   6m</span><br><span class="line">[root@kubernetes-64 jenkins]# </span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl get ingress -n jenkins   </span><br><span class="line">NAME      HOSTS              ADDRESS   PORTS     AGE</span><br><span class="line">jenkins   jenkins.jicki.me             80        6m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 查看 jenkins 初始密码</span><br><span class="line"></span><br><span class="line">[root@kubernetes-64 jenkins]# kubectl logs pods/jenkins-c5f45c84-8vlcp -n jenkins</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line"></span><br><span class="line">Jenkins initial setup is required. An admin user has been created and a password generated.</span><br><span class="line">Please use the following password to proceed to installation:</span><br><span class="line"></span><br><span class="line">b2458cfb46724268a4db025c54f172ab</span><br><span class="line"></span><br><span class="line">This may also be found at: /var/jenkins_home/secrets/initialAdminPassword</span><br><span class="line"></span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br><span class="line">*************************************************************</span><br></pre></td></tr></table></figure>
+<h2><span id="配置-jenkins">配置 jenkins</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 登录 web ui</span><br><span class="line"></span><br><span class="line">http://jenkins.jicki.me</span><br></pre></td></tr></table></figure>
+<p><img src="http://jicki.me/img/posts/jenkins/jenkins1.png" alt="jenkins1"><br>
+<img src="http://jicki.me/img/posts/jenkins/jenkins2.png" alt="jenkins2"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Master 需要安装的插件</span><br><span class="line"></span><br><span class="line">1. Pipeline</span><br><span class="line">2. kubernetes plugin </span><br><span class="line">3. Build WIth Parameters    (构建 输入参数的插件)</span><br><span class="line">4. Git Parameter Plug-In  ( git 分支 构建选择)</span><br></pre></td></tr></table></figure>
+<p><img src="http://jicki.me/img/posts/jenkins/jenkins3.png" alt="jenkins3"></p>
+<h2><span id="配置-kubernetes-云">配置 kubernetes 云</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 点击【系统管理】-【系统设置】-【新增一个云】-【Kubernetes】</span><br></pre></td></tr></table></figure>
+<p><img src="http://jicki.me/img/posts/jenkins/jenkins4.png" alt="jenkins4"></p>
+<p><img src="http://jicki.me/img/posts/jenkins/jenkins5.png" alt="jenkins5"></p>
+<h3><span id="基于-pipeline-模式">基于 pipeline 模式</span></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个基于 pipeline 的配置  cloud 字段配置为 kubernetes 云的 name .</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">podTemplate(label: &apos;jenkins-pod&apos;, cloud: &apos;Jenkins-Cloud&apos;) &#123;</span><br><span class="line">    node(&apos;jenkins-pod&apos;) &#123;</span><br><span class="line">        stage(&apos;Run shell&apos;) &#123;</span><br><span class="line">            sh &apos;echo hello world&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 点击立即构建, 控制台输出如下:</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Started by user 小炒肉</span><br><span class="line">Running in Durability level: MAX_SURVIVABILITY</span><br><span class="line">[Pipeline] podTemplate</span><br><span class="line">[Pipeline] &#123;</span><br><span class="line">[Pipeline] node</span><br><span class="line">Still waiting to schedule task</span><br><span class="line">jenkins-slave-bkcfk-vpzz0 is offline</span><br><span class="line">Running on jenkins-slave-bkcfk-vpzz0 in /home/jenkins/workspace/test-k8s</span><br><span class="line">[Pipeline] &#123;</span><br><span class="line">[Pipeline] stage</span><br><span class="line">[Pipeline] &#123; (Run shell)</span><br><span class="line">[Pipeline] sh</span><br><span class="line">[test-k8s] Running shell script</span><br><span class="line">+ echo hello world</span><br><span class="line">hello world</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // stage</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // node</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // podTemplate</span><br><span class="line">[Pipeline] End of Pipeline</span><br><span class="line">Finished: SUCCESS</span><br></pre></td></tr></table></figure>
+<h3><span id="基于-自由风格模式">基于 自由风格模式</span></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 点击【系统管理】-【系统设置】-【新增一个云】-【Kubernetes】- 【 Kubernetes Pod Template 】</span><br><span class="line">  - 【 Container Template 】</span><br><span class="line"></span><br><span class="line">具体参数 如下：</span><br></pre></td></tr></table></figure>
+<p><img src="http://jicki.me/img/posts/jenkins/jenkins6.png" alt="jenkins6"><br>
+<img src="http://jicki.me/img/posts/jenkins/jenkins7.png" alt="jenkins7"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 添加一个 自动风格的 pj</span><br></pre></td></tr></table></figure>
+<p><img src="http://jicki.me/img/posts/jenkins/jenkins8.png" alt="jenkins8"><br>
+<img src="http://jicki.me/img/posts/jenkins/jenkins9.png" alt="jenkins9"><br>
+<img src="http://jicki.me/img/posts/jenkins/jenkins10.png" alt="jenkins10"><br>
+<img src="http://jicki.me/img/posts/jenkins/jenkins11.png" alt="jenkins11"><br>
+<img src="http://jicki.me/img/posts/jenkins/jenkins12.png" alt="jenkins12"></p>
+<h2><span id="制作-slave-镜像">制作 slave 镜像</span></h2>
+<blockquote>
+<p>官方默认的 jenkins-slave 里面不存在任何的工具，依赖，项目环境等，我们需要制作一个属于自己项目的 jenkins-slave 镜像。</p>
+</blockquote>
+<blockquote>
+<p>官方 jenkins-slave dockerfile 地址 <a href="https://github.com/jenkinsci/docker-jnlp-slave" target="_blank" rel="noopener">https://github.com/jenkinsci/docker-jnlp-slave</a><br>
+官方 slave  <a href="https://github.com/jenkinsci/docker-slave" target="_blank" rel="noopener">https://github.com/jenkinsci/docker-slave</a></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 个人的 oracle-jdk-8 镜像 java -version = 1.8.0_161</span><br><span class="line"></span><br><span class="line">docker pull jicki/oracle-jdk:8</span><br><span class="line"></span><br><span class="line"># 个人的 gradle 镜像 </span><br><span class="line"></span><br><span class="line">docker pull jicki/gradle:4.5</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 基于 jicki/gradle:4.5 的一个 jenkins slave</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker pull jicki/slave:3.16</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 获取官方的git，主要是 jenkins-slave 脚本文件</span><br><span class="line"></span><br><span class="line">git clone https://github.com/jenkinsci/docker-jnlp-slave</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 重新编辑 dockerfile 官方默认使用 openjdk-1.8</span><br><span class="line"></span><br><span class="line">vi  dockerfile</span><br><span class="line"></span><br><span class="line">FROM jicki/slave:3.16</span><br><span class="line"></span><br><span class="line">COPY jenkins-slave /usr/local/bin/jenkins-slave</span><br><span class="line"></span><br><span class="line">USER root</span><br><span class="line">RUN chmod +x /usr/local/bin/jenkins-slave</span><br><span class="line"></span><br><span class="line">USER jenkins</span><br><span class="line">ENTRYPOINT [&quot;jenkins-slave&quot;]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t=&quot;jicki/jenkins-jnlp&quot; .</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"># 测试自己的镜像</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">podTemplate(label: &apos;jicki-jenkins&apos;, cloud: &apos;Jenkins-Cloud&apos;, containers: [</span><br><span class="line">    containerTemplate(</span><br><span class="line">        name: &apos;jnlp&apos;, </span><br><span class="line">        image: &apos;jicki/jenkins-jnlp&apos;, </span><br><span class="line">        alwaysPullImage: true, </span><br><span class="line">        args: &apos;$&#123;computer.jnlpmac&#125; $&#123;computer.name&#125;&apos;),</span><br><span class="line"></span><br><span class="line">  ],</span><br><span class="line">  volumes: [</span><br><span class="line">    hostPathVolume(mountPath: &apos;/var/run/docker.sock&apos;, hostPath: &apos;/var/run/docker.sock&apos;),</span><br><span class="line">],) </span><br><span class="line">&#123;</span><br><span class="line">    node(&apos;jicki-jenkins&apos;) &#123;</span><br><span class="line">        stage(&apos;Task-1&apos;) &#123;</span><br><span class="line">            stage(&apos;show java version&apos;) &#123;</span><br><span class="line">                sh &apos;java -version&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    node(&apos;jicki-jenkins&apos;) &#123;</span><br><span class="line">        stage(&apos;Task-2&apos;) &#123;</span><br><span class="line">            stage(&apos;show gradle version&apos;) &#123;</span><br><span class="line">                sh &apos;gradle -version&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Started by user 小炒肉</span><br><span class="line">Running in Durability level: MAX_SURVIVABILITY</span><br><span class="line">[Pipeline] podTemplate</span><br><span class="line">[Pipeline] &#123;</span><br><span class="line">[Pipeline] node</span><br><span class="line">Still waiting to schedule task</span><br><span class="line">Waiting for next available executor on jenkins-slave-9v0g5-73tng</span><br><span class="line">Running on jenkins-slave-9v0g5-73tng in /home/jenkins/workspace/test-2</span><br><span class="line">[Pipeline] &#123;</span><br><span class="line">[Pipeline] stage</span><br><span class="line">[Pipeline] &#123; (Task-1)</span><br><span class="line">[Pipeline] stage</span><br><span class="line">[Pipeline] &#123; (show java version)</span><br><span class="line">[Pipeline] sh</span><br><span class="line">[test-2] Running shell script</span><br><span class="line">+ java -version</span><br><span class="line">java version &quot;1.8.0_161&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_161-b12)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.161-b12, mixed mode)</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // stage</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // stage</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // node</span><br><span class="line">[Pipeline] node</span><br><span class="line">Still waiting to schedule task</span><br><span class="line">jenkins-slave-9v0g5-nxdf8 is offline</span><br><span class="line">Running on jenkins-slave-9v0g5-nxdf8 in /home/jenkins/workspace/test-2</span><br><span class="line">[Pipeline] &#123;</span><br><span class="line">[Pipeline] stage</span><br><span class="line">[Pipeline] &#123; (Task-2)</span><br><span class="line">[Pipeline] stage</span><br><span class="line">[Pipeline] &#123; (show gradle version)</span><br><span class="line">[Pipeline] sh</span><br><span class="line">[test-2] Running shell script</span><br><span class="line">+ gradle -version</span><br><span class="line"></span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Gradle 4.5</span><br><span class="line">------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">Build time:   2018-01-24 17:04:52 UTC</span><br><span class="line">Revision:     77d0ec90636f43669dc794ca17ef80dd65457bec</span><br><span class="line"></span><br><span class="line">Groovy:       2.4.12</span><br><span class="line">Ant:          Apache Ant(TM) version 1.9.9 compiled on February 2 2017</span><br><span class="line">JVM:          1.8.0_161 (Oracle Corporation 25.161-b12)</span><br><span class="line">OS:           Linux 4.4.111-1.el7.elrepo.x86_64 amd64</span><br><span class="line"></span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // stage</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // stage</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // node</span><br><span class="line">[Pipeline] &#125;</span><br><span class="line">[Pipeline] // podTemplate</span><br><span class="line">[Pipeline] End of Pipeline</span><br><span class="line">Finished: SUCCESS</span><br></pre></td></tr></table></figure>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2019/01/30/2018-03-02-jenkins-android-build/" data-toggle="tooltip" data-placement="top" title="jenkins build android">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2019/01/30/2018-08-07-hyperledger-fabric-1.2/" data-toggle="tooltip" data-placement="top" title="hyperledger-fabric v 1.2 多机 多节点">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <br>
+
+                <!--打赏-->
+                
+                <!--打赏-->
+
+                <br>
+                <!--分享-->
+                
+                    <div class="social-share" data-wechat-qrcode-helper="" align="center"></div>
+                    <!--  css & js -->
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+                
+                <!--分享-->
+                <br>                       
+                
+                <!-- require APlayer -->
+                
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                    <div class="comment">
+                        <div id="disqus_thread" class="disqus-thread"></div>
+                    </div>
+                
+                <!-- disqus comment end -->
+
+                
+
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+  
+    <style>
+      span.toc-nav-number{
+        display: none
+      }
+    </style>
+  
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">基于 Kubernetes Jenkins slave 动态资源伸缩 pod</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">环境说明</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">先决条件</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">创建 jenkins master</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">配置 jenkins</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">配置 kubernetes 云</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.5.1.</span> <span class="toc-nav-text">基于 pipeline 模式</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.5.2.</span> <span class="toc-nav-text">基于 自由风格模式</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#undefined"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">制作 slave 镜像</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://www.jicki.me" target="_blank">小炒肉</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus embedded js code start (one page only need to embed once) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "jicki";
+    var disqus_identifier = "https://www.jicki.me/2019/01/30/2018-02-08-kubernetes-jenkins/";
+    var disqus_url = "https://www.jicki.me/2019/01/30/2018-02-08-kubernetes-jenkins/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus embedded js code start end -->
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/jicki234">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/jicki520">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/jicki">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 小炒肉 2019 
+                    <br>
+                    Theme by <a href="http://beantech.org">BeanTech</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://www.huweihuang.com">胡伟煌</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=huweihuang&repo=hexo-theme-huweihuang&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://www.jicki.me/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-85602329-1';
+    var _gaDomain = 'jicki.me';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '1b38b88e4559c6725330b8c3328e2de3';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://www.jicki.me/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
