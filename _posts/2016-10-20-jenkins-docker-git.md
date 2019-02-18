@@ -105,8 +105,13 @@ Deploy Plugin   # build war 包以后部署
 
 Email Extension Plugin  # 邮件发送
 
-Multiple SCMs Plugin #多项目构建工具
+Multiple SCMs Plugin # 多项目构建工具
 
+Git Parameter  # 构建的时候选择 git 分支
+
+description setter plugin  # 配置 Build History 显示具体信息
+
+user build vars plugin  # 显示 构建用户名 而非 id
 ```
 
 

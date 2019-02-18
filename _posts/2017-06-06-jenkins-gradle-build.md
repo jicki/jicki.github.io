@@ -223,6 +223,8 @@ Kind: SSH Username with private key
 5. Email Extension Plugin   (邮件 发送 插件)
 6. Multiple SCMs Plugin   (多 git 版本库 同时构建)
 7. Git Parameter Plug-In  ( git 分支 构建选择)
+8. description setter plugin ( 配置 Build History 显示具体信息 )
+9. user build vars plugin  ( 显示 构建用户名 而非 id )
 ```
 
 
@@ -315,11 +317,12 @@ General:
 参数化构建过程  --> 添加参数 --> Git Parameter:
 
 Name: 
-    tag
+    git_tag
 Parameter Type:
     Branch or Tag
 
-
+Default Value:
+    origin/master
 
 
 # 源码管理 ( 这里需要填写上面参数化构建 Git Parameter 名称)
@@ -327,11 +330,33 @@ Parameter Type:
 
 Branches to build
     Branch Specitfier (blank for 'any'):
-            $Tag
+            $git_tag
 
-
-# 构建
 ```
+
+
+## Build Environment
+
+```
+# 添加 user 的 var
+
+#勾选如下:
+    Set jenkins user build variables
+
+
+# 变量说明如下:
+
+This plugin is used to set user build variables:
+BUILD_USER -- full name of user started build,
+BUILD_USER_FIRST_NAME -- first name of user started build,
+BUILD_USER_LAST_NAME -- last name of user started build,
+BUILD_USER_ID -- id of user started build.
+BUILD_USER_EMAIL -- email of user started build.
+```
+
+
+
+## 构建
 
 ```
 1. 选择一个 Execute shell
@@ -412,6 +437,7 @@ docker images |grep "$date"
 ```
 
 
+# 构建后操作 (Post-build Actions)
 
 ```
 # 构建后操作 (这里只写需要更改的)
@@ -432,5 +458,17 @@ Triggers:
         高级...
             Recipient List:
                 jicki@qq.com    
+
+```
+
+
+```
+# 添加 Set build description
+
+Regular expression:
+	留空
+
+Description:
+	本次发布由 <span style="color:#E53333;"><strong>$BUILD_USER</strong></span> 发起，Git 分支<span style="color:#E53333;"><strong> $git_tag </strong></span>	
 
 ```
