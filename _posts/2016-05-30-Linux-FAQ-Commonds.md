@@ -64,6 +64,43 @@ cat /proc/uptime| awk -F. '{run_days=$1 / 86400;run_hour=($1 % 86400)/3600;run_m
 ```
 sed '/13:30:00/,/13:50:00/!d' catalina.out >> 22222.txt
 ```
+
+
+
+### Sed 替换变量带特殊字符
+
+```
+#/bin/bash
+
+IMAGE_NAME="jicki/hd-cloud-admin:0fjdskfjdsklfds0"
+
+echo $IMAGE_NAME
+
+# 原替换语句为
+# sed -i "s/jicki\/hd-cloud-admin.*$/${IMAGE_NAME}/g" 1.txt
+# 因为变量包含特殊字符 / 号，所以以上语句会报错
+# 修改为以下语句:
+
+sed -i 's%jicki/hd-cloud-admin.*$%'"${IMAGE_NAME}"'%g' 1.txt
+
+```
+
+
+
+
+
+
+```
+# 1.txt 内容如下:
+
+jicki
+hd-cloud-admin
+image: jicki/hd-cloud-admin:12342423
+
+```
+
+
+
  
 
 ## 添加主机路由
