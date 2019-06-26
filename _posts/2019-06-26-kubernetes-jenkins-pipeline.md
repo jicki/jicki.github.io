@@ -571,6 +571,147 @@ podTemplate(label: 'label', cloud: 'kubernetes') {
 
 
 
+### 2.5.2 基于自己的 slave 镜像构建
+
+> 在使用 pipeline 的时候默认会启动 官方的 image
+>
+>  jenkins/jnlp-slave:alpine 去运行我们的流程
+> 
+> 当然我们也可以构建自己的 slave 镜像，指定运行.
+
+
+
+```
+# 首先需要下载官方的 jenkins-slave 文件
+
+wget https://raw.githubusercontent.com/jenkinsci/docker-jnlp-slave/master/jenkins-slave
+
+```
+
+```
+# 这里使用我个人的镜像
+# 镜像基于 alpine  软件包含  oracle 1.8 与 gradle 4.5 构建
+# 镜像名称为 jicki/slave:3.16
+
+# 创建 dockerfile
+
+
+vi dockerfile
+
+
+
+FROM jicki/slave:3.16
+
+COPY jenkins-slave /usr/local/bin/jenkins-slave
+
+USER root
+RUN chmod +x /usr/local/bin/jenkins-slave
+
+USER jenkins
+ENTRYPOINT ["jenkins-slave"]
+
+```
+
+```
+# 构建镜像
+docker build -t="jicki/jenkins-jnlp" .
+
+```
+
+
+```
+# 配置 Pipeline 
+
+
+def label = "mypod-${UUID.randomUUID().toString()}"
+podTemplate(label: 'label', cloud: 'kubernetes', containers: [
+    containerTemplate(
+        name: 'jnlp', 
+        image: 'jicki/jenkins-jnlp', 
+        alwaysPullImage: true,
+        args: '${computer.jnlpmac} ${computer.name}'),
+],
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+],)
+{
+    node('label') {
+        stage('Task-1') {
+            stage('show Java version') {
+                sh 'java -version'
+            }
+            stage('show Gradle version') {
+                sh 'gradle -version'
+            }            
+        }
+    }
+}
+
+```
+
+![图15][15]
+
+
+
+### 2.5.3 完整的 java 项目
+
+> 通过 Pipeline Scm 插件， CheckOut git 代码，然后执行 Gradle 打包
+
+```
+# 以下为配置的 Pipeline
+
+
+def label = "mypod-${UUID.randomUUID().toString()}"
+podTemplate(label: 'label', cloud: 'kubernetes', containers: [
+    containerTemplate(
+        name: 'jnlp', 
+        image: 'jicki/jenkins-jnlp', 
+        alwaysPullImage: true,
+        args: '${computer.jnlpmac} ${computer.name}'),
+],
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+],)
+{
+    node('label') {
+        stage('Task-1') {
+            stage('Git CheckOut') {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '4f419afa-8f63-45d8-85af-66381f17b924', url: 'http://192.168.168.14:3000/jicki/demo.git']]])
+                echo 'Checkout'
+            }
+            stage('show Java version') {
+                sh 'java -version'
+            }
+            stage('show Gradle version') {
+                sh 'gradle -version'
+            }  
+            stage('Gradle Build') {
+                echo 'Gradle Building'
+                sh 'gradle clean build jar --stacktrace --debug'
+                echo 'Show Build jar'
+                sh 'ls -lt /home/jenkins/workspace/${JOB_NAME}/build/libs/*.jar'
+            }
+        }
+    }
+}
+
+```
+
+```
+# 这里面备注一下 Pipeline SCM 插件
+
+checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '4f419afa-8f63-45d8-85af-66381f17b924', url: 'http://192.168.168.14:3000/jicki/demo.git']]])
+
+# credentialsId 标签 这里是 Jenkins 里创建的一个 凭据, 这个凭据 的用户名密码为 Git 代码库的用户密码.
+# 创建完毕以后, 编辑里可以查看到 Id
+```
+
+
+![图16][16]
+
+![图17][17]
+
+
   [1]: http://jicki.me/img/posts/pipeline/1.png
   [2]: http://jicki.me/img/posts/pipeline/2.png
   [3]: http://jicki.me/img/posts/pipeline/3.png 
@@ -585,3 +726,6 @@ podTemplate(label: 'label', cloud: 'kubernetes') {
   [12]: http://jicki.me/img/posts/pipeline/12.png 
   [13]: http://jicki.me/img/posts/pipeline/13.png 
   [14]: http://jicki.me/img/posts/pipeline/14.png 
+  [15]: http://jicki.me/img/posts/pipeline/15.png 
+  [16]: http://jicki.me/img/posts/pipeline/16.png 
+  [17]: http://jicki.me/img/posts/pipeline/17.png
