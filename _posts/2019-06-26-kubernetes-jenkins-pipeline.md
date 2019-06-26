@@ -479,7 +479,7 @@ This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
 2. Kubernetes URL 处我填写了 https://kubernetes.default 这里我填写了 Kubernetes Service 对应的 DNS 记录，通过该 DNS 记录可以解析成该 Service 的 Cluster IP，注意：也可以填写 https://kubernetes.default.svc.cluster.local , 或者直接填写外部 Kubernetes 的地址 https://<ClusterIP>:<Ports>。
 
 
-3. Jenkins URL 处我填写了 http://jenkins.default:8080，跟上边类似，也是使用 Jenkins Service 对应的 DNS 记录，不过要指定为 8080 端口，因为我们设置暴漏 8080 端口.
+3. Jenkins URL 处我填写了 http://jenkins.default，跟上边类似，也是使用 Jenkins Service 对应的 DNS 记录.
 
 ```
 
