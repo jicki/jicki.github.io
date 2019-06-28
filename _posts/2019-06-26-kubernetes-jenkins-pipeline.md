@@ -657,6 +657,10 @@ podTemplate(label: 'label', cloud: 'kubernetes', containers: [
 
 > 通过 Pipeline Scm 插件， CheckOut git 代码，然后执行 Gradle 打包
 
+
+
+
+
 ```
 # 以下为配置的 Pipeline
 
@@ -712,6 +716,254 @@ checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleC
 ![图17][17]
 
 
+> 下面增加一个 docker build 流程
+
+```
+# 编辑以上 jicki/jenkins-jnlp 镜像, 增加 docker
+```
+
+
+
+```
+# dockerfile
+
+FROM frolvlad/alpine-java
+
+ENV GRADLE_VERSION=5.4.1 \
+    GRADLE_HOME=/opt/gradle \
+    GRADLE_FOLDER=/root/.gradle \
+    DOCKER_CHANNEL=stable \
+    DOCKER_VERSION=18.09.6 \
+    HOME=/home/jenkins
+
+USER root
+
+# Change to tmp folder
+WORKDIR /tmp
+
+# Download and extract gradle to opt folder
+RUN wget https://downloads.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip gradle-${GRADLE_VERSION}-bin.zip -d /opt \
+    && ln -s /opt/gradle-${GRADLE_VERSION} /opt/gradle \
+    && rm -f gradle-${GRADLE_VERSION}-bin.zip \
+    && ln -s /opt/gradle/bin/gradle /usr/bin/gradle \
+    && apk add --no-cache libstdc++ git libltdl wget \
+    ca-certificates \
+    && echo 'hosts: files dns' > /etc/nsswitch.conf \
+    && mkdir -p $GRADLE_FOLDER \
+    && addgroup -S -g 10000 jenkins \
+    && adduser -D -S -G jenkins -u 10000 jenkins
+
+LABEL Description="This is a base image, which provides the Jenkins agent executable (slave.jar)" Vendor="Jenkins project" Version="3.19"
+ARG VERSION=3.19
+ARG AGENT_WORKDIR=/home/jenkins/agent
+
+RUN apk add --no-cache --virtual .build-deps \
+    curl
+
+RUN curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
+  && chmod 755 /usr/share/jenkins \
+  && chmod 644 /usr/share/jenkins/slave.jar \
+  && apk del .build-deps
+
+ENV AGENT_WORKDIR=${AGENT_WORKDIR}
+RUN mkdir /home/jenkins/.jenkins && mkdir -p ${AGENT_WORKDIR}
+
+# Mark as volume
+VOLUME  $GRADLE_FOLDER
+VOLUME /home/jenkins/.jenkins
+VOLUME ${AGENT_WORKDIR}
+
+RUN set -eux; \
+        \
+# this "case" statement is generated via "update.sh"
+        apkArch="$(apk --print-arch)"; \
+        case "$apkArch" in \
+# amd64
+                x86_64) dockerArch='x86_64' ;; \
+# arm32v6
+                armhf) dockerArch='armel' ;; \
+# arm32v7
+                armv7) dockerArch='armhf' ;; \
+# arm64v8
+                aarch64) dockerArch='aarch64' ;; \
+                *) echo >&2 "error: unsupported architecture ($apkArch)"; exit 1 ;;\
+        esac; \
+        \
+        if ! wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/${dockerArch}/docker-${DOCKER_VERSION}.tgz"; then \
+                echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
+                exit 1; \
+        fi; \
+        \
+        tar --extract \
+                --file docker.tgz \
+                --strip-components 1 \
+                --directory /usr/local/bin/ \
+        ; \
+        rm docker.tgz; \
+        \
+        dockerd --version; \
+        docker --version
+
+# Down Docker File
+RUN wget https://raw.githubusercontent.com/docker-library/docker/cdcff675cecbae122cbae49ed6e17fa78bb6116a/18.09/modprobe.sh  -O /usr/local/bin/modprobe
+RUN wget https://raw.githubusercontent.com/docker-library/docker/cdcff675cecbae122cbae49ed6e17fa78bb6116a/18.09/docker-entrypoint.sh -O /usr/local/bin/docker-entrypoint.sh
+
+# Down jenkins-slave file
+RUN wget https://raw.githubusercontent.com/jenkinsci/docker-jnlp-slave/master/jenkins-slave -O /usr/local/bin/jenkins-slave
+
+# Chomd
+RUN chmod +x /usr/local/bin/jenkins-slave \
+    && chmod +x /usr/local/bin/modprobe \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["jenkins-slave"]
+
+```
+
+
+```
+# build
+
+docker build -t="jicki/jenkins-jnlp:docker"
+
+
+```
+
+> 这里 gradle 项目 需要增加一点 变量, 修改 build.gradle 文件
+
+```
+# 完整的 build.gradle 文件如下
+
+buildscript {
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' } // aliyun
+        mavenLocal() 
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
+    }
+}
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'net.researchgate.release' version '2.5.0'
+    id 'com.github.ben-manes.versions' version '0.14.0'
+}
+
+apply plugin: 'project-report'
+apply plugin: 'maven-publish'
+apply plugin: 'org.springframework.boot'
+apply plugin: "io.spring.dependency-management"
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+jar {
+    baseName = 'demo'
+    version = ''
+}
+
+repositories {
+        mavenCentral()
+}
+
+dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+bootRepackage {
+    doLast {
+        File envFile = new File("build/tmp/PROJECT_ENV")
+        println("Create ${archivesBaseName} ENV File ===> " + envFile.createNewFile())
+        envFile.write("export PROJECT_BUILD_FINALNAME=${archivesBaseName}\n")
+        println("Generate Docker image tag...")
+        envFile.append("export BUILD_DATE=`date +%Y%m%d%H%M%S`\n")
+        envFile.append("export IMAGE_NAME=jicki/demo:`echo \${CI_BUILD_REF_NAME} | cut -c1-8`\${BUILD_DATE}\n")
+        envFile.append("export LATEST_IMAGE_NAME=jicki/demo:latest\n")
+    }
+}
+
+```
+
+
+
+
+
+
+
+
+
+> Pipeline 流程 , git pull, gradle build, docker build
+
+```
+
+def label = "mypod-${UUID.randomUUID().toString()}"
+podTemplate(label: 'label', cloud: 'kubernetes', containers: [
+    containerTemplate(
+        name: 'jnlp', 
+        image: 'jicki/jenkins-jnlp:docker', 
+        alwaysPullImage: true,
+        args: '${computer.jnlpmac} ${computer.name}'),
+],
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+    hostPathVolume(mountPath: '/root/.gradle', hostPath: '/opt/data/gradle'),
+],)
+{
+    node('label') {
+        stage('Task-1') {
+            stage('Git CheckOut') {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '4f419afa-8f63-45d8-85af-66381f17b924', url: 'http://192.168.168.14:3000/jicki/demo.git']]])
+                echo 'Checkout'
+            }
+            stage('Gradle Build') {
+                echo 'Gradle Building'
+                sh 'gradle clean build jar --stacktrace --debug'
+            }
+            stage('Docker Build') {
+                sh '''
+                echo ----------------
+                cat dockerfile
+                echo ----------------
+                source build/tmp/PROJECT_ENV
+                docker build -t ${IMAGE_NAME} --build-arg PROJECT_BUILD_FINALNAME=${PROJECT_BUILD_FINALNAME} .
+                docker images
+                '''
+            }
+        }
+    }
+}
+
+```
+
+
+```
+# docker pipeline 插件会获取 git 项目底下的 dockerfile 进行构建 , 以下为 dockerfile
+
+
+FROM jicki/openjdk:1.8-alpine
+
+ARG PROJECT_BUILD_FINALNAME
+
+ENV TZ 'Asia/Shanghai'
+ENV PROJECT_BUILD_FINALNAME ${PROJECT_BUILD_FINALNAME}
+
+
+COPY build/libs/${PROJECT_BUILD_FINALNAME}.jar /${PROJECT_BUILD_FINALNAME}.jar
+
+CMD ["sh","-c","java -jar /${PROJECT_BUILD_FINALNAME}.jar"]
+
+```
+
+![图18][18]
+
+![图19][19]
+
   [1]: http://jicki.me/img/posts/pipeline/1.png
   [2]: http://jicki.me/img/posts/pipeline/2.png
   [3]: http://jicki.me/img/posts/pipeline/3.png 
@@ -729,3 +981,5 @@ checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleC
   [15]: http://jicki.me/img/posts/pipeline/15.png 
   [16]: http://jicki.me/img/posts/pipeline/16.png 
   [17]: http://jicki.me/img/posts/pipeline/17.png
+  [18]: http://jicki.me/img/posts/pipeline/18.png 
+  [19]: http://jicki.me/img/posts/pipeline/19.png
