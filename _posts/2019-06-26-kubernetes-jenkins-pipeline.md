@@ -943,7 +943,7 @@ podTemplate(label: 'label', cloud: 'kubernetes', containers: [
 
 
 ```
-# docker pipeline 插件会获取 git 项目底下的 dockerfile 进行构建 , 以下为 dockerfile
+# git 项目底下的 dockerfile  , 以下为 dockerfile
 
 
 FROM jicki/openjdk:1.8-alpine
