@@ -57,7 +57,7 @@ Prometheus 与 Prometheus-operator 的区别
 ```
 
 
-https://coreos.com/sites/default/files/inline-images/p1.png
+![图13][13]
 
 
 
@@ -542,3 +542,4 @@ spec:
   [10]: http://jicki.me/img/posts/kube-prometheus/10.png 
   [11]: http://jicki.me/img/posts/kube-prometheus/11.png 
   [12]: http://jicki.me/img/posts/kube-prometheus/12.png 
+  [13]: https://coreos.com/sites/default/files/inline-images/p1.png
