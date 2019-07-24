@@ -11,7 +11,6 @@ tags:
     - docker
 ---
 
-
 # ChatOps
 
 **什么是ChatOps**
@@ -231,7 +230,7 @@ module.exports = (robot) ->
   robot.hear /hi/i, (res) ->
     res.reply "hello"
   robot.hear /吃饭了吗/, (res) ->
-    res.send '只有你们这些愚蠢的人类才吃饭'
+    res.send '猫只吃鱼'
 
 ```
 
@@ -251,9 +250,94 @@ docker restart hubot
 
 
 
+## 添加 hubot 插件
+
+> hubot-script-shellcmd 是执行 shell 命令的一个插件
+
+
+```
+# 在 docker-compose.yaml 的 EXTERNAL_SCRIPTS 中增加
+hubot-script-shellcmd
+# 增加 HUBOT_SHELLCMD 选项，用于配置shell存放路径,并且将这个路径挂载到我们本地
+
+
+    environment:
+    - EXTERNAL_SCRIPTS=hubot-pugme,hubot-help,hubot-script-shellcmd
+    - HUBOT_SHELLCMD=/home/hubot/bash/handlers
+    volumes:
+    - ./data/rocket/bash:/home/hubot/bash  
+
+```
+
+
+```
+# 创建一下目录
+
+mkdir -p ./data/rocket/bash/handlers
+
+
+# 增加完毕以后重启 hubot 机器人
+
+docker restart hubot
+
+
+# 重启以后，将生成的 bash 文件拷贝到我们的目录
+# 这里一定要拷贝，否则执行会卡住
+
+
+cd ./data/rocket/bash
+
+docker cp hubot:/home/hubot/node_modules/hubot-script-shellcmd/bash/handler .
+
+cd ./data/rocket/bash/handlers
+
+docker cp hubot:/home/hubot/node_modules/hubot-script-shellcmd/bash/handlers/helloworld .
+
+docker cp hubot:/home/hubot/node_modules/hubot-script-shellcmd/bash/handlers/update .
+
+```
+
+
+`测试shellcmd`
+
+
+![图5][5]
+
+
+`创建 bash`
+
+```
+cd ./data/rocket/bash/handlers
+
+# 新建一个 bash ,并且授权必须有执行权限
+
+
+vi date
+
+
+#!/bin/bash
+
+time=$(date "+%Y-%m-%d %H:%M:%S")
+
+echo "${time}"
+
+exit 0
+
+```
+
+![图6][6]
+
+```
+# 创建脚本不需要重启 hubot 机器人
+
+```
+
+
+
 
 
   [1]: http://jicki.me/img/posts/chatops/1.png
   [2]: http://jicki.me/img/posts/chatops/2.png
   [3]: http://jicki.me/img/posts/chatops/3.png 
   [4]: http://jicki.me/img/posts/chatops/4.png 
+  [5]: http://jicki.me/img/posts/chatops/5.png 
