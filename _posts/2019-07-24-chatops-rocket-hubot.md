@@ -341,3 +341,4 @@ exit 0
   [3]: http://jicki.me/img/posts/chatops/3.png 
   [4]: http://jicki.me/img/posts/chatops/4.png 
   [5]: http://jicki.me/img/posts/chatops/5.png 
+  [6]: http://jicki.me/img/posts/chatops/6.png 
