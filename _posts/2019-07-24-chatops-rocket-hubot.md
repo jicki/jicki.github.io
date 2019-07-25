@@ -227,6 +227,8 @@ cd ./data/rocket/scripts
 vi example.coffee
 
 module.exports = (robot) ->
+  robot.catchAll (res) ->
+    res.send "对不起，我不认识这条命令，请查看 help"
   robot.hear /hi/i, (res) ->
     res.reply "hello"
   robot.hear /吃饭了吗/, (res) ->
@@ -253,17 +255,18 @@ docker restart hubot
 ## 添加 hubot 插件
 
 > hubot-script-shellcmd 是执行 shell 命令的一个插件
+>
+> 插件官方 github https://github.com/coderofsalvation/hubot-script-shellcmd
 
 
 ```
 # 在 docker-compose.yaml 的 EXTERNAL_SCRIPTS 中增加
 hubot-script-shellcmd
-# 增加 HUBOT_SHELLCMD 选项，用于配置shell存放路径,并且将这个路径挂载到我们本地
+# 将这个路径挂载到我们本地 方便修改
 
 
     environment:
     - EXTERNAL_SCRIPTS=hubot-pugme,hubot-help,hubot-script-shellcmd
-    - HUBOT_SHELLCMD=/home/hubot/bash/handlers
     volumes:
     - ./data/rocket/bash:/home/hubot/bash  
 
@@ -300,7 +303,6 @@ docker cp hubot:/home/hubot/node_modules/hubot-script-shellcmd/bash/handlers/upd
 
 `测试shellcmd`
 
-
 ![图5][5]
 
 
@@ -327,6 +329,7 @@ exit 0
 
 ![图6][6]
 
+
 ```
 # 创建脚本不需要重启 hubot 机器人
 
@@ -334,6 +337,40 @@ exit 0
 
 
 
+`操作docker`
+
+> 基于 shellcmd 插件，我们可以操作一下 docker
+
+
+
+```
+# 添加如下挂载, 并且这里镜像中运行用户必须使用 root
+
+    user: root
+
+    volumes:
+    - /usr/bin/docker:/usr/bin/docker
+    - /var/run/docker.sock:/var/run/docker.sock:z
+
+```
+
+```
+# 添加 一个 bash
+
+cd ./data/rocket/bash/handlers
+
+vi dockerversion
+
+#!/bin/bash
+
+docker version
+
+exit 0
+
+```
+
+
+![图7][7]
 
 
   [1]: http://jicki.me/img/posts/chatops/1.png
@@ -342,3 +379,4 @@ exit 0
   [4]: http://jicki.me/img/posts/chatops/4.png 
   [5]: http://jicki.me/img/posts/chatops/5.png 
   [6]: http://jicki.me/img/posts/chatops/6.png 
+  [7]: http://jicki.me/img/posts/chatops/7.png 
