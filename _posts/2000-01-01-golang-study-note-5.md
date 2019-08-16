@@ -130,7 +130,7 @@ func main() {
 * reflect.ValueOf() 函数 返回的是 `reflect.value` 类型, 包含了原始值的相关信息. `relect.value` 与 原始值之间可以相互转换.
 
 
-1. `relect.value` 类型 获取原始值的方法有如下:
+`relect.value` 类型 获取原始值的方法有如下:
 
 方法 | 说明 |
 -|-|
@@ -173,7 +173,8 @@ func main() {
 
 ```
 
-2. 通过反射 修改设置变量的值
+
+通过反射 修改设置变量的值
 
 
 ```go
@@ -194,7 +195,7 @@ func main() {
 }
 ```
 
-3. IsNil() 与 IsValid()
+IsNil() 与 IsValid()
 
 * IsNil() 常用于判断 指针是否为空, IsValid() 常用于判断返回值是否有效.
 
