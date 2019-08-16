@@ -28,6 +28,6 @@ tags:
 
 # Go 学习目录
 
-[Go学习笔记-反射](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
+[ 【Go学习笔记-反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
 
   [1]: http://jicki.me/img/posts/golang/logo.jpg
