@@ -129,7 +129,8 @@ func main() {
 
 * reflect.ValueOf() 函数 返回的是 `reflect.value` 类型, 包含了原始值的相关信息. `relect.value` 与 原始值之间可以相互转换.
 
-	1. `relect.value` 类型 获取原始值的方法有如下:
+
+1. `relect.value` 类型 获取原始值的方法有如下:
 
 方法 | 说明 |
 -|-|
@@ -152,11 +153,14 @@ func reflectValue(x interface{}) {
 	// 想获取传入时的类型,就必须要进行如下判断并强制转换为原来的类型
 	switch k {
 	case reflect.Int64:
-		fmt.Printf("type = int64 , value = %d \n", int64(v.Int()))
+		fmt.Printf("type = int64 , value = %d \n", 
+		int64(v.Int()))
 	case reflect.Float32:
-		fmt.Printf("type = float32 , value = %f \n", float32(v.Float()))
+		fmt.Printf("type = float32 , value = %f \n", 
+		float32(v.Float()))
 	case reflect.Float64:
-		fmt.Printf("type = float64 , value = %f \n", float64(v.Float()))
+		fmt.Printf("type = float64 , value = %f \n", 
+		float64(v.Float()))
 	}
 }
 
@@ -168,7 +172,8 @@ func main() {
 }
 
 ```
-  2. 通过反射 修改设置变量的值
+
+2. 通过反射 修改设置变量的值
 
 
 ```go
@@ -188,7 +193,8 @@ func main() {
 	fmt.Println(a)
 }
 ```
-  3. IsNil() 与 IsValid()
+
+3. IsNil() 与 IsValid()
 
 * IsNil() 常用于判断 指针是否为空, IsValid() 常用于判断返回值是否有效.
 
@@ -235,10 +241,12 @@ func main() {
 	b := struct{}{}
 	// FieldByName() 判断结构体的 字段 是否 存在
 	// 输出 是否存在的结构体字段: false
-	fmt.Println("是否存在的结构体字段:", reflect.ValueOf(b).FieldByName("123").IsValid())
+	fmt.Println("是否存在的结构体字段:", 
+	reflect.ValueOf(b).FieldByName("123").IsValid())
 	// MethodByName() 判断结构体的 方法 是否存在
 	// 输出 是否存在的结构体方法: false
-	fmt.Println("是否存在的结构体方法:", reflect.ValueOf(b).MethodByName("123").IsValid())
+	fmt.Println("是否存在的结构体方法:", 
+	reflect.ValueOf(b).MethodByName("123").IsValid())
 
 }
 
@@ -277,7 +285,7 @@ type StructField struct {
 	Type 		Type		// 字段类型
 	Tag 		StructTag	// 字段标签
 	Offset  	uintptr		// 字段在结构体中的字节偏移量
-	Index   	[]int		// 用于Type.FieldByIndex 方法时的索引切片
+	Index   	[]int		// 用于Type.FieldByIndex 的索引切片
 	Anonymous 	bool		// 是否为匿名字段
 }
 
@@ -285,6 +293,7 @@ type StructField struct {
 
 
 * 例子1
+
 
 ```go
 
@@ -311,7 +320,8 @@ func main() {
 		//t.Field() 根据索引返回索引的字段信息
 		field := t.Field(i)
 		fmt.Printf("Key: %s index: %d  Type: %v  json Tag: %v \n",
-			field.Name, field.Index, field.Type, field.Tag.Get("json"))
+			field.Name, field.Index, field.Type, 
+			field.Tag.Get("json"))
 		/* 输出:
 		Key: Name index: [0]  Type: string  json Tag: name
 		Key: Score index: [1]  Type: int  json Tag: score
@@ -321,7 +331,8 @@ func main() {
 	// t.FieldByName("字段名") 会返回指定字段名的结构体信息
 	if soreField, ok := t.FieldByName("Score"); ok {
 		fmt.Printf("Key: %s Index: %d Type: %v json tag: %v\n",
-			soreField.Name, soreField.Index, soreField.Type, soreField.Tag.Get("json"))
+			soreField.Name, soreField.Index, soreField.Type, 
+			soreField.Tag.Get("json"))
 		/* 输出:
 		Key: Score Index: [1] Type: int json tag: score
 		*/
