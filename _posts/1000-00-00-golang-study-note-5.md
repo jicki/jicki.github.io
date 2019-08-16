@@ -1,3 +1,15 @@
+---
+layout: post
+title: Go学习笔记 - 5
+categories: [golang,Go]
+description: Go学习笔记 - 5
+keywords: golang,Go
+header-img: "img/pexels/triangular.jpeg"
+catalog:    true
+tags:
+    - golang
+---
+
 # Go学习笔记 - 5
 
 ## 1. 反射
