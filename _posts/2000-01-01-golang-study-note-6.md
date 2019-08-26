@@ -592,3 +592,64 @@ func main() {
 }
 
 ```
+
+**原子操作**
+
+* 在代码中加锁的操作性能会下降. 针对基本数据类型我们可以用 原子操作 来确保并发安全
+* 原子操作 是Go语言的方法, 它在用户态 的时候就可以完成, 性能比加锁操作更好.
+* Go语言的 原子操作 作为内置的标准库 `sync/atomic` 模块.
+* `atomic` 原子操作,只支持 Int, Uint 的数据操作. 
+
+
+```go
+// atomic 原子操作
+
+var (
+	x  int64
+	l  sync.Mutex     //锁
+	wg sync.WaitGroup //等待组
+)
+
+// 累加函数
+func add() {
+	x = x + 1
+	wg.Done()
+}
+
+// 加锁的累加函数
+func mutexAdd() {
+	l.Lock()
+	x = x + 1
+	l.Unlock()
+	wg.Done()
+}
+
+func atomicAdd() {
+	// 给整数 x + 1
+	atomic.AddInt64(&x, 1)
+	wg.Done()
+}
+
+func main() {
+	start := time.Now()
+	for i := 0; i < 10000; i++ {
+		wg.Add(1)
+		// 普通的数据累加操作
+		// 线程不是安全的,耗时 5.383036ms
+		//go add()
+
+		// 加锁版数据累加操作
+		// 线程安全的,耗时 5.628079ms
+		// go mutexAdd()
+
+		// 原子操作版数据累加
+		// 线程安全, 耗时 5.263185ms
+		go atomicAdd()
+	}
+
+	wg.Wait()
+	end := time.Now()
+	fmt.Println(x)
+	fmt.Println(end.Sub(start))
+}
+```
