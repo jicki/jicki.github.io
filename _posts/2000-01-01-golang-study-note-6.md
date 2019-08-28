@@ -30,16 +30,16 @@ tags:
 
 * 协程: 协程又称微线程和纤程, 协没有线程的上下文切换消耗。协程的调度切换是用户(程序员)手动切换的,因此更加灵活,因此又叫用户空间线程。
 
-## groutine
+## goroutine
 
-* Go 语言中创建 `groutine` 使用 关键字 `go` 就可以为函数创建一个 `groutine` 。 
-* 一个函数可以创建多个 `groutine` 。
-* 一个 `groutine` 只能对应一个函数。
-* `groutine` 调度是随机、无序的。
+* Go 语言中创建 `goroutine` 使用 关键字 `go` 就可以为函数创建一个 `goroutine` 。 
+* 一个函数可以创建多个 `goroutine` 。
+* 一个 `goroutine` 只能对应一个函数。
+* `goroutine` 调度是随机、无序的。
 
 
 
-`sync.WaitGroup` 配合 `groutine` 使用
+`sync.WaitGroup` 配合 `goroutine` 使用
 
 `sync.WaitGroup` 包含三个方法 `Add(i)`  `Done()`  `Wait()` 
 
@@ -58,36 +58,36 @@ import (
 var wg sync.WaitGroup
 
 func say() {
-	fmt.Println("This groutine Func !")
+	fmt.Println("This goroutine Func !")
 	// 执行完毕 wg.Add(n)  每执行完毕都 n-1
 	wg.Done()
 }
 
 func main() {
-	// 使用关键字 go 启动一个 groutine
-	// 添加锁等待, (1) 数字为多少个 groutine
+	// 使用关键字 go 启动一个 goroutine
+	// 添加锁等待, (1) 数字为多少个 goroutine
 	wg.Add(1)
 	go say()
 	fmt.Println("This Main Func !")
-	// 阻塞, 等待 groutine 运行完.
+	// 阻塞, 等待 goroutine 运行完.
 	wg.Wait()
 }
 ```
 
 
-### groutine 与 线程
+### goroutine 与 线程
 
 **可增长的栈**
 
-* OS线程(操作系统线程)一般都有固定的栈内存(通常2MB), 一个 `groutine` 的栈在其生命周期开始时占用很小的内存(一般为2KB), 
-`groutine` 的栈并不是固定的, 它可以按需增加或缩小, `groutine` 栈的大小限制最大可以达到1GB。
+* OS线程(操作系统线程)一般都有固定的栈内存(通常2MB), 一个 `goroutine` 的栈在其生命周期开始时占用很小的内存(一般为2KB), 
+`goroutine` 的栈并不是固定的, 它可以按需增加或缩小, `goroutine` 栈的大小限制最大可以达到1GB。
 
 
-**groutine调度**
+**goroutine调度**
 
-* OS线程是由OS内核来调度, `groutine` 则是由 Go运行 `runtime` 自己的调度器调度的, 
-`groutine`调度器使用一个称为 m:n 调度技术(复用/调度 m 个 groutine 到 n 个OS线程)。`groutine` 调度不需要切换到OS内核环境,
-所以调度一个 `groutine` 比调度一个线程成本低很多。 (m:n  m 是指 groutine 数量 , n 是指 线程数量。)
+* OS线程是由OS内核来调度, `goroutine` 则是由 Go运行 `runtime` 自己的调度器调度的, 
+`goroutine`调度器使用一个称为 m:n 调度技术(复用/调度 m 个 goroutine 到 n 个OS线程)。`goroutine` 调度不需要切换到OS内核环境,
+所以调度一个 `goroutine` 比调度一个线程成本低很多。 (m:n  m 是指 goroutine 数量 , n 是指 线程数量。)
 
 
 
@@ -137,25 +137,25 @@ func main() {
 ```
 
 
-**OS与groutine的关系**
+**OS与goroutine的关系**
 
-* 一个操作系统线程对应用户态多个 `groutine`。 
+* 一个操作系统线程对应用户态多个 `goroutine`。 
 * Go 程序可以同时使用多个操作系统线程。
-* `groutine` 与 OS 线程 是多对多的关系,既 m:n 。
+* `goroutine` 与 OS 线程 是多对多的关系,既 m:n 。
 
 
 
-**groutine退出**
+**goroutine退出**
 
-* `groutine` 什么时候退出? `groutine` 是在 `groutine` 启动所启动的那个 `函数` 退出的时候 就会退出.
+* `goroutine` 什么时候退出? `goroutine` 是在 `goroutine` 启动所启动的那个 `函数` 退出的时候 就会退出.
 
 
 
 ## channel
 
 * Go语言的并发模型是CSP, 提倡通过 `通信共享内存` 而不是通过 共享内存 而实现通信。
-  `groutine` 是Go程序的并发执行体, `channel` 就是它们之间的连接。channel 是可以
-  让一个 `groutine` 发送特定值到另一个 `groutine` 的通信机制。
+  `goroutine` 是Go程序的并发执行体, `channel` 就是它们之间的连接。channel 是可以
+  让一个 `goroutine` 发送特定值到另一个 `goroutine` 的通信机制。
 * Go语言中的 通信(channel) 是一种特殊的类型。通道像一个 传送带或者队列, 总是遵循先入先出(First in First out)
   的规则, 保证收发数据的顺序。每一个通道都是一个具体类型的导管, 也就是声明 `channel` 的时候需要为其指定 元素类型。
 
@@ -404,10 +404,10 @@ func receive(ch <-chan int) {
 
 ## 控制与锁
 
-* 多个 `groutine` 操作同一组数据的时候,会出现数据竞争, 这时候我们就要加锁.
+* 多个 `goroutine` 操作同一组数据的时候,会出现数据竞争, 这时候我们就要加锁.
 
 
-**groutine 竞争**
+**goroutine 竞争**
 
 ```go
 var x int64
@@ -424,7 +424,7 @@ func add() {
 
 func main() {
 	wg.Add(2)
-	// 启动2个 groutine 去执行 x+1
+	// 启动2个 goroutine 去执行 x+1
 	// 此时会出现数据竞争
 	go add()
 	go add()
@@ -437,9 +437,9 @@ func main() {
 
 **互斥锁**
 
-* 互斥锁 是一种常用的控制共享资源访问的方法, 它能够保证同一时间只能有一个 `groutine` 可以访问共享资源.
+* 互斥锁 是一种常用的控制共享资源访问的方法, 它能够保证同一时间只能有一个 `goroutine` 可以访问共享资源.
 * Go语言 使用 `sync` 包 `Mutex`  类型来实现 互斥锁.
-* 互斥锁能保证同一时间只有一个 `groutine` 进入临界区, 其他的 `groutine` 则在等待锁, 当互斥锁释放后, 等待的 `groutine` 才可以获取锁进入临界区, 多个 `groutine` 同时等待一个锁时, 唤醒的策略是随机的.
+* 互斥锁能保证同一时间只有一个 `goroutine` 进入临界区, 其他的 `goroutine` 则在等待锁, 当互斥锁释放后, 等待的 `goroutine` 才可以获取锁进入临界区, 多个 `goroutine` 同时等待一个锁时, 唤醒的策略是随机的.
 
 
 例子1
@@ -553,7 +553,7 @@ func set(key string, value int) {
 }
 
 func main() {
-	// 当 groutine 超过5个,会报错
+	// 当 goroutine 超过5个,会报错
 	// fatal error: concurrent map writes
 	for i := 0; i < 20; i++ {
 		wg.Add(1)
