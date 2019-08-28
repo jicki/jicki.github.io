@@ -1,7 +1,7 @@
 {
-    "name": "hux-blog",
-    "title": "Hux Blog",
-    "author": "Hux <jicki@qq.com>",
+    "name": "jicki-blog",
+    "title": "Jicki Blog",
+    "author": "Jicki <jicki@qq.com>",
     "version": "1.7.0",
     "homepage": "http://jicki.github.io",
     "repository": {

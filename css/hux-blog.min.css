@@ -1,5 +1,5 @@
 /*!
- * Hux Blog v1.7.0 (http://jicki.github.io)
+ * Jicki Blog v1.7.0 (http://jicki.github.io)
  * Copyright 2018 Jicki <jicki@qq.com>
  */
 
