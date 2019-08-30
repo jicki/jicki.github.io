@@ -32,4 +32,6 @@ tags:
 
 [ 【Go学习笔记-并发-锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 学习第六天")
 
+[ 【Go学习笔记-网络编程-HTTP-TCP-UDP】](https://jicki.me/golang/go/2000/01/01/golang-study-note-7 "Go 学习第七天")
+
   [1]: http://jicki.me/img/posts/golang/logo.jpg
