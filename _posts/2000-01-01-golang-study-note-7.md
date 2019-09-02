@@ -673,6 +673,134 @@ func main() {
 
 ```
 
+
+
+### TCP黏包问题
+
+**Server**
+
+```go
+
+func process(conn net.Conn) {
+	defer conn.Close()
+	reader := bufio.NewReader(conn)
+	for {
+                // 调用模块proto.Decode 函数
+		msg, err := proto.Decode(reader)
+		if err == io.EOF {
+			return
+		}
+		if err != nil {
+			fmt.Println("消息解码失败 err: ", err)
+		}
+		fmt.Println("收到客户端发送的消息: ", msg)
+	}
+}
+
+func main() {
+	listen, err := net.Listen("tcp", "127.0.0.1:8888")
+	if err != nil {
+		fmt.Println("启动服务端失败 err: ", err)
+		return
+	}
+	for {
+		conn, err := listen.Accept()
+		if err != nil {
+			fmt.Println("客户端连接失败, err", err)
+			continue
+		}
+		go process(conn)
+	}
+}
+
+```
+
+
+**Client**
+
+```go
+
+func main() {
+	conn, err := net.Dial("tcp", "127.0.0.1:8888")
+	if err != nil {
+		fmt.Println("连接服务端失败, err ", err)
+		return
+	}
+	defer conn.Close()
+	for i := 0; i < 20; i++ {
+		msg := "Hello How are you ?"
+                // 调用模块 proto.Encode
+		pkg, err := proto.Encode(msg)
+		if err != nil {
+			fmt.Println("Encode Error:", err)
+			return
+		}
+		conn.Write(pkg)
+	}
+}
+
+```
+
+
+**模块**
+
+```go
+//Encode 消息编码
+func Encode(message string) ([]byte, error) {
+	// length 将消息长度,转换成int32类型(int32 占4字节)
+	var length = int32(len(message))
+	// 创建一个 字节类型的 缓冲区
+	var pkg = new(bytes.Buffer)
+
+	// 写入信息头 pkg
+	// binary.LittleEndian 内存 小端.
+	// 小端: 内存读写的顺序,按照从左到右的顺序是小端.
+	// 大端: 内存读写的顺序,按照从右到左的顺序是大端.
+	if err := binary.Write(pkg, binary.LittleEndian, length); err != nil {
+		return nil, err
+	}
+
+	// 写入消息内容
+	if err := binary.Write(pkg, binary.LittleEndian, []byte(message)); err != nil {
+		return nil, err
+	}
+	return pkg.Bytes(), nil
+}
+
+// Decode 解码消息
+func Decode(reader *bufio.Reader) (string, error) {
+	// 读取消息头
+	// 读取消息前4个字节
+	lengthByte, _ := reader.Peek(4)
+	// 缓冲区的内容
+	lengthBuff := bytes.NewBuffer(lengthByte)
+	var length int32
+	// 读取消息
+	err := binary.Read(lengthBuff, binary.LittleEndian, &length)
+	if err != nil {
+		return "", err
+	}
+	// 返回(缓冲区内)消息头中记录真正消息的(大小)字节数
+	if int32(reader.Buffered()) < length+4 {
+		return "", err
+	}
+
+	// 读取真正的消息内容
+	// 创建还有个切片,用于存放消息内容, 长度为头部4+length
+	pack := make([]byte, int(4+length))
+	_, err = reader.Read(pack)
+	if err != nil {
+		return "", err
+	}
+	// 返回切数据中从第四位开始后面的数据
+	return string(pack[4:]), nil
+}
+
+```
+
+
+
+
 ### UDP服务端/客户端
 
 * UDP协议(User Datagram Protocol) 用户数据报协议, 是 OSI 参考模型中一种 无连接 的传输层协议, 不需要建立连接就可以直接进行数据发送和接收, 属于不可靠的、无时序的通信, UDP协议的实时性比较好,通常用于视频直播相关领域.
