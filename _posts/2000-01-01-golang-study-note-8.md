@@ -525,7 +525,8 @@ func main() {
   * `Action` 里可以初始化一个变量来捕获管道的执行结果.
   * 初始化语法: `$variable := pipeline` 其中 $variable 是变量名称. 声明变量的action不会产生任何输出.
 
-```text
+{% raw %}
+```html
     <div>
         {{/* 这里是注释 */}}
         {{ $age := .Age }}
@@ -535,6 +536,7 @@ func main() {
         <h1>{{ $id.ID }}</h1>
     </div>
 ```
+{% endraw %}
 
 #### 条件判断
 
