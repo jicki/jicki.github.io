@@ -28,10 +28,12 @@ tags:
 
 # Go 学习目录
 
-[ 【Go学习笔记-反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
+[ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
 
-[ 【Go学习笔记-并发-锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 学习第六天")
+[ 【Go学习笔记 - 并发-锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 学习第六天")
 
-[ 【Go学习笔记-网络编程-HTTP-TCP-UDP】](https://jicki.me/golang/go/2000/01/01/golang-study-note-7 "Go 学习第七天")
+[ 【Go学习笔记 - 网络编程-HTTP-TCP-UDP】](https://jicki.me/golang/go/2000/01/01/golang-study-note-7 "Go 学习第七天")
+
+[ 【Go学习笔记 - HTML 基础】](https://jicki.me/golang/go/2000/01/01/golang-study-note-8 "Go 学习第八天")
 
   [1]: http://jicki.me/img/posts/golang/logo.jpg
