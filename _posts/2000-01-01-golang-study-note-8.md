@@ -562,6 +562,8 @@ func main() {
 
 **例子:**
 
+{% raw %}
+
 ```html
     <div>
         {{/* 条件判断 */}}
@@ -577,12 +579,16 @@ func main() {
     {{end}}
 ```
 
+{% endraw %}
+
 #### range循环
 
 * Go的模板语法中使用 `range` 关键字进行循环遍历,其中 `pipeline` 的值必须是数组、切片、字典或者通道.
   * `{{range $key, $value := .}}` 取值可以直接取,也可以加 `.` 里面的值
 
 **例子:**
+
+{% raw %}
 
 ```html
 
@@ -611,15 +617,21 @@ func main() {
     </table>
 ```
 
+{% endraw %}
+
 #### with(局部变量)
 
 * with语句: 其含义就是创建一个封闭的作用域, 在其范围内, 可以使用`.action`, 而与外面的`.`无关，只与with的参数有关;
+
+{% raw %}
 
 ```html
 {{ with arg }}
     此时的点 . 就是arg
 {{ end }}
 ```
+
+{% endraw %}
 
 #### 预定义函数
 
@@ -649,6 +661,8 @@ func main() {
 }
 ```
 
+{% raw %}
+
 ```html
     <div>
         {{/* 传入 . = userMap */}}
@@ -661,6 +675,8 @@ func main() {
         {{end}}
     </div>
 ```
+
+{% endraw %}
 
 #### 自定义模板函数
 
@@ -706,6 +722,8 @@ func info(w http.ResponseWriter, r *http.Request) {
     t.Execute(w, userMap)
 ```
 
+{% raw %}
+
 ```html
     <div>
     {{/* 自定义函数 */}}
@@ -715,9 +733,13 @@ func info(w http.ResponseWriter, r *http.Request) {
     </div>
 ```
 
+{% endraw %}
+
 #### 嵌套template
 
 * 在 template 中嵌套 其他的 template , 这个 template 可以是单独的文件, 也可以通过 `define` 定义的template.
+
+{% raw %}
 
 ```html
 <!DOCTYPE html>
@@ -758,6 +780,8 @@ func info(w http.ResponseWriter, r *http.Request) {
 </ul>
 
 ```
+
+{% endraw %}
 
 ```go
 func index(w http.ResponseWriter, r *http.Request) {
