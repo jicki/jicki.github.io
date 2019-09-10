@@ -525,7 +525,7 @@ func main() {
   * `Action` 里可以初始化一个变量来捕获管道的执行结果.
   * 初始化语法: `$variable := pipeline` 其中 $variable 是变量名称. 声明变量的action不会产生任何输出.
 
-```go
+```html
     <div>
         { {/* 这里是注释 */} }
         { { $age := .Age } }
