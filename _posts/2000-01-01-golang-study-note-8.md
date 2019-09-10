@@ -539,10 +539,10 @@ func main() {
 #### 条件判断
 
 * 条件判断
-  * 条件判断 必须要以 {{end}} 来结束.
-  * {{if 条件判断 arg1 arg2}}  输出  {{end}}
-  * {{if 条件判断 arg1 arg2}} 输出 {{else}} 输出 {{end}}
-  * {{if 条件判断 arg1 arg2}} 输出 {{else if 条件判断 arg3 arg4}} 输出 {{end}}
+  * 条件判断 必须要以 \{\{end\}\} 来结束.
+  * \{\{if 条件判断 arg1 arg2\}\}  输出  \{\{end\}\}
+  * \{\{if 条件判断 arg1 arg2\}\} 输出 \{\{else\}\} 输出 \{\{end\}\}
+  * \{\{if 条件判断 arg1 arg2\}\} 输出 \{\{else if 条件判断 arg3 arg4\}\} 输出 \{\{end\}\}
 
 #### 比较函数
 
