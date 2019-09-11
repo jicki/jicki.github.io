@@ -26,6 +26,19 @@ tags:
 * Go在2016年，Go被软件评价公司TIOBE 选为“TIOBE 2016 年最佳语言”。
 
 
+# Go 代理
+
+* 为解决 go get 下载慢或者下载不到的问题
+
+```shell
+# Go 1.13 中使用 goproxy.cn 作为代理
+# 执行如下命令
+
+go env -w GOPROXY=https://goproxy.cn,direct
+
+```
+
+
 # Go 学习目录
 
 [ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
