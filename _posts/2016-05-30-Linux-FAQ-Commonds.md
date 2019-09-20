@@ -43,6 +43,16 @@ chmod -R ug+w directories
 
 ```
  
+
+```
+# 创建公私钥
+
+ssh-keygen -t rsa -b 4096 -C "jicki@qq.com" -N "" -f /home/jicki/id_rsa
+
+```
+
+
+
 ## 查看系统启动时间
 
 ```
