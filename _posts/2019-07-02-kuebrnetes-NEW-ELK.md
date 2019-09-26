@@ -530,6 +530,36 @@ green  open   nginx-log-2019.07.02 TuXuOOONTL-aIZt2wq_hHQ   5   1         20    
 ```
 
 
+# 配置 Java 日志多行匹配
+
+
+## filebeat 配置 
+
+
+```
+# 修改镜像内的模板文件 添加 multiline
+
+
+# 源码中路径 log-pilot/assets/filebeat/filebeat.tpl
+
+# 镜像中路径 /pilot/filebeat.tpl 
+
+
+{{range .configList}}
+- type: log
+  enabled: true
+  paths:
+      - {{ .HostDir }}/{{ .File }}
+  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+  multiline.timeout: 10s
+  multiline.max_lines: 10000
+
+
+```
+
+
 ![图1][1]
 
 ![图2][2]
