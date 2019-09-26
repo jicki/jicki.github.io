@@ -535,6 +535,7 @@ green  open   nginx-log-2019.07.02 TuXuOOONTL-aIZt2wq_hHQ   5   1         20    
 
 ## filebeat 配置 
 
+{% raw %}
 
 ```
 # 修改镜像内的模板文件 添加 multiline
@@ -559,6 +560,7 @@ green  open   nginx-log-2019.07.02 TuXuOOONTL-aIZt2wq_hHQ   5   1         20    
 
 ```
 
+{% endraw %}
 
 ![图1][1]
 
