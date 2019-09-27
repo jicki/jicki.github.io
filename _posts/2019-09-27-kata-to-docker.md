@@ -23,7 +23,7 @@ tags:
 # 安装 Docker
 
 
-```shell
+```
 # 安装 yum-config-manager
 yum -y install yum-utils
 
@@ -45,7 +45,7 @@ yum -y install docker-ce
 
 ## 配置 docker
 
-```shell
+```
 # 添加配置
 
 vi /etc/systemd/system/docker.service
@@ -82,14 +82,14 @@ WantedBy=multi-user.target
 ```
 
 
-```shell
+```
 # 创建额外配置目录
 
 mkdir -p /etc/systemd/system/docker.service.d/
 
 ```
 
-```shell
+```
 # 添加额外配置
 
 vi /etc/systemd/system/docker.service.d/docker-options.conf
@@ -102,7 +102,7 @@ Environment="DOCKER_OPTS=\
 ```
 
 
-```shell
+```
 
 # 重新读取配置，启动 docker, 并设置自动启动 
 
@@ -113,7 +113,7 @@ systemctl enable docker
 ```
 
 
-```shell
+```
 # 验证 安装
 
 docker info
@@ -172,7 +172,7 @@ Server:
 # 安装 Kata
 
 
-```shell
+```
 # 下载 yum 源
 curl http://download.opensuse.org/repositories/home:/katacontainers:/releases:/x86_64:/master/CentOS_7/home:katacontainers:releases:x86_64:master.repo -o /etc/yum.repos.d/katacontainers.repo
 
@@ -191,7 +191,7 @@ yum -y install kata-runtime kata-proxy kata-shim
 
 
 
-```shell
+```
 # 检查安装,并确认硬件支持
 
 kata-runtime kata-check
@@ -204,7 +204,7 @@ kata-runtime kata-check
 
 ## 配置 kata 
 
-```shell
+```
 # 拷贝 kata 配置文件
 
 cp /usr/share/defaults/kata-containers/configuration.toml /etc/kata-containers/configuration.toml
@@ -213,7 +213,7 @@ cp /usr/share/defaults/kata-containers/configuration.toml /etc/kata-containers/c
 
 
 
-```shell
+```
 # 添加一个 config 配置 docker 运行 kata
 # 这里配置 默认还是使用 docker 的 runc 作为容器 也可以将 --default-runtime 配置为 kata 
 # 运行容器的时候使用 --runtime kata-runtime 指定 使用 kata-runntime 
@@ -229,7 +229,7 @@ ExecStart=/usr/bin/dockerd -D --default-runtime runc --add-runtime kata-runtime=
 
 ```
 
-```shell
+```
 # 生效配置,重启 docker
 
 systemctl daemon-reload
@@ -239,7 +239,7 @@ systemctl restart docker
 
 ## 测试 kata
 
-```shell
+```
 # 启动容器
 docker run -d --name kata-nginx -p 80:80 --runtime kata-runtime nginx:alpine
 
