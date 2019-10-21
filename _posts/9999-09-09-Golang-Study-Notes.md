@@ -41,6 +41,8 @@ go env -w GOPROXY=https://goproxy.cn,direct
 
 # Go 学习目录
 
+[ 【Go学习笔记 - Go 语言结构】](https://jicki.me/golang/go/2000/01/01/golang-study-note-0 "Go 语言结构")
+
 [ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
 
 [ 【Go学习笔记 - 并发-锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 学习第六天")
