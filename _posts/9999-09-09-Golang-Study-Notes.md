@@ -43,11 +43,13 @@ go env -w GOPROXY=https://goproxy.cn,direct
 
 [ 【Go学习笔记 - Go 语言结构】](https://jicki.me/golang/go/2000/01/01/golang-study-note-0 "Go 学习第零天")
 
-[ 【Go学习笔记 - Go 常量变量-数据类型】](https://jicki.me/golang/go/2000/01/01/golang-study-note-1 "Go 学习第一天")
+[ 【Go学习笔记 - Go 常量变量 && 数据类型】](https://jicki.me/golang/go/2000/01/01/golang-study-note-1 "Go 学习第一天")
+
+[ 【Go学习笔记 - Go 运算符 && 流程控制】](https://jicki.me/golang/go/2000/01/01/golang-study-note-2 "Go 学习第二天")
 
 [ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
 
-[ 【Go学习笔记 - 并发-锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 学习第六天")
+[ 【Go学习笔记 - 并发 && 锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 学习第六天")
 
 [ 【Go学习笔记 - 网络编程-HTTP-TCP-UDP】](https://jicki.me/golang/go/2000/01/01/golang-study-note-7 "Go 学习第七天")
 
