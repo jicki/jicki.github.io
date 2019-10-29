@@ -184,46 +184,46 @@ git checkout -b release-1.4 remotes/origin/release-1.4
 # 文件如下:
 
 [root@localhost fabric]# ls -lt
-总用量 1240
-drwxr-xr-x  8 root root    153 11月  5 11:41 vendor
-drwxr-xr-x  4 root root     96 11月  5 11:41 token
--rw-r--r--  1 root root    301 11月  5 11:41 tox.ini
-drwxr-xr-x  2 root root     56 11月  5 11:41 unit-test
--rw-r--r--  1 root root   3816 11月  5 11:41 testingInfo.rst
--rw-r--r--  1 root root 438053 11月  5 11:41 test-pyramid.png
-drwxr-xr-x  2 root root   4096 11月  5 11:41 scripts
--rw-r--r--  1 root root    316 11月  5 11:41 settings.gradle
-drwxr-xr-x  4 root root    110 11月  5 11:41 sampleconfig
-drwxr-xr-x  3 root root     22 11月  5 11:41 release
-drwxr-xr-x  2 root root   4096 11月  5 11:41 release_notes
-drwxr-xr-x 14 root root   4096 11月  5 11:41 protos
-drwxr-xr-x 11 root root   4096 11月  5 11:41 peer
-drwxr-xr-x  6 root root    126 11月  5 11:41 orderer
-drwxr-xr-x  6 root root   4096 11月  5 11:41 msp
-drwxr-xr-x 12 root root   4096 11月  5 11:41 integration
-drwxr-xr-x  8 root root    112 11月  5 11:41 images
-drwxr-xr-x  2 root root   4096 11月  5 11:41 idemix
-drwxr-xr-x 16 root root   4096 11月  5 11:41 gossip
--rw-r--r--  1 root root   2944 11月  5 11:41 gotools.mk
-drwxr-xr-x  8 root root    126 11月  5 11:41 examples
-drwxr-xr-x  5 root root    156 11月  5 11:41 docs
-drwxr-xr-x  7 root root   4096 11月  5 11:41 discovery
--rw-r--r--  1 root root   3356 11月  5 11:41 docker-env.mk
-drwxr-xr-x  4 root root   4096 11月  5 11:41 devenv
-drwxr-xr-x 22 root root   4096 11月  5 11:41 core
-drwxr-xr-x 24 root root   4096 11月  5 11:41 common
-drwxr-xr-x  4 root root     46 11月  5 11:41 cmd
--rw-r--r--  1 root root     14 11月  5 11:41 ci.properties
-drwxr-xr-x  8 root root   4096 11月  5 11:41 bccsp
--rw-r--r--  1 root root   3205 11月  5 11:41 Gopkg.toml
--rw-r--r--  1 root root  11358 11月  5 11:41 LICENSE
--rwxr-xr-x  1 root root  18176 11月  5 11:41 Makefile
--rw-r--r--  1 root root   6482 11月  5 11:41 README.md
--rw-r--r--  1 root root 670001 11月  5 11:41 CHANGELOG.md
--rw-r--r--  1 root root    597 11月  5 11:41 CODE_OF_CONDUCT.md
--rw-r--r--  1 root root    664 11月  5 11:41 CONTRIBUTING.md
--rw-r--r--  1 root root  26423 11月  5 11:41 Gopkg.lock
-
+total 1420
+drwxr-xr-x  3 root root   4096 Oct 29 11:19 sampleconfig
+drwxr-xr-x  9 root root   4096 Oct 29 09:48 vendor
+drwxr-xr-x  8 root root   4096 Oct 29 09:48 token
+-rw-r--r--  1 root root    495 Oct 29 09:48 tox.ini
+drwxr-xr-x  2 root root   4096 Oct 29 09:48 unit-test
+-rw-r--r--  1 root root   3816 Oct 29 09:48 testingInfo.rst
+-rw-r--r--  1 root root 438053 Oct 29 09:48 test-pyramid.png
+drwxr-xr-x  2 root root   4096 Oct 29 09:48 scripts
+-rw-r--r--  1 root root    316 Oct 29 09:48 settings.gradle
+drwxr-xr-x  3 root root   4096 Oct 29 09:48 release
+drwxr-xr-x  2 root root   4096 Oct 29 09:48 release_notes
+drwxr-xr-x 14 root root   4096 Oct 29 09:48 protos
+drwxr-xr-x 11 root root   4096 Oct 29 09:48 peer
+drwxr-xr-x  6 root root   4096 Oct 29 09:48 orderer
+drwxr-xr-x  6 root root   4096 Oct 29 09:48 msp
+drwxr-xr-x 13 root root   4096 Oct 29 09:48 integration
+drwxr-xr-x  2 root root   4096 Oct 29 09:48 idemix
+drwxr-xr-x  8 root root   4096 Oct 29 09:48 images
+-rw-r--r--  1 root root   2999 Oct 29 09:48 gotools.mk
+drwxr-xr-x 17 root root   4096 Oct 29 09:48 gossip
+drwxr-xr-x  7 root root   4096 Oct 29 09:48 examples
+drwxr-xr-x  5 root root   4096 Oct 29 09:48 docs
+drwxr-xr-x  7 root root   4096 Oct 29 09:48 discovery
+-rw-r--r--  1 root root   3355 Oct 29 09:48 docker-env.mk
+drwxr-xr-x  4 root root   4096 Oct 29 09:48 devenv
+drwxr-xr-x 24 root root   4096 Oct 29 09:48 core
+drwxr-xr-x 28 root root   4096 Oct 29 09:48 common
+drwxr-xr-x  4 root root   4096 Oct 29 09:48 cmd
+-rw-r--r--  1 root root     14 Oct 29 09:48 ci.properties
+drwxr-xr-x  9 root root   4096 Oct 29 09:48 bccsp
+-rw-r--r--  1 root root  29937 Oct 29 09:48 Gopkg.lock
+-rw-r--r--  1 root root   3849 Oct 29 09:48 Gopkg.toml
+-rw-r--r--  1 root root  11358 Oct 29 09:48 LICENSE
+-rwxr-xr-x  1 root root  17474 Oct 29 09:48 Makefile
+-rw-r--r--  1 root root   7391 Oct 29 09:48 README.md
+-rw-r--r--  1 root root   1035 Oct 29 09:48 SECURITY.md
+-rw-r--r--  1 root root 804634 Oct 29 09:48 CHANGELOG.md
+-rw-r--r--  1 root root    597 Oct 29 09:48 CODE_OF_CONDUCT.md
+-rw-r--r--  1 root root    661 Oct 29 09:48 CONTRIBUTING.md
 
 ```
 
@@ -573,9 +573,6 @@ crypto-config
 
 # 首先需要创建一个文件夹
 mkdir -p /opt/jicki/channel-artifacts
-
-
-# 修改 configtx.yaml 文件增加 orderer 多节点 以及 peer 多节点, 删除了 &Org3 节点
 
 # 完整 configtx.yaml 如下: 
 # configtx.yaml 文件格式 请千万注意 空格 与 tab 键 里的缩进，否则会报错。
