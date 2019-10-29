@@ -1,8 +1,8 @@
 ---
 layout: post
-title: hyperledger-fabric v 1.3
+title: hyperledger-fabric v 1.4
 categories: fabric
-description: hyperledger-fabric v 1.3
+description: hyperledger-fabric v 1.4
 keywords: fabric
 feature-img: "assets/img/pexels/desk-top.jpeg"
 catalog:    true
