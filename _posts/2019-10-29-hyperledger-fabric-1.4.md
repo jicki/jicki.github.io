@@ -178,7 +178,7 @@ git branch
 
 
 # 切换分支
-git checkout -b release-1.3 remotes/origin/release-1.3
+git checkout -b release-1.4 remotes/origin/release-1.4
 
 
 # 文件如下:
