@@ -39,20 +39,6 @@ tags:
 |kafka1节点|kafka1|192.168.100.100|9092|CentOS 7 x64|
 |kafka2节点|kafka2|192.168.100.100|9092|CentOS 7 x64|
 
-```
-# 配置一下 hosts 后面需要调用
-
-
-# fabric
-
-192.168.168.100 orderer0.jicki.me
-192.168.168.100 ca.org1.jicki.me
-192.168.168.100 ca.org2.jicki.me
-192.168.168.100 peer0.org1.jicki.me
-192.168.168.100 peer0.org2.jicki.me
-
-# fabric
-```
 
 ## 官方地址
 
