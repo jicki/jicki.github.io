@@ -49,6 +49,8 @@ go env -w GOPROXY=https://goproxy.cn,direct
 
 [ 【Go学习笔记 - Go 数组 切片 Map】](https://jicki.me/golang/go/2000/01/01/golang-study-note-3 "Go 学习第三天")
 
+[ 【Go学习笔记 - Go 值类型与引用类型】](https://jicki.me/golang/go/2000/01/01/golang-study-note-3-1 "Go 学习第三天补充")
+
 [ 【Go学习笔记 - Go 函数 闭包 panic 指针】](https://jicki.me/golang/go/2000/01/01/golang-study-note-4 "Go 学习第四天")
 
 [ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 学习第五天")
