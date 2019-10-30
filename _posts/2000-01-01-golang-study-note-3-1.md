@@ -16,7 +16,7 @@ tags:
 
 ### 值类型
 
-* 值类型有: 整型int、浮点型float、布尔值bool、整型string、数组Array、结构体struct
+* 值类型有: 整型int、浮点型float、布尔值bool、字符串string、数组Array、结构体struct
 
 * 值类型的特点是: 变量直接存储值, 内存通常在栈中分配.
 
