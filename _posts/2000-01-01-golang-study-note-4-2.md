@@ -164,3 +164,71 @@ func main() {
 
 ```
 
+### 练习题
+
+* 编写一个clac包实现加减乘除四个功能函数, 在snow这个包中导入并使用加减乘除四个函数实现数学运算。
+
+```go
+# clac 包
+func Add(x, y int) int {
+	return x + y
+}
+
+func Sub(x, y int) int {
+	return x - y
+}
+
+func Multi(x, y int) int {
+	return x * y
+}
+
+func Divide(x, y int) int {
+	return x / y
+}
+```
+
+```go
+# snow 包
+
+package snow
+
+import (
+	"fmt"
+
+	"github.com/jicki/package/package_work/clac"
+)
+
+func Sum(char string, x, y int) int {
+	sum := 0
+	switch char {
+	case "+":
+		sum = clac.Add(x, y)
+	case "-":
+		sum = clac.Sub(x, y)
+	case "*":
+		sum = clac.Multi(x, y)
+	case "/":
+		sum = clac.Divide(x, y)
+	default:
+		fmt.Println("char 输入有误!")
+	}
+	return sum
+}
+```
+
+```go
+# main.go
+
+import (
+	"fmt"
+
+	"github.com/jicki/package/package_work/snow"
+)
+
+func main() {
+	ret := snow.Sum("+", 100, 200)
+	fmt.Println(ret)
+}
+
+```
+
