@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Go学习笔记 - 3-1
+title: Go学习笔记
 categories: [golang,Go]
-description: Go学习笔记 - 3-1
+description: Go学习笔记
 keywords: golang,Go
 header-img: "img/pexels/triangular.jpeg"
 catalog:    true
@@ -10,7 +10,7 @@ tags:
     - golang
 ---
 
-# Go学习笔记 - 3-1
+# Go语言基础
 
 ## 引用类型与值类型
 
