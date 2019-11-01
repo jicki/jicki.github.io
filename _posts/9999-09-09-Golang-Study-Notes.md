@@ -55,6 +55,8 @@ go env -w GOPROXY=https://goproxy.cn,direct
 
 [ 【Go学习笔记 - Go 结构体 方法 Json序列化】](https://jicki.me/golang/go/2000/01/01/golang-study-note-4-1 "Go 语言基础")
 
+[ 【Go学习笔记 - Go 包package 】](https://jicki.me/golang/go/2000/01/01/golang-study-note-4-2 "Go 语言基础")
+
 [ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 语言基础")
 
 [ 【Go学习笔记 - 并发 && 锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 语言基础")
