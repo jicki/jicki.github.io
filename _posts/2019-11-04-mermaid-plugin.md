@@ -27,7 +27,7 @@ js/mermaid/
 
 之后 `_config.yml` 中的相关配置:
 
-```yaml
+```
 # Gems
 # from PR#40, to support local preview for Jekyll 3.0
 plugins: [jekyll-paginate, jekyll-mermaid]
