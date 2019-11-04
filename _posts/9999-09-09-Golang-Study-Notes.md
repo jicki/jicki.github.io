@@ -10,15 +10,15 @@ tags:
     - golang
 ---
 
-<div class="mermaid">
+![logo][1]
+
+<div margin: 0 auto; class="mermaid">
 graph TD;
     A[人生]-->B[苦短];
     A-->C[我用];
     B-->D[Golang];
     C-->D;
 </div>
-
-![logo][1]
 
 # Go 简介
 
