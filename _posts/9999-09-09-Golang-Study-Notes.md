@@ -10,15 +10,13 @@ tags:
     - golang
 ---
 
-{% raw %}
 {% mermaid %}
 graph TD;
-    A[我]-->B[热];
-    A-->C[爱];
-    B-->D[学习];
+    A[人生]-->B[苦短];
+    A-->C[我用];
+    B-->D[Golang];
     C-->D;
 {% endmermaid %}
-{% endraw %}
 
 ![logo][1]
 
