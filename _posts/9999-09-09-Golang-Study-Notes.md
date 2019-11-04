@@ -12,7 +12,7 @@ tags:
 
 ![logo][1]
 
-<div margin: 0 auto; class="mermaid">
+<div class="mermaid">
 graph TD;
     A[人生]-->B[苦短];
     A-->C[我用];
