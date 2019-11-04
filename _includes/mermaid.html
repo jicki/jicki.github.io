@@ -9,15 +9,12 @@
       var preBlock = codeBlock.parentNode;
 
       codeBlock.style.backgroundColor = 'initial';
+      var gLabels = Array.from(document.querySelectorAll('code.language-mermaid g.label'))
+      gLabels.forEach(function(gLabel){gLabel.style.color = 'blue')}
       preBlock.style.border = 'none';
       preBlock.style.textAlign = 'center';
       preBlock.style.backgroundColor = 'initial';
     });
   })()
 </script>
-<style type="text/css">
-element.style:{
-color: 'red';
-}
-</style>
 {%- endif -%}
