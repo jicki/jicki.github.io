@@ -26,6 +26,14 @@ tags:
 * Go在2016年，Go被软件评价公司TIOBE 选为“TIOBE 2016 年最佳语言”。
 
 
+{% mermaid %}
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+{% endmermaid %}
+
 # Go 代理
 
 * 为解决 go get 下载慢或者下载不到的问题
