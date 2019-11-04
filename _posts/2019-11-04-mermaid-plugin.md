@@ -38,6 +38,7 @@ mermaid:
 
 之后在 Post 中使用姿势如下, 注意这里是使用 `{% raw %}{% mermaid  %}, {% endmermaid %}{% endraw %}` 来声明 mermaid block 的. mermaid block 内的语法可以参考 [mermaidjs](https://mermaidjs.github.io/).
 
+{% raw %}
 {% mermaid %}
 sequenceDiagram
     participant Alice
@@ -81,3 +82,4 @@ graph TD;
     B-->D[学习];
     C-->D;
 {% endmermaid %}
+{% endraw %}
