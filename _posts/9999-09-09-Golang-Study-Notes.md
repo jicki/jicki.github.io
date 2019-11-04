@@ -10,6 +10,7 @@ tags:
     - golang
 ---
 
+{% raw %}
 {% mermaid %}
 graph TD;
     A[我]-->B[热];
@@ -17,6 +18,7 @@ graph TD;
     B-->D[学习];
     C-->D;
 {% endmermaid %}
+{% endraw %}
 
 ![logo][1]
 
