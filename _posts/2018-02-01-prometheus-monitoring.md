@@ -9,7 +9,7 @@ header-img: "img/pexels/triangular.jpeg"
 ---
 
 
-
+{% raw %}
 # Prometheus Monitoring
 
 
@@ -1789,7 +1789,7 @@ prometheus-operator-9bf5574-s7k76     1/1       Running   0          2h
 ![3][3]
 ![4][4]
 ![5][5]
-
+{% endraw %}
 
   [1]: https://jicki.me/img/posts/grafana/grafana1.png
   [2]: https://jicki.me/img/posts/grafana/grafana2.png
