@@ -41,8 +41,9 @@ anchorjs: true                          # if you want to customize anchor. check
 plugins: [jekyll-paginate, jekyll-mermaid]
 
 # mermaid setting
-mermaid:
-  src: '/js/mermaid/current/mermaid.min.js'
+#mermaid:
+#  src: '/js/mermaid/current/mermaid.min.js'
+mermaid_enable: true
 
 # Markdown settings
 # replace redcarpet to kramdown,
