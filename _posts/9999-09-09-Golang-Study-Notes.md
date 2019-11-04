@@ -10,6 +10,13 @@ tags:
     - golang
 ---
 
+{% mermaid %}
+graph TD;
+    A[我]-->B[热];
+    A-->C[爱];
+    B-->D[学习];
+    C-->D;
+{% endmermaid %}
 
 ![logo][1]
 
@@ -25,20 +32,6 @@ tags:
 
 * Go在2016年，Go被软件评价公司TIOBE 选为“TIOBE 2016 年最佳语言”。
 
-
-{% mermaid %}
-sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice->John: Hello John, how are you?
-    loop Healthcheck
-        John->John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail...
-    John-->Alice: Great!
-    John->Bob: How about you?
-    Bob-->John: Jolly good!
-{% endmermaid %}
 
 # Go 代理
 
