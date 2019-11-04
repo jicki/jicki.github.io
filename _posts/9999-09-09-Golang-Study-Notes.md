@@ -10,13 +10,13 @@ tags:
     - golang
 ---
 
-{% mermaid %}
+```mermaid
 graph TD;
     A[人生]-->B[苦短];
     A-->C[我用];
     B-->D[Golang];
     C-->D;
-{% endmermaid %}
+```
 
 ![logo][1]
 
