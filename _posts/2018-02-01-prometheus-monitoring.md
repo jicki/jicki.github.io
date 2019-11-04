@@ -620,7 +620,7 @@ prometheus-operator-9bf5574-s7k76     1/1       Running   0          2m
 
 ### prometheus
 
-```
+```shell
 vi prometheus-k8s.yaml
 
 ---
