@@ -56,8 +56,8 @@ kramdown:
       start_line: 1
 
 # mermaid settings
-#mermaid:
-#  src: 'js/mermaid.js'
+mermaid:
+  src: 'js/mermaid.js'
 
 # Disqus settings
 disqus_username: jicki
