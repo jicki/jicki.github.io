@@ -32,6 +32,26 @@
     
     <title>{% if page.title %}{{ page.title }} - {{ site.SEOTitle }}{% else %}{{ site.SEOTitle }}{% endif %}</title>
 
+<!-- mermaid -->
+{%- if site.mermaid_enable -%}
+<script type="text/javascript" src="/assets/mermaid/7.1.2/mermaid.min.js"></script>
+<script type="text/javascript">
+  (function(){
+    // Initial mermaid
+    mermaid.init({startOnLoad:true}, "pre code.language-mermaid", function(){
+      // Change <pre> and <code> block style
+      var codeBlock = document.querySelector('code.language-mermaid');
+      var preBlock = codeBlock.parentNode;
+
+      codeBlock.style.backgroundColor = 'initial';
+      preBlock.style.border = 'none';
+      preBlock.style.textAlign = 'center';
+      preBlock.style.backgroundColor = 'initial';
+    });
+  })()
+</script>
+{%- endif -%}
+<!-- mermaid end -->
     <!-- Web App Manifest -->
     <link rel="manifest" href="{{ site.baseurl }}/pwa/manifest.json">
 
