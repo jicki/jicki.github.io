@@ -66,6 +66,8 @@ go env -w GOPROXY=https://goproxy.cn,direct
 
 [ 【Go学习笔记 - Go 文件操作 】](https://jicki.me/golang/go/2000/01/01/golang-study-note-4-3 "Go 语言基础")
 
+[ 【Go学习笔记 - Go 接口 interface 】](https://jicki.me/golang/go/2000/01/01/golang-study-note-4-4 "Go 语言基础")
+
 [ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 语言基础")
 
 [ 【Go学习笔记 - 并发 && 锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 语言基础")
