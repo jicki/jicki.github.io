@@ -70,7 +70,7 @@ go env -w GOPROXY=https://goproxy.cn,direct
 
 [ 【Go学习笔记 - 反射】](https://jicki.me/golang/go/2000/01/01/golang-study-note-5 "Go 语言基础")
 
-[ 【Go学习笔记 - 并发 && 锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 语言基础")
+[ 【Go学习笔记 - 并发 goroutine && 锁】](https://jicki.me/golang/go/2000/01/01/golang-study-note-6 "Go 语言基础")
 
 [ 【Go学习笔记 - 网络编程-HTTP-TCP-UDP】](https://jicki.me/golang/go/2000/01/01/golang-study-note-7 "Go 语言基础")
 
