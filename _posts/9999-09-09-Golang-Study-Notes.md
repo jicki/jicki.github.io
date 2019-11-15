@@ -45,6 +45,13 @@ go env -w GOPROXY=https://goproxy.cn,direct
 
 ```
 
+# Go 开启 module
+
+```shell
+# 执行如下命令
+
+go env -w GO111MODULE=on
+```
 
 # Go 学习目录
 
