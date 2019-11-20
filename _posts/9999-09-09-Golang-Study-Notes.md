@@ -41,7 +41,7 @@ graph TD;
 # Go 1.13 中使用 goproxy.cn 作为代理
 # 执行如下命令
 
-go env -w GOPROXY=https://goproxy.cn,direct
+go env -w GOPROXY=https://goproxy.cn,https://mirrors.aliyun.com/goproxy,direct
 
 ```
 
