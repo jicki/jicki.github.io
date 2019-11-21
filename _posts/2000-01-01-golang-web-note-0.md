@@ -51,3 +51,50 @@ tags:
 |POST|/book|创建书籍|
 |PUT|/book|更新书籍信息|
 |DELETE|/book|删除书籍|
+
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
+
+func main() {
+	r := gin.Default()
+	// HTTP 四个请求方式
+	
+	// 基于 GET 请求
+	r.GET("/book",func(c *gin.Context){
+		c.JSON(http.StatusOK, gin.H{
+			"Message":"查询书籍",
+		})
+	})
+	// 基于 POST 请求
+	r.POST("/book",func(c *gin.Context){
+		c.JSON(http.StatusOK,gin.H{
+			"Message":"创建书籍",
+		})
+	})
+	// 基于 PUT 请求
+	r.PUT("/book",func(c *gin.Context){
+		c.JSON(http.StatusOK,gin.H{
+			"Message":"更新书籍",
+		})
+	})
+	// 基于 DELETE 请求
+	r.DELETE("/book",func(c *gin.Context){
+		c.JSON(http.StatusOK,gin.H{
+			"Message":"删除书籍",
+		})
+	})
+	// 启动服务
+	if err := r.Run(":8888");err!=nil{
+		fmt.Printf("Server Run Failed err: %v\n",err)
+		return
+	}
+}
+
+```
