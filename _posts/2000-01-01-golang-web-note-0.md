@@ -19,7 +19,7 @@ tags:
 
 ## Gin 简介
 
-* Gin 是一个用 Go (Golang) 编写的 HTTP web 框架。 使用 `httprouter`, 因此是一个拥有很好的性能API框架。
+* Gin 是一个用 Go (Golang) 编写的 HTTP web 框架。 使用 `httprouter`, 因此是一个拥有很好性能的API框架。
 
 
 ## Gin 特性
@@ -67,18 +67,35 @@ import "github.com/gin-gonic/gin"
 ```go
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"log"
+)
 
 func main() {
-        // 创建一个 gin 实例
+	// 创建一个 gin实例,返回一个 *engine 路由引擎
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
+	// 创建一个GET 方法 的 /hello 的路由
+	// func 使用 匿名函数方式
+	r.GET("/hello",func(c *gin.Context){
+		// 使用 JSON格式,方式, 状态码为 200
+		// gin.H 是返回一个map
+		c.JSON(200,gin.H{
+			"message":"hello world",
 		})
 	})
-        // Run 默认绑定 0.0.0.0:8080 
-	r.Run()
+	// 启动 gin 服务
+	if err := r.Run(":8888");err!=nil{
+		log.Fatal(err.Error())
+	}
 }
 ```
 
+```shell
+# 访问 http://127.0.0.1:8888/hello
+
+# 显示一个 json 格式的数据
+
+{"message":"hello world"}
+
+```
