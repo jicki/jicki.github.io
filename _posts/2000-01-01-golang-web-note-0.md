@@ -12,90 +12,35 @@ tags:
 
 # Go Web 编程
 
-## Gin 框架
+## RESTful 框架
 
->官方 中文文档 https://gin-gonic.com/zh-cn/docs/
+* `RESTful`架构，就是目前最流行的一种互联网软件架构。它结构清晰、符合标准、易于理解、扩展方便，所以正得到越来越多网站的采用。
+  * REST这个词，是`Roy Thomas Fielding`在他2000年的博士论文中提出的, Fielding 将他对互联网软件的架构原则，定名为`REST`，即`Representational State Transfer`的缩写。中文翻译为 表现层状态转化 。
+  * 如果一个架构符合REST原则，就称它为RESTful架构。
+
+* 要理解`RESTful`架构，最好的方法就是去理解`Representational State Transfer`这个词组, REST的名称"表现层状态转化"中，省略了主语。"表现层"其实指的是"资源"（Resources）的"表现层"。"资源"是一种信息实体，它可以有多种外在表现形式。我们把"资源"具体呈现出来的形式，叫做它的"表现层"（Representation）。状态转化（State Transfer）, 客户端想要操作服务器，必须通过某种手段，让服务器端发生"状态转化"（State Transfer）。而这种转化是建立在表现层之上的，所以就是"表现层状态转化"。
+  1. Resources(资源): 所谓"资源"，就是网络上的一个实体，或者说是网络上的一个具体信息, 每种资源对应一个特定的URI, 当需要获取某种资源时,访问资源对应的 URL 既可。
+  2. Representation(表现层):  我们把"资源"具体呈现出来的形式，叫做它的 "表现层"（Representation）。URI只代表资源的实体，不代表它的形式。它的具体表现形式, 应该是在HTTP请求的头信息中用`Accept`和`Content-Type`字段指定，这两个字段才是对"表现层"的描述。
+  3. State Transfer(状态转化): 互联网通信协议HTTP协议，是一个无状态协议。这意味着，所有的状态都保存在服务器端。因此，如果客户端想要操作服务器，必须通过某种手段，让服务器端发生"状态转化"（State Transfer）。而这种转化是建立在表现层之上的，所以就是"表现层状态转化"。
+
+* 总结: 
+  1. 每一个URI代表一种资源。
+  2. 客户端和服务器之间，传递这种资源的某种表现层。
+  3. 客户端通过四个HTTP动词，对服务器端资源进行操作，实现"表现层状态转化"。
+
+## HTTP 四个动词-请求方法
+
+* `GET` 请求 用来获取资源
+* `POST` 请求 用来创建新的资源
+* `PUT` 请求 用来更新资源
+* `DELETE` 请求 用来删除资源
 
 
-## Gin 简介
+* REST风格 的系统设计
 
-* Gin 是一个用 Go (Golang) 编写的 HTTP web 框架。 使用 `httprouter`, 因此是一个拥有很好性能的API框架。
-
-
-## Gin 特性
-
-* 快速
-  * 基于 Radix 树的路由，内存占用小。没有使用反射。API 性能可以直观的测试出来。
-
-* 支持中间件
-  * 传入的 HTTP 请求可以由一系列中间件和最终操作来处理。 例如：Logger，Authorization，GZIP，最终操作 DB。
-
-* Crash 处理
-  * Gin 可以 捕获 发生在 HTTP 请求中的 panic 并 recover 它。这样，你的服务器将始终可用。例如，你可以向 Sentry 报告这个 panic .
-
-* JSON 验证
-  * Gin 可以解析并验证请求的 JSON，例如检查所需值的存在。
-
-* 路由组
-  * 更好地组织路由。是否需要授权，不同的 API 版本,  此外，这些组可以无限制地嵌套而不会降低性能。
-
-* 错误管理
-  * Gin 提供了一种方便的方法来收集 HTTP 请求期间发生的所有错误。使用中间件可以将错误写入日志文件，数据库里。
-
-* 内置渲染
-  * Gin 为 JSON，XML 和 HTML 渲染提供了易于使用的 API。
-
-* 可扩展性
-  * 可以很简单创建中间件。
-
-## 安装使用
-
-* 通过 go get 并使用 import 导入包, 既可。
-
-```shell
-go get -u github.com/gin-gonic/gin
-```
-
-```go
-
-import "github.com/gin-gonic/gin"
-
-```
-
-* 一个例子
-
-```go
-package main
-
-import (
-	"github.com/gin-gonic/gin"
-	"log"
-)
-
-func main() {
-	// 创建一个 gin实例,返回一个 *engine 路由引擎
-	r := gin.Default()
-	// 创建一个GET 方法 的 /hello 的路由
-	// func 使用 匿名函数方式
-	r.GET("/hello",func(c *gin.Context){
-		// 使用 JSON格式,方式, 状态码为 200
-		// gin.H 是返回一个map
-		c.JSON(200,gin.H{
-			"message":"hello world",
-		})
-	})
-	// 启动 gin 服务
-	if err := r.Run(":8888");err!=nil{
-		log.Fatal(err.Error())
-	}
-}
-```
-
-```shell
-# 访问 http://127.0.0.1:8888/hello
-
-# 显示一个 json 格式的数据
-
-{"message":"hello world"}
-
-```
+|请求方法|URI|含义|
+|-|-|-|
+|GET|/book|查询书籍信息|
+|POST|/book|创建书籍|
+|PUT|/book|更新书籍信息|
+|DELETE|/book|删除书籍|
