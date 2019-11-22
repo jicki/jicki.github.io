@@ -48,7 +48,6 @@ graph TD;
   id1--Request-->id2;
   id3--response-->id1;
   id2--数据驱动-->id3; 
-  id3--数据驱动-->id2;
   id2--数据交互-->id4;
   id4--数据操作-->id5;
   id5--数据操作-->id4;
