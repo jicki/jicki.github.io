@@ -46,8 +46,8 @@ graph TB;
   id4((Model))
   id5(DataBase)
   id1--Request-->id2;
-  id1<--response--id3;
-  id2<--数据驱动-->id3; 
-  id2<--数据交互-->id4;
-  id4<--数据操作-->id5;
+  id2--数据驱动-->id3; 
+  id3--response-->id1;
+  id2--数据交互-->id4;
+  id4--数据操作-->id5;
 ```
