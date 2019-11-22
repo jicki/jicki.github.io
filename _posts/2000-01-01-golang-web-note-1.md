@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Go Web编程
+title: MVC 框架
 categories: [golang,Go]
-description: Go Web编程
+description: MVC 框架
 keywords: golang,Go
 header-img: "img/pexels/triangular.jpeg"
 catalog:    true
