@@ -40,12 +40,14 @@ tags:
 
 ```mermaid
 graph TB;
-  id1(浏览器)--Request-->id2((Controller));
-  id2((Controller))--数据驱动-->id3((View));
-  id2((Controller))--数据交互-->id4((Model));
-  id3((View))--response-->id1(浏览器);
-  id3((View))--数据驱动-->((Controller));
-  id4((Model))--数据交互-->id2((Controller));
-  id4((Model))--数据库操作-->id5(DataBase);
-  id5(DataBase)--数据库操作-->id4((Model));
+  id1(浏览器)
+  id2((Controller))
+  id3((View))
+  id4((Model))
+  id5(DataBase)
+  id1--Request-->id2;
+  id1<--response--id3;
+  id2<--数据驱动-->id3; 
+  id2<--数据交互-->id4;
+  id4<--数据操作-->id5;
 ```
