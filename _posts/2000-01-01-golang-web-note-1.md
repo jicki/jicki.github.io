@@ -12,90 +12,40 @@ tags:
 
 # Go Web 编程
 
-## Gin 框架
+> 设计一个程序的结构，有一门专门的学问，叫做"架构模式"（architectural pattern），属于编程的方法论。
 
->官方 中文文档 https://gin-gonic.com/zh-cn/docs/
+## MVC 框架
 
+* MVC模式就是架构模式的一种。
 
-## Gin 简介
+* MVC - 这个模式认为，程序不论简单或复杂，从结构上看，都可以分成三层。
 
-* Gin 是一个用 Go (Golang) 编写的 HTTP web 框架。 使用 `httprouter`, 因此是一个拥有很好性能的API框架。
+  1. Model（模型）
 
+    * Model 是Web应用中的`最底层` 用于处理数据逻辑的部分，包括Service层和Dao层。
+    
+      * Service层用于和数据库联动，放置业务逻辑代码，处理数据库的增删改查。
+     
+      * Dao层用于放各种接口，以备调用。
 
-## Gin 特性
+  2. View（视图）
 
-* 快速
-  * 基于 Radix 树的路由，内存占用小。没有使用反射。API 性能可以直观的测试出来。
+    * View 是Web应用中的`第一层` 用于处理响应给客户的页面的部分，例如我们写的html静态页面，jsp动态页面，这些最终响应给浏览器的页面都是视图, 通常视图是依据模型数据来创建的。
 
-* 支持中间件
-  * 传入的 HTTP 请求可以由一系列中间件和最终操作来处理。 例如：Logger，Authorization，GZIP，最终操作 DB。
+  3. Controller（控制）
+  
+    * Controller 在Web应用中的`中间一层`，简而言之，就是Servlet。（实际上一个方法就相当于一个对应的Servlet）。
 
-* Crash 处理
-  * Gin 可以 捕获 发生在 HTTP 请求中的 panic 并 recover 它。这样，你的服务器将始终可用。例如，你可以向 Sentry 报告这个 panic .
+* 这三层是紧密联系在一起的，但又是互相独立的，每一层内部的变化不影响其他层。每一层都对外提供接口（Interface），供上面一层调用。这样一来，就实现了 模块化，修改外观或者变更数据都不用修改其他层，大大方便了维护和升级。
 
-* JSON 验证
-  * Gin 可以解析并验证请求的 JSON，例如检查所需值的存在。
-
-* 路由组
-  * 更好地组织路由。是否需要授权，不同的 API 版本,  此外，这些组可以无限制地嵌套而不会降低性能。
-
-* 错误管理
-  * Gin 提供了一种方便的方法来收集 HTTP 请求期间发生的所有错误。使用中间件可以将错误写入日志文件，数据库里。
-
-* 内置渲染
-  * Gin 为 JSON，XML 和 HTML 渲染提供了易于使用的 API。
-
-* 可扩展性
-  * 可以很简单创建中间件。
-
-## 安装使用
-
-* 通过 go get 并使用 import 导入包, 既可。
-
-```shell
-go get -u github.com/gin-gonic/gin
-```
-
-```go
-
-import "github.com/gin-gonic/gin"
-
-```
-
-* 一个例子
-
-```go
-package main
-
-import (
-	"github.com/gin-gonic/gin"
-	"log"
-)
-
-func main() {
-	// 创建一个 gin实例,返回一个 *engine 路由引擎
-	r := gin.Default()
-	// 创建一个GET 方法 的 /hello 的路由
-	// func 使用 匿名函数方式
-	r.GET("/hello",func(c *gin.Context){
-		// 使用 JSON格式,方式, 状态码为 200
-		// gin.H 是返回一个map
-		c.JSON(200,gin.H{
-			"message":"hello world",
-		})
-	})
-	// 启动 gin 服务
-	if err := r.Run(":8888");err!=nil{
-		log.Fatal(err.Error())
-	}
-}
-```
-
-```shell
-# 访问 http://127.0.0.1:8888/hello
-
-# 显示一个 json 格式的数据
-
-{"message":"hello world"}
-
+```mermaid
+graph TB;
+  id1(浏览器)--Request-->id2((Controller));
+  id2((Controller))--数据驱动-->id3((View));
+  id2((Controller))--数据交互-->id4((Model));
+  id3((View))--response-->id1(浏览器);
+  id3((View))--数据驱动-->((Controller));
+  id4((Model))--数据交互-->id2((Controller));
+  id4((Model))--数据库操作-->id5(DataBase);
+  id5(DataBase)--数据库操作-->id4((Model));
 ```
