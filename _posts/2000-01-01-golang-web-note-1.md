@@ -53,3 +53,18 @@ graph TD;
   id5--数据操作-->id4;
   id4--数据交互-->id2;
 ```
+
+
+### Web经典三层架构
+
+1. 表现层，UI，User Interface：
+
+  * 主要接受用户的请求和把相应的页面响应给用户浏览器, 页面 对应MVC中的视图（View）, 逻辑 对应MVC中的控制器（Controller），即Servlet服务器。
+
+2. 业务逻辑层，BLL，Business Logic Layer:
+
+  * 对应MVC中模型（Model）中的Service层，与数据库联动处理增删改查。
+
+3. 数据访问层/持久层，DAL，Data Access Layer:
+
+  * 对应MVC中模型（Model）中的Dao层，提供接口支持。
