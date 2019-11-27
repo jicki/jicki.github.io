@@ -227,6 +227,23 @@ func main() {
 	for _, v := range studs {
 		fmt.Printf("%#v \n", v)
 	}
+
+	// 利用 Query 查询
+	// 创建一个空的Student的结构体
+	s4 := Student{}
+	rows, err := DB.Queryx("select id,name,nick,country,province,city,status,create_time FROM student")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Next 方法
+	for rows.Next() {
+		// 将查询的结构返回到 s4 结构体指针中
+		err := rows.StructScan(&s4)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%#v\n", s4)
+	}
 ```
 
 * 输出:
@@ -236,4 +253,6 @@ func main() {
 main.Student{Id:1, Name:"No1", Nick:"Num1", Country:"China", Province:"GD", City:"SZ", Status:1, CreateTime:""} 
 main.Student{Id:2, Name:"No2", Nick:"Num2", Country:"China", Province:"GD", City:"SZ", Status:1, CreateTime:"2019-11-27 03:12:18.489914"} 
 
+main.Student{Id:1, Name:"No1", Nick:"Num1", Country:"China", Province:"GD", City:"SZ", Status:1, CreateTime:""}
+main.Student{Id:2, Name:"No2", Nick:"Num2", Country:"China", Province:"GD", City:"SZ", Status:1, CreateTime:"2019-11-27 03:12:18.489914"}
 ```
