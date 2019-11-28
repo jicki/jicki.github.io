@@ -37,6 +37,25 @@ go get -u github.com/jmoiron/sqlx
 
 ### 插入数据库
 
+```shell
+/*
+数据库 student 表
+
+CREATE TABLE `student` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `nick` varchar(64) DEFAULT NULL,
+  `country` varchar(128) DEFAULT NULL,
+  `province` varchar(64) DEFAULT NULL,
+  `city` varchar(64) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `create_time` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+*/
+```
+
 ```go
 import (
 	"fmt"
@@ -181,7 +200,6 @@ func main() {
 
 ```go
 
-```go
 import (
         "fmt"
         "log"
