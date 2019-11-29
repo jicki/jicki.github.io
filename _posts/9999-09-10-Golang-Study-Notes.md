@@ -30,5 +30,7 @@ graph TD;
 
 [ 【Go Web编程 - sqlx 模块介绍 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-4 "Go sqlx 模块介绍")
 
+[ 【Go Web编程 - GORM MYSQL 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-5 "Go GORM MYSQL")
+
 
   [1]: http://jicki.me/img/posts/golang/goweb.png
