@@ -32,5 +32,6 @@ graph TD;
 
 [ 【Go Web编程 - GORM MYSQL 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-5 "Go GORM MYSQL")
 
+[ 【Go Web编程 - Go go-redis 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-6 "Go go-redis")
 
   [1]: http://jicki.me/img/posts/golang/goweb.png
