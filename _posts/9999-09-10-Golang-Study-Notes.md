@@ -28,6 +28,8 @@ graph TD;
 
 [ 【Go Web编程 - Web框架 - Gin 简介 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-2 "Go Web框架- Gin")
 
+[ 【Go Web编程 - 跨域资源共享 CORS 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-3 "CORS 跨域解决")
+
 [ 【Go Web编程 - sqlx 模块介绍 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-4 "Go sqlx 模块介绍")
 
 [ 【Go Web编程 - GORM MYSQL 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-5 "Go GORM MYSQL")
