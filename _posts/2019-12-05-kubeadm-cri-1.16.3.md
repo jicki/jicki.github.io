@@ -683,6 +683,24 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          # readinessProbe - 检测pod 的 Ready 是否为 true
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            # 启动后5s 开始检测
+            initialDelaySeconds: 5  
+            # 检测 间隔为 10s
+            periodSeconds: 10
+          # livenessProbe - 检测 pod 的 State 是否为 Running
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            # 启动后 15s 开始检测
+            # 检测时间必须在 readinessProbe 之后
+            initialDelaySeconds: 15
+            # 检测 间隔为 20s
+            periodSeconds: 20
 ---
 
 apiVersion: v1 
