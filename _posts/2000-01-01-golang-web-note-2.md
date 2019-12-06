@@ -99,3 +99,82 @@ func main() {
 {"message":"hello world"}
 
 ```
+
+
+## RESTful API
+
+* 基于Gin 的 RESTful API 写法
+
+```go
+func main() {
+	r := gin.Default()
+	// HTTP 四个请求方式
+
+	// 基于 GET 请求
+	r.GET("/hello",func(c *gin.Context){
+		// gin.H 是 map[string]interface{} 的一种快捷方式
+		c.JSON(http.StatusOK, gin.H{
+			"Message":"GET",
+		})
+	})
+	// 基于 POST 请求
+	r.POST("/hello",func(c *gin.Context){
+		c.JSON(http.StatusOK,gin.H{
+			"Message":"POST",
+		})
+	})
+	// 基于 PUT 请求
+	r.PUT("/hello",func(c *gin.Context){
+		c.JSON(http.StatusOK,gin.H{
+			"Message":"PUT",
+		})
+	})
+	// 基于 DELETE 请求
+	r.DELETE("/hello",func(c *gin.Context){
+		c.JSON(http.StatusOK,gin.H{
+			"Message":"DELETE",
+		})
+	})
+	// 启动服务
+	if err := r.Run(":8888");err!=nil{
+		fmt.Printf("Server Run Failed err: %v\n",err)
+		return
+	}
+}
+```
+
+## Gin 框架的渲染
+
+### HTML渲染
+
+* Gin 可以渲染 单个 或者 多个 html 文件, 也可以渲染 整个 html 目录. `LoadHTMLFiles` 和 `LoadHTMLGlob`。
+
+```go
+func main() {
+	r := gin.Default()
+	// 使用 LoadHTMLGlob() 或者 LoadHTMLFiles()
+	// LoadHTMLFiles 指定单个或多个 文件
+	// r.LoadHTMLFiles("./templates/index.html", "./templates/login.html")
+	// LoadHTMLGlob 指定目录 ,使用通配符
+	r.LoadHTMLGlob("./templates/*")
+	r.GET("/index", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			// 将内容映射到 index.html 对应的标签中.
+			"title":  "Gin WebSite",
+			"status": http.StatusOK,
+		})
+	})
+	// 启动
+	if err := r.Run(":8888"); err != nil {
+		log.Fatalf("Server Run Failed err:%v\n", err)
+		return
+	}
+}
+```
+
+### Static 静态文件
+
+* 当我们渲染的HTML文件中引用了静态文件时，我们只需要按照以下方式在渲染页面前调用`gin.Static`方法加载。
+
+
+
