@@ -246,6 +246,69 @@ func main() {
 }
 ```
 
+### Any 请求方式
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// Any 请求,判断请求方式
+
+func indexHandler(c *gin.Context) {
+	UserName := c.PostForm("username")
+	PassWord := c.PostForm("password")
+	// 利用 Request.Method 判断 请求方式
+	if c.Request.Method == "POST" {
+		c.JSON(http.StatusOK, gin.H{
+			"Code":     http.StatusOK,
+			"username": UserName,
+			"password": PassWord,
+		})
+		// 其他请求方式直接返回到 login.html
+	} else {
+		c.HTML(http.StatusOK, "login.html", nil)
+	}
+}
+
+func main() {
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
+	r.Any("/index", indexHandler)
+	_ = r.Run(":8888")
+}
+
+```
+
+* HTML页面
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+</head>
+<body>
+<form action="/index" method="post">
+    用户名: <input type="text" name="username" >
+    密码: <input type="password" name="password">
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
+
+```
+
+
+
+
+
+
 ## Gin 框架的渲染
 
 ### HTML渲染
