@@ -256,7 +256,9 @@ func main() {
 
 * r.LoadHTMLFiles("/模板文件路径/1.html", "/模板文件路径/2.html")
 
-* r.LoadHTMLGlob("/模板文件路径/*")  r.LoadHTMLGlob("/模板文件路径/**/*")
+* r.LoadHTMLGlob("/模板文件路径/*")  
+
+* r.LoadHTMLGlob("/模板文件路径/**/*"), `/**/*` 需要在 html 文件中引入 {{define 路径/x.html}} 声明.
 
 ```go
 func main() {
@@ -620,7 +622,7 @@ import (
 // 定义一个 用户结构体
 type UserDB struct {
 	User     string `form:"user" json:"user" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required,min=4,max=20"`
 }
 // 绑定 QueryString
 func ShouldBindQuery(c *gin.Context) {
@@ -642,12 +644,201 @@ func main() {
 
 	// shouldBind QueryString
 	// http://127.0.0.1:8888/bindQuery?user=小炒肉&password=123456
-	r.GET("bindQuery", ShouldBindQuery)
+	r.GET("/bindQuery", ShouldBindQuery)
 
 	err := r.Run(":8888")
 	if err != nil {
 		log.Fatalf("Server Run Error: %v", err)
 	}
 }
+
+
+## 重定向
+
+
+### HTML 重定向 
+
+* HTTP 重定向 支持内部、外部重定向。
+
+* `c.Redirect("状态码", "地址")`
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// 重定向
+func main() {
+	r := gin.Default()
+
+	// Redirect 301跳转
+
+	// 外部跳转
+	r.GET("/redirect1", func(c *gin.Context) {
+		// StatusMovedPermanently error code 301
+		c.Redirect(http.StatusMovedPermanently, "https://www.jicki.me/")
+	})
+
+	// 内部跳转
+	r.GET("/redirect2", func(c *gin.Context) {
+		// StatusMovedPermanently error code 301
+		c.Redirect(http.StatusMovedPermanently, "/redirect1")
+	})
+
+	err := r.Run(":8888")
+	if err != nil {
+		log.Fatalf("Server Run Error: %v\n", err)
+	}
+}
+```
+
+
+### 路由重定向
+
+* 路由重定向, 使用`HandleContext`
+
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// 重定向
+func main() {
+	r := gin.Default()
+	// HandleContext
+	r.GET("/redirect3", func(c *gin.Context) {
+		// 指定重定向的URL
+		c.Request.URL.Path = "/redirect4"
+		r.HandleContext(c)
+	})
+	r.GET("/redirect4", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"Redirect": "redirect4",
+			"code":     http.StatusOK,
+		})
+	})
+
+	err := r.Run(":8888")
+	if err != nil {
+		log.Fatalf("Server Run Error: %v\n", err)
+	}
+}
+```
+
+## Gin 路由 与 路由组
+
+
+### 普通的路由请求
+
+```go
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+func sayHello(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"Code": http.StatusOK,
+		"Msg":  "hello 1",
+	})
+}
+
+// 路由
+func main() {
+	r := gin.Default()
+
+	// 普通的路由, 指定请求方式 GET (路径, 函数)
+	r.GET("/hello1", sayHello)
+
+	// 普通的路由, 指定请求方式 POST (路径, 匿名函数)
+	r.POST("/hello2", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"Code": http.StatusOK,
+			"Msg":  "hello 2",
+		})
+	})
+	// 普通的路由, 匹配所有的请求方式
+	r.Any("/hello3", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"Code": http.StatusOK,
+			"Msg":  "hello 3",
+		})
+	})
+	// 普通路由, 不匹配路径的路由默认返回
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(404, gin.H{
+			"Code": 404,
+			"Msg":  "404 Not Found",
+		})
+	})
+	_ = r.Run(":8888")
+}
+```
+
+
+### 路由组(Group)
+
+* 我们可以将拥有共同URL前缀的路由划分为一个路由组。习惯性一对`{}`包裹同组的路由，这只是为了看着清晰，你用不用`{}`包裹功能上没什么区别。
+
+* 通常我们将路由分组用在划分业务逻辑或划分API版本.
+
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// 路由
+func main() {
+	r := gin.Default()
+	// 路由组, 以组的形式定义功能组
+	// Url  http://127.0.0.1:888/v1/student
+	v1Group := r.Group("/v1")
+	{
+		v1Group.POST("/student", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"Code": 200,
+				"Msg":  "v1 Version Create",
+			})
+		})
+		v1Group.DELETE("/student", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"Code": 200,
+				"Msg":  "v1 Version Delete",
+			})
+		})
+		v1Group.GET("/student", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"Code": 200,
+				"Msg":  "v1 Version Search",
+			})
+		})
+		v1Group.PUT("/student", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"Code": 200,
+				"Msg":  "v1 Version Update",
+			})
+		})
+	}
+	_ = r.Run(":8888")
+}
+```
+
 
 
