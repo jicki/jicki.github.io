@@ -841,4 +841,233 @@ func main() {
 ```
 
 
+## Gin 上传文件
+
+
+### 单个文件上传
+
+
+```go
+
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+	r := gin.Default()
+
+	r.LoadHTMLGlob("./upload/*")
+	r.GET("/upload", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "upload.html", nil)
+	})
+	// 上传文件后的操作
+	r.POST("/upload1", func(c *gin.Context) {
+		// 获取上传后文件的 对象.
+		// c.FormFile("Form 表单中 name="filename" 的名字")
+		file, err := c.FormFile("filename")
+		if err != nil {
+			c.JSON(500, gin.H{
+				"Code":  500,
+				"Error": err.Error(),
+			})
+		}
+		// 将文件保存到指定路径
+		filePath := fmt.Sprintf("./%s", file.Filename)
+		err = c.SaveUploadedFile(file, filePath)
+		if err == nil {
+			c.JSON(http.StatusOK, gin.H{
+				"Code": http.StatusOK,
+				"Data": filePath,
+			})
+		}
+	})
+	err := r.Run(":8888")
+	if err != nil {
+		log.Fatalf("Server Run Err: %v\n", err)
+	}
+}
+```
+
+
+* HTML 文件
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gin 上传文件</title>
+</head>
+<body>
+    <form action="/upload1" method="post" enctype="multipart/form-data">
+        单个文件: <input type="file" name="filename">
+        <input type="submit">
+    </form>
+</body>
+</html>
+
+```
+
+
+### 多个文件上传
+
+* `c.MultipartForm()` 方法.
+
+```go
+
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+	r := gin.Default()
+
+	r.LoadHTMLGlob("./upload/*")
+	r.GET("/upload", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "upload.html", nil)
+	})
+	// 多个文件上传文件后的操作
+	r.POST("/upload2", func(c *gin.Context) {
+		// 获取多个上传后的 对象.
+		// c.MultipartForm()
+		data, err := c.MultipartForm()
+		if err != nil {
+			c.JSON(500, gin.H{
+				"Code":  500,
+				"Error": err.Error(),
+			})
+		}
+		// 将文件保存到指定路径
+		// data.File["Form 表单中 name="filename" 的名字"]
+		files := data.File["filename"]
+		// 循环遍历所有文件
+		for _, file := range files {
+			filesPath := fmt.Sprintf("./%s", file.Filename)
+			err = c.SaveUploadedFile(file, filesPath)
+			if err == nil {
+				c.JSON(http.StatusOK, gin.H{
+					"Code": http.StatusOK,
+					"Data": filesPath,
+				})
+			}
+		}
+	})
+	err := r.Run(":8888")
+	if err != nil {
+		log.Fatalf("Server Run Err: %v\n", err)
+	}
+}
+
+```
+
+
+* html 文件
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gin 上传文件</title>
+</head>
+<body>
+    <form action="/upload2" method="post" enctype="multipart/form-data">
+        多个文件: <input type="file" name="filename" multiple="multiple" />
+        <input type="submit" />
+    </form>
+</body>
+</html>
+
+```
+
+
+## Gin 中间件
+
+* Gin框架允许开发者在处理请求的过程中，加入用户自己的钩子（Hook）函数。这个钩子函数就叫中间件，中间件适合处理一些公共的业务逻辑，比如登录校验、日志打印、耗时统计等。
+
+* Gin中的中间件必须是一个`gin.HandlerFunc`类型。使用 `r.Use(HandlerFunc)` 调用中间件，可在全局, 路由组, 或者 单路由的某一个函数前。
+
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+func ShowIndexHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"Code": 200,
+		"Msg":  "首页",
+	})
+}
+
+func ShowPingHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"Code": 200,
+		"Msg":  "购物页",
+	})
+}
+
+func authLogin(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"Code": 200,
+		"Msg":  "Login OK",
+	})
+}
+
+func userInfoHandler(c *gin.Context) {
+	userInfo := struct {
+		Name string
+		Age  int
+	}{Name: "小炒肉", Age: 20}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Code": 200,
+		"Data": userInfo,
+	})
+}
+
+// gin 中间件
+func main() {
+	r := gin.Default()
+
+	// 创建一个路由组
+	ShopGroup := r.Group("/show")
+	{
+		ShopGroup.GET("/index", ShowIndexHandler)
+		ShopGroup.GET("/show", ShowPingHandler)
+	}
+
+	// 创建另一个路由组
+        // 可以在`r.Group("/user",authLogin)` 也可以写到第一行 
+	UserGroup := r.Group("/user", authLogin)
+	{
+		// 路由组内 执行中间件
+		// UserGroup.Use(authLogin)
+		UserGroup.GET("/info", userInfoHandler)
+	}
+
+	_ = r.Run(":8888")
+
+}
+
+```
+
+
 
