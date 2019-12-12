@@ -716,6 +716,113 @@ func main() {
 }
 ```
 
+
+### shouldBind 的例子
+
+* index.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .title }}</title>
+</head>
+<body>
+<h1>{{ .title }}</h1>
+<p>Status: {{ .status }}</p>
+<img src={{ .img }}  alt="golang"/>
+</body>
+</html>
+
+
+```
+
+* login.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+</head>
+<body>
+<form action="/user/login" method="post">
+    用户名: <input type="text" name="username" >
+    <br>
+    密码: <input type="password" name="password">
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
+
+
+```
+
+* main.go
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type UserDB struct {
+	UserName string `form:"username" binding:"required"`
+	PassWord string `form:"password" binding:"required"`
+}
+
+func loginHandler(c *gin.Context) {
+	// 判断请求方式为 POST
+	if c.Request.Method == "POST" {
+		// 定义一个 UserDB结构体类型的变量
+		var user UserDB
+		// ShouldBind : Gin 会尝试根据 Content-Type 推断如何绑定。
+		// 使用 ShouldBind 会自动解析 json, form, xml 等格式。
+		if err := c.ShouldBind(&user); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		// 模拟验证
+		if user.UserName != "jicki" || user.PassWord != "123456" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"Code": http.StatusUnauthorized,
+				"Msg":  "unauthorized",
+			})
+			return
+		}
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"title":  "首页",
+			"status": "you are logged in",
+			"img":    "/user/static/1.png",
+		})
+
+	} else {
+		c.HTML(http.StatusOK, "login.html", nil)
+	}
+}
+
+func main() {
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
+	r.Static("/user/static", "./static")
+
+	userGroup := r.Group("/user")
+	{
+		userGroup.GET("/login", loginHandler)
+		userGroup.POST("/login", loginHandler)
+	}
+
+	_ = r.Run(":8888")
+}
+
+```
+
+
 ## 重定向
 
 
