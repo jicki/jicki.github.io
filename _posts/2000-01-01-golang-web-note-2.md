@@ -590,9 +590,9 @@ type UserDB struct {
 
 // 绑定 json 格式
 func ShouldBindJson(c *gin.Context) {
-	// 定义一个 结构体实例
+	// 创建一个 UserDB结构体类型的变量
 	var userdb UserDB
-	// 绑定 结构体实例,通过 结构体 binding 的 tag 限制
+	// 绑定 userdb , 通过 结构体 binding 的 tag 限制
 	if err := c.ShouldBind(&userdb); err == nil {
 		fmt.Printf("UserDB Info: %#v\n", userdb)
 		c.JSON(http.StatusOK, gin.H{
@@ -779,7 +779,7 @@ type UserDB struct {
 func loginHandler(c *gin.Context) {
 	// 判断请求方式为 POST
 	if c.Request.Method == "POST" {
-		// 定义一个 UserDB结构体类型的变量
+		// 定义一个 UserDB 结构体类型的变量
 		var user UserDB
 		// ShouldBind : Gin 会尝试根据 Content-Type 推断如何绑定。
 		// 使用 ShouldBind 会自动解析 json, form, xml 等格式。
