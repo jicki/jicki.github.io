@@ -1,8 +1,8 @@
 ---
 layout: post
-title: PV/UV/PR/IP 网站流量分析指标
+title: PV/UV/PR/IP 网站分析指标
 categories: [golang,Go,web]
-description: PV/UV/PR/IP 网站流量分析指标
+description: PV/UV/PR/IP 网站分析指标
 keywords: golang,Go,web
 header-img: "img/pexels/triangular.jpeg"
 catalog:    true
