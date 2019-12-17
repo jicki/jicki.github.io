@@ -80,7 +80,7 @@ ga_domain: jicki.me
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "梦想决定了你的将来<br> 所以还是先睡一会"
-sidebar-avatar: /img/avatar-jicki.png      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/about-jicki2.png      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
