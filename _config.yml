@@ -1,9 +1,9 @@
 # Site settings
-title: 小炒肉
+title: 
 SEOTitle: 小炒肉 Blog | Jicki Blog
-header-img: img/about-jicki2.png
+header-img: img/about-jicki3.png
 email: jicki@qq.com
-description: "Your future depends on your dreams"
+description:
 keyword: "小炒肉, 运维工程师, Jicki, DevOps, Docker, Kubernetes"
 url: "https://jicki.me"              # your host, for absolute URL
 baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
