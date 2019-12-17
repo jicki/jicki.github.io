@@ -40,4 +40,6 @@ graph TD;
 
 [ 【Go Web编程 - Go Logrus 日志模块 】](https://jicki.me/golang/go/web/2000/01/01/golang-web-note-8 "Go Logrus 日志模块")
 
+[ 【Go Web编程 - Cookie 与 Session 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-9 "Cookie 与 Session")
+
   [1]: http://jicki.me/img/posts/golang/goweb.png

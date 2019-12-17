@@ -99,6 +99,360 @@ func (r *Request) AddCookie(c *Cookie)
 
 ### Gin 框架 Cookie
 
+* 利用 `c *gin.Context`  `c.SetCookie` 设置`Cookie`  `c.Cookie` 获取 `Cookie`
+
+* 例子:
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// 创建一个 User 的结构体
+type UserInfo struct {
+	UserName string `form:"username"`
+	Password string `form:"password"`
+}
+
+func autoCookie(c *gin.Context) gin.HandlerFunc {
+
+}
+
+func loginHandler(c *gin.Context) {
+	if c.Request.Method == "POST" {
+		var u UserInfo
+		if err := c.ShouldBind(&u); err != nil {
+			c.HTML(http.StatusOK, "login.html", gin.H{
+				"ShouldBindErr": "用户名密码禁止为空",
+			})
+			return
+		}
+		if u.UserName == "jicki" && u.Password == "123456" {
+			// 设置 Cookie
+                        // c.SetCookie("key名称", "value值", 过期时间, "path", "domain",是否加密, http只读)
+			c.SetCookie("username", u.UserName, 60, "/", "127.0.0.1", false, true)
+			// 登录成功跳转到 home 页
+			c.Redirect(http.StatusMovedPermanently, "/index")
+		} else {
+			c.HTML(http.StatusOK, "login.html", gin.H{
+				"ShouldBindErr": "用户名密码错误",
+			})
+			return
+		}
+	} else {
+		c.HTML(http.StatusOK, "login.html", nil)
+	}
+
+}
+
+func indexHandler(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", nil)
+}
+
+func homeHandler(c *gin.Context) {
+	// 判断是否有 Cookie
+	cookie, err := c.Cookie("username")
+	if err != nil {
+		c.Redirect(http.StatusMovedPermanently, "/login")
+		return
+	}
+	c.HTML(http.StatusOK, "home.html", gin.H{
+		"username": cookie,
+	})
+}
+
+func main() {
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
+
+	r.GET("/index", indexHandler)
+	r.GET("/login", loginHandler)
+	r.POST("/login", loginHandler)
+	r.GET("/home", homeHandler)
+
+	_ = r.Run(":8888")
+}
+```
+
+* Html 文件
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+    <h1>首页</h1>
+</body>
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+</head>
+<body>
+    <form action="" method="POST" enctype="application/x-www-form-urlencoded" >
+        <div>
+            <label> 用户名:
+                <input type="text" name="username">
+            </label>
+        </div>
+        <div>
+            <label> 密码:
+                <input type="password" name="password">
+            </label>
+        </div>
+        <div>
+            <input type="submit">
+        </div>
+        <p style="color:red">{{ .ShouldBindErr }}</p>
+    </form>
+</body>
+</html>
+```
 
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>{{ .username }}家目录</h1>
+</body>
+</html>
 
+```
+
+## Session 
+
+* `Session` 与 `Cookie` 都是会话保持的机制, `Session` 是记录客户状态的机制, 不同的是`Cookie` 保存在客户端浏览器中，而 `Session` 保存在服务器上。
+
+### Session 原理
+
+1. 浏览器向服务器发送登录请求(post), 携带账号和密码。
+
+2. 登录成功, 服务器记录登录的状态, `req.session.user = user`; 服务器记录这些信息。
+
+3. 服务器返回的响应头中携带服务器生成的 `Session ID` 并将 `Session ID` 记录到`Cookie`中，作为身份标识。
+
+4. 浏览器再次访问服务器的时候会通过`Cookie`携带`Session ID`。
+
+5. 服务器获取浏览器发送的`Session ID`后, 在服务器查找`Session ID`, 如果找不到, 返回未登录状态。
+
+6. 如果找到 `Session ID` , 根据 `Session ID` 查找对应的对象, 返回登录成功。
+
+
+### Gin 框架 Session
+
+* Gin middleware for Session management `https://github.com/gin-contrib/sessions`
+
+* Gin 框架可以使用基于 Gin 中间件的 第三方模块 处理 `Session`。
+
+* `gin-sessions` 支持多种后端存储 `Session`
+
+  1. cookie-based
+
+  2. Redis
+
+  3. Memcached
+
+  4. MongoDB
+
+  5. Memstore
+
+
+* Download and install:
+
+```shell
+
+go get -u github.com/gin-contrib/sessions
+
+```
+
+* import:
+
+```shell
+import "github.com/gin-contrib/sessions"
+
+```
+
+
+*  例子:
+
+```go
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-gonic/gin"
+)
+
+// 创建一个 User 的结构体
+type UserInfo struct {
+	UserName string `form:"username"`
+	Password string `form:"password"`
+}
+
+func homeHandler(c *gin.Context) {
+	// 判断是否有 Session
+	session := sessions.Default(c)
+	u := session.Get("username")
+	if u == nil {
+		c.Redirect(http.StatusMovedPermanently, "/login")
+		return
+	}
+	c.HTML(http.StatusOK, "home.html", gin.H{
+		"username": u,
+	})
+}
+
+func loginHandler(c *gin.Context) {
+	if c.Request.Method == "POST" {
+		var u UserInfo
+		if err := c.ShouldBind(&u); err != nil {
+			c.HTML(http.StatusOK, "login.html", gin.H{
+				"ShouldBindErr": "用户名密码禁止为空",
+			})
+			return
+		}
+		if u.UserName == "jicki" && u.Password == "123456" {
+			// 设置 Session
+			session := sessions.Default(c)
+			session.Set("username", u.UserName)
+			_ = session.Save()
+			// 登录成功跳转到 home 页
+			c.Redirect(http.StatusMovedPermanently, "/index")
+		} else {
+			c.HTML(http.StatusOK, "login.html", gin.H{
+				"ShouldBindErr": "用户名密码错误",
+			})
+			return
+		}
+	} else {
+		c.HTML(http.StatusOK, "login.html", nil)
+	}
+
+}
+
+func indexHandler(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", nil)
+}
+func main() {
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
+	// 1 创建一个 存储 Session 为 Cookie 的后端实例
+	store := cookie.NewStore([]byte("secret"))
+	// 2 创建一个 存储 Session 为 Redis 的后端实例
+	//store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("secret"))
+	// 3 创建一个 存储 Session 为 Memcached 的后端实例
+	//store := memcached.NewStore(memcache.New("localhost:11211"), "", []byte("secret"))
+	// 4 创建一个 存储 Session 为 MongoDB 的后端实例
+	//session, err := mgo.Dial("localhost:27017/test")
+	//if err != nil {
+	//	// handle err
+	//}
+	//c := session.DB("").C("sessions")
+	//store := mongo.NewStore(c, 3600, true, []byte("secret"))
+	// 5 创建一个 存储 Session 为 memstore 的后端实例
+	//store := memstore.NewStore([]byte("secret"))
+	r.GET("/index", indexHandler)
+	// 开始使用 gin中间件 Sessions
+	r.Use(sessions.Sessions("MySession", store))
+	r.GET("/login", loginHandler)
+	r.POST("/login", loginHandler)
+	r.GET("/home", homeHandler)
+
+	_ = r.Run(":8888")
+}
+
+```
+
+
+* html 文件
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+    <h1>首页</h1>
+</body>
+</html>
+
+```
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>{{ .username }}家目录</h1>
+</body>
+</html>
+
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+</head>
+<body>
+    <form action="" method="POST" enctype="application/x-www-form-urlencoded" >
+        <div>
+            <label> 用户名:
+                <input type="text" name="username">
+            </label>
+        </div>
+        <div>
+            <label> 密码:
+                <input type="password" name="password">
+            </label>
+        </div>
+        <div>
+            <input type="submit">
+        </div>
+        <p style="color:red">{{ .ShouldBindErr }}</p>
+    </form>
+</body>
+</html>
+
+```
+
+
+## Cookie 与 Session 优劣
+
+1. `Cookie` 数据存放在客户端(浏览器等..), `Session` 数据放在服务器端(内存、关系型数据库、Redis、Memcache等)。
+
+2. `Cookie` 不是很安全, 别人可以分析存放在本地的`Cookie` 并进行 `Cookie` 欺骗 考虑到安全应当使用`Session`。
+
+3. `Session` 会在一定时间内保存在服务器上。当访问增多, 会比较占用你服务器的性能 考虑到减轻服务器性能方面, 应当使用 `Cookie` 。 
+
+4. 单个`Cookie`保存的数据不能超过4KB, 很多浏览器都限制一个站点最多保存20个`Cookie`。
+
+5. 将登陆信息等重要信息存放为 `Session`、其他信息如果需要保留, 可以放在`Cookie`中。
