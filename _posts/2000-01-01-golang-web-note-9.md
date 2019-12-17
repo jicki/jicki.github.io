@@ -132,9 +132,12 @@ func loginHandler(c *gin.Context) {
 			return
 		}
 		if u.UserName == "jicki" && u.Password == "123456" {
-			// 设置 Cookie
-                        // c.SetCookie("key名称", "value值", 过期时间, "path", "domain",是否加密, http只读)
-			c.SetCookie("username", u.UserName, 60, "/", "127.0.0.1", false, true)
+			// 设置 Session
+			session := sessions.Default(c)
+			// 清除旧的
+			session.Clear()
+			session.Set("username", u.UserName)
+			_ = session.Save()
 			// 登录成功跳转到 home 页
 			c.Redirect(http.StatusMovedPermanently, "/index")
 		} else {
