@@ -335,8 +335,10 @@ func loginHandler(c *gin.Context) {
 			return
 		}
 		if u.UserName == "jicki" && u.Password == "123456" {
-			// 设置 Session
+			// 初始化一个 Session
 			session := sessions.Default(c)
+			// 清除旧的
+			session.Clear()
 			session.Set("username", u.UserName)
 			_ = session.Save()
 			// 登录成功跳转到 home 页
@@ -356,33 +358,45 @@ func loginHandler(c *gin.Context) {
 func indexHandler(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", nil)
 }
-func main() {
-	r := gin.Default()
-	r.LoadHTMLGlob("templates/*")
-	// 1 创建一个 存储 Session 为 Cookie 的后端实例
-	store := cookie.NewStore([]byte("secret"))
-	// 2 创建一个 存储 Session 为 Redis 的后端实例
+
+// 包装一个 Session 中间件, 并初始化session
+func Session(secret string) gin.HandlerFunc {
+	// 1. 创建一个 Cookie 实例 用于存储 Session
+	store := cookie.NewStore([]byte(secret))
+	// 2 创建一个 Redis 实例 用于存储 Session
 	//store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("secret"))
-	// 3 创建一个 存储 Session 为 Memcached 的后端实例
+	// 3 创建一个 MemCached 实例 用于存储 Session
 	//store := memcached.NewStore(memcache.New("localhost:11211"), "", []byte("secret"))
-	// 4 创建一个 存储 Session 为 MongoDB 的后端实例
+	// 4 创建一个 MongoDB  实例 用于存储 Session
 	//session, err := mgo.Dial("localhost:27017/test")
 	//if err != nil {
 	//	// handle err
 	//}
 	//c := session.DB("").C("sessions")
 	//store := mongo.NewStore(c, 3600, true, []byte("secret"))
-	// 5 创建一个 存储 Session 为 memstore 的后端实例
+	// 5 创建一个 memstore 实例 用于存储 Session
 	//store := memstore.NewStore([]byte("secret"))
+	//Also set Secure: true if using SSL, you should though
+	store.Options(sessions.Options{HttpOnly: true, MaxAge: 7 * 86400, Path: "/"})
+	return sessions.Sessions("gin-session", store)
+}
+
+func main() {
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
+	// 定义一个Session 加密串
+	secret := "SetSessionPassword"
 	r.GET("/index", indexHandler)
 	// 开始使用 gin中间件 Sessions
-	r.Use(sessions.Sessions("MySession", store))
+	r.Use(Session(secret))
+
 	r.GET("/login", loginHandler)
 	r.POST("/login", loginHandler)
 	r.GET("/home", homeHandler)
 
 	_ = r.Run(":8888")
 }
+
 
 ```
 
