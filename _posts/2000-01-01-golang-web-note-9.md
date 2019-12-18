@@ -139,7 +139,7 @@ func loginHandler(c *gin.Context) {
 			session.Set("username", u.UserName)
 			_ = session.Save()
 			// 登录成功跳转到 home 页
-			c.Redirect(http.StatusMovedPermanently, "/index")
+			c.Redirect(http.StatusFound, "/index")
 		} else {
 			c.HTML(http.StatusOK, "login.html", gin.H{
 				"ShouldBindErr": "用户名密码错误",
@@ -160,7 +160,7 @@ func homeHandler(c *gin.Context) {
 	// 判断是否有 Cookie
 	cookie, err := c.Cookie("username")
 	if err != nil {
-		c.Redirect(http.StatusMovedPermanently, "/login")
+		c.Redirect(http.StatusFound, "/login")
 		return
 	}
 	c.HTML(http.StatusOK, "home.html", gin.H{
@@ -317,7 +317,7 @@ func homeHandler(c *gin.Context) {
 	session := sessions.Default(c)
 	u := session.Get("username")
 	if u == nil {
-		c.Redirect(http.StatusMovedPermanently, "/login")
+		c.Redirect(http.StatusFound, "/login")
 		return
 	}
 	c.HTML(http.StatusOK, "home.html", gin.H{
@@ -340,7 +340,7 @@ func loginHandler(c *gin.Context) {
 			session.Set("username", u.UserName)
 			_ = session.Save()
 			// 登录成功跳转到 home 页
-			c.Redirect(http.StatusMovedPermanently, "/index")
+			c.Redirect(http.StatusFound, "/index")
 		} else {
 			c.HTML(http.StatusOK, "login.html", gin.H{
 				"ShouldBindErr": "用户名密码错误",
