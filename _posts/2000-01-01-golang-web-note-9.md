@@ -313,15 +313,8 @@ type UserInfo struct {
 }
 
 func homeHandler(c *gin.Context) {
-	// 判断是否有 Session
-	session := sessions.Default(c)
-	u := session.Get("username")
-	if u == nil {
-		c.Redirect(http.StatusFound, "/login")
-		return
-	}
 	c.HTML(http.StatusOK, "home.html", gin.H{
-		"username": u,
+		"username": "",
 	})
 }
 
@@ -381,6 +374,20 @@ func Session(secret string) gin.HandlerFunc {
 	return sessions.Sessions("gin-session", store)
 }
 
+// 判断是否登录中间件
+func AuthSessionMiddle() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		sessionValue := session.Get("username")
+		if sessionValue == nil {
+			c.Redirect(http.StatusFound, "/login")
+			return
+		}
+		c.Next()
+		return
+	}
+}
+
 func main() {
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
@@ -392,7 +399,7 @@ func main() {
 
 	r.GET("/login", loginHandler)
 	r.POST("/login", loginHandler)
-	r.GET("/home", homeHandler)
+	r.GET("/home", AuthSessionMiddle(), homeHandler)
 
 	_ = r.Run(":8888")
 }
