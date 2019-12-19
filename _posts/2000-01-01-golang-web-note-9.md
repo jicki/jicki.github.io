@@ -390,13 +390,13 @@ func SetSession(c *gin.Context, user UserInfo) {
 func AuthSessionMiddle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		uuID := session.Get("username")
-		if uuID == nil {
+		username := session.Get("username")
+		if username == nil {
 			c.Redirect(http.StatusFound, "/login")
 			return
 		}
 		// 设置一个键值对
-		c.Set("username", uuID)
+		c.Set("username", username)
 		// 执行下一个 程序
 		c.Next()
 		return
