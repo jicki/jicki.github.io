@@ -299,6 +299,7 @@ import "github.com/gin-contrib/sessions"
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
@@ -313,8 +314,11 @@ type UserInfo struct {
 }
 
 func homeHandler(c *gin.Context) {
+	session := sessions.Default(c)
+	username := session.Get("username")
+
 	c.HTML(http.StatusOK, "home.html", gin.H{
-		"username": "",
+		"username": username,
 	})
 }
 
@@ -328,12 +332,8 @@ func loginHandler(c *gin.Context) {
 			return
 		}
 		if u.UserName == "jicki" && u.Password == "123456" {
-			// 初始化一个 Session
-			session := sessions.Default(c)
-			// 清除旧的
-			session.Clear()
-			session.Set("username", u.UserName)
-			_ = session.Save()
+			// 登录成功设置一个 Session
+			SetSession(c, u)
 			// 登录成功跳转到 home 页
 			c.Redirect(http.StatusFound, "/index")
 		} else {
@@ -374,15 +374,30 @@ func Session(secret string) gin.HandlerFunc {
 	return sessions.Sessions("gin-session", store)
 }
 
+// 包装 一个 设置 Session 的函数
+func SetSession(c *gin.Context, user UserInfo) {
+	session := sessions.Default(c)
+	session.Clear()
+	session.Set("username", user.UserName)
+	err := session.Save()
+	if err != nil {
+		fmt.Printf("Save Session Failed: %s\n", err)
+		return
+	}
+}
+
 // 判断是否登录中间件
 func AuthSessionMiddle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		sessionValue := session.Get("username")
-		if sessionValue == nil {
+		uuID := session.Get("username")
+		if uuID == nil {
 			c.Redirect(http.StatusFound, "/login")
 			return
 		}
+		// 设置一个键值对
+		c.Set("username", uuID)
+		// 执行下一个 程序
 		c.Next()
 		return
 	}
@@ -403,7 +418,6 @@ func main() {
 
 	_ = r.Run(":8888")
 }
-
 
 ```
 
