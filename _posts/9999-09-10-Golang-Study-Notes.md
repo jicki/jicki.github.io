@@ -42,4 +42,6 @@ graph TD;
 
 [ 【Go Web编程 - Cookie 与 Session 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-9 "Cookie 与 Session")
 
+[ 【Go Web编程 - Sonyflake 唯一ID 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-10 "Sonyflake 唯一ID")
+
   [1]: http://jicki.me/img/posts/golang/goweb.png
