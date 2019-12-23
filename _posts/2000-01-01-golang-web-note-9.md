@@ -483,6 +483,209 @@ func main() {
 ```
 
 
+### gob 序列化
+
+* 标准库`gob`是golang提供的 "私有" 的编解码方式, 它的效率会比json，xml等更高, 特别适合在Go语言程序间传递数据。
+
+
+* 例子:
+
+```go
+package main
+
+import (
+	"bytes"
+	"encoding/gob"
+	"fmt"
+)
+
+type s struct {
+	data map[string]interface{}
+}
+
+func gobDemo() {
+	var s1 = s{
+		data: make(map[string]interface{}, 8),
+	}
+	s1.data["count"] = 1
+	// encode 编码
+	// 创建一个 指针空间
+	buf := new(bytes.Buffer)
+	// 创建一个 编码器对象
+	enc := gob.NewEncoder(buf)
+	// 对 s1.data 进行编码
+	err := enc.Encode(s1.data)
+	if err != nil {
+		fmt.Println("gob encode failed, err:", err)
+		return
+	}
+	// 获取 编码后的 字节(Bytes)数据
+	b := buf.Bytes()
+	fmt.Println(b)
+	var s2 = s{
+		data: make(map[string]interface{}, 8),
+	}
+	// decode 解码
+	// 创建一个 解码器对象
+	dec := gob.NewDecoder(bytes.NewBuffer(b))
+	// 对 s2.data 指针 进行解码
+	err = dec.Decode(&s2.data)
+	if err != nil {
+		fmt.Println("gob decode failed, err", err)
+		return
+	}
+	fmt.Println(s2.data)
+	for _, v := range s2.data {
+		fmt.Printf("value:%v, type:%T\n", v, v)
+	}
+}
+
+func main() {
+	gobDemo()
+}
+
+```
+
+* 输出:
+
+```shell
+[14 255 129 4 1 2 255 130 0 1 12 1 16 0 0 18 255 130 0 1 5 99 111 117 110 116 3 105 110 116 4 2 0 2]
+map[count:1]
+value:1, type:int
+
+```
+
+
+### gin-session 的 gob 问题
+
+* 使用`gin-session`的时候报错: 
+
+  * securecookie: error - caused by: securecookie: error - caused by: gob: type not registered for interface: `自定义类型或高级对象`
+
+* 需要解决以上错误,需要对`gob.Register(自定义类型或高级对象)` 类型进行注册。
+
+
+* 错误例子:
+
+```go
+package main
+
+import (
+	"bytes"
+	"encoding/gob"
+	"encoding/json"
+	"fmt"
+	"log"
+)
+
+func CloneObject(a, b interface{}) []byte {
+	// 创建一个 指针空间
+	buff := new(bytes.Buffer)
+	// 创建一个 编码器对象
+	enc := gob.NewEncoder(buff)
+	// 创建一个 解码器对象
+	dec := gob.NewDecoder(buff)
+	// 对 a 进行编码
+	err := enc.Encode(a)
+	if err != nil {
+		log.Panic("e1: ", err)
+	}
+	// 获取 a 编码后的 字节(Bytes)数据
+	b1 := buff.Bytes()
+	// 对 b 进行解码
+	err = dec.Decode(b)
+	if err != nil {
+		log.Panic("e2: ", err)
+	}
+	// 返回编码后的的 bytes 数据 b1
+	return b1
+}
+
+func main() {
+	// 定义 a 为空结构体类型
+	var a interface{}
+	// 初始化并赋值 a
+	a = map[string]interface{}{"X": 1}
+	// json 序列化 &a
+	b2, err := json.Marshal(&a)
+	// 打印序列化后的数据 b2
+	fmt.Println(string(b2), err)
+
+	// 定义 b 为空结构体类型
+	var b interface{}
+	// 使用 gob 对 &a &b 进行序列化与反序列化
+	b1 := CloneObject(&a, &b)
+	fmt.Println(string(b1))
+}
+```
+
+* 输出:
+
+```shell
+{"X":1} <nil>
+2019/12/23 15:13:49 e1: gob: type not registered for interface: map[string]interface {}
+```
+
+
+* 修改后的例子:
+
+
+```go
+package main
+
+import (
+	"bytes"
+	"encoding/gob"
+	"encoding/json"
+	"fmt"
+	"log"
+)
+
+func CloneObject(a, b interface{}) []byte {
+	// 创建一个 指针空间
+	buff := new(bytes.Buffer)
+	// 创建一个 编码器对象
+	enc := gob.NewEncoder(buff)
+	// 创建一个 解码器对象
+	dec := gob.NewDecoder(buff)
+	// 对 a 进行编码
+	err := enc.Encode(a)
+	if err != nil {
+		log.Panic("e1: ", err)
+	}
+	// 获取 a 编码后的 字节(Bytes)数据
+	b1 := buff.Bytes()
+	// 对 b 进行解码
+	err = dec.Decode(b)
+	if err != nil {
+		log.Panic("e2: ", err)
+	}
+	// 返回编码后的的 bytes 数据 b1
+	return b1
+}
+
+func main() {
+	// 定义 a 为空结构体类型
+	var a interface{}
+	// 初始化并赋值 a
+	a = map[string]interface{}{"X": 1}
+	// json 序列化 &a
+	b2, err := json.Marshal(&a)
+	// 打印序列化后的数据 b2
+	fmt.Println(string(b2), err)
+
+	// 定义 b 为空结构体类型
+	var b interface{}
+	// 注册一下
+	gob.Register(map[string]interface{}{})
+	// 使用 gob 对 &a &b 进行序列化与反序列化
+	b1 := CloneObject(&a, &b)
+	fmt.Println(string(b1))
+}
+
+```
+
+
 ## Cookie 与 Session 优劣
 
 1. `Cookie` 数据存放在客户端(浏览器等..), `Session` 数据放在服务器端(内存、关系型数据库、Redis、Memcache等)。
