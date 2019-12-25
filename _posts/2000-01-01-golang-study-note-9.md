@@ -108,3 +108,144 @@ r.HandleFunc("/debug/pprof/trace", pprof.Trace)
 * 注意:  - 获取的 `Profiling` 数据是动态的, 要想获得有效的数据,  请保证应用处于较大的负载 (比如正在生成中运行的服务, 或者通过其他工具模拟访问压力时) 。
 
 
+* 例子:
+
+```go
+package main
+
+import (
+	"flag"
+	"fmt"
+	"os"
+	"runtime/pprof"
+	"time"
+)
+
+// 一段有问题的代码
+func logicCode() {
+	var c chan int
+	for {
+		select {
+		// 因为c 未初始化 一直在此分支中等待 值
+		case v := <-c:
+			fmt.Printf("recv from chan, value:%v\n", v)
+		default:
+			// 未做任何处理
+		}
+	}
+}
+
+func main() {
+	var isCPUPprof bool
+	var isMemPprof bool
+
+	flag.BoolVar(&isCPUPprof, "cpu", false, "turn cpu pprof on")
+	flag.BoolVar(&isMemPprof, "mem", false, "turn mem pprof on")
+	flag.Parse()
+
+	if isCPUPprof {
+		file, err := os.Create("./cpu.pprof")
+		if err != nil {
+			fmt.Printf("create cpu pprof failed, err:%v\n", err)
+			return
+		}
+		_ = pprof.StartCPUProfile(file)
+		defer pprof.StopCPUProfile()
+	}
+	for i := 0; i < 8; i++ {
+		go logicCode()
+	}
+	time.Sleep(20 * time.Second)
+	if isMemPprof {
+		file, err := os.Create("./mem.pprof")
+		if err != nil {
+			fmt.Printf("create mem pprof failed, err:%v\n", err)
+			return
+		}
+		_ = pprof.WriteHeapProfile(file)
+		_ = file.Close()
+	}
+}
+
+```
+
+```shell
+# go run main.go -cpu
+
+```
+
+
+* 分析生成的报告
+
+```shell
+# go tool pprof ./cpu.pprof
+
+```
+
+* 进入交互模式
+
+
+```shell
+Type: cpu
+Time: Dec 25, 2019 at 4:00pm (CST)
+Duration: 20.14s, Total samples = 1.85mins (550.58%)
+Entering interactive mode (type "help" for commands, "o" for options)
+(pprof) 
+```
+
+
+* `top` 命令 查看占用资源排行
+
+```shell
+(pprof) top 4
+Showing nodes accounting for 110.86s, 100% of 110.89s total
+Dropped 9 nodes (cum <= 0.55s)
+      flat  flat%   sum%        cum   cum%
+    45.01s 40.59% 40.59%     86.34s 77.86%  runtime.selectnbrecv
+    30.19s 27.23% 67.81%     33.47s 30.18%  runtime.chanrecv
+    24.52s 22.11% 89.93%    110.86s   100%  main.logicCode
+    11.14s 10.05%   100%     11.14s 10.05%  runtime.newstack
+```
+
+* 选项解释:
+
+  * `flat`: 当前函数占用CPU的耗时
+
+  * `flati%`: 当前函数占用CPU的耗时百分比
+
+  * `sun%`: 函数占用CPU的耗时累计百分比
+
+  * `cum`: 当前函数加上调用当前函数的函数占用CPU的总耗时
+
+  * `cum%`: 当前函数加上调用当前函数的函数占用CPU的总耗时百分比
+
+  * 最后一列: 函数名称
+
+
+* `list` 命令 分析具体程序问题
+
+
+```shell
+(pprof) list main.logicCode
+Total: 1.85mins
+ROUTINE ======================== main.logicCode in main.go
+    24.52s   1.85mins (flat, cum)   100% of Total
+         .          .     12:func logicCode() {
+         .          .     13:   var c chan int
+         .          .     14:   for {
+         .          .     15:           select {
+         .          .     16:           // 因为c 未初始化 一直在此分支中等待 值
+    24.52s   1.85mins     17:           case v := <-c:
+         .          .     18:                   fmt.Printf("recv from chan, value:%v\n", v)
+         .          .     19:           default:
+         .          .     20:                   // 未做任何处理
+         .          .     21:           }
+         .          .     22:   }
+
+```
+
+* `24.52s   1.85mins     17:           case v := <-c:`  这一段标注了具体的耗时,说明有问题
+
+
+
+

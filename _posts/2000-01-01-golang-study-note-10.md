@@ -184,3 +184,38 @@ func main() {
 
 ```
 
+
+### flag 应用
+
+
+```go
+package main
+
+import (
+	"flag"
+	"fmt"
+	"time"
+)
+
+func cmdFlag() {
+	var (
+		password string
+	)
+	flag.StringVar(&password, "pw", "123456", "密码")
+	flag.Parse()
+
+	//判断输入的值
+	if password == "654321" {
+		fmt.Println("密码正确")
+		fmt.Printf("当前时间为 %v \n", time.Now().Format("2006-01-02 15:04:05"))
+	} else {
+		fmt.Println("密码不正确,请确认后再试。")
+	}
+
+}
+
+func main() {
+	cmdFlag()
+}
+```
+
