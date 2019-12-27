@@ -46,4 +46,6 @@ graph TD;
 
 [ 【Go Web编程 - Go Context 模块 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-11 "Go Context 模块")
 
+[ 【Go Web编程 - Golang to Kafka 】](https://jicki.me/golang/go/2000/01/01/golang-web-note-12 "Golang to Kafka")
+
   [1]: http://jicki.me/img/posts/golang/goweb.png
