@@ -15,7 +15,7 @@ tags:
 
 ## Kafka
 
-* `Apache Kafka 是由著名职业社交公司`Linkedln`开发的, 最初是被设计用于解决`Linkedln` 公司内部海量日志传输等问题。`Kafka` 使用 `Scala` 语言编写。 2011年`Linkedln` 将`Kafka`开源 并进入 `Apache` 孵化器, 2012年10月正式毕业,成为`Apache` 顶级项目。
+* `Apache Kafka` 是由著名职业社交公司`Linkedln`开发的, 最初是被设计用于解决`Linkedln` 公司内部海量日志传输等问题。`Kafka` 使用 `Scala` 语言编写。 2011年`Linkedln` 将`Kafka`开源 并进入 `Apache` 孵化器, 2012年10月正式毕业,成为`Apache` 顶级项目。
 
 ### 消息队列通信模型
 
