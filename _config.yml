@@ -119,7 +119,7 @@ friends: [
         title: "张馆长",
         href: "https://zhangguanzhang.github.io/"
     },{
-	title: "Bitnami"
+	title: "Bitnami",
         href: "https://github.com/bitnami"
     }
 ]
