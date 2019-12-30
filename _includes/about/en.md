@@ -1,6 +1,6 @@
-> 搞搞docker, 弄弄kubernetes,
+> 搞搞 docker, 弄弄 kubernetes,
 >
-> 学学golang, 写写shell。
+> 学学 golang, 写写 shell。
 
 
 ### 一、 序
@@ -18,5 +18,5 @@
 
 > **热爱 Devops，对新技术充满好奇心**
 
-> **目前就职于 Hedu 公司担任运维工程师**
+> **目前就职于 智科 公司担任运维工程师**
 
