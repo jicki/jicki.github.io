@@ -254,3 +254,64 @@ Partition:0 Offset:13 Key: Value:这是条测试消息
 Partition:0 Offset:14 Key: Value:这是条测试消息 
 
 ```
+
+
+### tail 库的使用
+
+* 使用 `hpcloud/tail` 第三方库, 实现了 类似于 Linux 命令中 `tail -f` 的效果。
+
+* `install`  `go get -u github.com/hpcloud/tail` 
+
+
+* 一个例子:
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/hpcloud/tail"
+)
+
+func main() {
+	file := "./access.log"
+	// 初始化 tail 实例
+	config := tail.Config{
+		Location: &tail.SeekInfo{
+			Offset: 0,
+			Whence: 2,
+		},
+		ReOpen:      true,
+		MustExist:   false,
+		Poll:        true,
+		Pipe:        false,
+		RateLimiter: nil,
+		Follow:      true,
+		MaxLineSize: 0,
+		Logger:      nil,
+	}
+	tails, err := tail.TailFile(file, config)
+	if err != nil {
+		fmt.Printf("tail file err: %v\n", err)
+		return
+	}
+	var (
+		msg *tail.Line
+		ok  bool
+	)
+	for {
+		// 一直往这里写数据
+		msg, ok = <-tails.Lines
+		if !ok {
+			fmt.Printf("tail file close reopen, filename: %s \n",
+				tails.Filename)
+			time.Sleep(time.Second)
+			continue
+		}
+		fmt.Println("msg:", msg.Text)
+	}
+}
+
+```
