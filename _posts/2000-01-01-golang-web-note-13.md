@@ -234,6 +234,88 @@ func main() {
 
 ```
 
+### 自定义模板渲染符
+
+* 自定义模板渲染符可使用 `r.Delims("左边符号", "右边符号")` 来重新定义。
+
+* go 代码
+
+```go
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type User struct {
+	Name  string
+	Age   int
+	Hobby []string
+}
+
+// template 语法
+func main() {
+	s1 := User{
+		Name: "张大仙",
+		Age:  20,
+		Hobby: []string{
+			"王者",
+			"英雄联盟",
+			"说骚话",
+		},
+	}
+	s2 := User{
+		Name: "魔教教主",
+		Age:  30,
+		Hobby: []string{
+			"英雄联盟",
+			"刺激战场",
+			"说骚话",
+		},
+	}
+	r := gin.Default()
+
+	// 自定义渲染分隔符
+	// 自定义渲染分隔符必须在 导入模板之前定义
+	r.Delims("{[{", "}]}")
+	// 加载模板
+	r.LoadHTMLGlob("templates/*")
+	// html 自定义渲染符号
+	r.GET("/delimit", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "delimit.tmpl", gin.H{
+			"name": s1.Name,
+			"age":  s1.Age,
+		})
+	})
+	_ = r.Run(":8888")
+}
+
+```
+
+* html 
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- 标题 -->
+    <title>HTML 自定义分隔符</title>
+</head>
+<body>
+    <!-- 自定义分隔符 -->
+    <p>姓名:  {[{ .name }]}</p>
+    <p>年龄:  {[{ .age }]}</p>
+</body>
+</html>
+
+```
+
+
 ### 多模板继承
 
 * Gin 框架下的模板都是单模板,多模板继承需要使用 第三方的包。
