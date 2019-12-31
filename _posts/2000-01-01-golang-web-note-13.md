@@ -233,4 +233,157 @@ func main() {
 {{end}}
 
 ```
+
+### 多模板继承
+
+* Gin 框架下的模板都是单模板,多模板继承需要使用 第三方的包。
+
+* `go get -u github.com/gin-contrib/multitemplate`
+
+* go 代码
+
+```go
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"net/http"
+
+	"github.com/gin-contrib/multitemplate"
+
+	"github.com/gin-gonic/gin"
+)
+type User struct {
+	Name  string
+	Age   int
+	Hobby []string
+}
+
+// 创建一个方法用来处理多模板继承
+func createMyRender() multitemplate.Renderer {
+	r := multitemplate.NewRenderer()
+        // 添加两个多模板继承, 初始模板必须写在前面。
+	r.AddFromFiles("index", "templates/inherit.tmpl", "templates/i1.tmpl")
+	r.AddFromFiles("home", "templates/inherit.tmpl", "templates/i2.tmpl")
+	return r
+}
+
+// html 继承
+func main() {
+	s1 := User{
+		Name: "张大仙",
+		Age:  20,
+		Hobby: []string{
+			"王者",
+			"英雄联盟",
+			"说骚话",
+		},
+	}
+	s2 := User{
+		Name: "魔教教主",
+		Age:  30,
+		Hobby: []string{
+			"英雄联盟",
+			"刺激战场",
+			"说骚话",
+		},
+	}
+	r := gin.Default()
+	// 加载模板
+	r.LoadHTMLGlob("templates/*")
+        
+	// 接收多模板函数定义的返回值
+	r.HTMLRender = createMyRender()
+        // 定义一个组
+	inGroup := r.Group("/inherit")
+	{
+
+		inGroup.GET("/index", func(c *gin.Context) {
+                        // 这里 c.HTML 写入的"index" 模板为 createMyRender 函数定义的名称
+			c.HTML(http.StatusOK, "index", gin.H{
+				"name": s1.Name,
+			})
+		})
+
+		inGroup.GET("/home", func(c *gin.Context) {
+			// 这里 c.HTML 写入的"home" 模板为 createMyRender 函数定义的名称
+			c.HTML(http.StatusOK, "home", gin.H{
+				"name": s2.Name,
+			})
+		})
+	}
+
+	_ = r.Run(":8888")
+}
+```
+
+* html 模板
+
+* inherit.tmpl
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- 标题 -->
+    <title>HTML 继承</title>
+</head>
+<body>
+<div id="container" style="width:100%">
+
+    <div id="header" style="background-color:lightseagreen;">
+        <h1 style="margin-bottom:0;text-align:center;">HTML 继承</h1></div>
+
+    <div id="menu" style="background-color:lightcyan;height:200px;width:100px;float:left;">
+        <b></b>
+        <br>
+        Golang
+        <br>
+        Gin
+        <br>
+        HTML
+    </div>
+    <div id="content" style="text-align:center;">
+        {{ block "content" . }} {{ end }}
+    </div>
+
+    <div id="footer" style="background-color:cornflowerblue;clear:both;text-align:center;">
+    联系方式: https://jicki.me</div>
+</div>
+</body>
+</html>
+
+```
+
+* i1.tmpl
+
+```html
+{{/*继承 inherit 模板*/}}
+{{template "inherit"}}
+
+{{/* 重新定义 inherit 模板中的内容 */}}
+{{define "content"}}
+    <h1>这是index页面</h1>
+    <p>hello {{ .name }}</p>
+{{end}}
+
+```
+
+
+* i2.tmpl
+
+```html
+{{/*继承 inherit 模板*/}}
+{{template "inherit"}}
+
+{{/* 重新定义 inherit 模板中的内容 */}}
+{{define "content"}}
+    <h1>这是home页面</h1>
+    <p>hello {{ .name }}</p>
+{{end}}
+
+```
+
 {% endraw %}

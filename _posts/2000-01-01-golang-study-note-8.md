@@ -805,3 +805,14 @@ func main() {
 }
 ```
 
+#### 模板继承
+
+* block
+
+  * `block` 是定义模板`{{define "name"}} T1 {{end}}`和执行`{{template "name" pipeline}}`缩写, 典型的用法是定义一组根模板, 然后通过在其中重新定义块模板进行自定义。
+
+
+```go
+
+
+```
