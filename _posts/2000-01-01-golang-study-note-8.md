@@ -774,7 +774,6 @@ func main() {
 	http.ListenAndServe("127.0.0.1:8888", nil)
 }
 ```
-{% endraw %}
 
 #### 链式操作
 
@@ -811,8 +810,50 @@ func main() {
 
   * `block` 是定义模板`{{define "name"}} T1 {{end}}`和执行`{{template "name" pipeline}}`缩写, 典型的用法是定义一组根模板, 然后通过在其中重新定义块模板进行自定义。
 
+* `Go` 使用`template.ParseGlob`按照正则匹配规则解析模板文件, 然后通过`ExecuteTemplate`渲染指定的模板
 
 ```go
+func index(w http.ResponseWriter, r *http.Request){
+	tmpl, err := template.ParseGlob("templates/*.tmpl")
+	if err != nil {
+		fmt.Println("create template failed, err:", err)
+		return
+	}
+	err = tmpl.ExecuteTemplate(w, "index.tmpl", nil)
+	if err != nil {
+		fmt.Println("render template failed, err:", err)
+		return
+	}
+}
+```
 
+* base.tmpl
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>Go Templates</title>
+</head>
+<body>
+<div class="container-fluid">
+    {{block "content" . }}{{end}}
+</div>
+</body>
+</html>
 
 ```
+
+
+* index.tmpl
+
+```html
+{{/*继承 base.tmpl 模板 */}}
+{{template "base.tmpl"}}
+
+{{define "content"}}
+    <div>Hello world!</div>
+{{end}}
+```
+
+{% endraw %}
