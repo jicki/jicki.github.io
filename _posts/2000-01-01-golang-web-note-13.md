@@ -65,14 +65,12 @@ func main() {
 	}
 	r := gin.Default()
 
-	// 自定义函数
-	custom := func(name string) (string, error) {
-		return fmt.Sprintf("hello %s", name), nil
-	}
 	// 导入 自定义函数到 模板中
 	// 导入 自定义函数必须在 加载模板 之前,否则会报错
 	r.SetFuncMap(template.FuncMap{
-		"custom": custom,
+		"custom": func(name string) template.HTML {
+			return template.HTML(fmt.Sprintf("hello %s", name))
+		},
 	})
 
 	// 加载模板
