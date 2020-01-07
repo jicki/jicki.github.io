@@ -89,7 +89,7 @@ func main() {
 
 ### Client
 
-* Zinx 的消息处理采用, `[MsgLength]`|`[MsgID]`|`[Data]`的封包格式。
+* Zinx 的消息处理采用 `[MsgLength]` 、 `[MsgID]` 、 `[Data]` 的封包格式。
 
 ```go
 package main
