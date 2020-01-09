@@ -35,7 +35,8 @@ tags:
   |Tag|Length|Value|
 
   * `Constructed Data` 编码
-  |Tag|Length|`[T][L][TLV][T|L|V]`|
+
+|Tag|Length|`[T][L][TLV][T|L|V]`|
 
 
 ## TLV 解决黏包
@@ -46,5 +47,5 @@ tags:
 |head|body|
 |-|-|
 |DataLen和id|Data数据|
-|第一次Read获DataLen|第二次Read 根据DataLen 偏移读取消息数据|
+|第一次Read获取DataLen|第二次Read 根据DataLen 偏移读取消息数据|
 
