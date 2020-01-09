@@ -32,7 +32,8 @@ tags:
 * `Value` - 描述数据的值, 由一个或多个值组成, 值可以是一个原始数据类型`(Primitive Data)`, 也可以是一个`TLV`结构`(Constructed Data)`
 
   * `Primitive Data` 编码 
-  |Tag|Length|Value|
+ 
+|Tag|Length|Value|
 
   * `Constructed Data` 编码
 
