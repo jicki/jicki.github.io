@@ -143,7 +143,7 @@ message PhoneNumber {
 
 ## 编译 protobuf 文件
 
-* `protoc --proto_path=IMPORT_PATH --go_out=DST_PATH`
+* `protoc --proto_path=IMPORT_PATH --go_out=DST_PATH /path/file.proto`
 
 ```shell
 # 这里也可以使用 protoc --go_out=. *.proto  简化操作.
