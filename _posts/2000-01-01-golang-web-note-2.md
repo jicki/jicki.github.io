@@ -1241,3 +1241,79 @@ func main() {
 
 
 
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+)
+
+func indexHandle(c *gin.Context) {
+	fmt.Println("start indexHandle")
+
+	c.JSON(http.StatusOK, gin.H{
+		"Code": http.StatusOK,
+		"Msg":  "index OK",
+	})
+}
+
+// 定义一个中间件, 中间件必须包含 gin.Context
+func middle(c *gin.Context) {
+	fmt.Println("Middle in")
+	// 统计函数开始的时间
+	start := time.Now()
+	// c.Next 执行下一个函数, 既 middle 后续的一个函数
+	c.Next()
+	// 计算 函数消耗的时间
+	cost := time.Since(start)
+	fmt.Printf("Cost = %v \n", cost)
+	fmt.Println("Middle out")
+}
+
+// 定义一个中间件, 中间件必须包含 gin.Context
+func m2(c *gin.Context) {
+	fmt.Println("M2 in")
+
+	// c.Next 执行下一个函数
+	c.Next()
+
+	// 阻止 执行下一个函数
+	// c.Abort()
+
+	fmt.Println("M2 out")
+}
+
+// 判断是否登录的中间件 (一般都使用闭包的方式来写中间件)
+func authMiddleWere(auth bool) gin.HandlerFunc {
+	// 操作认证查询的工作
+	// 比如查询数据库等
+	return func(c *gin.Context) {
+		// 判断是否登录
+		//1. if 是登录用户
+		//2. 为真 执行 c.Next()
+		//3. 为假 执行 c.Abort()
+		if auth {
+			c.Next()
+		} else {
+			c.Abort()
+		}
+	}
+}
+
+func main() {
+	r := gin.Default()
+
+	// 全局中使用中间件, 注意顺序
+	r.Use(middle, m2, authMiddleWere(false))
+
+	r.GET("/index", indexHandle)
+
+	_ = r.Run(":8888")
+}
+
+```
