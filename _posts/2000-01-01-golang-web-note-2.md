@@ -1240,8 +1240,6 @@ func main() {
 ```
 
 
-
-
 ```go
 package main
 
@@ -1264,6 +1262,9 @@ func indexHandle(c *gin.Context) {
 
 // 定义一个中间件, 中间件必须包含 gin.Context
 func middle(c *gin.Context) {
+	// 设置一个值,传递到其他的 context 中
+	c.Set("name", "小炒肉")
+
 	fmt.Println("Middle in")
 	// 统计函数开始的时间
 	start := time.Now()
@@ -1278,12 +1279,16 @@ func middle(c *gin.Context) {
 // 定义一个中间件, 中间件必须包含 gin.Context
 func m2(c *gin.Context) {
 	fmt.Println("M2 in")
-
-	// c.Next 执行下一个函数
-	c.Next()
-
-	// 阻止 执行下一个函数
-	// c.Abort()
+	// 接收 Context 中 set 的值
+	name, ok := c.Get("name")
+	if !ok {
+		// 阻止 执行下一个函数
+		c.Abort()
+	} else {
+		// c.Next 执行下一个函数
+		fmt.Println(name)
+		c.Next()
+	}
 
 	fmt.Println("M2 out")
 }
@@ -1309,7 +1314,7 @@ func main() {
 	r := gin.Default()
 
 	// 全局中使用中间件, 注意顺序
-	r.Use(middle, m2, authMiddleWere(false))
+	r.Use(middle, m2, authMiddleWere(true))
 
 	r.GET("/index", indexHandle)
 
