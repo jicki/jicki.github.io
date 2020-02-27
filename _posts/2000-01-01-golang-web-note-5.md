@@ -16,6 +16,12 @@ tags:
 
 * ORM（Object Relation Mapping）, 对象关系映射, 实际上就是对数据库的操作进行封装, 对上层开发人员屏蔽数据操作的细节, 开发人员看到的就是一个个对象, 大大简化了开发工作, 提高了生产效率
 
+* O = Object 对象 (程序中的对象/实例 如: Struct 结构体)
+
+* R = Relational 关系 (关系型数据库 如: Mysql)
+
+* M = Mapping 映射 (程序对象映射到关系型数据库里)
+
 
 ### GORM 概览
 
