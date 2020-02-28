@@ -20,7 +20,19 @@ tags:
 
 * R = Relational 关系 (关系型数据库 如: Mysql)
 
-* M = Mapping 映射 (程序对象映射到关系型数据库里)
+* M = Mapping 映射
+
+  * 结构体 --> 数据表
+  * 结构体实例 --> 数据库行
+  * 结构体字段 --> 数据库字段
+
+
+
+* ORM 优缺点
+
+  * 优点 - 提高开发效率, 不需要使用SQL语句。
+
+  * 缺点 - 执行性能较差、灵活性较差、弱化了SQL能力。
 
 
 ### GORM 概览
@@ -84,6 +96,179 @@ func init() {
 
 
 
+### GORM Model
+
+* 在使用ORM工具时，通常我们需要在代码中定义模型（Models）与数据库中的数据表进行映射，在GORM中模型（Models）通常是正常定义的结构体、基本的go类型或它们的指针。 同时也支持`sql.Scanner`及`driver.Valuer`、接口`interfaces`。
+
+
+
+* GORM 内置了一个`gorm.Model`结构体。`gorm.Model`是一个包含了`ID` 、 `CreatedAt` 、`UpdatedAt` 、 `DeletedAt`四个字段的Golang结构体。
+
+```go
+// gorm.Model 定义
+type Model struct {
+  ID        uint `gorm:"primary_key"`
+  CreatedAt time.Time
+  UpdatedAt time.Time
+  DeletedAt *time.Time
+}
+```
+
+
+* 嵌入到自己的结构体模型中
+
+```go
+// 定义 数据模型
+type UserInfo struct {
+	gorm.Model   // 内嵌 Model 模型
+	Name         string
+	Age          sql.NullInt64 //零值类型
+	Birthday     *time.Time
+	Email        string  `gorm:"type:varchar(100);unique_index"`
+	Role         string  `gorm:"size:255"`        // 限制大小为最多255
+	MemberNumber *string `gorm:"unique;not null"` // 设置会员号唯一,且不能为空。
+	Num          int     `gorm:"AUTO_INCREMENT"`  // 设置字段 num 自增类型。
+	Address      string  `gorm:"index:addr"`      // 给address字段创建名为addr的索引
+	IgnoreMe     int     `gorm:"-"`               // 忽略本字段
+}
+
+```
+
+
+
+* GORM 结构体标识 (struct tag)
+
+|结构体标识(Tga)|描述|
+|-|-|
+|Column |指定列名|
+|Type |指定列数据类型|
+|Size |指定列大小, 默认值255|
+|PRIMARY_KEY |将列指定为主键|
+|UNIQUE |将列指定为唯一|
+|DEFAULT |指定列默认值|
+|PRECISION |指定列精度|
+|NOT NULL |将列指定为非 NULL|
+|AUTO_INCREMENT |指定列是否为自增类型|
+|INDEX |创建具有或不带名称的索引, 如果多个索引同名则创建复合索引|
+|UNIQUE_INDEX |和 INDEX 类似，只不过创建的是唯一索引|
+|EMBEDDED |将结构设置为嵌入|
+|EMBEDDED_PREFIX |设置嵌入结构的前缀|
+|- |忽略此字段|
+
+
+
+* GORM 创建表时 set 的标识
+
+|创建表的标识|描述|
+|-|-|
+|MANY2MANY |指定连接表|
+|FOREIGNKEY |设置外键|
+|ASSOCIATION_FOREIGNKEY |设置关联外键|
+|POLYMORPHIC |指定多态类型|
+|POLYMORPHIC_VALUE |指定多态值|
+|JOINTABLE_FOREIGNKEY |指定连接表的外键|
+|ASSOCIATION_JOINTABLE_FOREIGNKEY |指定连接表的关联外键|
+|SAVE_ASSOCIATIONS |是否自动完成 save 的相关操作|
+|ASSOCIATION_AUTOUPDATE |是否自动完成 update 的相关操作|
+|ASSOCIATION_AUTOCREATE |是否自动完成 create 的相关操作|
+|ASSOCIATION_SAVE_REFERENCE |是否自动完成引用的 save 的相关操作|
+|PRELOAD |是否自动完成预加载的相关操作|
+
+
+
+* 主键、表名、列名的约定
+ 
+  * 主键 (Primary Key) , GORM 默认会使用名为`ID` 这个字段名作为表的主键。
+
+  * 修改默认的 主键名为 其他, 需要使用结构体 tag `grom:"primary_key"` 来约定。
+
+```go
+
+type User struct {
+  ID   string // 名为`ID`的字段会默认作为表的主键
+  Name string
+}
+
+// 使用`AnimalID`作为主键
+type Animal struct {
+  AnimalID int64 `gorm:"primary_key"`
+  Name     string
+  Age      int64
+}
+
+```
+
+  
+* 表名 (Table Name) 
+
+  * GROM 创建数据表, 表名默认就是结构体名称的复数, 如: `User = users` , `UserInfo = user_infos`
+
+  * 修改默认的 数据表名称。
+
+```go
+
+// 将 User 的表名设置为 `profiles`
+func (User) TableName() string {
+  return "profiles"
+}
+
+// 多个条件判断
+func (u User) TableName() string {
+  if u.Role == "admin" {
+    return "admin_users"
+  } else {
+    return "users"
+  }
+}
+
+// 禁用默认表名的复数形式，如果置为 `true，则 `User` 的默认表名是 `user`
+db.SingularTable(true)
+
+```
+
+
+```go
+// table 可以指定表名
+
+// 使用User结构体创建名为`deleted_users`的表
+db.Table("deleted_users").CreateTable(&User{})
+
+```
+
+
+```go
+// 修改默认表的规则 (格式为job_表明)
+gorm.DefaultTableNameHandler = func (db *gorm.DB, defaultTableName string) string  {
+  return "job_" + defaultTableName;
+}
+```
+
+
+
+* 数据列 名称 (Column Name)
+
+  * 列名 是由 结构体字段的名称组合,一个字段多个单词组成 会使用 `_` 分割开。如: `MemberNumber` = `member_number`
+
+  * 修改默认的 数据列名称, 可使用结构体`tag` 中的 `column` 指定列名。
+
+```go
+type Animal struct {
+  AnimalId    int64     `gorm:"column:beast_id"`        
+  Birthday    time.Time `gorm:"column:beast_day"` 
+  Age         int64     `gorm:"column:beast_age"`
+}
+
+```
+
+
+* 时间类型 (At)
+
+  * `CreatedAt`字段, 该字段的值将会是初次创建记录的时间。
+
+  * `UpdatedAt`字段，该字段的值将会是每次更新记录的时间。 
+
+  * `DeletedAt`字段，调用Delete方法删除该记录时，将会设置`DeletedAt`字段为当前时间，而不是直接将记录从数据库中删除。
+
 
 ### 实际操作实例
 
@@ -95,9 +280,8 @@ package main
 import (
 	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 /*
