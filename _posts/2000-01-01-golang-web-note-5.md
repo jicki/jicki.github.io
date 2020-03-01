@@ -62,7 +62,7 @@ tags:
 12. 开发者友好
 
 
-### gorm 用法
+### gorm 模块用法
 
 ```shell
 go get -u github.com/jinzhu/gorm
@@ -268,6 +268,108 @@ type Animal struct {
   * `UpdatedAt`字段，该字段的值将会是每次更新记录的时间。 
 
   * `DeletedAt`字段，调用Delete方法删除该记录时，将会设置`DeletedAt`字段为当前时间，而不是直接将记录从数据库中删除。
+
+
+
+### GORM CRUD
+
+* CRUD 增、删、改、查
+
+
+* 增加(create)
+
+
+```go
+
+// 定义 数据模型
+type User struct {
+	ID int64
+	// 使用 tag default 设置默认值
+	Name string `gorm:"default:'小炒肉'"`
+	Age  int64
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 创建结构体实例
+	u1 := User{
+		Name: "小炒肉",
+		Age:  20,
+	}
+	// 判断主键是否存在,可用于判断数据是否成功写入。
+	db.NewRecord(&u1)
+	// 创建(插入)数据
+	db.Create(&u1)
+}
+```
+
+* 注意: 使用 结构体 tag default 设置默认值的时候, 所有字段的零值, 比如`0`, `""`, `false`或者其它零值，都不会保存到数据库内，但会使用他们的默认值。如需要零值/空值, 可以使用: 
+
+
+* `Name *string `gorm:"default:'小炒肉'"`` 
+
+```go
+// 定义 数据模型
+type User struct {
+	ID int64
+	// 使用 tag default 设置默认值
+	Name *string `gorm:"default:'小炒肉'"`
+	Age  int64
+}
+
+func main(){
+
+	// 创建结构体实例
+	u1 := User{
+		Name: new(string),
+		Age:  20,
+	}
+	// 判断主键是否存在,可用于判断数据是否成功写入。
+	db.NewRecord(&u1)
+	// 创建(插入)数据
+	db.Create(&u1)
+}
+
+```
+
+
+
+* `Name sql.NullString `gorm:"default:'小炒肉'"``
+
+
+```go
+type User struct {
+        ID int64
+        // 使用 tag default 设置默认值
+        Name sql.NullString `gorm:"default:'小炒肉'"`
+        Age  int64
+}
+
+func main(){
+
+        // 创建结构体实例
+        u1 := User{
+                Name: sql.NullString{"", true},
+                Age:  20,
+        }
+        // 判断主键是否存在,可用于判断数据是否成功写入。
+        db.NewRecord(&u1)
+        // 创建(插入)数据
+        db.Create(&u1)
+}
+
+```
 
 
 ### 实际操作实例
