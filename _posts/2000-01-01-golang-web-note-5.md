@@ -372,6 +372,102 @@ func main(){
 ```
 
 
+* 查询 (First、Take、Last、Find)
+
+```go
+func main() {
+	// 查询 select
+	// 定义一个User结构体类型的变量用于存储查询返回的数据
+	var user User
+
+	// 定义一个 User结构体类型的切片,用于存储查询返回的多条数据
+	var users []User
+
+	// First 取第一条数据
+	db.First(&user)
+	fmt.Printf("DB First User: %v \n", user)
+
+	// Take 随机取一条数据
+	db.Take(&user)
+	fmt.Printf("DB Take User: %v \n", user)
+
+	// Last 根据主键 的顺序查询最后一条数据
+	db.Last(&user)
+	fmt.Printf("DB Last User: %v \n", user)
+
+	// Find 查询所有的数据
+	db.Find(&users)
+	for _, user := range users {
+		fmt.Printf("DB Find Users: %v \n", user)
+	}
+
+	// First 也可以查询指定的数据, 当主键为整型时可用
+	db.Debug().First(&user, 2)
+	fmt.Printf("DB First 2 User: %v \n", user)
+}
+
+```
+
+
+* 条件过滤 (Where)
+
+
+```go
+func main() {
+
+	// Where 条件查询
+
+	// 过滤查询单条的数据
+	db.Where("name = ?", "大炒肉").First(&user)
+	fmt.Printf("Where First: %v \n", user)
+
+	// 过滤查询所有的数据
+	db.Where("name = ?", "大炒肉").Find(&users)
+	fmt.Printf("Where Find: %v \n", users)
+
+	// 过滤查询所有的数据 <> 不等于
+	db.Where("name <> ?", "炒肉").Find(&users)
+	fmt.Printf("Where Find <> : %v \n", users)
+
+	// 多个条件 IN 查询所有数据
+	db.Where("name IN(?)", []string{"小炒肉", "大炒肉"}).Find(&users)
+	fmt.Printf("Where Find IN : %v \n", users)
+
+	// 模糊匹配 查询所有的数据
+	db.Where("name LIKE ?", "%小%").Find(&users)
+	fmt.Printf("Where Find LIKE : %v \n", users)
+
+	// AND 匹配
+	db.Where("name =? AND age = ?", "小炒肉", "20").Find(&users)
+	fmt.Printf("Where Find AND : %v \n", users)
+
+	// Time 时间匹配
+	db.Where("updated_at > ?", "2020-03-02 06:41:44").Find(&users)
+	fmt.Printf("Where Find Time : %v \n", users)
+
+	// BETWEEN 区间时间
+	db.Where("created_at BETWEEN ? AND ?", "2020-01-01 09:09:01", "2020-03-02 06:41:50").Find(&users)
+	fmt.Printf("Where Find BETWEEN : %v \n", users)
+
+	// Where Struct 查询条件进行过滤查询
+	db.Where(&User{Name: "小炒肉", Age: 20}).First(&user)
+	fmt.Printf("Where Struct : %v \n", user)
+
+	// Where Map 查询条件进行过滤查询
+	db.Where(map[string]interface{}{"name": "大炒肉", "age": 30}).Find(&users)
+	fmt.Printf("Where Map : %v \n", users)
+
+	// Where 主键切片 查询条件 进行过滤查询
+	db.Where([]int64{1, 2}).Find(&users)
+	fmt.Printf("Where 切片 : %v \n", users)
+}
+```
+
+
+
+
+
+
 ### 实际操作实例
 
 
