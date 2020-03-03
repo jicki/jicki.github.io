@@ -409,7 +409,7 @@ func main() {
 ```
 
 
-* 条件过滤 (Where)
+* 条件选取 (Where)
 
 
 ```go
@@ -463,161 +463,375 @@ func main() {
 }
 ```
 
+* 提示：当通过结构体进行查询时，GORM将会只通过非零值字段查询，这意味着如果你的字段值为`0`，`''`，`false`或者其他零值时，将不会被用于构建查询条件。
 
 
-
-
-
-### 实际操作实例
-
+* 条件排除 (Not)
 
 ```go
-
-package main
-
-import (
-	"fmt"
-
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-)
-
-/*
-数据库 student 表
-
-CREATE TABLE `student` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) NOT NULL,
-  `nick` varchar(64) DEFAULT NULL,
-  `country` varchar(128) DEFAULT NULL,
-  `province` varchar(64) DEFAULT NULL,
-  `city` varchar(64) DEFAULT NULL,
-  `status` int(11) DEFAULT NULL,
-  `create_time` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
-
-*/
-
-// 创建一个 student 的结构体
-
-type student struct {
-	// gorm.Model 嵌入常用数据库字段.
-	// gorm.Model
-	// gorm 用 tag 的方式来标识 mysql 里面的约束
-	Id         int    `db:"id" gorm:"primary_key;type: int(11);NOT NULL;AUTO_INCREMENT"`
-	Name       string `db:"name" gorm:"type: varchar(64);NOT NULL"`
-	Nick       string `db:"nick" gorm:"type: varchar(64);DEFAULT NULL"`
-	Country    string `db:"country" gorm:"type: varchar(128);DEFAULT NULL"`
-	Province   string `db:"province" gorm:"type: varchar(64);DEFAULT NULL"`
-	City       string `db:"city" gorm:"type: varchar(64);DEFAULT NULL"`
-	Status     int    `db:"status" gorm:"type: int(11);DEFAULT NULL"`
-	CreateTime string `db:"create_time" gorm:"type: varchar(32);DEFAULT NULL"`
-}
-
 func main() {
-	// 连接数据库信息
-	dsn := "root:root@tcp(127.0.0.1:3306)/jicki?parseTime=true"
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
 
-	// 连接数据库
-	DB, err := gorm.Open("mysql", dsn)
+	db, err := gorm.Open("mysql", dsn)
 	if err != nil {
 		panic(err)
 	}
 
-	// 设置连接池
-	DB.DB().SetMaxIdleConns(10)
-	DB.DB().SetMaxOpenConns(100)
+	defer db.Close()
 
-	// 关闭数据库
-	defer DB.Close()
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
 
-	// 检查模型`student`表是否存在
-	DB.HasTable(&student{})
+	// 查询 select
+	// 定义一个User结构体类型的变量用于存储查询返回的数据
+	var user User
 
-	// 检查表 `student` 是否存在
-	//DB.HasTable("student")
+	// 定义一个 User结构体类型的切片,用于存储查询返回的多条数据
+	var users []User
 
-	// 删除数据库
-	DB.DropTableIfExists(&student{})
+	// Not
+	db.Not("name", "小小").First(&user)
+	fmt.Printf("Not First : %v \n", user)
 
-	// 创建表, 会自动创建 结构体对应 数据表, Migrate是迁移的意思, 自动迁移仅仅会创建表
-	DB.Set("gorm:table_options", "ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;").AutoMigrate(&student{})
+	// Not In
+	db.Not("name", []string{"小炒肉", "大炒肉"}).Find(&users)
+	fmt.Printf("Not In Find : %v \n", users)
 
-	// 按照构建 结构体的方式 插入数据
-	DB.Create(&student{
-		Id:       1,
-		Name:     "张大仙",
-		Nick:     "大仙",
-		Country:  "China",
-		Province: "广东",
-		City:     "深圳",
-		Status:   1,
-	})
+	// Not In Slice 主键, 主键必须为 Int 类型
+	db.Not([]int64{2}).First(&user)
+	fmt.Printf("Not Slice First : %v \n", user)
 
-	DB.Create(&student{
-		Id:       2,
-		Name:     "黄大仙",
-		Nick:     "大仙",
-		Country:  "China",
-		Province: "广东",
-		City:     "深圳",
-		Status:   1,
-	})
+	// Not Sql 写法
+	db.Not("name = ? ", "小炒肉").First(&user)
+	fmt.Printf("Not Sql First : %v \n", user)
 
-	DB.Create(&student{
-		Id:       3,
-		Name:     "陈小仙",
-		Nick:     "小仙",
-		Country:  "China",
-		Province: "广东",
-		City:     "深圳",
-		Status:   1,
-	})
+	// Not Struct
+	db.Not(&User{Name: "小炒肉"}).First(&user)
+	fmt.Printf("Not Struct First : %v \n", user)
 
-	// 查询数据
-	//DB.Find 查询整个数据表 DB.First 查询一条记录
-	var stu student
-	var stus []student
-
-	// 获取第一条记录，按主键排序
-	DB.First(&stu)
-	fmt.Printf("First 获取记录: %#v\n", stu)
-
-	// 获取所有记录
-	DB.Find(&stus)
-	for _, v := range stus {
-		fmt.Printf("Find 获取所有记录: %#v\n", v)
-	}
-
-	// 删除数据 (delete from student where id = 1;)
-	DB.Delete(&student{}, "id = ?", 1)
-
-	// 更新数据 (update student set name = '猪八戒' where name = '黄大仙';)
-	err = DB.Model(&student{}).Where("Name = ?", "黄大仙").Update("Name", "猪八戒").Error
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// 重新获取所有记录
-	DB.Find(&stus)
-	for _, v := range stus {
-		fmt.Printf("Delete and Update 后记录: %#v\n", v)
-	}
 }
 
 ```
 
-* 输出:
 
-```shell
+* OR (或)
 
-First 获取记录: main.student{Id:1, Name:"张大仙", Nick:"大仙", Country:"China", Province:"广东", City:"深圳", Status:1, CreateTime:""}
-Find 获取所有记录: main.student{Id:1, Name:"张大仙", Nick:"大仙", Country:"China", Province:"广东", City:"深圳", Status:1, CreateTime:""}
-Find 获取所有记录: main.student{Id:2, Name:"黄大仙", Nick:"大仙", Country:"China", Province:"广东", City:"深圳", Status:1, CreateTime:""}
-Find 获取所有记录: main.student{Id:3, Name:"陈小仙", Nick:"小仙", Country:"China", Province:"广东", City:"深圳", Status:1, CreateTime:""}
-Delete and Update 后记录: main.student{Id:2, Name:"猪八戒", Nick:"大仙", Country:"China", Province:"广东", City:"深圳", Status:1, CreateTime:""}
-Delete and Update 后记录: main.student{Id:3, Name:"陈小仙", Nick:"小仙", Country:"China", Province:"广东", City:"深圳", Status:1, CreateTime:""}
+```go
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 定义一个 User结构体类型的切片,用于存储查询返回的多条数据
+	var users []User
+
+	// Or
+	db.Where("name = ? ", "小炒肉").Or("name = ? ", "大炒肉").Find(&users)
+	fmt.Printf("Or Find : %v \n", users)
+
+	// Or Struct
+	db.Where("name = ? ", "小炒肉").Or(User{Age: 30}).Find(&users)
+	fmt.Printf("Or Struct Find : %v \n", users)
+
+	// Or Map
+	db.Where("name = ? ", "小炒肉").Or(map[string]interface{}{"age": 30}).Find(&users)
+	fmt.Printf("Or Struct Find : %v \n", users)
+}
 
 ```
+
+
+
+* 内联操作
+
+
+```go
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 查询 select
+	// 定义一个User结构体类型的变量用于存储查询返回的数据
+	var user User
+
+	// 定义一个 User结构体类型的切片,用于存储查询返回的多条数据
+	var users []User
+
+	// 内联条件 Inline (内嵌 where 条件)
+
+	// 根据主键获取记录 (只适用于整形主键)
+	db.First(&user, 2)
+	fmt.Printf("Inline int First : %v \n", user)
+
+	// 根据主键获取记录, 如果它是一个非整形主键
+	db.First(&user, "id = ?", "string_primary_key")
+	fmt.Printf("Inline string First : %v \n", user)
+
+	// SQL 语句方式
+	db.Find(&users, "name = ?", "小炒肉")
+	fmt.Printf("Inline SQL : %v \n", users)
+
+	db.Find(&users, "name <> ? AND age > ?", "小炒肉", 20)
+	fmt.Printf("Inline SQL : %v \n", users)
+
+	// Struct
+	db.Find(&users, User{Age: 20})
+	fmt.Printf("Inline Struct : %v \n", users)
+
+	// Map
+	db.Find(&users, map[string]interface{}{"age": 20})
+	fmt.Printf("Inline Map : %v \n", users)
+}
+
+```
+
+
+* FirstOrInit
+
+  * 获取匹配的第一条记录，否则根据给定的条件初始化一个新的对象 (仅支持 `struct` 和 `map` 条件)
+
+```go
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 查询 select
+	// 定义一个User结构体类型的变量用于存储查询返回的数据
+	var user User
+
+	// FirstOrInit 仅支持 Struct 和 Map
+	// Struct 方式 Not Found 会初始化一条对象到 user 这个实例中,不会写入数据库
+	db.FirstOrInit(&user, User{Name: "中炒肉", Age: 25})
+	fmt.Printf("FirstOrInit Struct Not Found %v \n", user)
+
+	// Map 方式 Not Found 会初始化一条对象到 user 这个实例中,不会写入数据库
+	db.FirstOrInit(&user, map[string]interface{}{"name": "中炒肉", "age": 25})
+	fmt.Printf("FirstOrInit Map Not Found %v \n", user)
+}
+
+```
+
+
+* Attrs 与 Assign
+
+  * Attrs 如果记录未找到， 将使用参数初始化 `struct` 。
+
+  * Assign 不管记录是否找到，都将参数赋值给 `struct` 。
+
+```go
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 查询 select
+	// 定义一个User结构体类型的变量用于存储查询返回的数据
+	var user User
+
+	// attrs 如果记录未找到， 将使用参数初始化 struct
+	db.Where(User{Name: "not_found"}).Attrs(User{Age: 99}).FirstOrInit(&user)
+	fmt.Printf("Attrs 未找到记录 : %v \n", user)
+
+	db.Where(User{Name: "中炒肉"}).Attrs(User{Age: 99}).FirstOrInit(&user)
+	fmt.Printf("Attrs 找到记录 : %v \n", user)
+
+	// Assign 不管记录是否找到，都将参数赋值给 struct.
+	db.Where(User{Name: "not_found"}).Assign(User{Age: 99}).FirstOrInit(&user)
+	fmt.Printf("Assign 未找到记录 : %v \n", user)
+
+	db.Where(User{Name: "中炒肉"}).Assign(User{Age: 99}).FirstOrInit(&user)
+	fmt.Printf("Assign 找到记录 : %v \n", user)
+}
+
+```
+
+
+* FirstOrCreate 
+  
+  * 获取匹配的第一条记录, 否则根据给定的条件创建一个新的数据库记录 (仅支持 `struct` 和 `map` 条件)
+
+```go
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 查询 select
+	// 定义一个User结构体类型的变量用于存储查询返回的数据
+	var user User
+
+	// FirstOrCreate 结合 Attrs 如果记录未找到， 将使用参数初始化 struct 并创建数据库记录
+	db.Where(User{Name: "巨炒肉"}).Attrs(User{Age: 40}).FirstOrCreate(&user)
+	fmt.Printf("FirstOrCreate Attrs : %v \n", user)
+
+	// FirstOrCreate 结合 Assign 不管记录是否找到，都将参数赋值给 struct. 并更新数据库对应记录
+	db.Where(User{Name: "大炒肉"}).Assign(User{Age: 35}).FirstOrCreate(&user)
+	fmt.Printf("FirstOrCreate Assign : %v \n", user)
+
+}
+```
+
+
+
+### 高级查询
+
+
+* 子查询 (QueryExpr)
+
+
+```go
+# 一个官方例子
+
+db.Where("amount > ?", DB.Table("orders").Select("AVG(amount)").Where("state = ?", "paid").QueryExpr()).Find(&orders)
+// SELECT * FROM "orders"  WHERE "orders"."deleted_at" IS NULL AND (amount > (SELECT AVG(amount) FROM "orders"  WHERE (state = 'paid')));
+
+```
+
+
+
+* 选择字段 (Select)
+
+
+```go
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 查询 select
+	// 定义一个User结构体类型的变量用于存储查询返回的数据
+	//var user User
+
+	var users []User
+
+	// Select 选择字段
+	db.Select("name,age").Find(&users)
+	fmt.Printf("Select Find : %v \n", users)
+
+	// Select Map
+	db.Select([]string{"name", "age"}).Find(&users)
+	fmt.Printf("Select Map Find : %v \n", users)
+
+}
+```
+
+
+* 排序 (Order)
+
+  * 定从数据库中检索出记录的顺序。设置第二个参数 `reorder` 为 `true` ，可以覆盖前面定义的排序条件。
+
+
+```go
+	// 排序 Order
+	// desc: 降序
+	db.Order("age desc, name").Find(&users)
+	fmt.Printf("Order  : %v \n", users)
+
+	// 多字段排序
+	db.Order("age desc").Order("name").Find(&users)
+	fmt.Printf("Order  : %v \n", users)
+```
+
+
+
+* 数量 (Limit)
+
+  * 指定从数据库检索出的最大记录数。
+
+
+```go
+
+	// 限制数量 Limit
+	db.Limit(3).Find(&users)
+	fmt.Printf("Limit 3 : %v \n", users)
+
+```
+
+
+
+* 偏移 (Offset)
+
+  * 指定开始返回记录前要跳过的记录数。
+
+```go
+	// 偏移 Offset
+	db.Offset(3).Find(&users)
+	fmt.Printf("Offset 3 : %v \n", users)
+```
+
+
+* 总数 (Count)
+
+  * 获取记录的总数。
+
+  * `Count` 必须是链式查询的最后一个操作 ，因为它会覆盖前面的 `SELECT`，但如果里面使用了 `count` 时不会覆盖。
+
+
+```go
+func main() {
+
+	var users []User
+	var count int
+
+	// 总数 Count
+	db.Find(&users).Count(&count)
+	fmt.Printf("Count %d \n", count)
+}
+
+```
+
+
+
