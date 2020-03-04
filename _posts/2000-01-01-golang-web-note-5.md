@@ -276,6 +276,10 @@ type Animal struct {
 * CRUD 增、删、改、查
 
 
+
+#### 增
+
+
 * 增加(create)
 
 
@@ -371,6 +375,8 @@ func main(){
 
 ```
 
+
+#### 查询
 
 * 查询 (First、Take、Last、Find)
 
@@ -829,6 +835,164 @@ func main() {
 	// 总数 Count
 	db.Find(&users).Count(&count)
 	fmt.Printf("Count %d \n", count)
+}
+
+```
+
+
+
+* 扫描 (Scan)
+
+  * 扫描结果记录到一个 `Struct` 实例中。
+
+
+```go
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name string `gorm:"default:'小炒肉'"`
+	Age  int64  `gorm:"default:99"`
+}
+
+type Result struct {
+	Name string
+	Age  int64
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 定义一个 Result 结构体类型的实例 result
+	var result Result
+
+	// 定义一个 Result切片类型的结构体 实例 results
+	var results []Result
+
+	// Scan 扫描单个结果 保存到 result 实例中。
+	db.Table("users").Select("name, age").Where("name = ?", "小炒肉").Scan(&result)
+	fmt.Printf("Scan Result : %v \n", result)
+
+	// Scan 扫描多个结构 保存到 results 实例中。
+	db.Table("users").Select("name, age").Where("id > ?", 0).Scan(&results)
+	fmt.Printf("Scan Results : %v \n", results)
+
+	// 使用SQL 语句
+	db.Raw("SELECT name, age FROM users WHERE age > ?", 30).Scan(&results)
+	fmt.Printf("Scan Results : %v \n", results)
+}
+
+```
+
+
+* 立即执行方法 (Immediate Methods) 
+
+  * 立即执行方法是指那些会立即执行`SQL`语句并发送到数据库的方法, 如: `Create`、`First`、`Find`、`Take`、`Save`、`Update`、`Delete`、`Scan`、`Row` 等.
+
+  * 多个立即执行方法，后一个立即执行方法会复用前面那个立刻执行方法的条件( 不包含内联条件 )。
+
+
+```go
+func main() {
+	var user User
+        var count int64
+
+	// 立即执行方法
+	db.Debug().Select("name").Where("name = ?", "小炒肉").First(&user)
+       // 执行语句: SELECT name FROM `users`  WHERE `users`.`deleted_at` IS NULL AND ((name = '小炒
+肉')) ORDER BY `users`.`id` ASC LIMIT 1
+
+
+	// 多个立即执行条件, 后一个会复用前一个的条件. ( 内联条件除外 )
+	db.Debug().Where("name LIKE ?", "%炒肉").Find(&users, "id IN (?)", []int64{2, 3, 4}).Count(&count)
+	fmt.Printf("Users : %v \n Count : %d \n", users, count)
+
+	// 实际语句为以下两条:
+	// SELECT * FROM `users`  WHERE `users`.`deleted_at` IS NULL AND ((name LIKE '%炒肉') AND (id IN (2,3,4)))
+	// SELECT count(*) FROM `users`  WHERE `users`.`deleted_at` IS NULL AND ((name LIKE '%炒肉'))
+	// Count 会复用 Where 后面的条件,  Find 里面的是 内联条件,所以不会复用 Find 内的。
+
+
+}
+
+```
+
+
+
+* 范围 (Scopes)
+
+  * Scope 是建立在链式操作基础上的方法。
+
+  * 可以让代码更加通用,逻辑更清晰。
+
+```go
+
+package main
+
+import (
+	"fmt"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+)
+
+// 定义一个全局的 DB 实例
+var DB *gorm.DB
+
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name string `gorm:"default:'小炒肉'"`
+	Age  int64  `gorm:"default:99"`
+}
+
+type Result struct {
+	Name string
+	Age  int64
+}
+
+// 查询年龄大于多少的用户
+func AgeThan(age int64) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where("age > ?", age)
+	}
+}
+
+// 查询返回指定用户
+func NameThan(user []string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where("name IN (?)", user)
+	}
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	DB = db
+
+	var users []User
+
+	// Scopes 将多个条件合并起来操作
+	DB.Scopes(NameThan([]string{"小炒肉", "大炒肉"}), AgeThan(19)).Find(&users)
+	fmt.Println(users)
 }
 
 ```
