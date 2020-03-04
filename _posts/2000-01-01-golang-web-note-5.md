@@ -998,4 +998,92 @@ func main() {
 ```
 
 
+#### 更新
+
+* 更新所有字段 ( Save )
+
+```go
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 定义一个 User结构体的实例 user
+	var user User
+
+	// 查询单条记录,保存到 user 实例中
+	db.First(&user)
+
+	// 更新 user 实例中的数据
+	user.Name = "炒肉"
+	user.Age = 21
+
+	// 利用 save 更新到数据库中, Save 会更新所有字段的数据
+	db.Debug().Save(&user)
+        // UPDATE `users` SET `created_at` = '2020-03-02 06:41:45', `updated_at` = '2020-03-04 19:04:53', `deleted_at` = NULL, `name` = '炒肉', `age` = 21, `active= false  WHERE `users`.`deleted_at` IS NULL AND `users`.`id` = 1  
+	fmt.Printf("Save Age : %v \n", user)
+}
+
+```
+
+
+* 更新指定字段 ( Update 、Updates )
+
+```go
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	var user User
+
+	// 查询第一条数据
+	db.First(&user)
+
+	// update 更新指定字段
+	db.Debug().Model(&user).Update("name", "小炒肉")
+	// UPDATE `users` SET `name` = '小炒肉', `updated_at` = '2020-03-04 19:28:27'  WHERE `users`.`deleted_at` IS NULL AND `users`.`id` = 1 
+
+	// 根据指定条件 更新字段
+	db.Debug().Model(&user).Where("age = ?", 21).Update("age", 20)
+
+}
+
+
+```
+
 
