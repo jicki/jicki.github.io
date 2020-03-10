@@ -50,14 +50,29 @@ curl -fsSL "https://get.docker.com/" | bash -s -- --mirror Aliyun
 
 
 ```
-# 第一种方式 修改 /lib/systemd/system/docker.service
+# 第一种方式, 增加daemon.json
 
 
-ExecStart=/usr/bin/dockerd 
-
-# 修改为
-
-ExecStart=/usr/bin/dockerd --graph=/opt/docker --registry-mirror=http://b438f72b.m.daocloud.io --iptables=false
+mkdir -p /etc/docker/
+cat>/etc/docker/daemon.json<<EOF
+{
+  "bip": "172.17.0.1/16",
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "registry-mirrors": ["https://9jwx2023.mirror.aliyuncs.com"],
+  "data-root": "/opt/docker",
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m",
+    "max-file": "5"
+  },
+  "dns-search": ["default.svc.cluster.local", "svc.cluster.local", "localdomain"],
+  "dns-opts": ["ndots:2", "timeout:2", "attempts:2"]
+}
+EOF
 
 
 ```
@@ -85,18 +100,20 @@ Environment=GOTRACEBACK=crash
 ExecReload=/bin/kill -s HUP $MAINPID
 Delegate=yes
 KillMode=process
-ExecStart=/usr/bin/docker daemon \
+ExecStart=/usr/bin/dockerd \
           $DOCKER_OPTS \
           $DOCKER_STORAGE_OPTIONS \
           $DOCKER_NETWORK_OPTIONS \
           $DOCKER_DNS_OPTIONS \
           $INSECURE_REGISTRY
-TasksMax=infinity
 LimitNOFILE=1048576
 LimitNPROC=1048576
 LimitCORE=infinity
 TimeoutStartSec=1min
-Restart=on-abnormal
+# restart the docker process if it exits prematurely
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
 
 [Install]
 WantedBy=multi-user.target
@@ -108,7 +125,10 @@ EOF
 
 cat >> /etc/systemd/system/docker.service.d/docker-options.conf << EOF
 [Service]
-Environment="DOCKER_OPTS=--graph=/opt/docker --registry-mirror=http://b438f72b.m.daocloud.io --iptables=false"
+Environment="DOCKER_OPTS=--insecure-registry=10.254.0.0/16 \
+    --registry-mirror=http://b438f72b.m.daocloud.io \
+    --exec-opt native.cgroupdriver=systemd \
+    --data-root=/opt/docker --log-opt max-size=50m --log-opt max-file=5"
 EOF
 
 ```
