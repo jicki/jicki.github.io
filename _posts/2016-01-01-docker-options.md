@@ -58,7 +58,7 @@ cat>/etc/docker/daemon.json<<EOF
 {
   "bip": "172.17.0.1/16",
   "exec-opts": ["native.cgroupdriver=systemd"],
-  "registry-mirrors": ["https://registry.docker-cn.com"],
+  "registry-mirrors": ["https://dockerhub.azk8s.cn","https://gcr.azk8s.cn","https://quay.azk8s.cn"],
   "data-root": "/opt/docker",
   "storage-driver": "overlay2",
   "storage-opts": [
@@ -82,7 +82,7 @@ cat>/etc/docker/daemon.json<<EOF
 { 
   "bip": "172.17.0.1/16",
   "exec-opts": ["native.cgroupdriver=systemd"],
-  "registry-mirrors": ["https://registry.docker-cn.com"],
+  "registry-mirrors": ["https://dockerhub.azk8s.cn","https://gcr.azk8s.cn","https://quay.azk8s.cn"],
   "data-root": "/opt/docker",
   "storage-driver": "overlay2",
   "storage-opts": [
