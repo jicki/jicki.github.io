@@ -58,7 +58,7 @@ cat>/etc/docker/daemon.json<<EOF
 {
   "bip": "172.17.0.1/16",
   "exec-opts": ["native.cgroupdriver=systemd"],
-  "registry-mirrors": ["https://9jwx2023.mirror.aliyuncs.com"],
+  "registry-mirrors": ["https://registry.docker-cn.com"],
   "data-root": "/opt/docker",
   "storage-driver": "overlay2",
   "storage-opts": [
@@ -82,7 +82,7 @@ cat>/etc/docker/daemon.json<<EOF
 { 
   "bip": "172.17.0.1/16",
   "exec-opts": ["native.cgroupdriver=systemd"],
-  "registry-mirrors": ["https://9jwx2023.mirror.aliyuncs.com"],
+  "registry-mirrors": ["https://registry.docker-cn.com"],
   "data-root": "/opt/docker",
   "storage-driver": "overlay2",
   "storage-opts": [
@@ -148,7 +148,7 @@ EOF
 cat >> /etc/systemd/system/docker.service.d/docker-options.conf << EOF
 [Service]
 Environment="DOCKER_OPTS=--insecure-registry=10.254.0.0/16 \
-    --registry-mirror=http://b438f72b.m.daocloud.io \
+    --registry-mirror=https://registry.docker-cn.com \
     --exec-opt native.cgroupdriver=systemd \
     --data-root=/opt/docker --log-opt max-size=50m --log-opt max-file=5"
 EOF
