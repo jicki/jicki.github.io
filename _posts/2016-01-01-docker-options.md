@@ -12,14 +12,38 @@ header-img: "img/pexels/triangular.jpeg"
 # docker 基础
 
 
+## 开启内核namespace支持
+
+```
+# 执行如下
+grubby --args="user_namespace.enable=1" --update-kernel="$(grubby --default-kernel)"
+
+
+
+# 必须重启系统
+
+reboot
+
+```
+
+
+```
+# 检查系统
+
+curl -s https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh | bash
+
+```
+
 ## docker install
 
+```
+# 指定安装,并指定安装源
+
+export VERSION=19.03
+curl -fsSL "https://get.docker.com/" | bash -s -- --mirror Aliyun
 
 ```
-# 官网安装
-wget -qO- https://get.docker.com/ | sh
 
-```
 
 
 ## docker 设置
