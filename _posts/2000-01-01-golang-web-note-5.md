@@ -1081,8 +1081,202 @@ func main() {
 	// 根据指定条件 更新字段
 	db.Debug().Model(&user).Where("age = ?", 21).Update("age", 20)
 
+	// 使用 Map 更新多个字段
+	db.Debug().Model(&user).Updates(map[string]interface{}{"name":"小小炒肉","age": 21,"active":true})
+
+	// 使用Struct 更新多个字段, 只会更新 非零 值的字段, 所以 false 不会被更新
+	db.Debug().Model(&user).Updates(User{Name:"小炒肉",Age:20,Active:false})
+
 }
 
 ```
+
+
+* 更新选定或忽略的字段
+
+  * 选定 (Select)
+
+  * 忽略 (Omit)
+
+```go
+
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+
+	var user User
+
+	db.First(&user)
+
+	// 更新 选定或者忽略 的字段
+
+	// 只更新选定的字段
+	db.Debug().Model(&user).Select("name").Updates(map[string]interface{}{"name":"小小炒肉","age":30, "active":false})
+	// UPDATE `users` SET `name` = '小小炒肉', `updated_at` = '2020-03-11 15:21:42'  WHERE `users`.`deleted_at` IS NULL AND `users`.`id` = 1
+
+
+	// 忽略选定的字段更新其他字段
+	db.Debug().Model(&user).Omit("age").Updates(map[string]interface{}{"name":"小炒肉","age":20, "active":true})
+	// UPDATE `users` SET `active` = true, `name` = '小炒肉', `updated_at` = '2020-03-11 15:22:28'  WHERE `users`.`deleted_at` IS NULL AND `users`.`id` = 1 
+}
+
+```
+
+
+* 不触发Hook更新
+
+
+```go
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	var user User
+
+	db.First(&user)
+
+	// UpdateColumn 更新指定单个字段 并且不触发hook,既不更新(BeforeUpdate, AfterUpdate)方法
+	db.Debug().Model(&user).UpdateColumn("name","小小炒肉")
+	// UPDATE `users` SET `name` = '小小炒肉'  WHERE `users`.`deleted_at` IS NULL AND `users`.`id` = 1
+
+
+	// UpdateColumns 更新多个字段 并且不触发hook,既不更新(BeforeUpdate, AfterUpdate)方法
+	db.Debug().Model(&user).UpdateColumns(map[string]interface{}{"name":"小炒肉","age":20})
+	// UPDATE `users` SET `age` = 20, `name` = '小炒肉'  WHERE `users`.`deleted_at` IS NULL AND `users`.`id` = 1  
+
+}
+```
+
+
+
+* 批量更新
+
+  * 批量更新字段的时候`Hook` 也不会执行。
+
+```go
+
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	// 批量更新 map[string]interface{} , map使用 Table指定 数据库名
+	db.Debug().Table("users").Where("id IN (?)", []int{1,2,3}).Updates(map[string]interface{}{"age":22})
+	// UPDATE `users` SET `age` = 22  WHERE (id IN (1,2,3))
+
+	// 批量更新 struct 只能更新非零字段 , struct 使用 Model指定数据库对应的结构体名
+	db.Debug().Model(User{}).Updates(User{Name:"小炒肉", Age:20})
+	// UPDATE `users` SET `age` = 20, `name` = '小炒肉', `updated_at` = '2020-03-11 16:14:06'  WHERE `users`.`deleted_at` IS NULL
+
+}
+
+```
+
+
+
+
+* 利用 SQL 表达式计算和更新数据
+
+  * `gorm.Expr`
+
+
+```go
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	var users []User
+	db.Find(&users)
+
+	// 使用 expr 的 sql 语句 将所有 age 都 +2
+	db.Debug().Model(&users).Update("age", gorm.Expr("age + ?",2))
+	// UPDATE `users` SET `age` = age + 2, `updated_at` = '2020-03-11 17:28:09'  WHERE `users`.`deleted_at` IS NULL
+
+
+	// 使用 map 将 所有 age 都 - 2
+	db.Debug().Model(&users).Updates(map[string]interface{}{"age":gorm.Expr("age - ?",2)})
+	// UPDATE `users` SET `age` = age - 2, `updated_at` = '2020-03-11 17:28:09'  WHERE `users`.`deleted_at` IS NULL
+
+
+	// 使用 Where 条件 加 grom.expr
+	db.Debug().Model(&users).Where("age < 30").Update("age",gorm.Expr("age - ?",1))
+	// UPDATE `users` SET `age` = age - 1, `updated_at` = '2020-03-11 17:28:10'  WHERE `users`.`deleted_at` IS NULL AND ((age < 30))
+
+}
+```
+
+
 
 
