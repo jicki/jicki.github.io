@@ -246,21 +246,20 @@ drwxr-xr-x  9 root root   4096 Oct 29 09:48 bccsp
 
 ```
 # 下载官方证书生成软件(均为二进制文件)
-# 官方离线下载地址为 https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/
+# 官方离线下载地址为 https://github.com/hyperledger/fabric/releases
 
 
 # 选择相应版本 CentOS 选择 linux-amd64-1.4.0  Mac 选择 darwin-amd64-1.4.0
 
 
-# 下载地址为: https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.4.0/hyperledger-fabric-linux-amd64-1.4.0.tar.gz
-
+# 下载地址为: https://github.com/hyperledger/fabric/releases/download/v1.4.0/hyperledger-fabric-linux-amd64-1.4.0.tar.gz
 
 
 mkdir /opt/jicki/
 
 cd /opt/jicki
 
-wget https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.4.0/hyperledger-fabric-linux-amd64-1.4.0.tar.gz
+wget https://github.com/hyperledger/fabric/releases/download/v1.4.0/hyperledger-fabric-linux-amd64-1.4.0.tar.gz
 
 tar zxvf hyperledger-fabric-linux-amd64-1.4.0.tar.gz
 
