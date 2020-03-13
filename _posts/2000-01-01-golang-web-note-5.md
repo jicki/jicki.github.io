@@ -1279,4 +1279,104 @@ func main() {
 
 
 
+#### 删除
+
+* GORM 删除记录时, 请必须指定主键的值, GORM是根据指定主键删除记录的, 如果没有指定主键的值, 那么GORM会删除Model指定的所有的数据。
+
+* GORM 删除记录 都是进行软删除, 既将 `deleted_at` 更新为删除的时间, 实际数据库的数据并没有被删除, 但是 GORM 中查询是没有的。
+
+```go
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	var users []User
+	db.Find(&users)
+
+	fmt.Printf("User DB : %v \n",users)
+
+	// 删除, 删除都是软删除
+	var user = User{}
+	var user2 = User{}
+
+	// 必须指定主键的 ID
+	user.ID = 1
+	db.Debug().Delete(&user)
+	// UPDATE `users` SET `deleted_at`='2020-03-13 12:40:28'  WHERE `users`.`deleted_at` IS NULL AND `users`.`id` = 1
+
+	// 如果未指定主键ID, 会删除所有的记录
+	db.Debug().Delete(&user2)
+	// UPDATE `users` SET `deleted_at`='2020-03-13 13:01:48'  WHERE `users`.`deleted_at` IS NULL
+}
+```
+
+
+* 条件删除 (批量操作)
+
+
+```go
+// 定义 数据模型
+type User struct {
+	gorm.Model
+	// 使用 tag default 设置默认值
+	Name   string `gorm:"default:'小炒肉'"`
+	Age    int64  `gorm:"default:99"`
+	Active bool
+}
+
+func main() {
+	dsn := "jicki:jicki123@tcp(127.0.0.1:3306)/jicki?charset=utf8mb4&parseTime=true"
+
+	db, err := gorm.Open("mysql", dsn)
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	// 创建 结构体User 对应的数据表
+	db.AutoMigrate(&User{})
+
+	var users []User
+
+	db.Find(&users)
+
+	fmt.Printf("User DB : %v \n",users)
+
+	db.Debug().Where("name = ?","巨炒肉").Delete(User{})
+	// UPDATE `users` SET `deleted_at`='2020-03-13 17:52:55'  WHERE `users`.`deleted_at` IS NULL AND ((name = '巨炒肉'))
+}
+
+	db.Debug().Delete(User{},"name = ?", "大炒肉")
+	// UPDATE `users` SET `deleted_at`='2020-03-13 17:55:41'  WHERE `users`.`deleted_at` IS NULL AND ((name = '大炒肉'))
+
+
+	// 查询所有记录,包括被软删除的
+	db.Debug().Unscoped().Where("name LIKE ?","%炒肉").Find(&users)
+	fmt.Printf("Unscoped DB : %v \n",users)
+
+	// 物理删除
+	db.Debug().Unscoped().Delete(User{},"name = ?", "巨炒肉")
+	//  DELETE FROM `users`  WHERE (name = '巨炒肉')
+```
+
+
 
