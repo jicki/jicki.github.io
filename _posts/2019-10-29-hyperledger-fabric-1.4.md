@@ -1053,6 +1053,8 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
+    # 数据持久化,以及存储
+    - ./data/orderer0:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
     - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
     - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
