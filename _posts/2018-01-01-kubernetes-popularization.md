@@ -208,6 +208,111 @@ header-img: "img/pexels/triangular.jpeg"
 * Horizontal Pod Autoscaling 可以根据 CPU 使用率或应用自定义 metrics 自动扩展 Pod 数量（支持replication controller、deployment和replica set）, 从而合理的扩展性能与使用资源。
 
 
+### PersistentVolume (PV)
+
+* PersistentVolume（PV）是集群中由管理员配置的一段网络存储。 它是集群中的资源，就像节点是集群资源一样。 PV是容量插件，如Volumes，但其生命周期独立于使用PV的任何单个pod。 此API对象捕获存储实现的详细信息，包括NFS，iSCSI或特定于云提供程序的存储系统。
+
+* PersistentVolume 支持的类型:
+
+  * GCEPersistentDisk
+
+  * AWSElasticBlockStore
+
+  * AzureFile
+
+  * AzureDisk
+
+  * FC (Fibre Channel)
+
+  * Flexvolume
+
+  * Flocker
+
+  * NFS
+
+  * iSCSI
+
+  * RBD (Ceph Block Device)
+
+  * CephFS
+
+  * Cinder (OpenStack block storage)
+
+  * Glusterfs
+
+  * VsphereVolume
+
+  * Quobyte Volumes
+
+  * HostPath
+
+  * Portworx Volumes
+
+  * ScaleIO Volumes
+
+  * StorageOS
+
+
+* PersistentVolume 服务状态
+
+  * `Available`  资源尚未被claim使用
+
+  * `Bound`  卷已经被绑定到claim了
+
+  * `Released`  claim被删除，卷处于释放状态，但未被集群回收。
+
+  * `Failed`  卷自动回收失败
+
+
+### PersistentVolumeClaim（PVC）
+
+* PersistentVolumeClaim（PVC）是由用户进行存储的请求。 它类似于pod。 Pod消耗节点资源，PVC消耗PV资源。Pod可以请求特定级别的资源（CPU和内存）。声明可以请求特定的大小和访问模式（例如，可以一次读/写或多次只读）。
+
+
+* PVC和PV是一一对应的。
+
+* PVC 与 PV 的生命周期
+
+  * PV是群集中的资源。PVC是对这些资源的请求，并且还充当对资源的检查。
+
+  * PV和PVC之间的相互作用遵循生命周期：`Provisioning` ——-> `Binding` ——–> `Using` -——> `Releasing` -——> `Recycling`
+
+    
+* Provisioning (准备) 通过集群外的存储系统或者云平台来提供存储持久化支持。
+
+  * 静态提供Static：集群管理员创建多个PV。 它们携带可供集群用户使用的真实存储的详细信息。 它们存在于Kubernetes API中，可用于消费。
+
+  * 动态提供Dynamic：当管理员创建的静态PV都不匹配用户的PersistentVolumeClaim时，集群可能会尝试为PVC动态配置卷。 此配置基于StorageClasses：PVC必须请求一个类，并且管理员必须已创建并配置该类才能进行动态配置。 要求该类的声明有效地为自己禁用动态配置。
+
+
+
+* Binding (绑定) 用户创建pvc并指定需要的资源和访问模式。在找到可用pv之前，pvc会保持未绑定状态。
+
+* Using (使用) 用户可在pod中像volume一样使用pvc。
+
+* Releasing (释放) 用户删除pvc来回收存储资源，pv将变成"released"状态。由于还保留着之前的数据，这些数据需要根据不同的策略来处理，否则这些存储资源无法被其他pvc使用。
+
+* Recycling (回收)  pv 可以设置三种回收策略：保留（Retain），回收（Recycle）和删除（Delete）。
+
+  * 保留策略 -  允许人工处理保留的数据。
+
+  * 删除策略 -  将删除pv和外部关联的存储资源，需要插件支持。
+
+  * 回收策略 -  将执行清除操作，之后可以被新的pvc使用，需要插件支持。
+
+
+
+### StorageClass
+
+* StorageClass为管理员提供了一种描述他们提供的存储的"类"的方法。 不同的类可能映射到服务质量级别，或备份策略，或者由群集管理员确定的任意策略。 Kubernetes本身对于什么类别代表是不言而喻的。 这个概念有时在其他存储系统中称为"配置文件"。
+
+
+
+
+
+
+
+
 
 
 
