@@ -213,7 +213,7 @@ header-img: "img/pexels/triangular.jpeg"
 
 
 
-  [1]: http://jicki.me/img/posts/kubernetes/kuebrnetes.png
+  [1]: http://jicki.me/img/posts/kubernetes/kubernetes.png
 
 
 
