@@ -31,7 +31,7 @@ header-img: "img/pexels/triangular.jpeg"
 
 ### Master 端
 
-* `kube-apiserver` 集群控制入口, 提供了 `HTTP Rest` 接口的关键服务进程，是 `Kubernetes` 里所有资源的增删改查等操作的唯一入口, 也是集群控制的入口进行。
+* `kube-apiserver` 集群控制入口, 提供了 `HTTP Rest` 接口的关键服务进程，是 `Kubernetes` 里所有资源的增删改查等操作的唯一入口, 也是集群控制的入口。
 
   * 提供集群管理的 REST API 接口，包括认证授权、数据校验以及集群状态变更等。
 
@@ -211,10 +211,215 @@ header-img: "img/pexels/triangular.jpeg"
 
 
 
+## Pod 的生命周期
+
+* Pod对象自从其创建开始至其终止退出的时间范围称为其生命周期。
+
+  * 1. 创建主容器（main container）为 `必需`的操作。
+
+  * 2. 初始化容器（init container）。
+
+  * 3. 容器启动后钩子（post start hook）。
+
+  * 4. 容器的存活性探测（liveness probe）。
+
+  * 5. 就绪性探测（readiness probe）。
+
+  * 6. 容器终止前钩子（pre stop hook）
+
+  * 7. 其他Pod的定义操作。
+
+![图2][2]
+
+
+
+### 初始化容器(init container)
+
+* 初始化容器（init container）即应用程序的主容器启动之前要运行的容器，常用于为主容器执行一些预置操作，它们具有两
+种典型特征。
+
+  1. 初始化容器必须运行完成直至结束，若某初始化容器运行失败，那么kubernetes需要重启它直到成功完成。（注意：如果pod的`spec.restartPolicy`字段值为 `Never`，那么运行失败的初始化容器不会被重启。）
+
+  2. 每个初始化容器都必须按定义的顺序串行运行。
+
+
+### pod phase
+
+* Pod 的 status 属性是一个 `PodStatus` 对象，拥有一个 phase 字段。它简单描述了 Pod 在其生命周期的阶段。
+
+|pod phase|描述|
+|-|-|
+|挂起(Pending)|kubernetes 通过`apiserver`创建了pod 资源对象并存入etcd中, 但它尚未被调度完成, 或者仍处于从仓库下载镜像的过程中|
+|运行中(Running)| Pod已经被调度至某节点，并且所有容器都已经被kubelet创建完成，至少一个容器正在运行。|
+|成功(Succeeded)| Pod中的所有容器都已经成功并且不会被重启。|
+|失败(Failed)| Pod中的所有容器都已终止了，并且至少有一个容器是因为失败终止。即容器以非0状态退出或者被系统禁止。|
+|未知(Unknown)| `ApiServer` 无法正常获取到Pod对象的状态信息，通常是由于无法与所在工作节点的kubelet通信所致。|
+
+
+
+### Pod conditions
+
+* Pod 的 status 属性是一个 `PodStatus` 对象, 里面包含 PodConditions 数组，代表 Condition 是否通过。
+
+* PodCondition 属性描述
+
+|字段|描述|
+|-|-|
+|lastProbeTime|最后一次探测 Pod Condition 的时间戳。|
+|lastTransitionTime|上次 Condition 从一种状态转换到另一种状态的时间。|
+|message|上次 Condition 状态转换的详细描述。|
+|reason|Condition 最后一次转换的原因。|
+|status|Condition 状态类型，可以为 True False Unknown|
+|type|Condition类型(PodScheduled, Ready, Initialized, Unschedulable, ContainersReady)|
+
+* Condition Type 说明
+
+  * `PodScheduled` Pod 已被调度到一个节点 
+
+  * `Ready` Pod 能够提供请求，应该被添加到负载均衡池中以提供服务
+
+  * `Initialized` 所有 init containers 成功启动
+
+  * `Unschedulable` 调度器不能正常调度容器，例如缺乏资源或其他限制
+
+  * `ContainersReady` Pod 中所有容器全部就绪
+
+
+### Container probes
+
+* Probe 是在容器上 kubelet 的定期执行的诊断，kubelet 通过调用容器实现的 Handler 来诊断。
+
+  * `Success` 容器诊断通过。
+
+  * `Failure` 容器诊断失败。
+
+  * `Unknown` 诊断失败，因此不应采取任何措施。
+
+* Handlers 包含如下三种
+
+  * `ExecAction` 在容器内部执行指定的命令，如果命令以状态代码 0 退出，则认为诊断成功。
+
+  * `TCPSocketAction` 对指定 IP 和端口的容器执行 TCP 检查，如果端口打开，则认为诊断成功。
+
+  * `HTTPGetAction` 对指定 IP + port + path 路径上的容器的执行 HTTP Get 请求。如果响应的状态代码大于或等于 200 且小于 400，则认为诊断成功。
+
+
+* kubelet 可以选择性地对运行中的容器进行两种探测器执行和响应。
+
+  * `livenessProbe`  存活性探测, 探测容器是否正在运行，如果活动探测失败，则 kubelet 会杀死容器，并且容器将受其 重启策略 的约束。如果不指定活动探测, 默认状态是 Success。
+
+
+  * `readinessProbe`  就绪性探测, 探测容器是否已准备好为请求提供服务，如果准备情况探测失败，则控制器会从与 Pod 匹配的所有服务的端点中删除 Pod 的 IP 地址。初始化延迟之前的默认准备状态是 `Failure`, 如果容器未提供准备情况探测，则默认状态为 Success。
+
+
+* 以下为 Nginx 应用的两种探针配置示例
+
+```shell
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: nginx-dm
+spec: 
+  replicas: 2
+  selector:
+    matchLabels:
+      name: nginx
+  template: 
+    metadata: 
+      labels: 
+        name: nginx 
+    spec: 
+      containers: 
+        - name: nginx 
+          image: nginx:alpine 
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+          # readinessProbe - 检测pod 的 Ready 是否为 true
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            # 启动后5s 开始检测
+            initialDelaySeconds: 5  
+            # 检测 间隔为 10s
+            periodSeconds: 10
+          # livenessProbe - 检测 pod 的 State 是否为 Running
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            # 启动后 15s 开始检测
+            # 检测时间必须在 readinessProbe 之后
+            initialDelaySeconds: 15
+            # 检测 间隔为 20s
+            periodSeconds: 20
+```
+
+
+
+### Pod RestartPolicy (重启策略)
+
+* PodSpec 中有一个`restartPolicy`字段，可能的值为Always、OnFailure和Never。默认为Always。restartPolicy适用于Pod中的所有容器。而且它仅用于控制在同一节点上重新启动Pod对象的相关容器。
+
+* 首次需要重启的容器，将在其需要时立即进行重启，随后再次需要重启的操作将由kubelet延迟一段时间后进行，且反复的重启操作的延迟时长依次为10秒、20秒、40秒... 300秒是最大延迟时长。
+
+* Pod，一旦绑定到一个节点，Pod对象将永远不会被重新绑定到另一个节点，它要么被重启，要么终止，直到节点发生故障或被删除。
+
+
+### Pod 创建过程
+
+* 创建一个 pod 的过程
+
+  1. 用户通过kubectl或其他API客户端提交了Pod Spec给API Server。
+
+  2. API Server尝试着将Pod对象的相关信息存入etcd中，待写入操作执行完成，API Server即会返回确认信息至客户端。
+
+  3. API Server开始检测etcd中的状态变化。
+
+  4. 所有的kubernetes组件均使用`watch`机制来跟踪检查API Server上的相关的变动。
+
+  5. kube-scheduler（调度器）通过其`watcher`觉察到API Server创建了新的Pod对象但尚未绑定至任何工作节点。
+
+  6. kube-scheduler（调度器）为Pod对象挑选一个工作节点并将结果信息更新至API Server。
+
+  7. 调度结果信息由API Server更新至etcd存储系统，而且API Server也开始反映此Pod对象的调度结果。
+
+  8. Pod被调度到的目标工作节点上的kubelet尝试在当前节点上调用Docker启动容器，并将容器的结果状态返回送至API Server。 
+
+  9. API Server将Pod状态信息存入etcd系统中。 
+
+  10. 在etcd确认写入操作成功完成后，API Server将确认信息发送至相关的kubelet，事件将通过它被接受。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   [1]: http://jicki.me/img/posts/kubernetes/kubernetes.png
 
+  [2]: http://jicki.me/img/posts/kubernetes/pod.png
 
 
 
