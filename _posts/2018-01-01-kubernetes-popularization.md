@@ -215,19 +215,19 @@ header-img: "img/pexels/triangular.jpeg"
 
 * Pod对象自从其创建开始至其终止退出的时间范围称为其生命周期。
 
-  * 1. 创建主容器（main container）为 `必需`的操作。
+  1. 创建主容器（main container）为 `必需`的操作。
 
-  * 2. 初始化容器（init container）。
+  2. 初始化容器（init container）。
 
-  * 3. 容器启动后钩子（post start hook）。
+  3. 容器启动后钩子（post start hook）。
 
-  * 4. 容器的存活性探测（liveness probe）。
+  4. 容器的存活性探测（liveness probe）。
 
-  * 5. 就绪性探测（readiness probe）。
+  5. 就绪性探测（readiness probe）。
 
-  * 6. 容器终止前钩子（pre stop hook）
+  6. 容器终止前钩子（pre stop hook）
 
-  * 7. 其他Pod的定义操作。
+  7. 其他Pod的定义操作。
 
 ![图2][2]
 
