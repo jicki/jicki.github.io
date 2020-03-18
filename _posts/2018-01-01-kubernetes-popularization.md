@@ -394,23 +394,167 @@ spec:
 
 
 
+## Kubernetes 资源调度与限制
+
+* 在 Kubernetes 体系中，资源默认是被多租户多应用共享使用的，应用与租户间不可避免地存在资源竞争问题。
+
+* 在 Kubernetes 中支持分别从 `Namespace`、`Pod` 和 `Container` 三个级别对资源进行管理。
+
+* 在 Kubernetes 将 cpu  1 Core (核) = 1000m, `m` 这个单位表示 千分之一核, 2000m 表示 两个完整的核心, 也可以写成`2` 或者 `2.0`。
+
+
+
+### ResourceQuota 
+
+* `Namespace` 级别, 可以通过创建 `ResourceQuota` 对象对`Namespace`进行绑定, 提供一个总体资源使用量限制。
+
+  1. 可以设置该命名空间中 Pod 可以使用到的计算资源（CPU、内存）、存储资源总量上限。
+
+  2. 可以限制该 Namespace 中某种类型对象（如 Pod、RC、Service、Secret、ConfigMap、PVC 等）的总量上限。
+
+
+
+* ResourceQuota 示例
+
+```shell
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: quota
+spec:
+  hard:
+    requests.cpu: "20"
+    requests.memory: 30Gi
+    requests.storage: 500Gi
+    requests.ephemeral-storage: 10Gi
+    limits.cpu: "40"
+    limits.memory: 60Gi
+    limits.ephemeral-storage: 20Gi
+    pods: "10"
+    services: "5"
+    replicationcontrollers: "20"
+    resourcequotas: "1"
+    secrets: "10"
+    configmaps: "10"
+    persistentvolumeclaims: "10"
+    services.nodeports: "50"
+    services.loadbalancers: "10"
+
+```
+
+* `requests` kubernetes会根据Request的值去查找有足够资源的node来调度此pod, 既超过了 Request 限制的值, Pod 将不会被调度到此node中。 
+
+* `limits`  对应资源量的上限, 既最多允许使用这个上限的资源量, 由于cpu是可压缩的, 进程是无法突破上限的, 而memory是不可压缩资源, 当进程试图请求超过limit限制时的memory, 此进程就会被kubernetes杀掉。
 
 
 
 
+### LimitRange
+
+* LimitRange 对象设置 Namespace 中 Pod 及 Container 的默认资源配额和资源限制。
+
+```shell
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limit
+spec:
+  limits:
+  - type: Pod
+    max:
+      cpu: "10"
+      memory: 100Gi
+    min:
+      cpu: 200m
+      memory: 6Mi
+    maxLimitRequestRatio:
+      cpu: "2"
+      memory: "4"
+  - type: Container
+    max:
+      cpu: "2"
+      memory: 1Gi
+    min:
+      cpu: 100m
+      memory: 3Mi
+    default:
+      cpu: 300m
+      memory: 200Mi
+    defaultRequest:
+      cpu: 200m
+      memory: 100Mi
+    maxLimitRequestRatio:
+      cpu: "2"
+      memory: "4"
+  - type: PersistentVolumeClaim
+    max:
+      storage: 10Gi
+    min:
+      storage: 5Gi
+```
+
+* `pod` 与 `Container` 以及 `pvc` 类型可分开定义 `LimitRange` 分配资源。
+
+
+* `limits` 字段下面的 `default` 字段表示每个 Pod 的默认的 limits 配置，所以任何没有分配资源的 limits 的 Pod 都会被自动分配 200Mi limits 的内存和 300m limits 的 CPU。 
+
+
+* `defaultRequest` 字段表示每个 Pod 的默认 requests 配置，所以任何没有分配资源的 requests 的 Pod 都会被自动分配 100Mi requests 的内存和 200m requests 的 CPU。
+
+
+* `max` 与 `min` 字段分别限制 type 类型下的 服务最大与最小的限制值。 
 
 
 
+### ResourceRequests/ResourceLimits
+
+
+* 在 Container 级别可以对两种计算资源进行管理 `CPU` 和 `内存`。
+
+* `ResourceRequests` 表示容器希望被分配到的可完全保证的资源量，Requests 的值会被提供给 Kubernetes 调度器，以便优化基于资源请求的容器调度。
+
+* `ResourceLimits` 表示容器能用的资源上限，这个上限的值会影响在节点上发生资源竞争时的解决策略。
 
 
 
+```shell
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+   - name: busybox
+     image: busybox
+     resources:
+       requests:
+         memory: "100Mi"
+         cpu: "200m"
+       limits:
+         memory: "200Mi"
+         cpu: "250m"
+```
+
+
+### kubernetes 与 Cgroup
+
+> Kubernetes 对内存资源的限制实际上是通过 cgroup 来控制的，cgroup 是容器的一组用来控制内核如何运行进程的相关属性集合。针对内存、CPU 和各种设备都有对应的 cgroup。cgroup 是具有层级的，这意味着每个 cgroup 拥有一个它可以继承属性的父亲，往上一直直到系统启动时创建的 root cgroup。
+
+
+* 内存 限制
+
+  * Kubernetes 通过 cgroup 和 OOM killer 来限制 Pod 的内存资源，当超过内存限制值以后, Kubernetes 会选择好几个进程作为 `OOM killer` 候选人, 其中最重要的进程是标注为 `pause` 的进程, 用来为业务容器创建共享的 `network` 和 `namespace`, 其 `oom_score_adj` 值为 `-998`，可以确保不被杀死。`oom_score_adj` 值越低就越不容易被杀死, 因为业务容器内`pause` 之外的所有其他进程的 `oom_score_adj` 值都相同，所以谁的内存使用量最多，`oom_score` 值就越高，也就越容易被杀死。
 
 
 
+* CPU 限制
+
+  * 在 Kubernetes 中设置的 cpu requests 最终会被 cgroup 设置为 `cpu.shares` 属性的值， cpu limits 会被带宽控制组设置为`cpu.cfs_period_us` 和 `cpu.cfs_quota_us` 属性的值。与内存一样，cpu requests 主要用于在调度时通知调度器节点上至少需要多少个 cpu shares 才可以被调度。
+
+  * cpu requests 与 内存 requests 不同，设置了 cpu requests 会在 cgroup 中设置一个属性，以确保内核会将该数量的 shares 分配给进程。
 
 
-
-
+  * cpu limits 与 内存 limits 也有所不同。如果容器进程使用的内存资源超过了内存使用限制，那么该进程将会成为 oom-killing 的候选者。但是容器进程基本上永远不能超过设置的 CPU 配额，所以容器永远不会因为尝试使用比分配的更多的 CPU 时间而被驱逐。系统会在调度程序中强制进行 CPU 资源限制，以确保进程不会超过这个限制。
 
 
 
