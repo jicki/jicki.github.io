@@ -663,6 +663,50 @@ spec:
 
 
 
+## Kubernetes 网络模型
+
+* Kubernetes 中每个Pod 都拥有一个独立的IP地址，而且假定所有Pod 都在一个可以直接连通的、扁平的网络空间中，不管是否运行在同一Node上都可以通过Pod的IP来访问。
+
+* Kubernetes 中Pod的IP是最小粒度IP。同一个Pod内所有的容器共享一个网络堆栈，该模型称为IP-per-Pod模型。
+
+
+### Kubernetes 通信
+
+* 同一个 Node 下, 同一个 pod 内
+
+* 同一个Pod的容器共享同一个网络命名空间, 它们之间的访问可以用 Pod IP 地址 + 容器端口就可以访问。
+
+
+![图3][3] 
+
+
+
+* 同一个 Node 下, 不同的 pod 之间通信
+
+
+![图4][4]
+
+
+
+
+
+
+* 不同的 Node 之间, pod 与 pod 使用 网络组件进行通信
+
+![图5][5]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -670,5 +714,10 @@ spec:
 
   [2]: http://jicki.me/img/posts/kubernetes/pod.png
 
+  [3]: http://jicki.me/img/posts/kubernetes/node-pod.png
+
+  [4]: http://jicki.me/img/posts/kubernetes/node-pod-pod.png
+
+  [5]: http://jicki.me/img/posts/kubernetes/node-node-pod.gif
 
 
