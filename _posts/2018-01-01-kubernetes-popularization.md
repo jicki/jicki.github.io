@@ -698,11 +698,207 @@ spec:
 
 
 
+## Kubernetes RBAC
+
+* 基于角色的访问控制（Role-Based Access Control, 即 "RBAC"）: 使用 “rbac.authorization.k8s.io” API Group 实现授权决策，允许管理员通过 Kubernetes API 动态配置策略。
+
+![图6][6]
+
+
+
+### 角色 ( ClusterRole 与 Role )
+
+* `Role（角色）` 是一系列权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限。
+  * Role 只能用来给某个特定 namespace 中的资源作鉴权。
+
+
+
+* 如下是 role 对象的定义的一个 demo 授予 default 这个 namespaces 下的 pods 的权限
+
+```shell
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: demo-role
+rules:
+- apiGroups: [""]  # 空字符串""表明使用 core API group
+  resources: ["pods"]
+  verbs: ["get", "watch", "list", "create", "delete"]
+```
+
+
+
+* 大多数资源由代表其名字的字符串表示，例如 ”pods”，就像它们出现在相关API endpoint 的URL中一样。然而，有一些Kubernetes API还 包含了”子资源”，比如 pod 的 logs。
+
+* 在Kubernetes中，pod logs endpoint的URL格式为：`GET /api/v1/namespaces/{namespace}/pods/{name}/log`
+
+```shell
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: pod-and-pod-logs-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list"]
+```
+
+
+
+* 通过 `resourceNames` 列表，角色可以针对不同种类的请求根据资源名引用资源实例。
+
+* 当指定了 `resourceNames` 列表时，不同动作 种类的请求的权限，如使用 ”get”、”delete”、”update”以及”patch”等动词的请求，将被限定到资源列表中所包含的资源实例上。
+
+* 值得注意的是，如果设置了 resourceNames，则请求所使用的动词不能是 list、watch、create或者delete  collection。由于资源名不会出现在 create、list、watch和delete  collection 等API请求的URL中，所以这些请求动词不会被设置了resourceNames 的规则所允许，因为规则中的 resourceNames 部分不会匹配这些请求。
+
+
+* 如下 如果需要限定一个角色绑定主体只能 ”get” 或者 ”update” 指定的一个 configmap
+
+```shell
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: configmap-updater
+rules:
+- apiGroups: [""]
+  resources: ["configmap"]
+  resourceNames: ["my-configmap"]
+  verbs: ["update", "get"]
+
+```
 
 
 
 
 
+* `ClusterRole` 对象可以授予与 Role 对象相同的权限，但由于它们属于集群范围对象，也可以使用它们授予对以下几种资源的访问权限
+
+  * 集群范围资源（例如节点，即 node）
+
+  * 非资源类型 endpoint（例如 /healthz）
+
+  * 授权多个 Namespace
+
+
+* 如下是 ClusterRole 定义可用于授予用户对某一个 namespace，或者 所有 namespace 的 secret（取决于其绑定方式）的读访问权限
+
+```shell
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  # ClusterRole 是集群范围对象，没有 "namespace" 区分
+  name: demo-clusterrole
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list", "create", "delete"]
+```
+
+
+
+### 角色绑定 ( ClusterRoleBinding 与 RoleBinding )
+
+
+* `RoleBinding` 把 Role 或 ClusterRole 中定义的各种权限映射到 `User`，`Service Account` 或者 `Group`，从而让这些用户继承角色在 namespace 中的权限。
+
+
+
+* 如下是 RoleBinding 引用在同一命名空间内定义的Role对象。
+
+```shell
+# 以下角色绑定定义将允许用户 "jane" 从 "default" 命名空间中读取pod
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User
+  name: jane
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+
+```
+
+
+* `RoleBinding` 对象也可以引用一个 ClusterRole 对象用于在 RoleBinding 所在的命名空间内授予用户对所引用的ClusterRole 中定义的命名空间资源的访问权限。这一点允许管理员在整个集群范围内首先定义一组通用的角色，然后再在不同的命名空间中复用这些角色。
+
+
+
+* 如下 RoleBinding 引用的是一个 ClusterRole 对象，但是用户”dave”（即角色绑定主体）还是只能读取”development” 命名空间中的 secret（即RoleBinding所在的命名空间）
+
+```shell
+# 以下角色绑定允许用户"dave"读取"development"命名空间中的secret。
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: read-secrets
+  namespace: development # 这里表明仅授权读取"development"命名空间中的资源。
+subjects:
+- kind: User
+  name: dave
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+
+
+
+* `ClusterRoleBinding` 让用户继承 ClusterRole 在整个集群中的权限。
+
+
+* 如下使用 ClusterRoleBinding 在集群级别和所有命名空间中授予权限。下面示例中所定义的 ClusterRoleBinding 允许在用户组 ”manager” 中的任何用户都可以读取集群中任何命名空间中的 secret 。
+
+```shell
+# 以下`ClusterRoleBinding`对象允许在用户组"manager"中的任何用户都可以读取集群中任何命名空间中的secret。
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: read-secrets-global
+subjects:
+- kind: Group
+  name: manager
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+
+### 默认角色 与 默认角色绑定
+
+* API Server 会创建一组默认的 ClusterRole 和 ClusterRoleBinding 对象。这些默认对象中有许多包含 system: 前缀，表明这些资源由 Kubernetes基础组件”拥有”。对这些资源的修改可能导致非功能性集群（non-functional cluster）。
+
+* `system:node` ClusterRole 对象。这个角色定义了 kubelet 的权限。如果这个角色被修改，可能会导致kubelet 无法正常工作。
+
+* 所有默认的 ClusterRole 和 ClusterRoleBinding 对象都会被标记为 kubernetes.io/bootstrapping=rbac-defaults。
+
+
+
+
+
+
+### 用户角色
+
+* 通过命令 `kubectl get clusterrole` 查看到并不是所有都是以 system:前缀，它们是面向用户的角色。这些角色包含超级用户角色（cluster-admin），即旨在利用 ClusterRoleBinding（cluster-status）在集群范围内授权的角色， 以及那些使用 RoleBinding（admin、edit和view）在特定命名空间中授权的角色。
+
+  * `cluster-admin`  超级用户权限，允许对任何资源执行任何操作。在 ClusterRoleBinding 中使用时，可以完全控制集群和所有命名空间中的所有资源。在 RoleBinding 中使用时，可以完全控制 RoleBinding 所在命名空间中的所有资源，包括命名空间自己。
+
+  * `admin` 管理员权限，利用 RoleBinding 在某一命名空间内部授予。在 RoleBinding 中使用时，允许针对命名空间内大部分资源的读写访问， 包括在命名空间内创建角色与角色绑定的能力。但不允许对资源配额（resource quota）或者命名空间本身的写访问。
+
+  * `edit`  允许对某一个命名空间内大部分对象的读写访问，但不允许查看或者修改角色或者角色绑定。
+
+  * `view`  允许对某一个命名空间内大部分对象的只读访问。不允许查看角色或者角色绑定。由于可扩散性等原因，不允许查看 secret 资源。 
 
 
 
@@ -720,4 +916,4 @@ spec:
 
   [5]: http://jicki.me/img/posts/kubernetes/node-node-pod.gif
 
-
+  [6]: http://jicki.me/img/posts/kubernetes/rbac.png
