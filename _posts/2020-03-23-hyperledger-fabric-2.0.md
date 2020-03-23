@@ -207,6 +207,7 @@ chmod +x /usr/local/bin/docker-compose
 FABRIC_TAG=2.0
 
 function pullImages() {
+  docker pull hyperledger/fabric-couchdb:0.4.20
   docker pull hyperledger/fabric-ca:1.4.6
   for image in peer orderer ccenv tools; do
     echo "Pull image hyperledger/fabric-$image:$FABRIC_TAG"
@@ -628,7 +629,278 @@ configtxgen \
 
 
 
+### 启动 fabric
 
+
+* docker-compose.yaml 文件
+
+```shell
+version: '2'
+services:
+  orderer0.jicki.me:
+    container_name: orderer0.jicki.me
+    image: hyperledger/fabric-orderer:2.0
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt, /etc/hyperledger/crypto/peerOrg1/tls/ca.crt, /etc/hyperledger/crypto/peerOrg2/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    # 数据持久化,以及存储
+    - ./data/orderer0:/var/hyperledger/production
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
+    networks:
+      default:
+        aliases:
+          - jicki
+    ports:
+      - 7050:7050
+  orderer1.jicki.me:
+    container_name: orderer1.jicki.me
+    image: hyperledger/fabric-orderer:2.0
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt, /etc/hyperledger/crypto/peerOrg1/tls/ca.crt, /etc/hyperledger/crypto/peerOrg2/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    # 数据持久化,以及存储
+    - ./data/orderer1:/var/hyperledger/production
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
+    networks:
+      default:
+        aliases:
+          - jicki
+    ports:
+      - 8050:7050
+  orderer2.jicki.me:
+    container_name: orderer2.jicki.me
+    image: hyperledger/fabric-orderer:2.0
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt, /etc/hyperledger/crypto/peerOrg1/tls/ca.crt, /etc/hyperledger/crypto/peerOrg2/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    # 数据持久化,以及存储
+    - ./data/orderer2:/var/hyperledger/production
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
+    networks:
+      default:
+        aliases:
+          - jicki
+    ports:
+      - 9050:7050
+
+  couchdb0:
+    container_name: couchdb0
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    #ports:
+    #  - "5984:5984"
+    volumes:
+      # 数据持久化，用于存储链码值
+      - ./data/couchdb0/data:/opt/couchdb/data
+    networks:
+      default:
+        aliases:
+          - jicki
+
+  couchdb1:
+    container_name: couchdb1
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    volumes:
+      # 数据持久化，用于存储链码值
+      - ./data/couchdb1/data:/opt/couchdb/data
+    networks:
+      default:
+        aliases:
+          - jicki
+
+  couchdb2:
+    container_name: couchdb2
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    volumes:
+      # 数据持久化，用于存储链码值
+      - ./data/couchdb2/data:/opt/couchdb/data
+    networks:
+      default:
+        aliases:
+          - jicki
+
+  couchdb3:
+    container_name: couchdb3
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    volumes:
+      # 数据持久化，用于存储链码值
+      - ./data/couchdb3/data:/opt/couchdb/data
+    networks:
+      default:
+        aliases:
+          - jicki
+
+  peer0.org1.jicki.me:
+    container_name: peer0.org1.jicki.me
+    image: hyperledger/fabric-peer:2.0
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
+      
+      - CORE_PEER_ID=peer0.org1.jicki.me
+      - CORE_PEER_NETWORKID=jicki
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.me:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.me:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki
+      # - CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
+      - CORE_PEER_GOSSIP_SKIPHANDSHAKE=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+      - GODEBUG=netdns=go
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        # 数据持久化, 存储安装，以及实例化智能合约的数据
+        - ./data/peer0org1:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 7052:7052
+      - 7053:7053
+    networks:
+      default:
+        aliases:
+          - jicki
+    depends_on:
+      - couchdb0
+
+  peer0.org2.jicki.me:
+    container_name: peer0.org2.jicki.me
+    image: hyperledger/fabric-peer:2.0
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+      
+      - CORE_PEER_ID=peer0.org2.jicki.me
+      - CORE_PEER_NETWORKID=jicki
+      - CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org2.jicki.me:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.jicki.me:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki
+      # - CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
+      - CORE_PEER_GOSSIP_SKIPHANDSHAKE=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+      - GODEBUG=netdns=go
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls:/etc/hyperledger/fabric/tls
+        # 数据持久化, 存储安装，以及实例化智能合约的数据
+        - ./data/peer0org2:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 8051:7051
+      - 8052:7052
+      - 8053:7053
+    networks:
+      default:
+        aliases:
+          - jicki
+    depends_on:
+      - couchdb1
+
+```
 
 
 
