@@ -56,6 +56,25 @@ reboot
 ```
 
 
+
+## 修改内核参数
+
+```
+cat<<EOF > /etc/sysctl.d/docker.conf
+# 要求iptables不对bridge的数据进行处理
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-arptables = 1
+EOF
+
+
+
+# 生效配置
+sysctl --system
+```
+
+
+
 ```
 # 检查系统
 
