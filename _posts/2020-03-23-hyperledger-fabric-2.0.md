@@ -297,7 +297,7 @@ Organizations:
     - &OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: ./channel-artifacts/crypto-config/ordererOrganizations/jicki.me/msp
+        MSPDir: crypto-config/ordererOrganizations/jicki.me/msp
         Policies:
             Readers:
                 Type: Signature
@@ -314,7 +314,7 @@ Organizations:
     - &Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: ./channel-artifacts/crypto-config/peerOrganizations/org1.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org1.jicki.me/msp
         Policies:
             Readers:
                 Type: Signature
@@ -335,7 +335,7 @@ Organizations:
     - &Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: ./channel-artifacts/crypto-config/peerOrganizations/org2.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org2.jicki.me/msp
         Policies:
             Readers:
                 Type: Signature
@@ -444,16 +444,16 @@ Profiles:
                 Consenters:
                 - Host: orderer0.jicki.me
                   Port: 7050
-                  ClientTLSCert: ./channel-artifacts/crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
-                  ServerTLSCert: ./channel-artifacts/crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
                 - Host: orderer1.jicki.me
                   Port: 7050
-                  ClientTLSCert: ./channel-artifacts/crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
-                  ServerTLSCert: ./channel-artifacts/crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
                 - Host: orderer2.jicki.me
                   Port: 7050
-                  ClientTLSCert: ./channel-artifacts/crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
-                  ServerTLSCert: ./channel-artifacts/crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
             Addresses:
                 - orderer0.jicki.me:7050
                 - orderer1.jicki.me:7050
