@@ -351,7 +351,16 @@ apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
 controlPlaneEndpoint: "172.16.0.3:6443"
-controllerManager: {}
+controllerManager:
+  extraArgs:
+    v: "4"
+    node-cidr-mask-size: "19"
+    deployment-controller-sync-period: "10s"
+    # 在 kubeadm 配置文件中设置证书有效期为 10 年
+    experimental-cluster-signing-duration: "86700h"
+    node-monitor-grace-period: "20s"
+    pod-eviction-timeout: "2m"
+    terminated-pod-gc-threshold: "30"
 dns:
   type: CoreDNS
 etcd:
@@ -597,6 +606,17 @@ k8s-node-1   Ready    master   51m   v1.16.3
 k8s-node-2   Ready    <none>   49m   v1.16.3
 
 ```
+
+### 更改证书为10年
+
+
+```
+# 必须在初始化完成以后,再执行一次
+
+kubeadm alpha certs renew all --use-api
+
+```
+
 
 
 ### 3.8.2 查看 pods 状态
