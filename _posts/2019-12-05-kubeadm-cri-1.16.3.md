@@ -304,7 +304,95 @@ systemctl enable kubelet.service
 
 ```
 
+* 修改源码, 增加证书 10年期限
 
+```
+# 下载源码
+
+git clone https://github.com/kubernetes/kubernetes
+
+Cloning into 'kubernetes'...
+remote: Enumerating objects: 219, done.
+remote: Counting objects: 100% (219/219), done.
+remote: Compressing objects: 100% (128/128), done.
+remote: Total 1087208 (delta 112), reused 91 (delta 91), pack-reused 1086989
+Receiving objects: 100% (1087208/1087208), 668.66 MiB | 486.00 KiB/s, done.
+Resolving deltas: 100% (777513/777513), done.
+
+
+```
+
+
+```
+# 查看分支
+cd kubernetes
+
+git branch -a
+
+```
+
+```
+查看当前的分支
+git branch
+
+
+```
+
+```
+# 切换到相关的分支
+git checkout remotes/origin/release-1.16
+
+```
+
+
+* 修改 cert.go 文件
+
+```
+# 打开文件
+vi staging/src/k8s.io/client-go/util/cert/cert.go
+
+# 如下 默认已经是10年,可不修改,也可以修改99年,但是不能超过100年
+
+NotAfter:              now.Add(duration365d * 10).UTC(),
+
+
+```
+
+* 修改 constants.go 文件
+
+```
+# 打开文件
+
+# 如下 默认是 1年, 修改为 10 年 
+
+CertificateValidity = time.Hour * 24 * 365
+
+# 修改为
+
+CertificateValidity = time.Hour * 24 * 365 * 10
+```
+
+
+* 重新编译 kubeadm
+
+
+```
+make all WHAT=cmd/kubeadm GOFLAGS=-v
+
+```
+
+* 拷贝 覆盖 kubeadm
+
+
+```
+# 编译后生成目录为 _output/local/bin/linux/amd64
+
+cp _output/local/bin/linux/amd64/kubeadm /usr/bin/kubeadm
+
+
+cp: overwrite ‘/usr/bin/kubeadm’? y
+
+```
 
 
 ## 3.3 修改 kubeadm 配置信息
@@ -351,16 +439,7 @@ apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
 controlPlaneEndpoint: "172.16.0.3:6443"
-controllerManager:
-  extraArgs:
-    v: "4"
-    node-cidr-mask-size: "19"
-    deployment-controller-sync-period: "10s"
-    # 在 kubeadm 配置文件中设置证书有效期为 10 年
-    experimental-cluster-signing-duration: "86700h"
-    node-monitor-grace-period: "20s"
-    pod-eviction-timeout: "2m"
-    terminated-pod-gc-threshold: "30"
+controllerManager: {}
 dns:
   type: CoreDNS
 etcd:
@@ -381,8 +460,6 @@ mode: "ipvs"
 
 
 ```
-
-
 
 
 ## 3.4 初始化集群 
@@ -508,6 +585,27 @@ k8s-node-2   NotReady   <none>   2m46s   v1.16.3
 
 ```
 
+
+* 查看证书
+
+
+```
+# 更新证书
+# kubeadm alpha certs renew all
+
+# 查看证书时间
+kubeadm alpha certs check-expiration
+
+```
+
+
+
+
+
+
+
+
+
 ## 3.7 安装网络组件
 
 
@@ -606,228 +704,6 @@ k8s-node-1   Ready    master   51m   v1.16.3
 k8s-node-2   Ready    <none>   49m   v1.16.3
 
 ```
-
-### 更改证书为10年
-
-```
-# 必须在初始化完成以后,再执行一次
-
-kubeadm alpha certs renew all --use-api
-
-```
-
-
-* 执行如上操作会输出如下:
-
-```
-[renew] Reading configuration from the cluster...
-[renew] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -oyaml'
-
-[certs] Certificate request "kubeadm-cert-kubernetes-admin-tzcdv" created
-
-```
-
-
-
-* 打开另外一个窗口
-
-  * 查看 csr , 会持续输出 好几个 csr 都需要通过
-
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                  AGE   REQUESTOR               CONDITION
-csr-2ltgz                             25m   system:node:localhost   Approved,Issued
-kubeadm-cert-kubernetes-admin-tzcdv   37s   kubernetes-admin        Pending
-
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-kubernetes-admin-tzcdv
-
-
-```
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                  AGE   REQUESTOR               CONDITION
-csr-2ltgz                             25m   system:node:localhost   Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k     6s    kubernetes-admin        Pending
-kubeadm-cert-kubernetes-admin-tzcdv   52s   kubernetes-admin        Approved,Issued
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-kube-apiserver-c2s9k
-
-```
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                            AGE   REQUESTOR               CONDITION
-csr-2ltgz                                       26m   system:node:localhost   Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k               26s   kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2   6s    kubernetes-admin        Pending
-kubeadm-cert-kubernetes-admin-tzcdv             72s   kubernetes-admin        Approved,Issued
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-kube-apiserver-etcd-client-944l2
-
-```
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                               AGE   REQUESTOR               CONDITION
-csr-2ltgz                                          26m   system:node:localhost   Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k                  43s   kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2      23s   kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh   4s    kubernetes-admin        Pending
-kubeadm-cert-kubernetes-admin-tzcdv                89s   kubernetes-admin        Approved,Issued
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-kube-apiserver-kubelet-client-q9vmh
-
-```
-
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                                AGE    REQUESTOR               CONDITION
-csr-2ltgz                                           26m    system:node:localhost   Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k                   54s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2       34s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh    15s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kubernetes-admin-tzcdv                 100s   kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-controller-manager-svcgf   2s     kubernetes-admin        Pending
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-system:kube-controller-manager-svcgf
-
-```
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                                AGE    REQUESTOR               CONDITION
-csr-2ltgz                                           26m    system:node:localhost   Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k                   66s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2       46s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh    27s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-etcd-healthcheck-client-sxlvq     2s     kubernetes-admin        Pending
-kubeadm-cert-kubernetes-admin-tzcdv                 112s   kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-controller-manager-svcgf   14s    kubernetes-admin        Approved,Issued
-
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-kube-etcd-healthcheck-client-sxlvq
-
-```
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                                AGE    REQUESTOR               CONDITION
-csr-2ltgz                                           27m    system:node:localhost   Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k                   77s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2       57s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh    38s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-etcd-healthcheck-client-sxlvq     13s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kubernetes-admin-tzcdv                 2m3s   kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-src8x                        1s     kubernetes-admin        Pending
-kubeadm-cert-system:kube-controller-manager-svcgf   25s    kubernetes-admin        Approved,Issued
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-localhost-src8x
-
-```
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                                AGE     REQUESTOR               CONDITION
-csr-2ltgz                                           27m     system:node:localhost   Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k                   88s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2       68s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh    49s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-etcd-healthcheck-client-sxlvq     24s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kubernetes-admin-tzcdv                 2m14s   kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-7rdkj                        2s      kubernetes-admin        Pending
-kubeadm-cert-localhost-src8x                        12s     kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-controller-manager-svcgf   36s     kubernetes-admin        Approved,Issued
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-localhost-7rdkj
-
-```
-
-
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                                AGE     REQUESTOR               CONDITION
-csr-2ltgz                                           27m     system:node:localhost   Approved,Issued
-kubeadm-cert-front-proxy-client-r92w2               1s      kubernetes-admin        Pending
-kubeadm-cert-kube-apiserver-c2s9k                   99s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2       79s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh    60s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-etcd-healthcheck-client-sxlvq     35s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kubernetes-admin-tzcdv                 2m25s   kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-7rdkj                        13s     kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-src8x                        23s     kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-controller-manager-svcgf   47s     kubernetes-admin        Approved,Issued
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-front-proxy-client-r92w2
-
-```
-
-
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                                AGE     REQUESTOR               CONDITION
-csr-2ltgz                                           27m     system:node:localhost   Approved,Issued
-kubeadm-cert-front-proxy-client-r92w2               12s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k                   110s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2       90s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh    71s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-etcd-healthcheck-client-sxlvq     46s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kubernetes-admin-tzcdv                 2m36s   kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-7rdkj                        24s     kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-src8x                        34s     kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-controller-manager-svcgf   58s     kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-scheduler-9568l            1s      kubernetes-admin        Pending
-
-
-
-# 通过 csr
-kubectl certificate approve kubeadm-cert-system:kube-scheduler-9568l
-
-```
-
-
-```
-[root@localhost ~]# kubectl get csr
-NAME                                                AGE     REQUESTOR               CONDITION
-csr-2ltgz                                           27m     system:node:localhost   Approved,Issued
-kubeadm-cert-front-proxy-client-r92w2               31s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-c2s9k                   2m9s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-etcd-client-944l2       109s    kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-apiserver-kubelet-client-q9vmh    90s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kube-etcd-healthcheck-client-sxlvq     65s     kubernetes-admin        Approved,Issued
-kubeadm-cert-kubernetes-admin-tzcdv                 2m55s   kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-7rdkj                        43s     kubernetes-admin        Approved,Issued
-kubeadm-cert-localhost-src8x                        53s     kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-controller-manager-svcgf   77s     kubernetes-admin        Approved,Issued
-kubeadm-cert-system:kube-scheduler-9568l            20s     kubernetes-admin        Approved,Issued
-
-```
-
-
-
-
 
 ### 3.8.2 查看 pods 状态
 
