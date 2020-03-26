@@ -790,6 +790,10 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+              readOnly: true
           # readinessProbe - 检测pod 的 Ready 是否为 true
           readinessProbe:
             tcpSocket:
@@ -808,6 +812,10 @@ spec:
             initialDelaySeconds: 15
             # 检测 间隔为 20s
             periodSeconds: 20
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /etc/localtime
 ---
 
 apiVersion: v1 
