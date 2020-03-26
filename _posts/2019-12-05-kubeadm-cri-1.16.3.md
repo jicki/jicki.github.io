@@ -362,6 +362,7 @@ NotAfter:              now.Add(duration365d * 10).UTC(),
 
 ```
 # 打开文件
+vi cmd/kubeadm/app/constants/constants.go
 
 # 如下 默认是 1年, 修改为 10 年 
 
