@@ -706,6 +706,53 @@ k8s-node-2   Ready    <none>   49m   v1.16.3
 
 ```
 
+
+
+* 查看 etcd 状态
+
+
+```
+# 这里目前只有一个 etcd 节点,多个节点 就写多个就可以
+export ETCDCTL_API=3
+
+
+# 1
+etcdctl -w table \
+   --endpoints=https://172.16.0.3:2379 \
+   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+   --cert=/etc/kubernetes/pki/etcd/server.crt \
+   --key=/etc/kubernetes/pki/etcd/server.key \
+   endpoint status
+
+
+
+
+# 2
+etcdctl -w table \
+   --endpoints=https://172.16.0.3:2379 \
+   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+   --cert=/etc/kubernetes/pki/etcd/server.crt \
+   --key=/etc/kubernetes/pki/etcd/server.key \
+   endpoint health
+
+
+
+
+# 3
+etcdctl -w table \
+   --endpoints=https://172.16.0.3:2379 \
+   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+   --cert=/etc/kubernetes/pki/etcd/server.crt \
+   --key=/etc/kubernetes/pki/etcd/server.key \
+   member list
+
+```
+
+
+
+
+
+
 ### 3.8.2 查看 pods 状态
 
 
