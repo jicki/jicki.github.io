@@ -87,7 +87,7 @@ tags:
 
 ## KubeSphere 架构
 
-![图片2[2]
+![图片2][2]
 
 
 
@@ -121,29 +121,6 @@ tags:
 |OpenLDAP|负责集中存储和管理用户账号信息与对接外部的 LDAP|
 |存储|内置 CSI 插件对接云平台存储服务，可选安装开源的 NFS/Ceph/Gluster 的客户端|
 |网络|可选安装 Calico/Flannel 等开源的网络插件，支持对接云平台 SDN|
-
-
-
-## KubeSphere 功能
-
-
-|页面模块|模块释义|
-|-|-|
-|项目|既`Namespace`， 为 Kubernetes 集群提供虚拟的隔离作用。|
-|容器组|既`Pod`，是 Kubernetes 进行资源调度的最小单位，每个 Pod 中运行着一个或多个密切相关的业务容器。|
-|部署|既 `Deployments`，表示用户对 Kubernetes 集群的一次更新操作。|
-|有状态副本集|既 `StatefulSets`，用来管理有状态应用，可以保证部署和 scale 的顺序。|
-|守护进程集| 既 `DaemonSets`，保证在每个 Node 上都运行一个容器副本，常用来部署一些集群的日志、监控或者其他系统管理应用。|
-|任务|既 `Jobs`，在 Kubernetes 中用来控制批处理型任务的资源对象，即仅执行一次的任务，它保证批处理任务的一个或多个 Pod 成功结束。任务管理的 Pod 根据用户的设置将任务成功完成就自动退出了。比如在创建工作负载前，执行任务，将镜像上传至镜像仓库。|
-|定时任务|既 `CronJob`，是基于时间的 Job，就类似于 Linux 系统的 crontab，在指定的时间周期运行指定的 Job，在给定时间点只运行一次或周期性地运行。|
-|服务|既 `Service`，一个 Kubernete 服务是一个最小的对象，类似 Pod，和其它的终端对象一样。|
-|应用路由|既 `Ingress`，是授权入站连接到达集群服务的规则集合。可通过 Ingress 配置提供外部可访问的 URL、负载均衡、SSL、基于名称的虚拟主机等。|
-|镜像仓库|既 `Image Registries`，镜像仓库用于存放 Docker 镜像，Docker 镜像用于部署容器服务。|
-|存储卷|既 `PersistentVolumeClaim（PVC）`，满足用户对于持久化存储的需求，用户将 Pod 内需要持久化的数据挂载至存储卷，实现删除 Pod 后，数据仍保留在存储卷内。Kubesphere 推荐使用动态分配存储，当集群管理员配置存储类型后，集群用户可一键式分配和回收存储卷，无需关心存储底层细节。|
-|存储类型|既 `StorageClass`，为管理员提供了描述存储 “Class（类）” 的方法，包含 Provisioner、 ReclaimPolicy 和 Parameters 。|
-|流水线|既 `Pipeline`，简单来说就是一套运行在 Jenkins 上的 CI/CD 工作流框架，将原来独立运行于单个或者多个节点的任务连接起来，实现单个任务难以完成的复杂流程编排和可视化的工作。|
-|企业空间|既 `Workspace`，是 KubeSphere 实现多租户模式的基础，是您管理项目、 DevOps 工程和企业成员的基本单位。|
-
 
 
 ## KubeSphere 部署
