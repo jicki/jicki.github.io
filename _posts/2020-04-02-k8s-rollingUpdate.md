@@ -49,7 +49,7 @@ tags:
    
     * 对于这种情况我们可以使用 `terminationGracePeriodSeconds`。
 
-    * `terminationGracePeriodSeconds` 当 `kubernetes` 准备删除一个 pod 时，会向该 pod 中的容器发送 TERM 信号并同时将 pod 从 service 的 endpoint 列表中移除。如果容器无法在规定时间（默认 30 秒）内终止，k8s 会向容器发送 SIGKILL 信号强制终止进程。 
+    * `terminationGracePeriodSeconds` 当 `kubernetes` 准备删除一个 pod 时，会向该 pod 中的容器发送 TERM 信号并同时将 pod 从 service 的 endpoint 列表中移除。如果容器无法在规定时间（默认 30 秒）内终止，`kubernetes` 会向容器发送 SIGKILL 信号强制终止进程。 
 
   * 应用升级过程中需要保证即将下线的应用实例不会接收到新的请求且有足够时间处理完当前请求。 
 
@@ -87,7 +87,7 @@ spec:
   minReadySeconds: 120
   selector:
     matchLabels:
-      name: spring-boot-probes
+      app: spring-boot-probes
   template:
     metadata:
       labels:
@@ -98,8 +98,9 @@ spec:
       - name: spring-boot-probes
         image: registry.cn-hangzhou.aliyuncs.com/log-service/spring-boot-probes:1.0.0
         ports:
-        - containerPort: 8080
-	# resources 资源限制
+          - containerPort: 8080
+            name: http
+        # resources 资源限制
         resources:
           limits:
             cpu: 500m
@@ -153,9 +154,46 @@ spec:
       targetPort: 8080
       protocol: TCP 
   selector: 
-    name: spring-boot-probes
+    app: spring-boot-probes
+```
+
+## 测试
+
+* 部署应用以后,我们可以通过修改 `version` 进行滚动更新
+
+
+```
+[root@localhost ~]# kubectl get pods
+NAME                                 READY   STATUS    RESTARTS   AGE
+spring-boot-probes-8d6868f4f-4jcb7   1/1     Running   0          3m11s
+spring-boot-probes-8d6868f4f-r8zdc   1/1     Running   0          3m11s
+spring-boot-probes-8d6868f4f-vz6md   1/1     Running   0          3m11s
+spring-boot-probes-8d6868f4f-wmxcw   1/1     Running   0          3m11s
 ```
 
 
+* 执行更新以后 通过 `kubectl get rs -w` 查看滚动更新流程
 
-  
+```
+[root@localhost ~]# kubectl get rs -w
+NAME                            DESIRED   CURRENT   READY   AGE
+spring-boot-probes-74dbf69548   3         3         0       2s
+spring-boot-probes-8d6868f4f    3         3         3       4m34s
+
+spring-boot-probes-74dbf69548   3         3         1       32s
+spring-boot-probes-74dbf69548   3         3         2       38s
+spring-boot-probes-74dbf69548   3         3         3       40s
+spring-boot-probes-74dbf69548   3         3         3       2m33s
+spring-boot-probes-8d6868f4f    2         3         3       7m5s
+spring-boot-probes-74dbf69548   4         3         3       2m33s
+spring-boot-probes-8d6868f4f    2         3         3       7m5s
+spring-boot-probes-8d6868f4f    2         2         2       7m5s
+spring-boot-probes-74dbf69548   4         3         3       2m33s
+spring-boot-probes-74dbf69548   4         4         3       2m33s
+spring-boot-probes-74dbf69548   4         4         4       3m11s
+spring-boot-probes-8d6868f4f    0         2         2       7m43s
+spring-boot-probes-8d6868f4f    0         2         2       7m43s
+spring-boot-probes-8d6868f4f    0         0         0       7m43s
+```
+
+
