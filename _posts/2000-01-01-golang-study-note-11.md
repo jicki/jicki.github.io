@@ -79,3 +79,146 @@ func main() {
 result1 =  [[abc] [azc] [a7c] [a9c]]
 ```
 
+
+
+## 模拟过滤页面
+
+
+```go
+
+package main
+
+import (
+	"fmt"
+	"regexp"
+)
+
+func main() {
+	//``   截取了一段页面原生字符串
+	buf := `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Your future depends on your dreams">
+    <meta name="keywords"  content="小炒肉, 运维工程师, Jicki, DevOps, Docker, Kubernetes">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="About - 小炒肉 Blog | Jicki Blog">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="你是我的梦想">
+    
+    <meta property="og:image" content="https://jicki.me/img/avatar-jicki.png">
+    <meta property="og:url" content="https://jicki.me/about/">
+    <meta property="og:site_name" content="小炒肉 Blog | Jicki Blog">
+    
+    <title>About - 小炒肉 Blog | Jicki Blog</title>
+
+<header class="intro-header" style="background-image: url('/img/about-bg.jpg')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        
+        <div class="site-heading">
+        
+          <h1>About</h1>
+          <span class="subheading">你是我的梦想</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- PostList Container -->
+    		<div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                postlist-container
+            ">
+    			<!-- Language Selector -->
+<select class="sel-lang" onchange= "onLanChange(this.options[this.options.selectedIndex].value)">
+    <option value="0" selected> 中文 Chinese </option>
+    <option value="1"> 英文 English </option>
+</select>
+
+<!-- Chinese Version -->
+<div class="zh post-container">
+    
+    <blockquote>
+  <p>搞搞 docker, 弄弄 kubernetes,</p>
+
+  <p>学学 golang, 写写 shell。</p>
+</blockquote>
+
+<h3 id="一-序">一、 序</h3>
+
+<blockquote>
+  <p><strong>Your future depends on your dreams</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>不要活在别人的眼里，不要活在别人的嘴里</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>要活在自己的心里，生活过的洒脱一点，不要为别人去活</strong></p>
+</blockquote>
+
+</body>
+
+</html>
+    `
+	//解释正则表达式, 匹配标签内的字符
+	reg1 := regexp.MustCompile(`<title>(?s:(.*?))</title>`)
+	reg2 := regexp.MustCompile(`<p><strong>(?s:(.*?))</strong></p>`)
+	if reg1 == nil {
+		fmt.Println("MustCompile err")
+		return
+	}
+	if reg2 == nil {
+		fmt.Println("MustCompile err")
+		return
+	}
+
+	//提取关键信息
+	result1 := reg1.FindAllStringSubmatch(buf, -1)
+	result2 := reg2.FindAllStringSubmatch(buf, -1)
+
+	//过滤<></>
+	for _, text := range result1 {
+		//过滤不带标签的 不带<></>
+		fmt.Println("text[1] = ", text[1])
+	}
+	//过滤<></>
+	for _, text := range result2 {
+		//过滤不带标签的 不带<></>
+		fmt.Println("text[2] = ", text[1])
+	}
+}
+
+```
+
+* 输出如下:
+
+```
+text[1] =  About - 小炒肉 Blog | Jicki Blog
+text[2] =  Your future depends on your dreams
+text[2] =  不要活在别人的眼里，不要活在别人的嘴里
+text[2] =  要活在自己的心里，生活过的洒脱一点，不要为别人去活
+
+```
