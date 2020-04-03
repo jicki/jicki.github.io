@@ -77,4 +77,6 @@ go env -w GOPROXY=https://goproxy.cn,https://mirrors.aliyun.com/goproxy,direct
 
 [ 【Go学习笔记 - 基础库 flag 库】](https://jicki.me/golang/go/2000/01/01/golang-study-note-10 "Go 语言基础")
 
+[ 【Go学习笔记 - regexp 库 正则】](https://jicki.me/golang/go/2000/01/01/golang-study-note-11 "Go 正则表达式")
+
   [1]: http://jicki.me/img/posts/golang/logo.jpg
