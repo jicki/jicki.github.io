@@ -309,6 +309,23 @@ header-img: "img/pexels/triangular.jpeg"
 
 
 
+### Command、Args、Entrypoint、Cmd
+
+* `Command`、`Args` 是属于 `kubernetes` 的命令
+
+* `Entrypoint`、`Cmd` 是属于 `Docker` 的命令
+
+
+* 在`kubernetes` 于 `Docker image` 中都分别包含命令的情况下:
+
+  * 如果 `command` 和 `args` 均没有写, 那么用 `Docker image` 默认的配置。
+
+  * 如果 `command` 写了, 但 `args` 没有写, 那么`Docker` 默认的配置会被忽略而且仅仅执行`kubernetes` 的 `command`（不带任何参数的）。
+
+  * 如果 `command` 没写, 但 `args` 写了, 那么`Docker` 默认配置的 `Entrypoint` 命令行会被执行, 但是调用的参数是 `kubernetes` 的 `args`。
+
+  * 如果 `command` 和 `args` 都写了, 那么`Docker` 默认的配置会被忽略, 而使用 `kubernetes` 的配置。
+
 
 
 
@@ -685,8 +702,6 @@ spec:
 
 
 ![图4][4]
-
-
 
 
 
