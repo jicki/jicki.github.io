@@ -920,6 +920,139 @@ roleRef:
 
 
 
+## API Server 认证机制
+
+* 通常我们使用客户端 `kubectl` 来与`Kubernetes API Server` 交互, 它们之间的接口是REST调用。
+
+* 为了确保 `Kubernetes` 集群的安全，`API Server` 都会对客户端进行身份认证，认证失败则无法调用API。
+
+* Pod中访问`Kubernetes API Server`服务的时候，是以`Service`方式访问服务名为`kubernetes`的这个服务，而`kubernetes`服务又只在HTTPS 443上提供服务，那么如何进行身份认证呢? 
+
+  * `Service Account Token`
+
+* `Kubernetes` &emsp; 有两套账户系统分别是
+
+  * 1.&emsp; `User Account` 是给用户使用的, 是全局性的, 主要用于 后端的用户数据库同步。
+
+  * 2.&emsp; `Service Account` 是给 `Pod` 内的进程使用的, 是属于具体的 `Namespace` 的。
+
+
+### Service Account
+
+> 每个Namespace下有一个名为default的默认的Service Account对象，这个Service Account里面有一个名为Tokens的可以当作Volume一样被Mount到Podcast里的Secret,当Pod 启动时，这个Secret会自动被Mount到Pod的指定目录下，用来协助完成Pod中的进程访问API Server时的身份鉴权过程。
+
+
+* `kubernetes` 开启了 `Service Account` 会在每个 `Namespace` 下面都会创建一个默认的 `default` 的`Service Account`。
+
+```
+[root@k8s-node-1 ~]# kubectl get sa --all-namespaces |grep default
+default              default                                   1         13d
+ingress-nginx        default                                   1         7d16h
+istio-system         default                                   1         2d20h
+jicki                default                                   1         2d18h
+kube-system          default                                   1         13d
+```
+
+
+
+* 每个`Service Account` 下面都会拥有一个加密过的`secret` 作为`Token`。 这个`Token` 就是 `Service Account Token` 。这个 `Token` 才是真正在 `API Server` 验证(authentication)环节起作用的。
+
+
+```
+[root@k8s-node-1 ~]# kubectl get sa/default -o yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: "2020-04-03T10:06:15Z"
+  name: default
+  namespace: default
+  resourceVersion: "372"
+  selfLink: /api/v1/namespaces/default/serviceaccounts/default
+  uid: 23344d2a-08e1-447c-a62e-73b821fcc5ce
+secrets:
+- name: default-token-9bcmt
+```
+
+
+* 当用户在该`Namespace` 下创建 `pod` 的时候都会默认使用这个`Service Account` 。
+
+
+```
+[root@k8s-node-1 ~]# kubectl get pods/nginx -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+ .....
+
+spec:
+  containers:
+  - image: nginx:alpine
+    imagePullPolicy: IfNotPresent
+    name: nginx
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-9bcmt
+      readOnly: true
+
+ ....
+
+  volumes:
+  - name: default-token-9bcmt
+    secret:
+      defaultMode: 420
+      secretName: default-token-9bcmt
+
+```
+
+
+* 查看 `secret` 的具体内容
+
+  * `ca.crt` &emsp; 这个是`API Server`的 `CA`公钥证书, 用于`Pod` 中的 `Process` 对 `API Server` 的服务端数字证书进行校验时使用
+
+  * 
+
+```
+[root@k8s-node-1 ~]# kubectl get secrets default-token-9bcmt -o yaml
+apiVersion: v1
+data:
+  ca.crt: {base64}
+  namespace: ZGVmYXVsdA== 
+  token: {base64}
+kind: Secret
+
+  ....
+
+type: kubernetes.io/service-account-token
+```
+
+
+
+* `Secret`
+
+  * `Kubernetes` 提供了 `Secret` 来处理敏感信息, 目前`Secret`的类型有3种
+
+    * 1.&emsp; `Opaque` (default):&emsp; 任意字符串。 
+
+    * 2.&emsp; `kubernetes.io/service-account-token`:&emsp; 作用于 `Service Account` 。
+
+    * 3.&emsp; `kubernetes.io/dockercfg`:&emsp; 作用于`Docker registry`, 用于下载Docker镜像认证使用。 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   [1]: http://jicki.me/img/posts/kubernetes/kubernetes.png
 
