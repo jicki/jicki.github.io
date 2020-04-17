@@ -1012,7 +1012,7 @@ spec:
 
   * `ca.crt` &emsp; 这个是`API Server`的 `CA`公钥证书, 用于`Pod` 中的 `Process` 对 `API Server` 的服务端数字证书进行校验时使用
 
-  * 
+  * `Namespace` 和 `Token` 被放到了容器内, 这样容器内就可以通过`https`的方式通过 SVC - `kubernetes` 请求访问`API Server` 。 
 
 ```
 [root@k8s-node-1 ~]# kubectl get secrets default-token-9bcmt -o yaml
