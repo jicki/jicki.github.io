@@ -54,7 +54,7 @@ tags:
 
 * 如下使用 deployment 进行 HPA 的测试
 
-  * HAP API `v1` 版本只支持`CPU` , `v2beta2` 版本支持多 `metrics(CPU，memory)`以及自定义`metrics`。
+  * HPA API `v1` 版本只支持`CPU` , `v2beta2` 版本支持多 `metrics(CPU，memory)`以及自定义`metrics`。
 
 ```
 # 创建 deployment 与 service
