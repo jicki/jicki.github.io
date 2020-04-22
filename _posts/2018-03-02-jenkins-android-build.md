@@ -38,7 +38,7 @@ tags: [jenkins]
 
 如：
 
-https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
 
 
 # 创建目录
@@ -47,8 +47,7 @@ mkdir -p /opt/android-sdk
 
 cd /opt/android-sdk
 
-wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-
+wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
 
 
 # 创建 env
