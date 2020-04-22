@@ -38,7 +38,22 @@ tags:
 
 ## Etcd 架构与内部机制
 
+
+### etcd 基础概念
+
 * etcd 是一个 `分布式`、`强一致性可靠`、`key/value` 存储系统。 它主要用于存储分布式系统中的 关键数据。
+
+  * etcd `key/value`存储是按照 有序 `key` 排列的, 可以顺序遍历。
+
+  * 因为 `key` 有序, 所以 `etcd` 支持按目录结构高效遍历。
+
+  * 支持复杂事务, 提供类似 `if ... then ... else ...` 的事务能力。
+
+  * 基于租约机制实现 `key` 的 `TTL` 过期。
+
+
+* etcd 包含三种状态：
+
 
 * etcd 集群通常由 奇数(最低3)个 etcd 组成。
   * 集群中多个 etcd 通过 `Raft consensus algorithm` 算法进行协同, 多个 etcd 会通过 `Raft` 算法选举出一个 `Leader`, 由 `Leader` 节点进行数据同步, 以及数据分发。
@@ -47,14 +62,13 @@ tags:
 
   * 客户端从任何一个 etcd 都可以进行 `读/写` 操作。
 
-  * 在 etcd 集群中 `故障容忍数 = ( n + 1 ) / 2`, 意思是 集群中可以容忍故障的数量, 如&emsp; `(3 + 1) / 2 = 1` 可以容忍的故障数为1台。 
+  * 在 etcd 集群中 有一个关键概念 `quorum`、 `quorum = ( n + 1 ) / 2`, 也就是说超过集群中半数节点组成的一个团体。 集群中可以容忍故障的数量, 如&emsp; `(3 + 1) / 2 = 1` 可以容忍的故障数为1台。 
 
-  * 在 etcd 集群中 任意两个 `quorum` 一定会存在差异, 只要有任意一个`quorum`存活, 这其中肯定包含某个 etcd 节点 它包含 etcd 集群中最新的数据, 基于这种假设, `Raft` 强一致性算法会将最新数据同步到其他 etcd 节点中。 
+  * 在 etcd 集群中 任意两个 quorum 的成员之间一定会有交集, 只要有任意一个`quorum`存活, 其中一定存在某一个节点它包含 etcd 集群中最新的数据, 基于这种假设, `Raft` 一致性算法就可以在一个 quorum 之间采用这份最新的数据去完成数据的同步。 
  
     * `quorum`:&emsp; 在`Raft` 中超过一半以上的人数就是法定人数。
 
 ![etcd-1][2]
-
 
 
 * etcd 提供了如下 `API`
@@ -67,21 +81,79 @@ tags:
   * `Leasesi Grant / Revoke / KeepAlive`
 
 
-* etcd 的数据版本号机制
+### etcd 数据版本号机制
 
-  * `term`:&emsp;全局单调递增 (64bits), `term` 表示整个集群中 `leader` 的任期, 当集群中发生 `leader` 切换, 如: `leader`节点故障、`leader`网络故障、整个集群重启都会发生 `leader` 切换, 这个时候 `term = term + 1`。 
+> etcd 的数据版本号机制非常重要
 
-  * `revision`:&emsp;全局单调递增 (64bits), `revision` 表示在整个集群中数据变更版本号, 当集群中数据发生变更, 包括 `创建`、`修改`、`删除` 的时候, `revision = revision + 1`。
 
-  * `Key/Vaule`:
-    * `Create_revision`:&emsp; 表示在当前 `Key/Value` 中在整个集群数据中创建时的版本号。每个 `Key/Value` 都有一个 `Create_revision`。
+* `term`:&emsp;全局单调递增 (64bits), `term` 表示整个集群中 `leader` 的任期, 当集群中发生 `leader` 切换, 如: `leader`节点故障、`leader`网络故障、整个集群重启都会发生 `leader` 切换, 这个时候 `term = term + 1`。 
 
-    * `mod_revision`:&emsp; 表示当前 `Key/Value` 最后修改 `Value` 的版本号。   
+* `revision`:&emsp;全局单调递增 (64bits), `revision` 表示在整个集群中数据变更版本号, 当集群中数据发生变更, 包括 `创建`、`修改`、`删除` 的时候, `revision = revision + 1`。
 
-    * `version`: &emsp; 表示当前 `Key/Value`  被修改了多少次。
+* `Key/Vaule`:
+
+  * `Create_revision`:&emsp; 表示在当前 `Key/Value` 中在整个集群数据中创建时(revision)的版本号。每个 `Key/Value` 都有一个 `Create_revision`。
+
+  * `mod_revision`:&emsp; 表示当前 `Key/Value` 等于当前修改时的全局的版本数 (revision) 既 `mod_version = 当前 revision`。  
+
+  * `version`: &emsp; 表示当前 `Key/Value`  被修改了多少次。
 
 
 ![etcd-3][3]
+
+
+
+* 实际例子操作
+
+  * 查看 key 的相关版本信息
+
+```
+[root@k8s-node-1 opt]# etcdctl -w json get key0 | jq
+{
+  # header 下显示的是 etcd 全局中的信息
+  "header": {
+    "cluster_id": 12826157174689708000,
+    "member_id": 15154619590888327000,
+    # revision 全局数据变更版本号  
+    "revision": 4462858,
+    # term 是全局 leader 任期
+    "raft_term": 4
+  },
+  # kvs 表示当前 key/value 的信息
+  "kvs": [
+    {
+      # key 在这里显示是 base64 编码后的二进制数
+      "key": "a2V5MA==",
+      # create_revision 与 mod_revision 相同
+      # 因为没有对 key0 进行任何的修改  
+      "create_revision": 4462566,
+      # 如果对 key0 进行修改
+      # mod_revision 等于 当前 revision 版本数
+      "mod_revision": 4462566,
+      # version 为 1 如果对 key0 进行修改
+      # version 会递增修改的次数
+      "version": 1,
+      # value 在这里显示是 base64 编码后的二进制数
+      "value": "dmFsdWUw"
+    }
+  ],
+  # 返回的数据条数
+  "count": 1
+}
+
+```
+
+
+
+
+### etcd leader 选举机制
+
+
+1. 集群选举 `Leader` 需要半数以上节点参与
+
+2. 节点 `revision` 版本最大的允许选举为 `Leader`
+
+3. 节点中 `revision` 相同, 则 `term` 越大的允许选举为 `Leader`
 
 
 
@@ -120,16 +192,28 @@ tags:
 * etcd 的 `transaction` 机制比较简单, 基本可以理解为一段 `if else` 程序, 在 `if` 中可以提供多个操作。
 
 ```
-Txn.if(
-  Compare(Value(key1), ">", "bar"),
-  Compare(Version(key1), "=", 2),
-  ...
-).Then(
-  Put(key2, valueX),
-  Delete(key3)
-).Else(
-  Put(key2, valueY)
-).Commit()
+# 进入 事务操作
+[root@k8s-node-1 opt]# etcdctl txn -i
+compares:
+# 执行条件
+value("key0") = "value0"
+
+# 成功时执行的命令
+success requests (get, put, del):
+get key1
+
+# 失败时执行的命令
+failure requests (get, put, del):
+put key0 value0  
+get key2
+
+
+# 结果判定
+SUCCESS
+
+# 返回执行后的命令
+key1
+value1
 
 ```
 
@@ -139,6 +223,16 @@ Txn.if(
 
 ![etcd-3][4]
 
+
+* `Kubernetes` 在使用 `etcd` 做为元数据存储后
+
+  * 元数据实现高可用, 无单点故障
+
+  * 系统无状态, 故障修复相对容易
+
+  * 系统可水平扩展, 横向提升性能以及容量
+
+  * 简化整体架构, 降低维护的复杂度
 
 
 
@@ -152,7 +246,13 @@ Txn.if(
   * 通过 Put(key1, value1, lease) 可以将之前创建的 租约绑定到 `key1` 中(同一个租约可以绑定多个key)。当租约过期时, `etcd`会自动清理 `key1` 对应的 `value1` 值。
 
   * `KeepAlive` 方法:&emsp; 可以续约租期。
-    * 如说需要检测分布式系统中一个进程是否存活, 那么就会在这个分布式进程中去访问 `etcd` 并且创建一个租约, 同时在该进程中去调用 `KeepAlive` 的方法, 与 `etcd` 保持一个租约不断的续约。当进程挂掉了, 租约在进程挂掉的一段时间就会被 `etcd` 自动清理掉。所以可以通过这个机制来判定节点是否存活。
+    * 比如说需要检测分布式系统中一个进程是否存活, 那么就会在这个分布式进程中去访问 `etcd` 并且创建一个租约, 同时在该进程中去调用 `KeepAlive` 的方法, 与 `etcd` 保持一个租约不断的续约。当进程挂掉了, 租约在进程挂掉的一段时间就会被 `etcd` 自动清理掉。所以可以通过这个机制来判定节点是否存活。
+
+
+
+
+## etcd 性能优化
+
 
 
 
