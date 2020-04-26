@@ -226,7 +226,7 @@ echo "================开始签名======================="
   --ks-key-alias xxx \
   --ks-pass pass:xxxxx \
   --key-pass pass:xxxxx \
-  --out /optlegu/app-product-release-sign_legu.apk /opt/legu/app-product-release_legu.apk
+  --out /opt/legu/app-product-release-sign_legu.apk /opt/legu/app-product-release_legu.apk
 
 echo "================签名结束======================="
 
@@ -338,5 +338,10 @@ Finished: SUCCESS
 
 
 
-
+  [1]: http://jicki.me/img/posts/jenkins/wechat-bot.png
+  [2]: http://jicki.me/img/posts/jenkins/wechat-bot2.png
+  [3]: http://jicki.me/img/posts/jenkins/wechat-bot3.png
+  [4]: http://jicki.me/img/posts/jenkins/wechat-bot4.png
+  [5]: http://jicki.me/img/posts/jenkins/wechat-bot5.png
+  [6]: http://jicki.me/img/posts/jenkins/wechat-bot6.png
 
