@@ -52,11 +52,13 @@ tags:
   * 基于租约机制实现 `key` 的 `TTL` 过期。
 
 
-* etcd 包含三种状态：
+* etcd 包含二种状态：`Leader` `Follower`
 
 
 * etcd 集群通常由 奇数(最低3)个 etcd 组成。
   * 集群中多个 etcd 通过 `Raft consensus algorithm` 算法进行协同, 多个 etcd 会通过 `Raft` 算法选举出一个 `Leader`, 由 `Leader` 节点进行数据同步, 以及数据分发。
+
+  * `etcd` 通过 `boltdb` 持久化存储数据。
 
   * 当 `Leader` 出现故障时, 集群中的 etcd 会投票选举出另一个 `Leader` , 并重新进行数据同步以及数据分发。
 
@@ -253,6 +255,47 @@ value1
 ## etcd 性能优化
 
 
+### etcd 性能分析
+
+
+![etcd性能][5]
+
+
+
+### Etcd Server 硬件需求
+
+
+* `etcd` 硬件需求 (如下为官方提供的参考数据)
+
+  * `小型集群`&emsp; 少于100个客户端, 每秒少于200个请求, 存储数据少于100MB。如: 少于50节点的`Kubernetes`集群。
+
+|CPU|内存|最大并发|磁盘吞吐量|
+|-|-|-|-|
+|2核|4G|1500IOPS|50MB/S|
+
+
+  * `中型集群`&emsp; 少于500个客户端, 每秒少于1000个请求, 存储数据少于500MB。如: 少于250节点的`Kubernetes`集群。
+
+|CPU|内存|最大并发|磁盘吞吐量|
+|-|-|-|-|
+|4核|16G|5000IOPS|100MB/S|
+
+
+  * `大型集群`&emsp; 少于1500个客户端, 每秒少于10000个请求, 存储数据少于1GB。 如: 少于1000节点的`Kubernetes`集群。
+
+|CPU|内存|最大并发|磁盘吞吐量|
+|-|-|-|-|
+|8核|32G|8000IOPS|200MB/S|
+
+
+  * `超大型集群`&emsp; 大于1500个客户端, 每秒处理大于10000个请求, 存储数据大于1GB。如: 少于3000个节点的`Kubernetes`集群
+
+|CPU|内存|最大并发|磁盘吞吐量|
+|-|-|-|-|
+|16核|64G|15000IOPS|300MB/S|
+
+
+
 
 
 
@@ -275,3 +318,4 @@ value1
   [2]: http://jicki.me/img/posts/etcd/etcd-1.png
   [3]: http://jicki.me/img/posts/etcd/etcd-2.png
   [4]: http://jicki.me/img/posts/etcd/etcd-3.png
+  [5]: http://jicki.me/img/posts/etcd/etcd-4.png
