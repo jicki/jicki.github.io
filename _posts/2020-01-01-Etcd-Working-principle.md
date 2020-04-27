@@ -36,8 +36,34 @@ tags:
 * etcd 于 2019年 发布 etcd v3.4 该版本又 `Google、AWS、Alibaba` 等大公司联合打造的一个版本。将进一步优化稳定性以及性能。
 
 
+
+
 ## Etcd 架构与内部机制
 
+### Etcd 术语简介
+
+|名称|含义|
+|-|-|
+|Raft|etcd 使用的一致性算法|
+|WAL|预写`Log`, 持久化数据, 防止节点重启等导致数据丢失|
+|Snapshot|快照, 数据更新超过阈值时, 会通过快照的方式来压缩 `WAL` 文件大小|
+|MVCC|多版本并发控制|
+|DB|`boltdb`/`bboltdb`, 实际存储 `etcd v3` 的数据|
+|Revision|版本号, 作为 `etcd` 数据的逻辑时钟|
+|Auth revision|鉴权操作所用的版本号, 为了避免 `TOCTOU` 问题引入|
+|Propose|发起一次 `Raft` 请求提案|
+|Committed|一半以上的节点同意这次请求后的状态, 此时数据可以被应用层 `apply`|
+|Apply|应用层实际将 `Committed` 的数据应用到 `DB`|
+|Compact|压缩历史版本数据|
+|Defrag|碎片整理, 压缩 `etcd` 的 `db` 存储大小|
+|Endpoint|客户端指定的 `etcd` 访问地址|
+|Node|组成 `etcd` 集群的节点|
+|Term|`Leader` 任期, 每进行一次 `leader` 选举 `Term` 会增加 1|
+|Index|单调递增, 每次经过 `Raft` 模块发起变更操作时由 `leader` 增加|
+|CommittedIndex|经过 `Raft` 协议同意提交的数据 `Index`|
+|AppliedIndex|已经被应用层应用的 `Index`|
+|ConsistentIndex|为保证不重复 `Apply` 同一条数据引入, 保证 `Apply` 操作的幂等性|
+|ReadIndex|通过 `Raft` 模块获取 `leader` 当前的 `committedIndex`|
 
 ### etcd 基础概念
 
@@ -81,6 +107,19 @@ tags:
   * `Watch(key)` / `Watch(key前缀)` &emsp;事件监听, 监听key的变化
   * `Transactions(if / then / else ops).Commit()` 事务操作, 指定某些条件, 为`true`时执行其他操作。 
   * `Leasesi Grant / Revoke / KeepAlive`
+
+
+
+
+
+### etcd 写操作流程
+
+
+
+
+
+
+
 
 
 ### etcd 数据版本号机制
