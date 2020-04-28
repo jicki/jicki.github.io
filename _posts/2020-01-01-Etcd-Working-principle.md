@@ -360,14 +360,42 @@ value1
 
 
 
+## etcd 运维
+
+
+* 备份 Etcd 快照
+
+  * 在集群状态正常的情况下对任意一个节点进行数据备份都可以。
+
+```
+#!/bin/bash
+
+ETCD_BACK=/opt/etcd_bak
+mkdir -p ${ETCD_BACK}
+export IPS="https://10.0.0.1:2379,https://10.0.0.2:2379,https://10.0.0.3:2379"
+export ETCDCTL_API=3
+etcdctl --endpoints=${IPS} \
+        --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+        --cert=/etc/kubernetes/pki/etcd/server.crt \
+        --key=/etc/kubernetes/pki/etcd/server.key \
+        snapshot save ${ETCD_BACK}/snap-$(date +%Y%m%d%H%M).db
+``` 
 
 
 
 
 
+* 恢复集群数据
+
+  * `etcdctl snapshot restore` 命令恢复
+
+  * 恢复数据, 需要将快照覆盖到所有`ETCD`集群节点。
 
 
 
+
+
+* `kubectl describe pods/etcd-k8s-node-1 -n kube-system` 查找 `initial-cluster-token`
 
 
 
