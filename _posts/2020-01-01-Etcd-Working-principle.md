@@ -363,18 +363,59 @@ value1
 ## etcd 运维
 
 
+### etcd 集群数据备份
+
+
+
+* 准备一些测试数据
+
+```
+#!/bin/bash
+
+export ETCDCTL_API=3
+
+export IPS="https://10.0.0.1:2379,https://10.0.0.2:2379,https://10.0.0.3:2379"
+
+
+for((i=1;i<=10;i++));do
+  etcdctl --endpoints=${IPS} \
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+      --cert=/etc/kubernetes/pki/etcd/server.crt \
+      --key=/etc/kubernetes/pki/etcd/server.key \
+      put key$i value$i
+done
+
+
+for((i=1;i<=10;i++));do
+  etcdctl --endpoints=${IPS} \
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+      --cert=/etc/kubernetes/pki/etcd/server.crt \
+      --key=/etc/kubernetes/pki/etcd/server.key \
+      get key$i
+done
+
+```
+
+
+
 * 备份 Etcd 快照
 
+  * `snapshot save` 命令备份。
+
   * 在集群状态正常的情况下对任意一个节点进行数据备份都可以。
+
+    * `etcd v3.4` 只能一个节点进行数据备份。`Snapshot can only be requested from one etcd node`
+
+  * 在使用 `ETCD API` 3 的情况下,只会备份 3 的数据。
+
 
 ```
 #!/bin/bash
 
 ETCD_BACK=/opt/etcd_bak
 mkdir -p ${ETCD_BACK}
-export IPS="https://10.0.0.1:2379,https://10.0.0.2:2379,https://10.0.0.3:2379"
 export ETCDCTL_API=3
-etcdctl --endpoints=${IPS} \
+etcdctl --endpoints=https://10.0.0.1 \
         --cacert=/etc/kubernetes/pki/etcd/ca.crt \
         --cert=/etc/kubernetes/pki/etcd/server.crt \
         --key=/etc/kubernetes/pki/etcd/server.key \
@@ -383,6 +424,39 @@ etcdctl --endpoints=${IPS} \
 
 
 
+* 删除创建的数据
+
+
+```
+#!/bin/bash
+
+export ETCDCTL_API=3
+
+export IPS="https://10.0.0.1:2379,https://10.0.0.2:2379,https://10.0.0.3:2379"
+
+
+for((i=1;i<=10;i++));do
+  etcdctl --endpoints=${IPS} \
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+      --cert=/etc/kubernetes/pki/etcd/server.crt \
+      --key=/etc/kubernetes/pki/etcd/server.key \
+      del key$i
+done
+
+
+for((i=1;i<=10;i++));do
+  etcdctl --endpoints=${IPS} \
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+      --cert=/etc/kubernetes/pki/etcd/server.crt \
+      --key=/etc/kubernetes/pki/etcd/server.key \
+      get key$i
+done
+
+```
+
+
+
+### etcd 集群数据恢复
 
 
 * 恢复集群数据
@@ -394,8 +468,182 @@ etcdctl --endpoints=${IPS} \
 
 
 
+* `节点-1`
 
-* `kubectl describe pods/etcd-k8s-node-1 -n kube-system` 查找 `initial-cluster-token`
+  * `--data-dir`&emsp; 指定恢复数据的目录, 如果数据目录存在会报错, 可以选择删除原来的, 或者备份为新的目录。
+  
+  * `--name`&emsp; 每个节点的 `name` 都不相同
+
+  * `initial-cluster` 配置为集群所有节点的 2380 内部通讯端口
+
+  * `initial-cluster-token` 必须配置与原来相同
+
+  * `initial-advertise-peer-urls` 配置为恢复节点的 `IP:2380` 
+
+```
+#!/bin/bash
+
+export ETCDCTL_API=3
+export ETCD_IPS="etcd1=https://10.0.0.1:2380,etcd2=https://10.0.0.2:2380,etcd3=https://10.0.0.3:2380"
+
+etcdctl  \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot restore /opt/etcd_bak/snapshot.db \
+  --data-dir=/var/lib/etcd-new \
+  --name etcd1 \
+  --initial-cluster ${ETCD_IPS} \
+  --initial-cluster-token etcd-cluster \
+  --initial-advertise-peer-urls https://10.0.0.1:2380
+
+```
+
+
+
+* `节点-2`
+
+  * `--data-dir`&emsp; 指定恢复数据的目录, 如果数据目录存在会报错, 可以选择删除原来的, 或者备份为新的目录。
+
+  * `--name`&emsp; 每个节点的 `name` 都不相同
+
+  * `initial-cluster` 配置为集群所有节点的 2380 内部通讯端口
+
+  * `initial-cluster-token` 必须配置与原来相同
+
+  * `initial-advertise-peer-urls` 配置为恢复节点的 `IP:2380`
+
+```
+#!/bin/bash
+
+export ETCDCTL_API=3
+export ETCD_IPS="etcd1=https://10.0.0.1:2380,etcd2=https://10.0.0.2:2380,etcd3=https://10.0.0.3:2380"
+
+etcdctl  \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot restore /opt/etcd_bak/snapshot.db \
+  --data-dir=/var/lib/etcd-new \
+  --name etcd2 \
+  --initial-cluster ${ETCD_IPS} \
+  --initial-cluster-token etcd-cluster \
+  --initial-advertise-peer-urls https://10.0.0.2:2380
+
+```
+
+
+* `节点-3`
+
+  * `--data-dir`&emsp; 指定恢复数据的目录, 如果数据目录存在会报错, 可以选择删除原来的, 或者备份为新的目录。
+
+  * `--name`&emsp; 每个节点的 `name` 都不相同
+
+  * `initial-cluster` 配置为集群所有节点的 2380 内部通讯端口
+
+  * `initial-cluster-token` 必须配置与原来相同
+
+  * `initial-advertise-peer-urls` 配置为恢复节点的 `IP:2380`
+
+```
+#!/bin/bash
+
+export ETCDCTL_API=3
+export ETCD_IPS="etcd1=https://10.0.0.1:2380,etcd2=https://10.0.0.2:2380,etcd3=https://10.0.0.3:2380"
+
+etcdctl  \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot restore /opt/etcd_bak/snapshot.db \
+  --data-dir=/var/lib/etcd-new \
+  --name etcd3 \
+  --initial-cluster ${ETCD_IPS} \
+  --initial-cluster-token etcd-cluster \
+  --initial-advertise-peer-urls https://10.0.0.3:2380
+
+```
+
+
+
+* 重启所有 `etcd` 服务
+
+  * 如上恢复数据到新的数据目录 `--data-dir` 
+
+```
+# 停止所有节点的 etcd 服务
+
+# 系统部署的 etcd
+systemctl stop etcd
+
+
+# 容器化的
+docker stop etcd
+
+```
+
+* 备份原来的数据目录
+
+```
+
+mv /var/lib/etcd /var/lib/etcd-old
+
+```
+
+* 使用新的数据
+
+```
+mv /var/lib/etcd-new /var/lib/etcd
+
+```
+
+
+```
+# 重新启动所有节点的 etcd 服务
+
+systemctl start etcd
+
+
+# 容器化的
+docker start etcd
+
+```
+
+
+* 查看节点的情况
+
+
+```
+# status
+etcdctl  \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  endpoint status -w table 
+
+```
+
+
+
+* 查询恢复数据
+
+
+```
+#!/bin/bash
+
+export ETCDCTL_API=3
+
+export IPS="https://10.0.0.1:2379,https://10.0.0.2:2379,https://10.0.0.3:2379"
+
+for((i=1;i<=10;i++));do
+  etcdctl --endpoints=${IPS} \
+      --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+      --cert=/etc/kubernetes/pki/etcd/server.crt \
+      --key=/etc/kubernetes/pki/etcd/server.key \
+      get key$i
+done
+
+```
 
 
 
