@@ -157,6 +157,99 @@ lo        Link encap:Local Loopback
 
 
 
+## Kubernetes CNI
+
+
+* `Kubernetes` 目前网络有两种配置, 通过 `kubelet` 中的 `--network-plugin` 来指定选择哪一种配置.
+
+  * `cni`&emsp; 目前`kubernetes` 部署方式基本都使用 `cni` 配置网络. 如上所述, `cni`包含两个部分
+
+    * `cni`组件的二进制文件 `--cni-bin-dir` 默认存放于 `/opt/cni/bin` 目录下.
+
+```
+[root@k8s-node-1 ~]# ls -lt /opt/cni/bin/
+total 36132
+-rwxr-xr-x 1 root root 2973336 Mar 26  2019 bridge
+-rwxr-xr-x 1 root root 7598064 Mar 26  2019 dhcp
+-rwxr-xr-x 1 root root 2110208 Mar 26  2019 flannel
+-rwxr-xr-x 1 root root 2288536 Mar 26  2019 host-device
+-rwxr-xr-x 1 root root 2238208 Mar 26  2019 host-local
+-rwxr-xr-x 1 root root 2621472 Mar 26  2019 ipvlan
+-rwxr-xr-x 1 root root 2257808 Mar 26  2019 loopback
+-rwxr-xr-x 1 root root 2650160 Mar 26  2019 macvlan
+-rwxr-xr-x 1 root root 2613864 Mar 26  2019 portmap
+-rwxr-xr-x 1 root root 2946664 Mar 26  2019 ptp
+-rwxr-xr-x 1 root root 1951880 Mar 26  2019 sample
+-rwxr-xr-x 1 root root 2103456 Mar 26  2019 tuning
+-rwxr-xr-x 1 root root 2617328 Mar 26  2019 vlan
+```
+
+    * `cni`组件的 网络配置(Network Configuration) 或 网络配置列表(Network Configuration List) `--cni-conf-dir` 默认存放于 `etc/cni/net.d/ 目录中.
+
+```
+[root@k8s-node-1 ~]# ls -lt /etc/cni/net.d/
+total 4
+-rw-r--r-- 1 root root 292 Apr 26 14:05 10-flannel.conflist
+```
+
+```
+[root@k8s-node-1 ~]# cat /etc/cni/net.d/10-flannel.conflist
+{
+  "name": "cbr0",
+  "cniVersion": "0.3.1",
+  "plugins": [
+    {
+      "type": "flannel",
+      "delegate": {
+        "hairpinMode": true,
+        "isDefaultGateway": true
+      }
+    },
+    {
+      "type": "portmap",
+      "capabilities": {
+        "portMappings": true
+      }
+    }
+  ]
+}
+```
+
+
+**CNI工作流程**
+
+* `Client` 发送创建 `Pod`的请求. `Pod`的创建中间流程忽略, 最后到 `kubelet` .
+
+* `kubelet` 通过`dockershim` + `docker-containerd` 的方式创建 `container` .
+
+*  `Pod` 创建完毕以后, `kubelet` 通过 `CNI` 相关流程创建 `Pod` 网络.
+
+  * 1. `CNI`组件搜索 `--cni-conf-dir` 目录下的配置文件, 按照数字顺序查找合法的网络配置. `Flannel` 的配置文件为 `10-flannel.conflist` 
+  
+  * 2. 读取配置文件, 通过 `type`  或者 `cni`组件. 
+
+  * 3. 通过 `type` 调用`--cni-bin-dir` 目录下的  `cni`组件的二进制文件.
+
+  * 4. 通过配置文件参数配置容器网络.
+
+  * 5. 配置完网络以后, 调用 `--cni-bin-dir` 目录下的 `portmap` 二进制文件, 将容器的IP和端口通过`iptables`映射到宿主机的端口上.
+
+
+
+
+**Kubenet工作流程**
+
+
+* `kubenet` 是个非常简单的 `L2 Bridge`,  其实也是通过 `CNI` 建立一个简单的网络, 由 `kubenet` 配置的网络只能用于单节点的网络通讯. 所以 `kubenet` 是用于测试.
+
+
+
+
+
+
+
+
+
 
   [1]: http://jicki.me/img/posts/cni/cni.png
 
