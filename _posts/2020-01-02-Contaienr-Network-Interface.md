@@ -186,7 +186,7 @@ total 36132
 
 
 
-*  `cni`组件的 网络配置(Network Configuration) 或 网络配置列表(Network Configuration List) `--cni-conf-dir` 默认存放于 `etc/cni/net.d/ 目录中.
+*  `cni`组件的 网络配置(Network Configuration) 或 网络配置列表(Network Configuration List) `--cni-conf-dir` 默认存放于 `etc/cni/net.d/` 目录中.
 
 
 
