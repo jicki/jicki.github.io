@@ -184,7 +184,12 @@ total 36132
 -rwxr-xr-x 1 root root 2617328 Mar 26  2019 vlan
 ```
 
-    * `cni`组件的 网络配置(Network Configuration) 或 网络配置列表(Network Configuration List) `--cni-conf-dir` 默认存放于 `etc/cni/net.d/ 目录中.
+
+
+*  `cni`组件的 网络配置(Network Configuration) 或 网络配置列表(Network Configuration List) `--cni-conf-dir` 默认存放于 `etc/cni/net.d/ 目录中.
+
+
+
 
 ```
 [root@k8s-node-1 ~]# ls -lt /etc/cni/net.d/
@@ -224,15 +229,15 @@ total 4
 
 *  `Pod` 创建完毕以后, `kubelet` 通过 `CNI` 相关流程创建 `Pod` 网络.
 
-  * 1. `CNI`组件搜索 `--cni-conf-dir` 目录下的配置文件, 按照数字顺序查找合法的网络配置. `Flannel` 的配置文件为 `10-flannel.conflist` 
+  * 1.`CNI`组件搜索 `--cni-conf-dir` 目录下的配置文件, 按照数字顺序查找合法的网络配置. `Flannel` 的配置文件为 `10-flannel.conflist` 
   
-  * 2. 读取配置文件, 通过 `type`  或者 `cni`组件. 
+  * 2.读取配置文件, 通过 `type`  或者 `cni`组件. 
 
-  * 3. 通过 `type` 调用`--cni-bin-dir` 目录下的  `cni`组件的二进制文件.
+  * 3.通过 `type` 调用`--cni-bin-dir` 目录下的  `cni`组件的二进制文件.
 
-  * 4. 通过配置文件参数配置容器网络.
+  * 4.通过配置文件参数配置容器网络.
 
-  * 5. 配置完网络以后, 调用 `--cni-bin-dir` 目录下的 `portmap` 二进制文件, 将容器的IP和端口通过`iptables`映射到宿主机的端口上.
+  * 5.配置完网络以后, 调用 `--cni-bin-dir` 目录下的 `portmap` 二进制文件, 将容器的IP和端口通过`iptables`映射到宿主机的端口上.
 
 
 
