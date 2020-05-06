@@ -230,13 +230,9 @@ total 4
 *  `Pod` 创建完毕以后, `kubelet` 通过 `CNI` 相关流程创建 `Pod` 网络.
 
   * `CNI`组件搜索 `--cni-conf-dir` 目录下的配置文件, 按照数字顺序查找合法的网络配置. `Flannel` 的配置文件为 `10-flannel.conflist` 
-  
   * 读取配置文件, 通过 `type`  或者 `cni`组件. 
-
   * 通过 `type` 调用`--cni-bin-dir` 目录下的  `cni`组件的二进制文件.
-
   * 通过配置文件参数配置容器网络.
-
   * 配置完网络以后, 调用 `--cni-bin-dir` 目录下的 `portmap` 二进制文件, 将容器的IP和端口通过`iptables`映射到宿主机的端口上.
 
 
