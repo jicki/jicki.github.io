@@ -166,6 +166,9 @@ lo        Link encap:Local Loopback
 
     * `cni`组件的二进制文件 `--cni-bin-dir` 默认存放于 `/opt/cni/bin` 目录下.
 
+    *  `cni`组件的 网络配置(Network Configuration) 或 网络配置列表(Network Configuration List) `--cni-conf-dir` 默认存放于 `etc/cni/net.d/` 目录中.
+
+
 ```
 [root@k8s-node-1 ~]# ls -lt /opt/cni/bin/
 total 36132
@@ -186,16 +189,12 @@ total 36132
 
 
 
-*  `cni`组件的 网络配置(Network Configuration) 或 网络配置列表(Network Configuration List) `--cni-conf-dir` 默认存放于 `etc/cni/net.d/` 目录中.
-
-
-
-
 ```
 [root@k8s-node-1 ~]# ls -lt /etc/cni/net.d/
 total 4
 -rw-r--r-- 1 root root 292 Apr 26 14:05 10-flannel.conflist
 ```
+
 
 ```
 [root@k8s-node-1 ~]# cat /etc/cni/net.d/10-flannel.conflist
@@ -227,7 +226,7 @@ total 4
 
 * `kubelet` 通过`dockershim` + `docker-containerd` 的方式创建 `container` .
 
-*  `Pod` 创建完毕以后, `kubelet` 通过 `CNI` 相关流程创建 `Pod` 网络.
+* `Pod` 创建完毕以后, `kubelet` 通过 `CNI` 相关流程创建 `Pod` 网络.
 
   * `CNI`组件搜索 `--cni-conf-dir` 目录下的配置文件, 按照数字顺序查找合法的网络配置. `Flannel` 的配置文件为 `10-flannel.conflist` 
   * 读取配置文件, 通过 `type`  或者 `cni`组件. 
