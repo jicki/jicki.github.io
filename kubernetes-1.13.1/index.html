@@ -2574,7 +2574,7 @@ Node 节点 基于 Nginx 负载 API 做 Master HA</p></blockquote><div class=hig
 在每个 node 上启动一个 nginx，每个 nginx 反向代理所有 api server;
 node 上 kubelet、kube-proxy 连接本地的 nginx 代理端口;
 当 nginx 发现无法连接后端时会自动踢掉出问题的 api server，从而实现 api server 的 HA;
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.me/img/posts/kubernetes/hamaster.jpg data-srcset="https://jicki.me/img/posts/kubernetes/hamaster.jpg, https://jicki.me/img/posts/kubernetes/hamaster.jpg 1.5x, https://jicki.me/img/posts/kubernetes/hamaster.jpg 2x" data-sizes=auto alt=https://jicki.me/img/posts/kubernetes/hamaster.jpg title=HAMaster></p><h3 id=发布证书>发布证书</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/kubernetes/hamaster.jpg data-srcset="https://jicki.cn/img/posts/kubernetes/hamaster.jpg, https://jicki.cn/img/posts/kubernetes/hamaster.jpg 1.5x, https://jicki.cn/img/posts/kubernetes/hamaster.jpg 2x" data-sizes=auto alt=https://jicki.cn/img/posts/kubernetes/hamaster.jpg title=HAMaster></p><h3 id=发布证书>发布证书</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -4381,7 +4381,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -4394,7 +4394,7 @@ spec:
 
 [root@kubernetes-64 ingress]# kubectl get ingress
 NAME            HOSTS            ADDRESS   PORTS     AGE
-nginx-ingress   nginx.jicki.me             80        6s
+nginx-ingress   nginx.jicki.cn             80        6s
 </code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -4428,7 +4428,7 @@ nginx-ingress   nginx.jicki.me             80        6s
 </span><span class=lnt>31
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 测试访问
 
-[root@kubernetes-64 ingress]# curl nginx.jicki.me
+[root@kubernetes-64 ingress]# curl nginx.jicki.cn
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -4513,12 +4513,12 @@ Commercial support is available at
 
 # 创建一个 基于 自身域名的 证书
 
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.me-key.key -out dashboard.jicki.me.pem -subj &#34;/CN=dashboard.jicki.me&#34;
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.cn-key.key -out dashboard.jicki.cn.pem -subj &#34;/CN=dashboard.jicki.cn&#34;
 
 
 # 导入 域名的证书 到 集群 的 secret 中
 
-kubectl create secret tls dashboard-secret --namespace=kube-system --cert dashboard.jicki.me.pem --key dashboard.jicki.me-key.key
+kubectl create secret tls dashboard-secret --namespace=kube-system --cert dashboard.jicki.cn.pem --key dashboard.jicki.cn-key.key
 
 
 
@@ -4548,10 +4548,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: dashboard-secret
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -4576,7 +4576,7 @@ spec:
 </span><span class=lnt>15
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 测试访问
 
-[root@kubernetes-64 dashboard]# curl -I -k https://dashboard.jicki.me
+[root@kubernetes-64 dashboard]# curl -I -k https://dashboard.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.13.12
 Date: Wed, 11 Jul 2018 07:19:03 GMT
@@ -4721,7 +4721,7 @@ token:      eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZ
 
 # 登录 web ui 选择 令牌登录
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.me/img/posts/kubernetes/dashboard-new.jpeg data-srcset="https://jicki.me/img/posts/kubernetes/dashboard-new.jpeg, https://jicki.me/img/posts/kubernetes/dashboard-new.jpeg 1.5x, https://jicki.me/img/posts/kubernetes/dashboard-new.jpeg 2x" data-sizes=auto alt=https://jicki.me/img/posts/kubernetes/dashboard-new.jpeg title=dashboard></p><h2 id=部署-monitoring>部署 monitoring</h2><h1 id=k8s-运维相关>k8s 运维相关</h1><h2 id=基础维护>基础维护</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/kubernetes/dashboard-new.jpeg data-srcset="https://jicki.cn/img/posts/kubernetes/dashboard-new.jpeg, https://jicki.cn/img/posts/kubernetes/dashboard-new.jpeg 1.5x, https://jicki.cn/img/posts/kubernetes/dashboard-new.jpeg 2x" data-sizes=auto alt=https://jicki.cn/img/posts/kubernetes/dashboard-new.jpeg title=dashboard></p><h2 id=部署-monitoring>部署 monitoring</h2><h1 id=k8s-运维相关>k8s 运维相关</h1><h2 id=基础维护>基础维护</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4

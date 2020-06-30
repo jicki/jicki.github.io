@@ -10,7 +10,7 @@
 
 # Ceph RBD StorageClass
 
-> Ceph RBD 集群部署 这里就略过了，可查看我之前的文章 https://jicki.me/2017/05/09/kubernetes-ceph-rbd
+> Ceph RBD 集群部署 这里就略过了，可查看我之前的文章 https://jicki.cn/2017/05/09/kubernetes-ceph-rbd
 
 
 ## 创建 ceph pool

@@ -482,17 +482,17 @@ http://127.0.0.1:8000/webclient/main.html
 
 ![muddery-game-4][13]
 
-  [1]: https://jicki.me/img/posts/muddery/muddery-web.png
-  [2]: https://jicki.me/img/posts/muddery/muddery-editor.png
-  [3]: https://jicki.me/img/posts/muddery/muddery-game.png
-  [4]: https://jicki.me/img/posts/muddery/muddery-AREA.png
-  [5]: https://jicki.me/img/posts/muddery/muddery-ROOM.png
-  [6]: https://jicki.me/img/posts/muddery/muddery-models.png
-  [7]: https://jicki.me/img/posts/muddery/muddery-world-npc.png
-  [8]: https://jicki.me/img/posts/muddery/muddery-dialogues.png
-  [9]: https://jicki.me/img/posts/muddery/muddery-dialogue-sentences.png
-  [10]: https://jicki.me/img/posts/muddery/muddery-game-2.png
-  [11]: https://jicki.me/img/posts/muddery/muddery-game-3.png
-  [12]: https://jicki.me/img/posts/muddery/muddery-game-4.png
-  [13]: https://jicki.me/img/posts/muddery/muddery-game-5.png
+  [1]: https://jicki.cn/img/posts/muddery/muddery-web.png
+  [2]: https://jicki.cn/img/posts/muddery/muddery-editor.png
+  [3]: https://jicki.cn/img/posts/muddery/muddery-game.png
+  [4]: https://jicki.cn/img/posts/muddery/muddery-AREA.png
+  [5]: https://jicki.cn/img/posts/muddery/muddery-ROOM.png
+  [6]: https://jicki.cn/img/posts/muddery/muddery-models.png
+  [7]: https://jicki.cn/img/posts/muddery/muddery-world-npc.png
+  [8]: https://jicki.cn/img/posts/muddery/muddery-dialogues.png
+  [9]: https://jicki.cn/img/posts/muddery/muddery-dialogue-sentences.png
+  [10]: https://jicki.cn/img/posts/muddery/muddery-game-2.png
+  [11]: https://jicki.cn/img/posts/muddery/muddery-game-3.png
+  [12]: https://jicki.cn/img/posts/muddery/muddery-game-4.png
+  [13]: https://jicki.cn/img/posts/muddery/muddery-game-5.png
 

@@ -28,7 +28,7 @@
 ```
 # 配置jenkins 后端存储, 如 nfs, gfs, cephfs 等， 请自行配置，或者参考 之前的文章。
 
-# 基于单独的 nfs 最为后端 文档在这里 https://jicki.me/2017/01/01/kubernetes-nfs/ 
+# 基于单独的 nfs 最为后端 文档在这里 https://jicki.cn/2017/01/01/kubernetes-nfs/ 
 
 ```
 
@@ -202,7 +202,7 @@ metadata:
   namespace: jenkins
 spec:  
   rules:  
-  - host: jenkins.jicki.me
+  - host: jenkins.jicki.cn
     http:  
       paths:  
       - path: /  
@@ -236,7 +236,7 @@ jenkins   ClusterIP   10.254.47.35   <none>        8080/TCP,50000/TCP   6m
 [root@kubernetes-64 jenkins]# 
 [root@kubernetes-64 jenkins]# kubectl get ingress -n jenkins   
 NAME      HOSTS              ADDRESS   PORTS     AGE
-jenkins   jenkins.jicki.me             80        6m
+jenkins   jenkins.jicki.cn             80        6m
 
 
 
@@ -268,7 +268,7 @@ This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
 ```
 # 登录 web ui
 
-http://jenkins.jicki.me
+http://jenkins.jicki.cn
 
 ```
 
@@ -549,16 +549,16 @@ Finished: SUCCESS
 ```
 
 
-  [1]: http://jicki.me/img/posts/jenkins/jenkins1.png
-  [2]: http://jicki.me/img/posts/jenkins/jenkins2.png
-  [3]: http://jicki.me/img/posts/jenkins/jenkins3.png
-  [4]: http://jicki.me/img/posts/jenkins/jenkins4.png
-  [5]: http://jicki.me/img/posts/jenkins/jenkins5.png
-  [6]: http://jicki.me/img/posts/jenkins/jenkins6.png
-  [7]: http://jicki.me/img/posts/jenkins/jenkins7.png
-  [8]: http://jicki.me/img/posts/jenkins/jenkins8.png
-  [9]: http://jicki.me/img/posts/jenkins/jenkins9.png
-  [10]: http://jicki.me/img/posts/jenkins/jenkins10.png
-  [11]: http://jicki.me/img/posts/jenkins/jenkins11.png
-  [12]: http://jicki.me/img/posts/jenkins/jenkins12.png
+  [1]: http://jicki.cn/img/posts/jenkins/jenkins1.png
+  [2]: http://jicki.cn/img/posts/jenkins/jenkins2.png
+  [3]: http://jicki.cn/img/posts/jenkins/jenkins3.png
+  [4]: http://jicki.cn/img/posts/jenkins/jenkins4.png
+  [5]: http://jicki.cn/img/posts/jenkins/jenkins5.png
+  [6]: http://jicki.cn/img/posts/jenkins/jenkins6.png
+  [7]: http://jicki.cn/img/posts/jenkins/jenkins7.png
+  [8]: http://jicki.cn/img/posts/jenkins/jenkins8.png
+  [9]: http://jicki.cn/img/posts/jenkins/jenkins9.png
+  [10]: http://jicki.cn/img/posts/jenkins/jenkins10.png
+  [11]: http://jicki.cn/img/posts/jenkins/jenkins11.png
+  [12]: http://jicki.cn/img/posts/jenkins/jenkins12.png
 

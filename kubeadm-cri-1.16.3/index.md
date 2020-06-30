@@ -1437,7 +1437,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -1460,7 +1460,7 @@ ingress.extensions/nginx-ingress created
 
 [root@k8s-node-1 yaml]# kubectl get ingress
 NAME            HOSTS            ADDRESS   PORTS   AGE
-nginx-ingress   nginx.jicki.me             80      17s
+nginx-ingress   nginx.jicki.cn             80      17s
 
 
 
@@ -1473,7 +1473,7 @@ nginx-ingress   nginx.jicki.me             80      17s
 
 
 ```
-[root@k8s-node-1 yaml]# curl -I nginx.jicki.me
+[root@k8s-node-1 yaml]# curl -I nginx.jicki.cn
 HTTP/1.1 200 OK
 Server: openresty/1.15.8.2
 Date: Thu, 05 Dec 2019 05:41:07 GMT
@@ -1580,12 +1580,12 @@ kubernetes-dashboard        ClusterIP   10.254.7.84     <none>        443/TCP   
 
 # 创建一个 基于 自身域名的 证书
 
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.me-key.key -out dashboard.jicki.me.pem -subj "/CN=dashboard.jicki.me"
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.cn-key.key -out dashboard.jicki.cn.pem -subj "/CN=dashboard.jicki.cn"
 
 
 # 导入 域名的证书 到 集群 的 secret 中
 
-kubectl create secret tls dashboard-secret --namespace=kubernetes-dashboard --cert dashboard.jicki.me.pem --key dashboard.jicki.me-key.key
+kubectl create secret tls dashboard-secret --namespace=kubernetes-dashboard --cert dashboard.jicki.cn.pem --key dashboard.jicki.cn-key.key
 
 ```
 
@@ -1639,10 +1639,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: dashboard-secret
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -1664,7 +1664,7 @@ ingress.extensions/kubernetes-dashboard created
 
 [root@k8s-node-1 dashboard]# kubectl get ingress -n kubernetes-dashboard
 NAME                   HOSTS                ADDRESS   PORTS     AGE
-kubernetes-dashboard   dashboard.jicki.me             80, 443   34s
+kubernetes-dashboard   dashboard.jicki.cn             80, 443   34s
 
 ```
 
@@ -1673,7 +1673,7 @@ kubernetes-dashboard   dashboard.jicki.me             80, 443   34s
 
 
 ```
-[root@k8s-node-1 dashboard]# curl -I -k https://dashboard.jicki.me
+[root@k8s-node-1 dashboard]# curl -I -k https://dashboard.jicki.cn
 HTTP/2 200 
 server: openresty/1.15.8.2
 date: Thu, 05 Dec 2019 06:39:03 GMT

@@ -738,7 +738,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -756,7 +756,7 @@ ingress "nginx-ingress" created
 
 [root@k8s-node-1 ~]# kubectl get ingresses
 NAME            HOSTS            ADDRESS   PORTS     AGE
-nginx-ingress   nginx.jicki.me             80        17s
+nginx-ingress   nginx.jicki.cn             80        17s
 
 # 这里显示 ADDRESS 为 空 实际上 所有 master 与 nodes 都绑定了
 # 将域名解析到 任何一个 IP 上都可以。
@@ -766,7 +766,7 @@ nginx-ingress   nginx.jicki.me             80        17s
 
 
 
-# 下面访问 http://nginx.jicki.me/
+# 下面访问 http://nginx.jicki.cn/
 
 # 这里注意，Ingresses 只做简单的端口转发。
 
@@ -831,7 +831,7 @@ fatal: [node3]: FAILED! => {"failed": true, "msg": "'dict object' has no attribu
 
 
 
-  [1]: http://jicki.me/img/posts/kagro/1.png
+  [1]: http://jicki.cn/img/posts/kagro/1.png
 
 
 

@@ -53,7 +53,7 @@ chmod a+x ./certbot-auto
 </span><span class=lnt>8
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 独立模式 --standalone
 
-./certbot-auto certonly --standalone --email jicki@qq.com --agree-tos -d jicki.me -d www.jicki.me
+./certbot-auto certonly --standalone --email jicki@qq.com --agree-tos -d jicki.cn -d www.jicki.cn
 
 # 独立模式需要 占用本机的 80 以及 443 端口 用来认证 证书，
 
@@ -87,7 +87,7 @@ chmod a+x ./certbot-auto
 
 # 不同域名需要配置再不同的 --webroot 目录下
 
-./certbot-auto certonly --agree-tos --email jicki@qq.com --webroot -w /var/www/html/ -d jicki.me -d www.jicki.me -w /var/www/wiki -d wiki.jicki.me
+./certbot-auto certonly --agree-tos --email jicki@qq.com --webroot -w /var/www/html/ -d jicki.cn -d www.jicki.cn -w /var/www/wiki -d wiki.jicki.cn
 
 
 # --webroot 模式 不需要关闭正在运行的服务, 但是会在 网站文件目录下 创建一个 .well-known 目录
@@ -176,7 +176,7 @@ chmod a+x ./certbot-auto
 </span><span class=lnt>53
 </span><span class=lnt>54
 </span><span class=lnt>55
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>./certbot-auto --server https://acme-v02.api.letsencrypt.org/directory -d &#34;*.jicki.me&#34; --manual --preferred-challenges dns-01 certonly
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>./certbot-auto --server https://acme-v02.api.letsencrypt.org/directory -d &#34;*.jicki.cn&#34; --manual --preferred-challenges dns-01 certonly
 
 
 
@@ -187,7 +187,7 @@ Saving debug log to /var/log/letsencrypt/letsencrypt.log
 Plugins selected: Authenticator manual, Installer None
 Obtaining a new certificate
 Performing the following challenges:
-dns-01 challenge for jicki.me
+dns-01 challenge for jicki.cn
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 NOTE: The IP of this machine will be publicly logged as having requested this
@@ -200,7 +200,7 @@ Are you OK with your IP being logged?
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Please deploy a DNS TXT record under the name
-_acme-challenge.jicki.me with the following value:
+_acme-challenge.jicki.cn with the following value:
 
 tdoCC636Cel1wQPY-LB-FURPvNSloFhBdWyEoqkQZNU
 
@@ -216,7 +216,7 @@ Waiting for verification...
 ## 这里面提示在 dns 里配置一下 认证
 
 Please deploy a DNS TXT record under the name
-_acme-challenge.jicki.me with the following value:
+_acme-challenge.jicki.cn with the following value:
 
 tdoCC636Cel1wQPY-LB-FURPvNSloFhBdWyEoqkQZNU
 
@@ -224,7 +224,7 @@ Before continuing, verify the record is deployed.
 
 
 
-主机记录: _acme-challenge.jicki.me
+主机记录: _acme-challenge.jicki.cn
 记录类型: TXT
 记录值: tdoCC636Cel1wQPY-LB-FURPvNSloFhBdWyEoqkQZNU
 
@@ -281,16 +281,16 @@ Before continuing, verify the record is deployed.
   listen     80;
   listen     443 ssl;
   listen [::]:443 ssl ipv6only=on;
-  server_name jicki.me www.jicki.me;
+  server_name jicki.cn www.jicki.cn;
   root /var/www/html;
   index index.html index.htm index.php;
   access_log /var/logs/nginx/jicki.log main;
   
   # ssl setting
   ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
-  ssl_certificate /etc/letsencrypt/live/www.jicki.me/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/www.jicki.me/privkey.pem;
-  ssl_trusted_certificate /etc/letsencrypt/live/www.jicki.me/chain.pem;
+  ssl_certificate /etc/letsencrypt/live/www.jicki.cn/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/www.jicki.cn/privkey.pem;
+  ssl_trusted_certificate /etc/letsencrypt/live/www.jicki.cn/chain.pem;
   ssl_session_cache    shared:SSL:1m;
   ssl_session_timeout  5m;
   server_tokens off;
@@ -378,7 +378,7 @@ Before continuing, verify the record is deployed.
 </span><span class=se></span>        -v /opt/data/nginx/ssl/:/etc/letsencrypt <span class=se>\
 </span><span class=se></span>        certbot/certbot certonly <span class=se>\
 </span><span class=se></span>        --standalone -m jicki@qq.com --agree-tos <span class=se>\
-</span><span class=se></span>        -d www.jicki.me -d jicki.me
+</span><span class=se></span>        -d www.jicki.cn -d jicki.cn
 
         docker start nginx
 
@@ -448,7 +448,7 @@ docker run --rm  -it  \
   -v /opt/nginx/ssl:/acme.sh  \
   -e Ali_Key=&#34;xxxxxx&#34; \
   -e Ali_Secret=&#34;xxxx&#34; \
-  neilpang/acme.sh  --issue --dns dns_ali -d jicki.me -d *.jicki.me
+  neilpang/acme.sh  --issue --dns dns_ali -d jicki.cn -d *.jicki.cn
 
 
 
@@ -457,7 +457,7 @@ docker run --rm  -it  \
   -v /opt/nginx/ssl:/acme.sh  \
   -e DP_Id=&#34;xxxxxx&#34; \
   -e DP_Key=&#34;xxxx&#34; \
-  neilpang/acme.sh  --issue --dns dns_dp -d jicki.me -d *.jicki.me
+  neilpang/acme.sh  --issue --dns dns_dp -d jicki.cn -d *.jicki.cn
 
 
 
@@ -466,10 +466,10 @@ docker run --rm  -it  \
   -v /opt/nginx/ssl:/acme.sh  \
   -e GD_Key=&#34;xxxxxx&#34; \
   -e GD_Secret=&#34;xxxx&#34; \
-  neilpang/acme.sh  --issue --dns dns_gd -d jicki.me -d *.jicki.me
+  neilpang/acme.sh  --issue --dns dns_gd -d jicki.cn -d *.jicki.cn
 
 
-</code></pre></td></tr></table></div></div><h1 id=kubernetes-方式>Kubernetes 方式</h1><blockquote><p>Kubernetes 通过 Cert manager 进行自动申请 Let&rsquo;s Encrypt 。</p><p>github 地址 <a href=https://github.com/jetstack/cert-manager>https://github.com/jetstack/cert-manager</a></p></blockquote><h2 id=部署-cert-manager>部署 cert-manager</h2><blockquote><p>这里官方使用 helm 来直接部署</p></blockquote><h3 id=安装-helm>安装 helm</h3><blockquote><p>Helm 是 Kubernetes 的包管理器，可以帮我们简化 kubernetes 的操作，一键部署应用。</p><p>helm 部署 请参考 <a href=https://jicki.me/kubernetes/docker/2018/12/07/helm/>https://jicki.me/kubernetes/docker/2018/12/07/helm/</a></p></blockquote><h3 id=安装-cert-manager>安装 cert-manager</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><h1 id=kubernetes-方式>Kubernetes 方式</h1><blockquote><p>Kubernetes 通过 Cert manager 进行自动申请 Let&rsquo;s Encrypt 。</p><p>github 地址 <a href=https://github.com/jetstack/cert-manager>https://github.com/jetstack/cert-manager</a></p></blockquote><h2 id=部署-cert-manager>部署 cert-manager</h2><blockquote><p>这里官方使用 helm 来直接部署</p></blockquote><h3 id=安装-helm>安装 helm</h3><blockquote><p>Helm 是 Kubernetes 的包管理器，可以帮我们简化 kubernetes 的操作，一键部署应用。</p><p>helm 部署 请参考 <a href=https://jicki.cn/kubernetes/docker/2018/12/07/helm/>https://jicki.cn/kubernetes/docker/2018/12/07/helm/</a></p></blockquote><h3 id=安装-cert-manager>安装 cert-manager</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1037,10 +1037,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: dashboard-tls
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -1069,14 +1069,14 @@ spec:
 
 [root@kubernetes-1 ~]# kubectl get ingress -n kube-system
 NAME                        HOSTS                ADDRESS   PORTS     AGE
-kubernetes-dashboard        dashboard.jicki.me             80, 443   11s
+kubernetes-dashboard        dashboard.jicki.cn             80, 443   11s
 
 
 # 查看 pods
 
 [root@kubernetes-1 ~]# kubectl get pods -n kube-system
 NAME                        HOSTS                ADDRESS   PORTS     AGE
-cm-acme-http-solver-prcdn   dashboard.jicki.me             80        8s
+cm-acme-http-solver-prcdn   dashboard.jicki.cn             80        8s
 
 
 # 这个 cm-acme 是用来创建认证 证书的, 认证通过以后~会自动删除
@@ -1117,16 +1117,16 @@ Namespace:        kube-system
 Address:          
 Default backend:  default-http-backend:80 (&lt;none&gt;)
 TLS:
-  dashboard-tls terminates dashboard.jicki.me
+  dashboard-tls terminates dashboard.jicki.cn
 Rules:
   Host                Path  Backends
   ----                ----  --------
-  dashboard.jicki.me  
+  dashboard.jicki.cn  
                       /   kubernetes-dashboard:443 (10.254.101.26:8443)
 Annotations:
   certmanager.k8s.io/cluster-issuer:                 letsencrypt-prod
   ingress.kubernetes.io/ssl-passthrough:             true
-  kubectl.kubernetes.io/last-applied-configuration:  {&#34;apiVersion&#34;:&#34;extensions/v1beta1&#34;,&#34;kind&#34;:&#34;Ingress&#34;,&#34;metadata&#34;:{&#34;annotations&#34;:{&#34;certmanager.k8s.io/cluster-issuer&#34;:&#34;letsencrypt-prod&#34;,&#34;ingress.kubernetes.io/ssl-passthrough&#34;:&#34;true&#34;,&#34;kubernetes.io/ingress.class&#34;:&#34;nginx&#34;,&#34;nginx.ingress.kubernetes.io/secure-backends&#34;:&#34;true&#34;},&#34;name&#34;:&#34;kubernetes-dashboard&#34;,&#34;namespace&#34;:&#34;kube-system&#34;},&#34;spec&#34;:{&#34;rules&#34;:[{&#34;host&#34;:&#34;dashboard.jicki.me&#34;,&#34;http&#34;:{&#34;paths&#34;:[{&#34;backend&#34;:{&#34;serviceName&#34;:&#34;kubernetes-dashboard&#34;,&#34;servicePort&#34;:443},&#34;path&#34;:&#34;/&#34;}]}}],&#34;tls&#34;:[{&#34;hosts&#34;:[&#34;dashboard.jicki.me&#34;],&#34;secretName&#34;:&#34;dashboard-tls&#34;}]}}
+  kubectl.kubernetes.io/last-applied-configuration:  {&#34;apiVersion&#34;:&#34;extensions/v1beta1&#34;,&#34;kind&#34;:&#34;Ingress&#34;,&#34;metadata&#34;:{&#34;annotations&#34;:{&#34;certmanager.k8s.io/cluster-issuer&#34;:&#34;letsencrypt-prod&#34;,&#34;ingress.kubernetes.io/ssl-passthrough&#34;:&#34;true&#34;,&#34;kubernetes.io/ingress.class&#34;:&#34;nginx&#34;,&#34;nginx.ingress.kubernetes.io/secure-backends&#34;:&#34;true&#34;},&#34;name&#34;:&#34;kubernetes-dashboard&#34;,&#34;namespace&#34;:&#34;kube-system&#34;},&#34;spec&#34;:{&#34;rules&#34;:[{&#34;host&#34;:&#34;dashboard.jicki.cn&#34;,&#34;http&#34;:{&#34;paths&#34;:[{&#34;backend&#34;:{&#34;serviceName&#34;:&#34;kubernetes-dashboard&#34;,&#34;servicePort&#34;:443},&#34;path&#34;:&#34;/&#34;}]}}],&#34;tls&#34;:[{&#34;hosts&#34;:[&#34;dashboard.jicki.cn&#34;],&#34;secretName&#34;:&#34;dashboard-tls&#34;}]}}
 
   kubernetes.io/ingress.class:                  nginx
   nginx.ingress.kubernetes.io/secure-backends:  true
@@ -1198,6 +1198,6 @@ I1206 07:05:06.585718       1 controller.go:142] certificates controller: syncin
 
 # 如果域名未配置，会报错 (因为申请证书需要认证 域名下的 .well-known/acme-challenge 目录)
 
-I1206 07:58:57.570703       1 http.go:110] could not reach &#39;http://dashboard.jicki.me/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM&#39;: failed to GET &#39;http://dashboard.jicki.me/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM&#39;: Get http://dashboard.jicki.me/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM: dial tcp: lookup dashboard.jicki.me on 10.254.0.2:53: no such host
+I1206 07:58:57.570703       1 http.go:110] could not reach &#39;http://dashboard.jicki.cn/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM&#39;: failed to GET &#39;http://dashboard.jicki.cn/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM&#39;: Get http://dashboard.jicki.cn/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM: dial tcp: lookup dashboard.jicki.cn on 10.254.0.2:53: no such host
 </code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2018-12-04</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/certbot/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/certbot/ data-title="Let's Encrypt 证书 申请" data-via=jicki234 data-hashtags=linux,docker><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/certbot/ data-hashtag=linux><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/certbot/ data-title="Let's Encrypt 证书 申请" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/certbot/ data-title="Let's Encrypt 证书 申请"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/certbot/ data-title="Let's Encrypt 证书 申请"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/certbot/ data-title="Let's Encrypt 证书 申请" data-description="Let's Encrypt 证书 申请"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/certbot/ data-title="Let's Encrypt 证书 申请" data-description="Let's Encrypt 证书 申请"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/certbot/ data-title="Let's Encrypt 证书 申请"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/linux/>linux</a>,&nbsp;<a href=/tags/docker/>docker</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/hyperledger-fabric-1.3/ class=prev rel=prev title="hyperledger-fabric v 1.3"><i class="fas fa-angle-left fa-fw"></i>hyperledger-fabric v 1.3</a>
 <a href=/helm/ class=next rel=next title="helm 包管理">helm 包管理<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://jicki.cn target=_blank>小炒肉</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>粤ICP备20055633号</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":50},"comment":{},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

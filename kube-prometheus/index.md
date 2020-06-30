@@ -423,7 +423,7 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-  - host: prometheus.jicki.me
+  - host: prometheus.jicki.cn
     http:
       paths:
       - backend:
@@ -445,7 +445,7 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-  - host: grafana.jicki.me
+  - host: grafana.jicki.cn
     http:
       paths:
       - backend:
@@ -468,7 +468,7 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-  - host: alertmanager.jicki.me
+  - host: alertmanager.jicki.cn
     http:
       paths:
       - backend:
@@ -520,17 +520,17 @@ spec:
 ![图12][12]
 
 
-  [1]: http://jicki.me/img/posts/kube-prometheus/1.png
-  [2]: http://jicki.me/img/posts/kube-prometheus/2.png
-  [3]: http://jicki.me/img/posts/kube-prometheus/3.png 
-  [4]: http://jicki.me/img/posts/kube-prometheus/4.png 
-  [5]: http://jicki.me/img/posts/kube-prometheus/5.png 
-  [6]: http://jicki.me/img/posts/kube-prometheus/6.png 
-  [7]: http://jicki.me/img/posts/kube-prometheus/7.png 
-  [8]: http://jicki.me/img/posts/kube-prometheus/8.png 
-  [9]: http://jicki.me/img/posts/kube-prometheus/9.png 
-  [10]: http://jicki.me/img/posts/kube-prometheus/10.png 
-  [11]: http://jicki.me/img/posts/kube-prometheus/11.png 
-  [12]: http://jicki.me/img/posts/kube-prometheus/12.png 
+  [1]: http://jicki.cn/img/posts/kube-prometheus/1.png
+  [2]: http://jicki.cn/img/posts/kube-prometheus/2.png
+  [3]: http://jicki.cn/img/posts/kube-prometheus/3.png 
+  [4]: http://jicki.cn/img/posts/kube-prometheus/4.png 
+  [5]: http://jicki.cn/img/posts/kube-prometheus/5.png 
+  [6]: http://jicki.cn/img/posts/kube-prometheus/6.png 
+  [7]: http://jicki.cn/img/posts/kube-prometheus/7.png 
+  [8]: http://jicki.cn/img/posts/kube-prometheus/8.png 
+  [9]: http://jicki.cn/img/posts/kube-prometheus/9.png 
+  [10]: http://jicki.cn/img/posts/kube-prometheus/10.png 
+  [11]: http://jicki.cn/img/posts/kube-prometheus/11.png 
+  [12]: http://jicki.cn/img/posts/kube-prometheus/12.png 
   [13]: https://coreos.com/sites/default/files/inline-images/p1.png
 

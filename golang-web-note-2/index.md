@@ -842,7 +842,7 @@ func main() {
 	// 外部跳转
 	r.GET("/redirect1", func(c *gin.Context) {
 		// StatusMovedPermanently error code 301
-		c.Redirect(http.StatusMovedPermanently, "https://www.jicki.me/")
+		c.Redirect(http.StatusMovedPermanently, "https://www.jicki.cn/")
 	})
 
 	// 内部跳转

@@ -2337,7 +2337,7 @@ metadata:
   namespace: kube-system
 spec:
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - backend:
@@ -2357,12 +2357,12 @@ ingress "dashboard-ingress" created
 
 [root@k8s-master-25 dashboard]# kubectl get ingress -n kube-system -o wide
 NAME                HOSTS                ADDRESS                   PORTS     AGE
-dashboard-ingress   dashboard.jicki.me   172.16.1.28,172.16.1.29   80        35s
+dashboard-ingress   dashboard.jicki.cn   172.16.1.28,172.16.1.29   80        35s
 
 
 # 测试访问
 
-[root@k8s-master-25 dashboard]# curl -I dashboard.jicki.me
+[root@k8s-master-25 dashboard]# curl -I dashboard.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.13.2
 Date: Thu, 06 Jul 2017 06:32:00 GMT
@@ -2495,8 +2495,8 @@ rm -rf kubernetes*
 ```
 
 
-  [1]: https://jicki.me/img/posts/kubernetes/dashboard.png
-  [2]: https://jicki.me/img/posts/kubernetes/hamaster.jpg
+  [1]: https://jicki.cn/img/posts/kubernetes/dashboard.png
+  [2]: https://jicki.cn/img/posts/kubernetes/hamaster.jpg
 
 
 

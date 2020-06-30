@@ -355,16 +355,16 @@ steps:
 
 
 
-  [1]: http://jicki.me/img/posts/drone/1.png
-  [2]: http://jicki.me/img/posts/drone/2.png
-  [3]: http://jicki.me/img/posts/drone/3.png 
-  [4]: http://jicki.me/img/posts/drone/4.png 
-  [5]: http://jicki.me/img/posts/drone/5.png 
-  [6]: http://jicki.me/img/posts/drone/6.png 
-  [7]: http://jicki.me/img/posts/drone/7.png 
-  [8]: http://jicki.me/img/posts/drone/8.png 
-  [9]: http://jicki.me/img/posts/drone/9.png 
-  [10]: http://jicki.me/img/posts/drone/10.png 
-  [11]: http://jicki.me/img/posts/drone/11.png 
-  [12]: http://jicki.me/img/posts/drone/12.png 
+  [1]: http://jicki.cn/img/posts/drone/1.png
+  [2]: http://jicki.cn/img/posts/drone/2.png
+  [3]: http://jicki.cn/img/posts/drone/3.png 
+  [4]: http://jicki.cn/img/posts/drone/4.png 
+  [5]: http://jicki.cn/img/posts/drone/5.png 
+  [6]: http://jicki.cn/img/posts/drone/6.png 
+  [7]: http://jicki.cn/img/posts/drone/7.png 
+  [8]: http://jicki.cn/img/posts/drone/8.png 
+  [9]: http://jicki.cn/img/posts/drone/9.png 
+  [10]: http://jicki.cn/img/posts/drone/10.png 
+  [11]: http://jicki.cn/img/posts/drone/11.png 
+  [12]: http://jicki.cn/img/posts/drone/12.png 
 

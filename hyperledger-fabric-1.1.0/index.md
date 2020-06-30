@@ -154,9 +154,9 @@ go version go1.10 linux/amd64
 
 |节点标识|hostname|IP|开放端口|系统|
 |--------|--------|--|--------|----------|---|--|
-|orderer节点|orderer.jicki.me|192.168.168.100|7050|CentOS 7 x64|
-|ca节点|ca0.org1.jicki.me|192.168.168.100|7054|CentOS 7 x64|
-|peer节点|peer0.org1.jicki.me|192.168.168.100|7051, 7052, 7053|CentOS 7 x64|
+|orderer节点|orderer.jicki.cn|192.168.168.100|7050|CentOS 7 x64|
+|ca节点|ca0.org1.jicki.cn|192.168.168.100|7054|CentOS 7 x64|
+|peer节点|peer0.org1.jicki.cn|192.168.168.100|7051, 7052, 7053|CentOS 7 x64|
 
 
 
@@ -276,7 +276,7 @@ wget https://raw.githubusercontent.com/hyperledger/fabric/v1.0.0/examples/e2e_cl
 wget https://raw.githubusercontent.com/hyperledger/fabric/v1.0.0/examples/e2e_cli/configtx.yaml
 
 
-# 这里修改相应 jicki.me 为 jicki.me
+# 这里修改相应 jicki.cn 为 jicki.cn
 
 sed -i 's/example\.com/jicki\.me/g' *.yaml
 
@@ -284,8 +284,8 @@ sed -i 's/example\.com/jicki\.me/g' *.yaml
 # 然后这里使用 cryptogen 软件来生成相应的证书了
 
 [root@localhost jicki]# cryptogen generate --config=./crypto-config.yaml
-org1.jicki.me
-org2.jicki.me
+org1.jicki.cn
+org2.jicki.cn
 
 
 
@@ -349,8 +349,8 @@ version: '2'
 
 services:
 
-  orderer.jicki.me:
-    container_name: orderer.jicki.me
+  orderer.jicki.cn:
+    container_name: orderer.jicki.cn
     image: hyperledger/fabric-orderer
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -374,8 +374,8 @@ services:
     command: orderer
     volumes:
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer.jicki.me/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer.jicki.cn/tls/:/var/hyperledger/orderer/tls
     networks:
       default:
         aliases:
@@ -399,7 +399,7 @@ services:
 
 # 创建于 /opt/jicki 目录下
 
-# 注: 如下目录中相关的 ca 证书请替换为 各自生成的, 本文目录为 /opt/jicki/crypto-config/peerOrganizations/org1.jicki.me/ca
+# 注: 如下目录中相关的 ca 证书请替换为 各自生成的, 本文目录为 /opt/jicki/crypto-config/peerOrganizations/org1.jicki.cn/ca
 
 # cli 部分  ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/jicki/chaincode/go
 # 为 智能合约的目录 我们约定为这个目录 需要预先创建 
@@ -447,33 +447,33 @@ services:
       # 数据持久化，用于存储链码值
       - /opt/jicki/couchdb/data:/opt/couchdb/data
 
-  ca0.org1.jicki.me:
-    container_name: ca0.org1.jicki.me
+  ca0.org1.jicki.cn:
+    container_name: ca0.org1.jicki.cn
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/ebed980e19743358897c6c7e9069dbc789a872097af8d142bdc69f0ac60c89d5_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/ebed980e19743358897c6c7e9069dbc789a872097af8d142bdc69f0ac60c89d5_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/ebed980e19743358897c6c7e9069dbc789a872097af8d142bdc69f0ac60c89d5_sk -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org1.jicki.me/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/org1.jicki.cn/ca/:/etc/hyperledger/fabric-ca-server-config
 
-  peer0.org1.jicki.me:
-    container_name: peer0.org1.jicki.me
+  peer0.org1.jicki.cn:
+    container_name: peer0.org1.jicki.cn
     image: hyperledger/fabric-peer
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
 
-      - CORE_PEER_ID=peer0.org1.jicki.me
+      - CORE_PEER_ID=peer0.org1.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -494,8 +494,8 @@ services:
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         - /opt/jicki/peer0:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -521,13 +521,13 @@ services:
       # - CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_TLS_ENABLED=false
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
         - /var/run/:/host/var/run/
@@ -535,7 +535,7 @@ services:
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - peer0.org1.jicki.me
+      - peer0.org1.jicki.cn
 
 ```
 
@@ -549,7 +549,7 @@ services:
 
 [root@localhost jicki]# docker-compose -f docker-compose-orderer.yaml up -d
 Creating network "jicki_default" with the default driver
-Pulling orderer.jicki.me (hyperledger/fabric-orderer:latest)...
+Pulling orderer.jicki.cn (hyperledger/fabric-orderer:latest)...
 latest: Pulling from hyperledger/fabric-orderer
 1be7f2b886e8: Pull complete
 6fbc4a21b806: Pull complete
@@ -563,8 +563,8 @@ c71a6f8e1378: Pull complete
 b1b98004e7c6: Pull complete
 Digest: sha256:7a0a6ca2bbddff69ddf63615cdddfe46bf5f2fe7c55530a092d597d99bd2a4bb
 Status: Downloaded newer image for hyperledger/fabric-orderer:latest
-Creating orderer.jicki.me ... 
-Creating orderer.jicki.me ... done
+Creating orderer.jicki.cn ... 
+Creating orderer.jicki.cn ... done
 
 
 ```
@@ -575,12 +575,12 @@ Creating orderer.jicki.me ... done
 # 启动 peer 服务
 
 [root@localhost jicki]# docker-compose -f docker-compose-peer.yaml up -d
-Creating ca0.org1.jicki.me ... 
+Creating ca0.org1.jicki.cn ... 
 Creating couchdb ... 
 Creating couchdb ... donee ... done
-Creating ca0.org1.jicki.me
-Creating peer0.org1.jicki.me ... 
-Creating peer0.org1.jicki.me ... done
+Creating ca0.org1.jicki.cn
+Creating peer0.org1.jicki.cn ... 
+Creating peer0.org1.jicki.cn ... done
 Creating cli ... 
 Creating cli ... done
 
@@ -609,8 +609,8 @@ hyperledger/fabric-peer                     latest                b023f9be0771  
 
 [root@localhost jicki]# docker ps -a
 77962643125a        hyperledger/fabric-tools                          "/bin/bash"              About a minute ago   Up About a minute                                                                                                                                       cli
-8334cd884f99        hyperledger/fabric-peer                           "peer node start"        About a minute ago   Up About a minute       0.0.0.0:7051-7053->7051-7053/tcp                                                                                                peer0.org1.jicki.me
-7faf1692b1c8        hyperledger/fabric-ca                             "sh -c 'fabric-ca-..."   About a minute ago   Up About a minute       0.0.0.0:7054->7054/tcp                                                                                                          ca0.org1.jicki.me
+8334cd884f99        hyperledger/fabric-peer                           "peer node start"        About a minute ago   Up About a minute       0.0.0.0:7051-7053->7051-7053/tcp                                                                                                peer0.org1.jicki.cn
+7faf1692b1c8        hyperledger/fabric-ca                             "sh -c 'fabric-ca-..."   About a minute ago   Up About a minute       0.0.0.0:7054->7054/tcp                                                                                                          ca0.org1.jicki.cn
 c3d581ca1957        hyperledger/fabric-couchdb                        "tini -- /docker-e..."   About a minute ago   Up About a minute       4369/tcp, 9100/tcp, 0.0.0.0:5984->5984/tcp                                                                                      couchdb
 435f6268ed57        hyperledger/fabric-orderer                        "orderer"                39 minutes ago       Up 39 minutes           0.0.0.0:7050->7050/tcp    
 
@@ -630,7 +630,7 @@ root@77962643125a:/opt/gopath/src/github.com/hyperledger/fabric/peer#
 
 # 执行 创建命令
 
-peer channel create -o orderer.jicki.me:7050 -c mychannel -t 50 -f ./channel-artifacts/mychannel.tx
+peer channel create -o orderer.jicki.cn:7050 -c mychannel -t 50 -f ./channel-artifacts/mychannel.tx
 
 
 # 输出如下:
@@ -751,7 +751,7 @@ peer chaincode install -n mychannel -p github.com/hyperledger/fabric/jicki/chain
 
 ```
 
-peer chaincode instantiate -o orderer.jicki.me:7050 -C mychannel -n mychannel -c '{"Args":["init","A","10","B","10"]}' -P "OR ('Org1MSP.member')" -v 1.0
+peer chaincode instantiate -o orderer.jicki.cn:7050 -C mychannel -n mychannel -c '{"Args":["init","A","10","B","10"]}' -P "OR ('Org1MSP.member')" -v 1.0
 
 
 
@@ -1024,7 +1024,7 @@ anzyAiBhP1KC50lg2OPfBYwjUgogWoEgZBBFJq4Oo9WVDu2V0Q==
 2018-06-05 04:10:23.550 UTC [common/configtx] addToMap -> DEBU 06b Adding to config map: [Policy] /Channel/Writers
 2018-06-05 04:10:23.550 UTC [common/configtx] addToMap -> DEBU 06c Adding to config map: [Policy] /Channel/Admins
 2018-06-05 04:10:23.550 UTC [common/configtx] addToMap -> DEBU 06d Adding to config map: [Policy] /Channel/Readers
-2018-06-05 04:10:23.550 UTC [chaincodeCmd] InitCmdFactory -> INFO 06e Get chain(mychannel) orderer endpoint: orderer.jicki.me:7050
+2018-06-05 04:10:23.550 UTC [chaincodeCmd] InitCmdFactory -> INFO 06e Get chain(mychannel) orderer endpoint: orderer.jicki.cn:7050
 2018-06-05 04:10:23.553 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 06f Using default escc
 2018-06-05 04:10:23.553 UTC [chaincodeCmd] checkChaincodeCmdParams -> INFO 070 Using default vscc
 2018-06-05 04:10:23.553 UTC [chaincodeCmd] getChaincodeSpec -> DEBU 071 java chaincode disabled
@@ -1114,7 +1114,7 @@ peer chaincode install -n mychannel -p github.com/hyperledger/fabric/jicki/chain
 
 
 # 更新版本为 1.1 的合约
-peer chaincode upgrade -o orderer.jicki.me:7050 -C mychannel -n mychannel -c '{"Args":["init","A","10","B","10"]}' -P "OR ('Org1MSP.member')" -v 1.1
+peer chaincode upgrade -o orderer.jicki.cn:7050 -C mychannel -n mychannel -c '{"Args":["init","A","10","B","10"]}' -P "OR ('Org1MSP.member')" -v 1.1
 
 
 # 旧版本的合约, 目前，fabric不支持合约的启动与暂停。要暂停或删除合约，只能到peer上手动删除容器。

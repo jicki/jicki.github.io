@@ -142,7 +142,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: traefik.jicki.me
+  - host: traefik.jicki.cn
     http:
       paths:
       - backend:
@@ -175,7 +175,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -189,14 +189,14 @@ spec:
 
 kubectl get ing
 NAME            HOSTS            ADDRESS   PORTS     AGE
-nginx-ingress   nginx.jicki.me             80        6s
+nginx-ingress   nginx.jicki.cn             80        6s
 
 
 
 # 查看访问
 
 
-curl nginx.jicki.me
+curl nginx.jicki.cn
 hello word!
 
 ```
@@ -207,7 +207,7 @@ hello word!
 
 
 ```
-curl traefik.jicki.me   
+curl traefik.jicki.cn   
 
 <a href="/dashboard/">Found</a>.
 
@@ -216,5 +216,5 @@ curl traefik.jicki.me
 ![2.png-56.3kB][1]
 
 
-  [1]: https://jicki.me/img/posts/traefik/2.png
+  [1]: https://jicki.cn/img/posts/traefik/2.png
 

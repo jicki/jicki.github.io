@@ -321,7 +321,7 @@ kubectl create namespace cattle-system
 
 /opt/helm/bin/helm install rancher rancher-stable/rancher \
     --namespace cattle-system \
-    --set hostname=rancher.jicki.me \
+    --set hostname=rancher.jicki.cn \
     --debug --dry-run
 
 ```
@@ -489,7 +489,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
 spec:
   rules:
-  - host: rancher.jicki.me  # hostname to access rancher server
+  - host: rancher.jicki.cn  # hostname to access rancher server
     http:
       paths:
       - backend:
@@ -497,7 +497,7 @@ spec:
           servicePort: 80
   tls:
   - hosts:
-    - rancher.jicki.me
+    - rancher.jicki.cn
     secretName: tls-rancher-ingress
 ```
 
@@ -547,7 +547,7 @@ NAME              TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
 service/rancher   ClusterIP   10.254.54.9   <none>        80/TCP    44m
 
 NAME                         HOSTS              ADDRESS   PORTS   AGE
-ingress.extensions/rancher   rancher.jicki.me             80      44m
+ingress.extensions/rancher   rancher.jicki.cn             80      44m
 
 NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/rancher   3/3     3            3           44m
@@ -572,7 +572,7 @@ kubectl create namespace cattle-system
 
 /opt/helm/bin/helm install rancher rancher-stable/rancher \
     --namespace cattle-system \
-    --set hostname=rancher.jicki.me \
+    --set hostname=rancher.jicki.cn \
     --set ingress.tls.source=secret \
     --debug --dry-run
 
@@ -734,7 +734,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
 spec:
   rules:
-  - host: rancher.jicki.me  # hostname to access rancher server
+  - host: rancher.jicki.cn  # hostname to access rancher server
     http:
       paths:
       - backend:
@@ -742,7 +742,7 @@ spec:
           servicePort: 80
   tls:
   - hosts:
-    - rancher.jicki.me
+    - rancher.jicki.cn
     secretName: tls-rancher-ingress
 
 ```
@@ -770,8 +770,8 @@ serviceaccount/rancher created
 ```
 kubectl -n cattle-system create \
   secret tls tls-rancher-ingress \
-  --cert=3258931_rancher.jicki.me.pem \
-  --key=3258931_rancher.jicki.me.key
+  --cert=3258931_rancher.jicki.cn.pem \
+  --key=3258931_rancher.jicki.cn.key
 ```
 
 
@@ -837,7 +837,7 @@ http {
 
     server {
         listen 443 ssl http2; # 如果是升级或者全新安装v2.2.2,需要禁止http2，其他版本不需修改。
-        server_name rancher.jicki.me;
+        server_name rancher.jicki.cn;
         ssl_certificate tls.crt;
         ssl_certificate_key tls.key;
 
@@ -859,7 +859,7 @@ http {
 
     server {
         listen 80;
-        server_name rancher.jicki.me;
+        server_name rancher.jicki.cn;
         return 301 https://$server_name$request_uri;
     }
 }
@@ -918,10 +918,10 @@ systemctl status nginx-proxy
 
 ### 访问 Rancher 
 
-* 如上配置, 已经添加 ingress 并且配置了域名为 rancher.jicki.me
+* 如上配置, 已经添加 ingress 并且配置了域名为 rancher.jicki.cn
 
 
-* 通过 浏览器访问 https://rancher.jicki.me
+* 通过 浏览器访问 https://rancher.jicki.cn
 
 ![图3][3]
 
@@ -1053,24 +1053,24 @@ kubectl patch namespace user-6jntr  -p '{"metadata":{"finalizers":[]}}' --type='
 
 
 
-  [1]: http://jicki.me/img/posts/rancher/rancher.png
-  [2]: http://jicki.me/img/posts/rancher/rancher-1.png
-  [3]: http://jicki.me/img/posts/rancher/webui-1.png
-  [4]: http://jicki.me/img/posts/rancher/webui-2.png
-  [5]: http://jicki.me/img/posts/rancher/webui-3.png
-  [6]: http://jicki.me/img/posts/rancher/webui-4.png
-  [7]: http://jicki.me/img/posts/rancher/webui-5.png
-  [8]: http://jicki.me/img/posts/rancher/webui-6.png
-  [9]: http://jicki.me/img/posts/rancher/webui-7.png
-  [10]: http://jicki.me/img/posts/rancher/webui-8.png
-  [11]: http://jicki.me/img/posts/rancher/webui-9.png
-  [12]: http://jicki.me/img/posts/rancher/webui-10.png
-  [13]: http://jicki.me/img/posts/rancher/webui-11.png
-  [14]: http://jicki.me/img/posts/rancher/webui-12.png
-  [15]: http://jicki.me/img/posts/rancher/webui-13.png
-  [16]: http://jicki.me/img/posts/rancher/webui-14.png
-  [17]: http://jicki.me/img/posts/rancher/webui-15.png
-  [18]: http://jicki.me/img/posts/rancher/webui-16.png
-  [19]: http://jicki.me/img/posts/rancher/webui-17.png
+  [1]: http://jicki.cn/img/posts/rancher/rancher.png
+  [2]: http://jicki.cn/img/posts/rancher/rancher-1.png
+  [3]: http://jicki.cn/img/posts/rancher/webui-1.png
+  [4]: http://jicki.cn/img/posts/rancher/webui-2.png
+  [5]: http://jicki.cn/img/posts/rancher/webui-3.png
+  [6]: http://jicki.cn/img/posts/rancher/webui-4.png
+  [7]: http://jicki.cn/img/posts/rancher/webui-5.png
+  [8]: http://jicki.cn/img/posts/rancher/webui-6.png
+  [9]: http://jicki.cn/img/posts/rancher/webui-7.png
+  [10]: http://jicki.cn/img/posts/rancher/webui-8.png
+  [11]: http://jicki.cn/img/posts/rancher/webui-9.png
+  [12]: http://jicki.cn/img/posts/rancher/webui-10.png
+  [13]: http://jicki.cn/img/posts/rancher/webui-11.png
+  [14]: http://jicki.cn/img/posts/rancher/webui-12.png
+  [15]: http://jicki.cn/img/posts/rancher/webui-13.png
+  [16]: http://jicki.cn/img/posts/rancher/webui-14.png
+  [17]: http://jicki.cn/img/posts/rancher/webui-15.png
+  [18]: http://jicki.cn/img/posts/rancher/webui-16.png
+  [19]: http://jicki.cn/img/posts/rancher/webui-17.png
 
 

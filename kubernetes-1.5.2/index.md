@@ -873,7 +873,7 @@ kubeadm init
 ```
 
 
-  [1]: http://jicki.me/img/posts/kubernetes/1.png
+  [1]: http://jicki.cn/img/posts/kubernetes/1.png
 
 
 

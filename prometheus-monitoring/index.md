@@ -1198,7 +1198,7 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-  - host: prometheus.jicki.me
+  - host: prometheus.jicki.cn
     http:
       paths:
       - backend:
@@ -1536,7 +1536,7 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-  - host: alertmanager.jicki.me
+  - host: alertmanager.jicki.cn
     http:
       paths:
       - backend:
@@ -1736,7 +1736,7 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-  - host: grafana.jicki.me
+  - host: grafana.jicki.cn
     http:
       paths:
       - backend:
@@ -1784,9 +1784,9 @@ prometheus-operator-9bf5574-s7k76     1/1       Running   0          2h
 ![5][5]
 {% endraw %}
 
-  [1]: https://jicki.me/img/posts/grafana/grafana1.png
-  [2]: https://jicki.me/img/posts/grafana/grafana2.png
-  [3]: https://jicki.me/img/posts/grafana/grafana3.png
-  [4]: https://jicki.me/img/posts/grafana/grafana4.png
-  [5]: https://jicki.me/img/posts/grafana/grafana5.png
+  [1]: https://jicki.cn/img/posts/grafana/grafana1.png
+  [2]: https://jicki.cn/img/posts/grafana/grafana2.png
+  [3]: https://jicki.cn/img/posts/grafana/grafana3.png
+  [4]: https://jicki.cn/img/posts/grafana/grafana4.png
+  [5]: https://jicki.cn/img/posts/grafana/grafana5.png
 

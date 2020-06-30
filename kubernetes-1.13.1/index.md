@@ -3032,7 +3032,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -3045,13 +3045,13 @@ spec:
 
 [root@kubernetes-64 ingress]# kubectl get ingress
 NAME            HOSTS            ADDRESS   PORTS     AGE
-nginx-ingress   nginx.jicki.me             80        6s
+nginx-ingress   nginx.jicki.cn             80        6s
 ```
 
 ```
 # 测试访问
 
-[root@kubernetes-64 ingress]# curl nginx.jicki.me
+[root@kubernetes-64 ingress]# curl nginx.jicki.cn
 <!DOCTYPE html>
 <html>
 <head>
@@ -3090,12 +3090,12 @@ Commercial support is available at
 
 # 创建一个 基于 自身域名的 证书
 
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.me-key.key -out dashboard.jicki.me.pem -subj "/CN=dashboard.jicki.me"
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.cn-key.key -out dashboard.jicki.cn.pem -subj "/CN=dashboard.jicki.cn"
 
 
 # 导入 域名的证书 到 集群 的 secret 中
 
-kubectl create secret tls dashboard-secret --namespace=kube-system --cert dashboard.jicki.me.pem --key dashboard.jicki.me-key.key
+kubectl create secret tls dashboard-secret --namespace=kube-system --cert dashboard.jicki.cn.pem --key dashboard.jicki.cn-key.key
 
 
 
@@ -3125,10 +3125,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: dashboard-secret
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -3142,7 +3142,7 @@ spec:
 ```
 # 测试访问
 
-[root@kubernetes-64 dashboard]# curl -I -k https://dashboard.jicki.me
+[root@kubernetes-64 dashboard]# curl -I -k https://dashboard.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.13.12
 Date: Wed, 11 Jul 2018 07:19:03 GMT
@@ -3303,8 +3303,8 @@ kubectl uncordon [nodeid]
 ```
 
 
-  [1]: https://jicki.me/img/posts/kubernetes/dashboard.png
-  [2]: https://jicki.me/img/posts/kubernetes/hamaster.jpg
-  [3]: https://jicki.me/img/posts/kubernetes/dashboard-new.jpeg
+  [1]: https://jicki.cn/img/posts/kubernetes/dashboard.png
+  [2]: https://jicki.cn/img/posts/kubernetes/hamaster.jpg
+  [3]: https://jicki.cn/img/posts/kubernetes/dashboard-new.jpeg
 
 

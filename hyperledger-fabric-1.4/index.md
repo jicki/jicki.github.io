@@ -19,9 +19,9 @@
 
 |节点标识|hostname|IP|开放端口|系统|
 |--------|--------|--|--------|----------|---|--|
-|orderer0节点|orderer0.jicki.me|192.168.100.100|7050|CentOS 7 x64|
-|peer0节点|peer0.org1.jicki.me|192.168.100.100|7051, 7052, 7053|CentOS 7 x64|
-|peer0节点|peer0.org2.jicki.me|192.168.100.100|7051, 7052, 7053|CentOS 7 x64|
+|orderer0节点|orderer0.jicki.cn|192.168.100.100|7050|CentOS 7 x64|
+|peer0节点|peer0.org1.jicki.cn|192.168.100.100|7051, 7052, 7053|CentOS 7 x64|
+|peer0节点|peer0.org2.jicki.cn|192.168.100.100|7051, 7052, 7053|CentOS 7 x64|
 |zk0节点|zookeeper0|192.168.100.100|2181|CentOS 7 x64|
 |zk1节点|zookeeper1|192.168.100.100|2181|CentOS 7 x64|
 |zk2节点|zookeeper2|192.168.100.100|2181|CentOS 7 x64|
@@ -292,7 +292,7 @@ source /etc/profile
 
 OrdererOrgs:
   - Name: Orderer
-    Domain: jicki.me
+    Domain: jicki.cn
     CA:
         Country: CN
         Province: GuangDong
@@ -302,7 +302,7 @@ OrdererOrgs:
       
 PeerOrgs:
   - Name: Org1
-    Domain: org1.jicki.me
+    Domain: org1.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -313,7 +313,7 @@ PeerOrgs:
     Users:
       Count: 1
   - Name: Org2
-    Domain: org2.jicki.me
+    Domain: org2.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -333,225 +333,225 @@ PeerOrgs:
 # 然后这里使用 cryptogen 软件来生成相应的证书了
 
 [root@localhost jicki]# cryptogen generate --config=./cryptogen.yaml
-org1.jicki.me
-org2.jicki.me
+org1.jicki.cn
+org2.jicki.cn
 
 # 生成一个 crypto-config 证书目录
 
 [root@payment jicki]# tree crypto-config
 crypto-config
 ├── ordererOrganizations
-│   └── jicki.me
+│   └── jicki.cn
 │       ├── ca
 │       │   ├── 87fcad73e61dbc5e267d0b56e991e2ef445407ddf89924debc299cf42dde53aa_sk
-│       │   └── ca.jicki.me-cert.pem
+│       │   └── ca.jicki.cn-cert.pem
 │       ├── msp
 │       │   ├── admincerts
-│       │   │   └── Admin@jicki.me-cert.pem
+│       │   │   └── Admin@jicki.cn-cert.pem
 │       │   ├── cacerts
-│       │   │   └── ca.jicki.me-cert.pem
+│       │   │   └── ca.jicki.cn-cert.pem
 │       │   └── tlscacerts
-│       │       └── tlsca.jicki.me-cert.pem
+│       │       └── tlsca.jicki.cn-cert.pem
 │       ├── orderers
-│       │   └── orderer0.jicki.me
+│       │   └── orderer0.jicki.cn
 │       │       ├── msp
 │       │       │   ├── admincerts
-│       │       │   │   └── Admin@jicki.me-cert.pem
+│       │       │   │   └── Admin@jicki.cn-cert.pem
 │       │       │   ├── cacerts
-│       │       │   │   └── ca.jicki.me-cert.pem
+│       │       │   │   └── ca.jicki.cn-cert.pem
 │       │       │   ├── keystore
 │       │       │   │   └── 8b8f847af6be4f902f4a85236155a0b9ee37d17edee74ee56212d84cb4b52219_sk
 │       │       │   ├── signcerts
-│       │       │   │   └── orderer0.jicki.me-cert.pem
+│       │       │   │   └── orderer0.jicki.cn-cert.pem
 │       │       │   └── tlscacerts
-│       │       │       └── tlsca.jicki.me-cert.pem
+│       │       │       └── tlsca.jicki.cn-cert.pem
 │       │       └── tls
 │       │           ├── ca.crt
 │       │           ├── server.crt
 │       │           └── server.key
 │       ├── tlsca
 │       │   ├── d13f753996d547371bcecc387472e88b95cc790dbcbb59a914f6aa05531e8a18_sk
-│       │   └── tlsca.jicki.me-cert.pem
+│       │   └── tlsca.jicki.cn-cert.pem
 │       └── users
-│           └── Admin@jicki.me
+│           └── Admin@jicki.cn
 │               ├── msp
 │               │   ├── admincerts
-│               │   │   └── Admin@jicki.me-cert.pem
+│               │   │   └── Admin@jicki.cn-cert.pem
 │               │   ├── cacerts
-│               │   │   └── ca.jicki.me-cert.pem
+│               │   │   └── ca.jicki.cn-cert.pem
 │               │   ├── keystore
 │               │   │   └── 7dfa64d80276527ed1c4ffd030c8b1f4fda213c85396ac3e06794d3957d825bc_sk
 │               │   ├── signcerts
-│               │   │   └── Admin@jicki.me-cert.pem
+│               │   │   └── Admin@jicki.cn-cert.pem
 │               │   └── tlscacerts
-│               │       └── tlsca.jicki.me-cert.pem
+│               │       └── tlsca.jicki.cn-cert.pem
 │               └── tls
 │                   ├── ca.crt
 │                   ├── client.crt
 │                   └── client.key
 └── peerOrganizations
-    ├── org1.jicki.me
+    ├── org1.jicki.cn
     │   ├── ca
     │   │   ├── 3a233ccbd6706cee4c66a320e43bedad3e72b6f68e831ce121f35760eb1ac275_sk
-    │   │   └── ca.org1.jicki.me-cert.pem
+    │   │   └── ca.org1.jicki.cn-cert.pem
     │   ├── msp
     │   │   ├── admincerts
-    │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │   │   ├── cacerts
-    │   │   │   └── ca.org1.jicki.me-cert.pem
+    │   │   │   └── ca.org1.jicki.cn-cert.pem
     │   │   ├── config.yaml
     │   │   └── tlscacerts
-    │   │       └── tlsca.org1.jicki.me-cert.pem
+    │   │       └── tlsca.org1.jicki.cn-cert.pem
     │   ├── peers
-    │   │   ├── peer0.org1.jicki.me
+    │   │   ├── peer0.org1.jicki.cn
     │   │   │   ├── msp
     │   │   │   │   ├── admincerts
-    │   │   │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │   │   │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │   │   │   │   ├── cacerts
-    │   │   │   │   │   └── ca.org1.jicki.me-cert.pem
+    │   │   │   │   │   └── ca.org1.jicki.cn-cert.pem
     │   │   │   │   ├── config.yaml
     │   │   │   │   ├── keystore
     │   │   │   │   │   └── eecd3dec5e6ba609a931d94bf0a1fb9defe047e68e1437fd1fec5fcfbe7dea23_sk
     │   │   │   │   ├── signcerts
-    │   │   │   │   │   └── peer0.org1.jicki.me-cert.pem
+    │   │   │   │   │   └── peer0.org1.jicki.cn-cert.pem
     │   │   │   │   └── tlscacerts
-    │   │   │   │       └── tlsca.org1.jicki.me-cert.pem
+    │   │   │   │       └── tlsca.org1.jicki.cn-cert.pem
     │   │   │   └── tls
     │   │   │       ├── ca.crt
     │   │   │       ├── server.crt
     │   │   │       └── server.key
-    │   │   └── peer1.org1.jicki.me
+    │   │   └── peer1.org1.jicki.cn
     │   │       ├── msp
     │   │       │   ├── admincerts
-    │   │       │   │   └── Admin@org1.jicki.me-cert.pem
+    │   │       │   │   └── Admin@org1.jicki.cn-cert.pem
     │   │       │   ├── cacerts
-    │   │       │   │   └── ca.org1.jicki.me-cert.pem
+    │   │       │   │   └── ca.org1.jicki.cn-cert.pem
     │   │       │   ├── config.yaml
     │   │       │   ├── keystore
     │   │       │   │   └── d5a32a61b164604e6352a783f843e00c46ca2dfcefbc1b78c3ea14536483169b_sk
     │   │       │   ├── signcerts
-    │   │       │   │   └── peer1.org1.jicki.me-cert.pem
+    │   │       │   │   └── peer1.org1.jicki.cn-cert.pem
     │   │       │   └── tlscacerts
-    │   │       │       └── tlsca.org1.jicki.me-cert.pem
+    │   │       │       └── tlsca.org1.jicki.cn-cert.pem
     │   │       └── tls
     │   │           ├── ca.crt
     │   │           ├── server.crt
     │   │           └── server.key
     │   ├── tlsca
     │   │   ├── d17dbbb6206ef972706c17f25b77bd9482b9e1606cfa88ef90dbba179d4a86f7_sk
-    │   │   └── tlsca.org1.jicki.me-cert.pem
+    │   │   └── tlsca.org1.jicki.cn-cert.pem
     │   └── users
-    │       ├── Admin@org1.jicki.me
+    │       ├── Admin@org1.jicki.cn
     │       │   ├── msp
     │       │   │   ├── admincerts
-    │       │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │       │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │       │   │   ├── cacerts
-    │       │   │   │   └── ca.org1.jicki.me-cert.pem
+    │       │   │   │   └── ca.org1.jicki.cn-cert.pem
     │       │   │   ├── keystore
     │       │   │   │   └── 5420790271603cc3da1ec2a4e0c45e30fb6ebb00a001021b9e0a4d29ad4d19cc_sk
     │       │   │   ├── signcerts
-    │       │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │       │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │       │   │   └── tlscacerts
-    │       │   │       └── tlsca.org1.jicki.me-cert.pem
+    │       │   │       └── tlsca.org1.jicki.cn-cert.pem
     │       │   └── tls
     │       │       ├── ca.crt
     │       │       ├── client.crt
     │       │       └── client.key
-    │       └── User1@org1.jicki.me
+    │       └── User1@org1.jicki.cn
     │           ├── msp
     │           │   ├── admincerts
-    │           │   │   └── User1@org1.jicki.me-cert.pem
+    │           │   │   └── User1@org1.jicki.cn-cert.pem
     │           │   ├── cacerts
-    │           │   │   └── ca.org1.jicki.me-cert.pem
+    │           │   │   └── ca.org1.jicki.cn-cert.pem
     │           │   ├── keystore
     │           │   │   └── 43e76b981378f4820bdc3cf7a690e42c018e0cb69cf097dba4bbe0d8f8188cfa_sk
     │           │   ├── signcerts
-    │           │   │   └── User1@org1.jicki.me-cert.pem
+    │           │   │   └── User1@org1.jicki.cn-cert.pem
     │           │   └── tlscacerts
-    │           │       └── tlsca.org1.jicki.me-cert.pem
+    │           │       └── tlsca.org1.jicki.cn-cert.pem
     │           └── tls
     │               ├── ca.crt
     │               ├── client.crt
     │               └── client.key
-    └── org2.jicki.me
+    └── org2.jicki.cn
         ├── ca
         │   ├── 7ae61d566e35ebdcffa42a90e385d6698ffa457b69c3a56b94dfd77d8a2cfe96_sk
-        │   └── ca.org2.jicki.me-cert.pem
+        │   └── ca.org2.jicki.cn-cert.pem
         ├── msp
         │   ├── admincerts
-        │   │   └── Admin@org2.jicki.me-cert.pem
+        │   │   └── Admin@org2.jicki.cn-cert.pem
         │   ├── cacerts
-        │   │   └── ca.org2.jicki.me-cert.pem
+        │   │   └── ca.org2.jicki.cn-cert.pem
         │   ├── config.yaml
         │   └── tlscacerts
-        │       └── tlsca.org2.jicki.me-cert.pem
+        │       └── tlsca.org2.jicki.cn-cert.pem
         ├── peers
-        │   ├── peer0.org2.jicki.me
+        │   ├── peer0.org2.jicki.cn
         │   │   ├── msp
         │   │   │   ├── admincerts
-        │   │   │   │   └── Admin@org2.jicki.me-cert.pem
+        │   │   │   │   └── Admin@org2.jicki.cn-cert.pem
         │   │   │   ├── cacerts
-        │   │   │   │   └── ca.org2.jicki.me-cert.pem
+        │   │   │   │   └── ca.org2.jicki.cn-cert.pem
         │   │   │   ├── config.yaml
         │   │   │   ├── keystore
         │   │   │   │   └── 753d7217f9cbabdffbc69b74a38efedb70ab80b183cf50d78669fe0d19503aed_sk
         │   │   │   ├── signcerts
-        │   │   │   │   └── peer0.org2.jicki.me-cert.pem
+        │   │   │   │   └── peer0.org2.jicki.cn-cert.pem
         │   │   │   └── tlscacerts
-        │   │   │       └── tlsca.org2.jicki.me-cert.pem
+        │   │   │       └── tlsca.org2.jicki.cn-cert.pem
         │   │   └── tls
         │   │       ├── ca.crt
         │   │       ├── server.crt
         │   │       └── server.key
-        │   └── peer1.org2.jicki.me
+        │   └── peer1.org2.jicki.cn
         │       ├── msp
         │       │   ├── admincerts
-        │       │   │   └── Admin@org2.jicki.me-cert.pem
+        │       │   │   └── Admin@org2.jicki.cn-cert.pem
         │       │   ├── cacerts
-        │       │   │   └── ca.org2.jicki.me-cert.pem
+        │       │   │   └── ca.org2.jicki.cn-cert.pem
         │       │   ├── config.yaml
         │       │   ├── keystore
         │       │   │   └── 3ab2f929ddbe609cb587a55ac8f5bca4d47734db2c5bfed0221ef90ea73cb994_sk
         │       │   ├── signcerts
-        │       │   │   └── peer1.org2.jicki.me-cert.pem
+        │       │   │   └── peer1.org2.jicki.cn-cert.pem
         │       │   └── tlscacerts
-        │       │       └── tlsca.org2.jicki.me-cert.pem
+        │       │       └── tlsca.org2.jicki.cn-cert.pem
         │       └── tls
         │           ├── ca.crt
         │           ├── server.crt
         │           └── server.key
         ├── tlsca
         │   ├── 413aa8963bb8d193e91d7b54ccc699f32f293726e342ca102ea648e73d74813e_sk
-        │   └── tlsca.org2.jicki.me-cert.pem
+        │   └── tlsca.org2.jicki.cn-cert.pem
         └── users
-            ├── Admin@org2.jicki.me
+            ├── Admin@org2.jicki.cn
             │   ├── msp
             │   │   ├── admincerts
-            │   │   │   └── Admin@org2.jicki.me-cert.pem
+            │   │   │   └── Admin@org2.jicki.cn-cert.pem
             │   │   ├── cacerts
-            │   │   │   └── ca.org2.jicki.me-cert.pem
+            │   │   │   └── ca.org2.jicki.cn-cert.pem
             │   │   ├── keystore
             │   │   │   └── 08f6865e8d30d2d326e9d04be8eea92e25b39128afba02652fa0f4ee3f0dc35a_sk
             │   │   ├── signcerts
-            │   │   │   └── Admin@org2.jicki.me-cert.pem
+            │   │   │   └── Admin@org2.jicki.cn-cert.pem
             │   │   └── tlscacerts
-            │   │       └── tlsca.org2.jicki.me-cert.pem
+            │   │       └── tlsca.org2.jicki.cn-cert.pem
             │   └── tls
             │       ├── ca.crt
             │       ├── client.crt
             │       └── client.key
-            └── User1@org2.jicki.me
+            └── User1@org2.jicki.cn
                 ├── msp
                 │   ├── admincerts
-                │   │   └── User1@org2.jicki.me-cert.pem
+                │   │   └── User1@org2.jicki.cn-cert.pem
                 │   ├── cacerts
-                │   │   └── ca.org2.jicki.me-cert.pem
+                │   │   └── ca.org2.jicki.cn-cert.pem
                 │   ├── keystore
                 │   │   └── d5ac39f341b6e0ea2e50646dcabd132dcb002da31760a02e376d55669a30e885_sk
                 │   ├── signcerts
-                │   │   └── User1@org2.jicki.me-cert.pem
+                │   │   └── User1@org2.jicki.cn-cert.pem
                 │   └── tlscacerts
-                │       └── tlsca.org2.jicki.me-cert.pem
+                │       └── tlsca.org2.jicki.cn-cert.pem
                 └── tls
                     ├── ca.crt
                     ├── client.crt
@@ -581,7 +581,7 @@ Organizations:
     - &OrdererOrg
         Name: OrdererMSP
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/jicki.me/msp
+        MSPDir: crypto-config/ordererOrganizations/jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -596,7 +596,7 @@ Organizations:
     - &Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org1.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -609,13 +609,13 @@ Organizations:
                 Rule: "OR('Org1MSP.admin')"
 
         AnchorPeers:
-            - Host: peer0.org1.jicki.me
+            - Host: peer0.org1.jicki.cn
               Port: 7051
 
     - &Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org2.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -628,7 +628,7 @@ Organizations:
                 Rule: "OR('Org2MSP.admin')"
 
         AnchorPeers:
-            - Host: peer0.org2.jicki.me
+            - Host: peer0.org2.jicki.cn
               Port: 7051
 
 Capabilities:
@@ -666,7 +666,7 @@ Orderer: &OrdererDefaults
     OrdererType: kafka
 
     Addresses:
-        - orderer0.jicki.me:7050
+        - orderer0.jicki.cn:7050
 
     BatchTimeout: 2s
 
@@ -1011,8 +1011,8 @@ services:
       - zookeeper2
       - zookeeper3
 
-  orderer0.jicki.me:
-    container_name: orderer0.jicki.me
+  orderer0.jicki.cn:
+    container_name: orderer0.jicki.cn
     image: hyperledger/fabric-orderer:1.4.0
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -1046,10 +1046,10 @@ services:
     # 数据持久化,以及存储
     - ./data/orderer0:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
     networks:
       default:
         aliases:
@@ -1061,45 +1061,45 @@ services:
       - kafka1
       - kafka2
 
-  ca.org1.jicki.me:
-    container_name: ca.org1.jicki.me
+  ca.org1.jicki.cn:
+    container_name: ca.org1.jicki.cn
     image: hyperledger/fabric-ca:1.4.0
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org1
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3a233ccbd6706cee4c66a320e43bedad3e72b6f68e831ce121f35760eb1ac275_sk
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3a233ccbd6706cee4c66a320e43bedad3e72b6f68e831ce121f35760eb1ac275_sk
       - GODEBUG=netdns=go
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3a233ccbd6706cee4c66a320e43bedad3e72b6f68e831ce121f35760eb1ac275_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3a233ccbd6706cee4c66a320e43bedad3e72b6f68e831ce121f35760eb1ac275_sk -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org1.jicki.me/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/org1.jicki.cn/ca/:/etc/hyperledger/fabric-ca-server-config
     depends_on:
-      - orderer0.jicki.me
+      - orderer0.jicki.cn
 
-  ca.org2.jicki.me:
-    container_name: ca.org2.jicki.me
+  ca.org2.jicki.cn:
+    container_name: ca.org2.jicki.cn
     image: hyperledger/fabric-ca:1.4.0
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org2
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/7ae61d566e35ebdcffa42a90e385d6698ffa457b69c3a56b94dfd77d8a2cfe96_sk
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/7ae61d566e35ebdcffa42a90e385d6698ffa457b69c3a56b94dfd77d8a2cfe96_sk
       - GODEBUG=netdns=go
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.me-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/7ae61d566e35ebdcffa42a90e385d6698ffa457b69c3a56b94dfd77d8a2cfe96_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.cn-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/7ae61d566e35ebdcffa42a90e385d6698ffa457b69c3a56b94dfd77d8a2cfe96_sk -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org2.jicki.me/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/org2.jicki.cn/ca/:/etc/hyperledger/fabric-ca-server-config
     depends_on:
-      - orderer0.jicki.me
+      - orderer0.jicki.cn
 
   couchdb0:
     container_name: couchdb0
@@ -1133,18 +1133,18 @@ services:
         aliases:
           - jicki
 
-  peer0.org1.jicki.me:
-    container_name: peer0.org1.jicki.me
+  peer0.org1.jicki.cn:
+    container_name: peer0.org1.jicki.cn
     image: hyperledger/fabric-peer:1.4.0
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
       
-      - CORE_PEER_ID=peer0.org1.jicki.me
+      - CORE_PEER_ID=peer0.org1.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -1163,8 +1163,8 @@ services:
       - GODEBUG=netdns=go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         - ./data/peer0org1:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -1179,21 +1179,21 @@ services:
           - jicki
     depends_on:
       - couchdb0
-      - ca.org1.jicki.me
-      - orderer0.jicki.me
+      - ca.org1.jicki.cn
+      - orderer0.jicki.cn
 
-  peer0.org2.jicki.me:
-    container_name: peer0.org2.jicki.me
+  peer0.org2.jicki.cn:
+    container_name: peer0.org2.jicki.cn
     image: hyperledger/fabric-peer:1.4.0
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
       
-      - CORE_PEER_ID=peer0.org2.jicki.me
+      - CORE_PEER_ID=peer0.org2.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org2.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org2.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -1212,8 +1212,8 @@ services:
       - GODEBUG=netdns=go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         - ./data/peer0org2:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -1228,8 +1228,8 @@ services:
           - jicki
     depends_on:
       - couchdb1
-      - ca.org2.jicki.me
-      - orderer0.jicki.me
+      - ca.org2.jicki.cn
+      - orderer0.jicki.cn
   cli:
     container_name: cli
     image: hyperledger/fabric-tools:1.4.0
@@ -1241,13 +1241,13 @@ services:
       # - CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
         - /var/run/:/host/var/run/
@@ -1260,11 +1260,11 @@ services:
         aliases:
           - jicki
     depends_on:
-      - ca.org1.jicki.me
-      - ca.org2.jicki.me
-      - orderer0.jicki.me
-      - peer0.org1.jicki.me
-      - peer0.org2.jicki.me
+      - ca.org1.jicki.cn
+      - ca.org2.jicki.cn
+      - orderer0.jicki.cn
+      - peer0.org1.jicki.cn
+      - peer0.org2.jicki.cn
 ```
 
 
@@ -1297,7 +1297,7 @@ root@0b55c64a9853:/opt/gopath/src/github.com/hyperledger/fabric/peer#
 ```
 # 执行 创建命令 (未启动 认证)
 
-peer channel create -c mychannel -f ./channel-artifacts/channel.tx --orderer orderer0.jicki.me:7050
+peer channel create -c mychannel -f ./channel-artifacts/channel.tx --orderer orderer0.jicki.cn:7050
 
 
 # 提示如下表示认证不通过
@@ -1310,7 +1310,7 @@ Error: failed to create deliver client: rpc error: code = Unavailable desc = all
 
 ```
 # 以下为启用认证
-peer channel create -o orderer0.jicki.me:7050 -c mychannel -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer channel create -o orderer0.jicki.cn:7050 -c mychannel -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 
@@ -1346,7 +1346,7 @@ drwxr-xr-x 4 root root  4096 Oct 29 05:25 crypto
 > 我们这边有2个 peer 所以需要分别加入, 后续有多少个 peer 都需要加入到 Channel 中
 
 ```
-# peer0.org1.jicki.me 加入 此 channel 中，首先需要查看如下 环境变量
+# peer0.org1.jicki.cn 加入 此 channel 中，首先需要查看如下 环境变量
 
 
 echo $CORE_PEER_LOCALMSPID
@@ -1368,7 +1368,7 @@ peer channel join -b mychannel.block
 ```
 # 加入 channel (开启认证)
 
-peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer channel join -b mychannel.block -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 # 输出如下: 
@@ -1382,13 +1382,13 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 
 
 ```
-# peer1.org2.jicki.me 加入 此 channel 中，这里配置一下环境变量
+# peer1.org2.jicki.cn 加入 此 channel 中，这里配置一下环境变量
 
 
 export CORE_PEER_LOCALMSPID="Org2MSP"
-export CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
+export CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
 ```
 
 
@@ -1405,7 +1405,7 @@ peer channel join -b mychannel.block
 
 # 加入 channel (开启认证)
 
-peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer channel join -b mychannel.block -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 # 输入如下:
@@ -1486,9 +1486,9 @@ func main() {
 # 同样需要先配置变量
 
 export CORE_PEER_LOCALMSPID="Org1MSP"
-export CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
+export CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
 
 
 
@@ -1514,9 +1514,9 @@ peer chaincode install -n example2 -p github.com/hyperledger/fabric/jicki/chainc
 # 同样需要先配置变量
 
 export CORE_PEER_LOCALMSPID="Org2MSP"
-export CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
+export CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
 
 
 
@@ -1544,7 +1544,7 @@ peer chaincode install -n example2 -p github.com/hyperledger/fabric/jicki/chainc
 
 ```
 # 实例化合约 (未认证)
-peer chaincode instantiate -o orderer0.jicki.me:7050 -C mychannel -n example2 -c '{"Args":["init","A","200","B","500"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.0
+peer chaincode instantiate -o orderer0.jicki.cn:7050 -C mychannel -n example2 -c '{"Args":["init","A","200","B","500"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.0
 ```
 
 
@@ -1552,7 +1552,7 @@ peer chaincode instantiate -o orderer0.jicki.me:7050 -C mychannel -n example2 -c
 
 ```
 # 实例化合约 (已认证)
-peer chaincode instantiate -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem -C mychannel -n example2 -c '{"Args":["init","A","200","B","500"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.0
+peer chaincode instantiate -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem -C mychannel -n example2 -c '{"Args":["init","A","200","B","500"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.0
 
 
 
@@ -1624,7 +1624,7 @@ peer chaincode invoke -C mychannel -n example2 -c '{"Args":["invoke", "A", "B", 
 ```
 # 从A账户 转账 100 个币 到 B 账户 (开启认证)
 
-peer chaincode invoke -C mychannel -n example2 -c '{"Args":["invoke", "A", "B", "100"]}' -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer chaincode invoke -C mychannel -n example2 -c '{"Args":["invoke", "A", "B", "100"]}' -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 
@@ -1672,11 +1672,11 @@ peer chaincode query -C mychannel -n example2 -c '{"Args":["query","B"]}'
 ```
 
 ```
-# 查看 peer0.org1.jicki.me 节点里 生成的容器
+# 查看 peer0.org1.jicki.cn 节点里 生成的容器
 
 [root@localhost jicki]# docker ps -a
 CONTAINER ID        IMAGE                                                                                                     COMMAND                  CREATED             STATUS              PORTS                                                                                         NAMES
-1e3b763e3034        jicki-peer0.org2.jicki.me-example2-1.0-3b619b4d039726a6e131bc22c779eab46f4f1325e0299f289761f6372e0fc252   "chaincode -peer.add…"   3 minutes ago       Up 3 minutes                                                                                 jicki-peer0.org2.jicki.me-example2-1.0
+1e3b763e3034        jicki-peer0.org2.jicki.cn-example2-1.0-3b619b4d039726a6e131bc22c779eab46f4f1325e0299f289761f6372e0fc252   "chaincode -peer.add…"   3 minutes ago       Up 3 minutes                                                                                 jicki-peer0.org2.jicki.cn-example2-1.0
 
 ```
 
@@ -1709,11 +1709,11 @@ peer chaincode install -n example2 -p github.com/hyperledger/fabric/jicki/chainc
 
 
 # 更新版本为 1.1 的合约 (未开启认证)
-peer chaincode upgrade -o orderer0.jicki.me:7050 -C mychannel -n example2 -c '{"Args":["init","A","100","B","50"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.1 
+peer chaincode upgrade -o orderer0.jicki.cn:7050 -C mychannel -n example2 -c '{"Args":["init","A","100","B","50"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.1 
 
 
 # 更新版本为 1.1 的合约 (开启认证)
-peer chaincode upgrade -o orderer0.jicki.me:7050 -C mychannel -n example2 -c '{"Args":["init","A","100","B","50"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.1 -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer chaincode upgrade -o orderer0.jicki.cn:7050 -C mychannel -n example2 -c '{"Args":["init","A","100","B","50"]}' -P "OR ('Org1MSP.member','Org2MSP.member')" -v 1.1 -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 # 旧版本的合约, 目前，fabric不支持合约的启动与暂停。要暂停或删除合约，只能到peer上手动删除容器。
@@ -1826,26 +1826,26 @@ version: "1.0"
 channels:
   mychannel:
     orderers:
-      - orderer0.jicki.me    peers:
-      peer0.org1.jicki.me:
+      - orderer0.jicki.cn    peers:
+      peer0.org1.jicki.cn:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: true
 
-      #peer1.org1.jicki.me:
+      #peer1.org1.jicki.cn:
       #  endorsingPeer: false
       #  chaincodeQuery: true
       #  ledgerQuery: true
       #  eventSource: false
 
-      peer0.org2.jicki.me:
+      peer0.org2.jicki.cn:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: true
 
-      #peer1.org2.jicki.me:
+      #peer1.org2.jicki.cn:
       #  endorsingPeer: false
       #  chaincodeQuery: true
       #  ledgerQuery: true
@@ -1859,70 +1859,70 @@ organizations:
     mspid: Org1MSP
 
     peers:
-      - peer0.org1.jicki.me
-      #- peer1.org1.jicki.me
+      - peer0.org1.jicki.cn
+      #- peer1.org1.jicki.cn
 
     certificateAuthorities:
       - ca-org1
     adminPrivateKey:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp/keystore/a9666f561d211e7b7cc170bfe854721431a1038b7914a67555d82dcf6b9eaaf8_sk
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp/keystore/a9666f561d211e7b7cc170bfe854721431a1038b7914a67555d82dcf6b9eaaf8_sk
     signedCert:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp/signcerts/Admin@org1.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp/signcerts/Admin@org1.jicki.cn-cert.pem
 
   Org2:
     mspid: Org2MSP
     peers:
-      - peer0.org2.jicki.me
-      #- peer1.org2.jicki.me
+      - peer0.org2.jicki.cn
+      #- peer1.org2.jicki.cn
 
     certificateAuthorities:
       - ca-org2
     adminPrivateKey:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp/keystore/d402b684b807080653511978a51fcd2326668156cd8a10fb612b80bc49c9b354_sk
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp/keystore/d402b684b807080653511978a51fcd2326668156cd8a10fb612b80bc49c9b354_sk
     signedCert:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp/signcerts/Admin@org2.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp/signcerts/Admin@org2.jicki.cn-cert.pem
 
 orderers:
-  orderer0.jicki.me:
+  orderer0.jicki.cn:
     url: grpcs://localhost:7050
 
     grpcOptions:
-      ssl-target-name-override: orderer0.jicki.me
+      ssl-target-name-override: orderer0.jicki.cn
 
     tlsCACerts:
-      path: artifacts/channel/crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/ca.crt
+      path: artifacts/channel/crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/ca.crt
 
 peers:
-  peer0.org1.jicki.me:
+  peer0.org1.jicki.cn:
     # this URL is used to send endorsement and query requests
     url: grpcs://localhost:7051
 
     grpcOptions:
-      ssl-target-name-override: peer0.org1.jicki.me
+      ssl-target-name-override: peer0.org1.jicki.cn
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
 
-  #peer1.org1.jicki.me:
+  #peer1.org1.jicki.cn:
   #  url: grpcs://localhost:7056
   #  grpcOptions:
-  #    ssl-target-name-override: peer1.org1.jicki.me
+  #    ssl-target-name-override: peer1.org1.jicki.cn
   #  tlsCACerts:
-  #    path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/tls/ca.crt
+  #    path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/tls/ca.crt
 
-  peer0.org2.jicki.me:
+  peer0.org2.jicki.cn:
     url: grpcs://localhost:8051
     grpcOptions:
-      ssl-target-name-override: peer0.org2.jicki.me
+      ssl-target-name-override: peer0.org2.jicki.cn
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
 
-  #peer1.org2.jicki.me:
+  #peer1.org2.jicki.cn:
   #  url: grpcs://localhost:8056
   #  eventUrl: grpcs://localhost:8058
   #  grpcOptions:
-  #    ssl-target-name-override: peer1.org2.jicki.me
+  #    ssl-target-name-override: peer1.org2.jicki.cn
   #  tlsCACerts:
-  #    path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/tls/ca.crt
+  #    path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/tls/ca.crt
 
 certificateAuthorities:
   ca-org1:
@@ -1930,7 +1930,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/ca/ca.org1.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/ca/ca.org1.jicki.cn-cert.pem
 
     registrar:
       - enrollId: admin
@@ -1942,7 +1942,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/ca/ca.org2.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/ca/ca.org2.jicki.cn-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -2025,7 +2025,7 @@ node app
 
 # 本文中只运行了 2个 peer 
 
-# 所以需要 编辑 testAPIs.sh 修改文件中 删除 peer1.org1.jicki.me  以及 peer1.org2.jicki.me
+# 所以需要 编辑 testAPIs.sh 修改文件中 删除 peer1.org1.jicki.cn  以及 peer1.org2.jicki.cn
 
 # 修改  "channelConfigPath":"../artifacts/channel/mychannel.tx" 中 mychannel.tx 为 channel.tx
 
@@ -2113,7 +2113,7 @@ curl -s -X POST \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json" \
   -d '{
-    "peers": ["peer0.org1.jicki.me"]
+    "peers": ["peer0.org1.jicki.cn"]
 }'
 
 ```
@@ -2142,7 +2142,7 @@ curl -s -X POST \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json" \
   -d '{
-    "peers": ["peer0.org1.jicki.me"],
+    "peers": ["peer0.org1.jicki.cn"],
     "chaincodeName":"mycc",
     "chaincodePath":"github.com/example_cc/go",
     "chaincodeType": "golang",
@@ -2171,7 +2171,7 @@ curl -s -X POST \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json" \
   -d '{
-    "peers": ["peer0.org1.jicki.me"],
+    "peers": ["peer0.org1.jicki.cn"],
     "chaincodeName":"mycc",
     "chaincodeVersion":"v0",
     "chaincodeType": "golang",
@@ -2191,7 +2191,7 @@ curl -s -X POST \
 ```
 
 curl -s -X GET \
-  "http://localhost:4000/channels?peer=peer0.org1.jicki.me" \
+  "http://localhost:4000/channels?peer=peer0.org1.jicki.cn" \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json"
 
@@ -2218,7 +2218,7 @@ curl -s -X GET \
 # 查询 a 的值
 
 curl -s -X GET \
-  "http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.me&fcn=query&args=%5B%22a%22%5D" \
+  "http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.cn&fcn=query&args=%5B%22a%22%5D" \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json"
 
@@ -2232,7 +2232,7 @@ curl -s -X GET \
 
 
 curl -s -X GET \
-  "http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.me&fcn=query&args=%5B%22b%22%5D" \
+  "http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.cn&fcn=query&args=%5B%22b%22%5D" \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json"
 
@@ -2273,7 +2273,7 @@ curl -s -X POST \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json" \
   -d '{
-    "peers": ["peer0.org1.jicki.me", "peer0.org2.jicki.me"],
+    "peers": ["peer0.org1.jicki.cn", "peer0.org2.jicki.cn"],
     "fcn":"move",
     "args":["a","b","10"]
 }'
@@ -2302,7 +2302,7 @@ Transaction ID is 70a5157704b950cca09a6a46f5be7fca61355b43ed83f3d9a5b633f3e38b36
 ```
 
 curl -s -X GET \
-  "http://localhost:4000/channels/mychannel?peer=peer0.org1.jicki.me" \
+  "http://localhost:4000/channels/mychannel?peer=peer0.org1.jicki.cn" \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json"
   
@@ -2337,7 +2337,7 @@ curl -s -X GET \
 ```
 
 curl -s -X GET \
-  "http://localhost:4000/chaincodes?peer=peer0.org1.jicki.me&type=installed" \
+  "http://localhost:4000/chaincodes?peer=peer0.org1.jicki.cn&type=installed" \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json"
 
@@ -2358,7 +2358,7 @@ curl -s -X GET \
 ```
 
 curl -s -X GET \
-  "http://localhost:4000/chaincodes?peer=peer0.org1.jicki.me&type=instantiated" \
+  "http://localhost:4000/chaincodes?peer=peer0.org1.jicki.cn&type=instantiated" \
   -H "authorization: Bearer $ORG1_TOKEN" \
   -H "content-type: application/json"
 

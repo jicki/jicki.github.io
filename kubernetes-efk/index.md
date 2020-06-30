@@ -130,6 +130,6 @@ http://node-ip:30601
 ![EFK Dashboard][1]
 
 
-  [1]: https://jicki.me/img/posts/efk/1.png
+  [1]: https://jicki.cn/img/posts/efk/1.png
 
 

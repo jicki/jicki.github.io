@@ -3303,7 +3303,7 @@ metadata:
   namespace: explorer
 spec:
   rules:
-  - host: explorer.jicki.me
+  - host: explorer.jicki.cn
     http:
       paths:
       - backend:
@@ -3315,5 +3315,5 @@ spec:
 ![explorer][1]
 
 
-  [1]: https://jicki.me/img/posts/fabric/explorer.png
+  [1]: https://jicki.cn/img/posts/fabric/explorer.png
 

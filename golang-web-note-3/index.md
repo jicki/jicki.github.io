@@ -13,9 +13,9 @@
 
   * 当一个资源从与该资源本身所在的服务器不同的域(域名)、协议(http/https)或端口(80/443等)请求一个资源时, 资源会发起一个跨域 HTTP 请求。
   
-  * 如: https://www.jicki.me 与 http://www.jicki.me 属于协议不同, 跨域
-  * 如: http://www.jicki.me 与 http://www.jicki.me:81 属于 端口不同, 跨域
-  * 如: http://a1.jicki.me 与 http://a2.jicki.me 属于 域不同, 跨域
+  * 如: https://www.jicki.cn 与 http://www.jicki.cn 属于协议不同, 跨域
+  * 如: http://www.jicki.cn 与 http://www.jicki.cn:81 属于 端口不同, 跨域
+  * 如: http://a1.jicki.cn 与 http://a2.jicki.cn 属于 域不同, 跨域
 
 
 * 如何实现跨域请求

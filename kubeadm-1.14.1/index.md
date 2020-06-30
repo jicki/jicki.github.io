@@ -1606,7 +1606,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -1629,7 +1629,7 @@ ingress.extensions/nginx-ingress created
 
 [root@kubernetes-1 yaml]# kubectl get ingress
 NAME            HOSTS            ADDRESS   PORTS   AGE
-nginx-ingress   nginx.jicki.me             80      3s
+nginx-ingress   nginx.jicki.cn             80      3s
 
 
 
@@ -1644,8 +1644,8 @@ nginx-ingress   nginx.jicki.me             80      3s
 ```
 # kubernetes-1
 
-[root@kubernetes-1 ~]# ping nginx.jicki.me
-PING nginx.jicki.me (192.168.168.11) 56(84) bytes of data.
+[root@kubernetes-1 ~]# ping nginx.jicki.cn
+PING nginx.jicki.cn (192.168.168.11) 56(84) bytes of data.
 64 bytes from kubernetes-1 (192.168.168.11): icmp_seq=1 ttl=64 time=0.070 ms
 64 bytes from kubernetes-1 (192.168.168.11): icmp_seq=2 ttl=64 time=0.031 ms
 64 bytes from kubernetes-1 (192.168.168.11): icmp_seq=3 ttl=64 time=0.032 ms
@@ -1653,7 +1653,7 @@ PING nginx.jicki.me (192.168.168.11) 56(84) bytes of data.
 
 
 
-[root@kubernetes-1 ~]# curl -I nginx.jicki.me
+[root@kubernetes-1 ~]# curl -I nginx.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.15.10
 Date: Fri, 10 May 2019 09:13:41 GMT
@@ -1674,8 +1674,8 @@ Accept-Ranges: bytes
 # kubernetes-2
 
 
-[root@kubernetes-1 ~]# ping nginx.jicki.me
-PING nginx.jicki.me (192.168.168.12) 56(84) bytes of data.
+[root@kubernetes-1 ~]# ping nginx.jicki.cn
+PING nginx.jicki.cn (192.168.168.12) 56(84) bytes of data.
 64 bytes from kubernetes-2 (192.168.168.12): icmp_seq=1 ttl=63 time=0.468 ms
 64 bytes from kubernetes-2 (192.168.168.12): icmp_seq=2 ttl=63 time=0.476 ms
 64 bytes from kubernetes-2 (192.168.168.12): icmp_seq=3 ttl=63 time=1.15 ms
@@ -1683,7 +1683,7 @@ PING nginx.jicki.me (192.168.168.12) 56(84) bytes of data.
 
 
 
-[root@kubernetes-1 ~]# curl -I nginx.jicki.me
+[root@kubernetes-1 ~]# curl -I nginx.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.15.10
 Date: Fri, 10 May 2019 09:21:06 GMT
@@ -1703,8 +1703,8 @@ Accept-Ranges: bytes
 # kubernetes-3
 
 
-[root@kubernetes-1 ~]# ping nginx.jicki.me
-PING nginx.jicki.me (192.168.168.13) 56(84) bytes of data.
+[root@kubernetes-1 ~]# ping nginx.jicki.cn
+PING nginx.jicki.cn (192.168.168.13) 56(84) bytes of data.
 64 bytes from kubernetes-3 (192.168.168.13): icmp_seq=1 ttl=64 time=0.273 ms
 64 bytes from kubernetes-3 (192.168.168.13): icmp_seq=2 ttl=64 time=0.098 ms
 64 bytes from kubernetes-3 (192.168.168.13): icmp_seq=3 ttl=64 time=0.123 ms
@@ -1712,7 +1712,7 @@ PING nginx.jicki.me (192.168.168.13) 56(84) bytes of data.
 
 
 
-[root@kubernetes-1 ~]# curl -I nginx.jicki.me
+[root@kubernetes-1 ~]# curl -I nginx.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.15.10
 Date: Fri, 10 May 2019 09:22:31 GMT
@@ -1866,12 +1866,12 @@ kubernetes-dashboard   ClusterIP   10.254.28.8   <none>        443/TCP          
 
 # 创建一个 基于 自身域名的 证书
 
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.me-key.key -out dashboard.jicki.me.pem -subj "/CN=dashboard.jicki.me"
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.jicki.cn-key.key -out dashboard.jicki.cn.pem -subj "/CN=dashboard.jicki.cn"
 
 
 # 导入 域名的证书 到 集群 的 secret 中
 
-kubectl create secret tls dashboard-secret --namespace=kube-system --cert dashboard.jicki.me.pem --key dashboard.jicki.me-key.key
+kubectl create secret tls dashboard-secret --namespace=kube-system --cert dashboard.jicki.cn.pem --key dashboard.jicki.cn-key.key
 
 ```
 
@@ -1926,10 +1926,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: dashboard-secret
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -1954,7 +1954,7 @@ ingress.extensions/kubernetes-dashboard created
 
 [root@kubernetes-1 dashboard]# kubectl get ingress -n kube-system
 NAME                   HOSTS                ADDRESS   PORTS     AGE
-kubernetes-dashboard   dashboard.jicki.me             80, 443   21s
+kubernetes-dashboard   dashboard.jicki.cn             80, 443   21s
 
 ```
 
@@ -1963,8 +1963,8 @@ kubernetes-dashboard   dashboard.jicki.me             80, 443   21s
 
 
 ```
-[root@kubernetes-1 dashboard]# ping dashboard.jicki.me
-PING dashboard.jicki.me (192.168.168.11) 56(84) bytes of data.
+[root@kubernetes-1 dashboard]# ping dashboard.jicki.cn
+PING dashboard.jicki.cn (192.168.168.11) 56(84) bytes of data.
 64 bytes from kubernetes-1 (192.168.168.11): icmp_seq=1 ttl=64 time=0.051 ms
 64 bytes from kubernetes-1 (192.168.168.11): icmp_seq=2 ttl=64 time=0.031 ms
 
@@ -1973,7 +1973,7 @@ PING dashboard.jicki.me (192.168.168.11) 56(84) bytes of data.
 
 
 ```
-[root@kubernetes-1 dashboard]# curl -I -k https://dashboard.jicki.me
+[root@kubernetes-1 dashboard]# curl -I -k https://dashboard.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.15.10
 Date: Mon, 13 May 2019 05:57:28 GMT

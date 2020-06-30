@@ -258,7 +258,7 @@ metadata:
   name: jenkins
 spec:  
   rules:  
-  - host: jenkins.jicki.me
+  - host: jenkins.jicki.cn
     http:  
       paths:  
       - path: /  

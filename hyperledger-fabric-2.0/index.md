@@ -236,7 +236,7 @@ hyperledger/fabric-ca        1.4.6               3b96a893c1e4        3 weeks ago
 ```
 OrdererOrgs:
   - Name: Orderer
-    Domain: jicki.me
+    Domain: jicki.cn
     CA:
         Country: CN
         Province: GuangDong
@@ -248,7 +248,7 @@ OrdererOrgs:
 
 PeerOrgs:
   - Name: Org1
-    Domain: org1.jicki.me
+    Domain: org1.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -260,7 +260,7 @@ PeerOrgs:
       Count: 1
 
   - Name: Org2
-    Domain: org2.jicki.me
+    Domain: org2.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -287,7 +287,7 @@ Organizations:
     - &OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/jicki.me/msp
+        MSPDir: crypto-config/ordererOrganizations/jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -300,11 +300,11 @@ Organizations:
                 Rule: "OR('OrdererMSP.admin')"
 
         OrdererEndpoints:
-            - orderer0.jicki.me:7050
+            - orderer0.jicki.cn:7050
     - &Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org1.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -320,12 +320,12 @@ Organizations:
                 Rule: "OR('Org1MSP.peer')"
 
         AnchorPeers:
-            - Host: peer0.org1.jicki.me
+            - Host: peer0.org1.jicki.cn
               Port: 7051
     - &Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org2.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -341,7 +341,7 @@ Organizations:
                 Rule: "OR('Org2MSP.peer')"
 
         AnchorPeers:
-            - Host: peer0.org2.jicki.me
+            - Host: peer0.org2.jicki.cn
               Port: 7051
 Capabilities:
     Channel: &ChannelCapabilities
@@ -432,22 +432,22 @@ Profiles:
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                - Host: orderer0.jicki.me
+                - Host: orderer0.jicki.cn
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
-                - Host: orderer1.jicki.me
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/server.crt
+                - Host: orderer1.jicki.cn
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
-                - Host: orderer2.jicki.me
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/tls/server.crt
+                - Host: orderer2.jicki.cn
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/tls/server.crt
             Addresses:
-                - orderer0.jicki.me:7050
-                - orderer1.jicki.me:7050
-                - orderer2.jicki.me:7050
+                - orderer0.jicki.cn:7050
+                - orderer1.jicki.cn:7050
+                - orderer2.jicki.cn:7050
 
             Organizations:
             - *OrdererOrg
@@ -524,8 +524,8 @@ mkdir -p /opt/jicki/channel-artifacts
 # 然后这里使用 cryptogen 软件来生成相应的证书了
 
 [root@localhost jicki]# cryptogen generate --config=./crypto-config.yaml
-org1.jicki.me
-org2.jicki.me
+org1.jicki.cn
+org2.jicki.cn
 
 ```
 
@@ -632,8 +632,8 @@ configtxgen \
 ```shell
 version: '2'
 services:
-  orderer0.jicki.me:
-    container_name: orderer0.jicki.me
+  orderer0.jicki.cn:
+    container_name: orderer0.jicki.cn
     image: hyperledger/fabric-orderer:2.0
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -658,20 +658,20 @@ services:
     # 数据持久化,以及存储
     - ./data/orderer0:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/:/etc/hyperledger/crypto/peer1rg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/:/etc/hyperledger/crypto/peer1rg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/:/etc/hyperledger/crypto/peer1rg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/:/etc/hyperledger/crypto/peer1rg2
     networks:
       default:
         aliases:
           - jicki
     ports:
       - 7050:7050
-  orderer1.jicki.me:
-    container_name: orderer1.jicki.me
+  orderer1.jicki.cn:
+    container_name: orderer1.jicki.cn
     image: hyperledger/fabric-orderer:2.0
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -696,20 +696,20 @@ services:
     # 数据持久化,以及存储
     - ./data/orderer1:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/:/etc/hyperledger/crypto/peer1rg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/:/etc/hyperledger/crypto/peer1rg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/:/etc/hyperledger/crypto/peer1rg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/:/etc/hyperledger/crypto/peer1rg2
     networks:
       default:
         aliases:
           - jicki
     ports:
       - 8050:7050
-  orderer2.jicki.me:
-    container_name: orderer2.jicki.me
+  orderer2.jicki.cn:
+    container_name: orderer2.jicki.cn
     image: hyperledger/fabric-orderer:2.0
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -734,12 +734,12 @@ services:
     # 数据持久化,以及存储
     - ./data/orderer2:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/:/etc/hyperledger/crypto/peer1rg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/:/etc/hyperledger/crypto/peer1rg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/:/etc/hyperledger/crypto/peer1rg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/:/etc/hyperledger/crypto/peer1rg2
     networks:
       default:
         aliases:
@@ -805,18 +805,18 @@ services:
         aliases:
           - jicki
 
-  peer0.org1.jicki.me:
-    container_name: peer0.org1.jicki.me
+  peer0.org1.jicki.cn:
+    container_name: peer0.org1.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
       
-      - CORE_PEER_ID=peer0.org1.jicki.me
+      - CORE_PEER_ID=peer0.org1.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -836,8 +836,8 @@ services:
       - GODEBUG=netdns=go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         - ./data/peer0org1:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -853,18 +853,18 @@ services:
     depends_on:
       - couchdb0
 
-  peer1.org1.jicki.me:
-    container_name: peer1.org1.jicki.me
+  peer1.org1.jicki.cn:
+    container_name: peer1.org1.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
       
-      - CORE_PEER_ID=peer1.org1.jicki.me
+      - CORE_PEER_ID=peer1.org1.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer1.org1.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.org1.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer1.org1.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.org1.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -884,8 +884,8 @@ services:
       - GODEBUG=netdns=go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         - ./data/peer1org1:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -902,18 +902,18 @@ services:
       - couchdb1
 
 
-  peer0.org2.jicki.me:
-    container_name: peer0.org2.jicki.me
+  peer0.org2.jicki.cn:
+    container_name: peer0.org2.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
 
-      - CORE_PEER_ID=peer0.org2.jicki.me
+      - CORE_PEER_ID=peer0.org2.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org2.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org2.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -933,8 +933,8 @@ services:
       - GODEBUG=netdns=go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         - ./data/peer0org2:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -950,18 +950,18 @@ services:
     depends_on:
       - couchdb2
 
-  peer1.org2.jicki.me:
-    container_name: peer1.org2.jicki.me
+  peer1.org2.jicki.cn:
+    container_name: peer1.org2.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
 
-      - CORE_PEER_ID=peer1.org2.jicki.me
+      - CORE_PEER_ID=peer1.org2.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer1.org2.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.org2.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer1.org2.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.org2.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -981,8 +981,8 @@ services:
       - GODEBUG=netdns=go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         - ./data/peer1org2:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -1008,13 +1008,13 @@ services:
       # - CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=org1.cli
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
         - /var/run/:/host/var/run/
@@ -1038,13 +1038,13 @@ services:
       # - CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=org2.cli
-      - CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
         - /var/run/:/host/var/run/
@@ -1069,11 +1069,11 @@ services:
 
 CLI_NAME=cli
 
-ORDERER=orderer0.jicki.me:7050
+ORDERER=orderer0.jicki.cn:7050
 
 CORE_PEER_TLS_ENABLED=true
 
-CAFILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+CAFILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 # Channel 通道ID 不能与 之前 Orderer 之前创建的通道相同,否则报错
 # config update for existing channel did not pass initial checks: implicit policy evaluation failed - 0 sub-policies were satisfied, but this policy requires 1 of the 'Writers' sub-policies to be satisfied: permission denied
@@ -1100,15 +1100,15 @@ docker exec -it -e "ORDERER=$ORDERER" -e "CORE_PEER_TLS_ENABLED=$CORE_PEER_TLS_E
 [root@localhost jicki]# docker exec -it org1.cli bash
 
 
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
-export CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
+export CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
 export CORE_PEER_LOCALMSPID="Org1MSP"
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
 
 
 peer channel join \
     -b mychannel.block \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     --tls $CORE_PEER_TLS_ENABLED \
     --cafile $ORDERER_CA
 
@@ -1118,16 +1118,16 @@ peer channel join \
 ```shell
 # org1 下的 peer1 节点
 
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
-export CORE_PEER_ADDRESS=peer1.org1.jicki.me:7051
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
+export CORE_PEER_ADDRESS=peer1.org1.jicki.cn:7051
 export CORE_PEER_LOCALMSPID="Org1MSP"
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/tls/ca.crt
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/tls/ca.crt
 
 
 
 peer channel join \
     -b mychannel.block \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     --tls $CORE_PEER_TLS_ENABLED \
     --cafile $ORDERER_CA
 
@@ -1140,15 +1140,15 @@ peer channel join \
 # org2 组织下的 peer0 节点
 
 
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
-export CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
+export CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
 export CORE_PEER_LOCALMSPID="Org2MSP"
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
 
 
 peer channel join \
     -b mychannel.block \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     --tls $CORE_PEER_TLS_ENABLED \
     --cafile $ORDERER_CA
 
@@ -1159,15 +1159,15 @@ peer channel join \
 # org2 组织下的 peer1 节点
 
 
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
-export CORE_PEER_ADDRESS=peer1.org2.jicki.me:7051
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
+export CORE_PEER_ADDRESS=peer1.org2.jicki.cn:7051
 export CORE_PEER_LOCALMSPID="Org2MSP"
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/tls/ca.crt
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/tls/ca.crt
 
 
 peer channel join \
     -b mychannel.block \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     --tls $CORE_PEER_TLS_ENABLED \
     --cafile $ORDERER_CA
 
@@ -1201,7 +1201,7 @@ docker exec -it org1.cli bash
 
 
 peer channel update \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     -c mychannel \
     -f ./channel-artifacts/Org1MSPanchors.tx \
     --tls $CORE_PEER_TLS_ENABLED \
@@ -1222,7 +1222,7 @@ docker exec -it org2.cli bash
 
 
 peer channel update \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     -c mychannel \
     -f ./channel-artifacts/Org2MSPanchors.tx \
     --tls $CORE_PEER_TLS_ENABLED \
@@ -1368,7 +1368,7 @@ peer lifecycle chaincode approveformyorg \
 
 2020-03-24 06:24:19.615 UTC [main] InitCmd -> WARN 001 CORE_LOGGING_LEVEL is no longer supported, please use the FABRIC_LOGGING_SPEC environment variable
 2020-03-24 06:24:19.619 UTC [main] SetOrdererEnv -> WARN 002 CORE_LOGGING_LEVEL is no longer supported, please use the FABRIC_LOGGING_SPEC environment variable
-2020-03-24 06:24:19.634 UTC [cli.lifecycle.chaincode] setOrdererClient -> INFO 003 Retrieved channel (mychannel) orderer endpoint: orderer0.jicki.me:7050
+2020-03-24 06:24:19.634 UTC [cli.lifecycle.chaincode] setOrdererClient -> INFO 003 Retrieved channel (mychannel) orderer endpoint: orderer0.jicki.cn:7050
 2020-03-24 06:24:21.880 UTC [chaincodeCmd] ClientWait -> INFO 004 txid [fb01bb2497d00ea1b4e63ef1f9afad125f892dd84717c0712e649716f3092493] committed with status (VALID) at 
 
 
@@ -1425,7 +1425,7 @@ peer lifecycle chaincode approveformyorg \
 ```shell
 # 输出如下:
 
-2020-03-24 06:26:25.523 UTC [cli.lifecycle.chaincode] setOrdererClient -> INFO 003 Retrieved channel (mychannel) orderer endpoint: orderer0.jicki.me:7050
+2020-03-24 06:26:25.523 UTC [cli.lifecycle.chaincode] setOrdererClient -> INFO 003 Retrieved channel (mychannel) orderer endpoint: orderer0.jicki.cn:7050
 2020-03-24 06:26:27.675 UTC [chaincodeCmd] ClientWait -> INFO 004 txid [067cce8f1c3ca9fa8f9239ad78542e30fee5b83d68ae054a8e9b76a01393bb08] committed with status (VALID) at
 ```
 
@@ -1467,7 +1467,7 @@ docker exec -it org1.cli bash
 
 # 提交 commit
 peer lifecycle chaincode commit \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     --channelID mychannel \
     --name mycc \
     --version 1 \
@@ -1475,10 +1475,10 @@ peer lifecycle chaincode commit \
     --init-required \
     --tls $CORE_PEER_TLS_ENABLED \
     --cafile $ORDERER_CA \
-    --peerAddresses peer0.org1.jicki.me:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt \
-    --peerAddresses peer0.org2.jicki.me:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
+    --peerAddresses peer0.org1.jicki.cn:7051 \
+    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt \
+    --peerAddresses peer0.org2.jicki.cn:7051 \
+    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
 
 ```
 
@@ -1486,8 +1486,8 @@ peer lifecycle chaincode commit \
 
 ```shell
 
-2020-03-24 07:14:12.187 UTC [chaincodeCmd] ClientWait -> INFO 003 txid [131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93] committed with status (VALID) at peer0.org1.jicki.me:7051
-2020-03-24 07:14:12.199 UTC [chaincodeCmd] ClientWait -> INFO 004 txid [131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93] committed with status (VALID) at peer0.org2.jicki.me:7051
+2020-03-24 07:14:12.187 UTC [chaincodeCmd] ClientWait -> INFO 003 txid [131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93] committed with status (VALID) at peer0.org1.jicki.cn:7051
+2020-03-24 07:14:12.199 UTC [chaincodeCmd] ClientWait -> INFO 004 txid [131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93] committed with status (VALID) at peer0.org2.jicki.cn:7051
 
 ```
 
@@ -1553,15 +1553,15 @@ docker exec -it org1.cli bash
 # Invoke 操作 ( 初始化 a, b 的值为100 )
 
 peer chaincode invoke \
-    -o orderer0.jicki.me:7050 \
+    -o orderer0.jicki.cn:7050 \
     --tls $CORE_PEER_TLS_ENABLED \
     --cafile $ORDERER_CA \
     -C mychannel \
     -n mycc \
-    --peerAddresses peer0.org1.jicki.me:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt \
-    --peerAddresses peer0.org2.jicki.me:7051 \
-    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt \
+    --peerAddresses peer0.org1.jicki.cn:7051 \
+    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt \
+    --peerAddresses peer0.org2.jicki.cn:7051 \
+    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt \
     --isInit \
     -c '{"Args":["Init","a","100","b","100"]}'
 
@@ -1604,8 +1604,8 @@ peer chaincode query \
 
 [root@localhost jicki]# docker ps -a
 CONTAINER ID        IMAGE                                                                                                                                                              COMMAND                  CREATED             STATUS              PORTS                                                                       NAMES
-439369210b83        jicki-peer0.org2.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-4b4600a44f861b0308c82385aacc3c53c711443e78b5bbfda58137dc13822a5a   "chaincode -peer.add…"   9 minutes ago       Up 9 minutes                                                                                    jicki-peer0.org2.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
-471657d67a7a        jicki-peer0.org1.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-80a4542fb02360e50a162b4d72841d190b64ed34b9b4a06234a09ed2a8c4d392   "chaincode -peer.add…"   9 minutes ago       Up 9 minutes                                                                                    jicki-peer0.org1.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
+439369210b83        jicki-peer0.org2.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-4b4600a44f861b0308c82385aacc3c53c711443e78b5bbfda58137dc13822a5a   "chaincode -peer.add…"   9 minutes ago       Up 9 minutes                                                                                    jicki-peer0.org2.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
+471657d67a7a        jicki-peer0.org1.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-80a4542fb02360e50a162b4d72841d190b64ed34b9b4a06234a09ed2a8c4d392   "chaincode -peer.add…"   9 minutes ago       Up 9 minutes                                                                                    jicki-peer0.org1.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
 
 ```
 
@@ -1613,6 +1613,6 @@ CONTAINER ID        IMAGE                                                       
 
 
 
-  [1]: http://jicki.me/img/posts/fabric/fabric.png
-  [2]: http://jicki.me/img/posts/fabric/fabric-2.png
+  [1]: http://jicki.cn/img/posts/fabric/fabric.png
+  [2]: http://jicki.cn/img/posts/fabric/fabric-2.png
 

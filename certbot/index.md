@@ -61,7 +61,7 @@ chmod a+x ./certbot-auto
 ```
 # 独立模式 --standalone
 
-./certbot-auto certonly --standalone --email jicki@qq.com --agree-tos -d jicki.me -d www.jicki.me
+./certbot-auto certonly --standalone --email jicki@qq.com --agree-tos -d jicki.cn -d www.jicki.cn
 
 # 独立模式需要 占用本机的 80 以及 443 端口 用来认证 证书，
 
@@ -77,7 +77,7 @@ chmod a+x ./certbot-auto
 
 # 不同域名需要配置再不同的 --webroot 目录下
 
-./certbot-auto certonly --agree-tos --email jicki@qq.com --webroot -w /var/www/html/ -d jicki.me -d www.jicki.me -w /var/www/wiki -d wiki.jicki.me
+./certbot-auto certonly --agree-tos --email jicki@qq.com --webroot -w /var/www/html/ -d jicki.cn -d www.jicki.cn -w /var/www/wiki -d wiki.jicki.cn
 
 
 # --webroot 模式 不需要关闭正在运行的服务, 但是会在 网站文件目录下 创建一个 .well-known 目录
@@ -119,7 +119,7 @@ chmod a+x ./certbot-auto
 > dns 模式支持 范域名 的证书
 
 ```
-./certbot-auto --server https://acme-v02.api.letsencrypt.org/directory -d "*.jicki.me" --manual --preferred-challenges dns-01 certonly
+./certbot-auto --server https://acme-v02.api.letsencrypt.org/directory -d "*.jicki.cn" --manual --preferred-challenges dns-01 certonly
 
 
 
@@ -130,7 +130,7 @@ Saving debug log to /var/log/letsencrypt/letsencrypt.log
 Plugins selected: Authenticator manual, Installer None
 Obtaining a new certificate
 Performing the following challenges:
-dns-01 challenge for jicki.me
+dns-01 challenge for jicki.cn
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 NOTE: The IP of this machine will be publicly logged as having requested this
@@ -143,7 +143,7 @@ Are you OK with your IP being logged?
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Please deploy a DNS TXT record under the name
-_acme-challenge.jicki.me with the following value:
+_acme-challenge.jicki.cn with the following value:
 
 tdoCC636Cel1wQPY-LB-FURPvNSloFhBdWyEoqkQZNU
 
@@ -159,7 +159,7 @@ Waiting for verification...
 ## 这里面提示在 dns 里配置一下 认证
 
 Please deploy a DNS TXT record under the name
-_acme-challenge.jicki.me with the following value:
+_acme-challenge.jicki.cn with the following value:
 
 tdoCC636Cel1wQPY-LB-FURPvNSloFhBdWyEoqkQZNU
 
@@ -167,7 +167,7 @@ Before continuing, verify the record is deployed.
 
 
 
-主机记录: _acme-challenge.jicki.me
+主机记录: _acme-challenge.jicki.cn
 记录类型: TXT
 记录值: tdoCC636Cel1wQPY-LB-FURPvNSloFhBdWyEoqkQZNU
 
@@ -195,16 +195,16 @@ Before continuing, verify the record is deployed.
   listen     80;
   listen     443 ssl;
   listen [::]:443 ssl ipv6only=on;
-  server_name jicki.me www.jicki.me;
+  server_name jicki.cn www.jicki.cn;
   root /var/www/html;
   index index.html index.htm index.php;
   access_log /var/logs/nginx/jicki.log main;
   
   # ssl setting
   ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
-  ssl_certificate /etc/letsencrypt/live/www.jicki.me/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/www.jicki.me/privkey.pem;
-  ssl_trusted_certificate /etc/letsencrypt/live/www.jicki.me/chain.pem;
+  ssl_certificate /etc/letsencrypt/live/www.jicki.cn/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/www.jicki.cn/privkey.pem;
+  ssl_trusted_certificate /etc/letsencrypt/live/www.jicki.cn/chain.pem;
   ssl_session_cache    shared:SSL:1m;
   ssl_session_timeout  5m;
   server_tokens off;
@@ -267,7 +267,7 @@ case $1 in
         -v /opt/data/nginx/ssl/:/etc/letsencrypt \
         certbot/certbot certonly \
         --standalone -m jicki@qq.com --agree-tos \
-        -d www.jicki.me -d jicki.me
+        -d www.jicki.cn -d jicki.cn
 
         docker start nginx
 
@@ -307,7 +307,7 @@ docker run --rm  -it  \
   -v /opt/nginx/ssl:/acme.sh  \
   -e Ali_Key="xxxxxx" \
   -e Ali_Secret="xxxx" \
-  neilpang/acme.sh  --issue --dns dns_ali -d jicki.me -d *.jicki.me
+  neilpang/acme.sh  --issue --dns dns_ali -d jicki.cn -d *.jicki.cn
 
 
 
@@ -316,7 +316,7 @@ docker run --rm  -it  \
   -v /opt/nginx/ssl:/acme.sh  \
   -e DP_Id="xxxxxx" \
   -e DP_Key="xxxx" \
-  neilpang/acme.sh  --issue --dns dns_dp -d jicki.me -d *.jicki.me
+  neilpang/acme.sh  --issue --dns dns_dp -d jicki.cn -d *.jicki.cn
 
 
 
@@ -325,7 +325,7 @@ docker run --rm  -it  \
   -v /opt/nginx/ssl:/acme.sh  \
   -e GD_Key="xxxxxx" \
   -e GD_Secret="xxxx" \
-  neilpang/acme.sh  --issue --dns dns_gd -d jicki.me -d *.jicki.me
+  neilpang/acme.sh  --issue --dns dns_gd -d jicki.cn -d *.jicki.cn
 
 
 ```
@@ -346,7 +346,7 @@ docker run --rm  -it  \
 
 > Helm 是 Kubernetes 的包管理器，可以帮我们简化 kubernetes 的操作，一键部署应用。
 >
-> helm 部署 请参考 https://jicki.me/kubernetes/docker/2018/12/07/helm/
+> helm 部署 请参考 https://jicki.cn/kubernetes/docker/2018/12/07/helm/
 
 
 
@@ -671,10 +671,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: dashboard-tls
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -692,14 +692,14 @@ spec:
 
 [root@kubernetes-1 ~]# kubectl get ingress -n kube-system
 NAME                        HOSTS                ADDRESS   PORTS     AGE
-kubernetes-dashboard        dashboard.jicki.me             80, 443   11s
+kubernetes-dashboard        dashboard.jicki.cn             80, 443   11s
 
 
 # 查看 pods
 
 [root@kubernetes-1 ~]# kubectl get pods -n kube-system
 NAME                        HOSTS                ADDRESS   PORTS     AGE
-cm-acme-http-solver-prcdn   dashboard.jicki.me             80        8s
+cm-acme-http-solver-prcdn   dashboard.jicki.cn             80        8s
 
 
 # 这个 cm-acme 是用来创建认证 证书的, 认证通过以后~会自动删除
@@ -716,16 +716,16 @@ Namespace:        kube-system
 Address:          
 Default backend:  default-http-backend:80 (<none>)
 TLS:
-  dashboard-tls terminates dashboard.jicki.me
+  dashboard-tls terminates dashboard.jicki.cn
 Rules:
   Host                Path  Backends
   ----                ----  --------
-  dashboard.jicki.me  
+  dashboard.jicki.cn  
                       /   kubernetes-dashboard:443 (10.254.101.26:8443)
 Annotations:
   certmanager.k8s.io/cluster-issuer:                 letsencrypt-prod
   ingress.kubernetes.io/ssl-passthrough:             true
-  kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{"certmanager.k8s.io/cluster-issuer":"letsencrypt-prod","ingress.kubernetes.io/ssl-passthrough":"true","kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/secure-backends":"true"},"name":"kubernetes-dashboard","namespace":"kube-system"},"spec":{"rules":[{"host":"dashboard.jicki.me","http":{"paths":[{"backend":{"serviceName":"kubernetes-dashboard","servicePort":443},"path":"/"}]}}],"tls":[{"hosts":["dashboard.jicki.me"],"secretName":"dashboard-tls"}]}}
+  kubectl.kubernetes.io/last-applied-configuration:  {"apiVersion":"extensions/v1beta1","kind":"Ingress","metadata":{"annotations":{"certmanager.k8s.io/cluster-issuer":"letsencrypt-prod","ingress.kubernetes.io/ssl-passthrough":"true","kubernetes.io/ingress.class":"nginx","nginx.ingress.kubernetes.io/secure-backends":"true"},"name":"kubernetes-dashboard","namespace":"kube-system"},"spec":{"rules":[{"host":"dashboard.jicki.cn","http":{"paths":[{"backend":{"serviceName":"kubernetes-dashboard","servicePort":443},"path":"/"}]}}],"tls":[{"hosts":["dashboard.jicki.cn"],"secretName":"dashboard-tls"}]}}
 
   kubernetes.io/ingress.class:                  nginx
   nginx.ingress.kubernetes.io/secure-backends:  true
@@ -774,7 +774,7 @@ I1206 07:05:06.585718       1 controller.go:142] certificates controller: syncin
 
 # 如果域名未配置，会报错 (因为申请证书需要认证 域名下的 .well-known/acme-challenge 目录)
 
-I1206 07:58:57.570703       1 http.go:110] could not reach 'http://dashboard.jicki.me/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM': failed to GET 'http://dashboard.jicki.me/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM': Get http://dashboard.jicki.me/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM: dial tcp: lookup dashboard.jicki.me on 10.254.0.2:53: no such host
+I1206 07:58:57.570703       1 http.go:110] could not reach 'http://dashboard.jicki.cn/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM': failed to GET 'http://dashboard.jicki.cn/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM': Get http://dashboard.jicki.cn/.well-known/acme-challenge/0beMNTSzGirQygofZ2kyiexLjqPDSV3-XGUGpokFSNM: dial tcp: lookup dashboard.jicki.cn on 10.254.0.2:53: no such host
 ```
 
 

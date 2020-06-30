@@ -105,8 +105,8 @@ func main() {
     <meta property="og:type" content="website">
     <meta property="og:description" content="你是我的梦想">
     
-    <meta property="og:image" content="https://jicki.me/img/avatar-jicki.png">
-    <meta property="og:url" content="https://jicki.me/about/">
+    <meta property="og:image" content="https://jicki.cn/img/avatar-jicki.png">
+    <meta property="og:url" content="https://jicki.cn/about/">
     <meta property="og:site_name" content="小炒肉 Blog | Jicki Blog">
     
     <title>About - 小炒肉 Blog | Jicki Blog</title>

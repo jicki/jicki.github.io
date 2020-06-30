@@ -188,6 +188,6 @@
 
 
 
-  [1]: http://jicki.me/img/posts/flannel/flannel-logo.png
-  [2]: http://jicki.me/img/posts/flannel/flannel-1.png
+  [1]: http://jicki.cn/img/posts/flannel/flannel-logo.png
+  [2]: http://jicki.cn/img/posts/flannel/flannel-1.png
 

@@ -3,7 +3,7 @@
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
 <i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">hyperledger-fabric v2.0</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/fabric/><i class="far fa-folder fa-fw"></i>fabric</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-03-23>2020-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 5192 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 11 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#hyperleger-fabric-是什么>Hyperleger fabric 是什么?</a></li><li><a href=#hyperledger-fabric-交易流程>Hyperledger Fabric 交易流程</a></li><li><a href=#部署-hyperledger-fabric-v20>部署 Hyperledger Fabric v2.0</a><ul><li><a href=#准备阶段>准备阶段</a></li><li><a href=#安装-docker>安装 docker</a></li><li><a href=#安装-docker-compose>安装 docker-compose</a></li><li><a href=#hyperledger-fabric-images>Hyperledger Fabric images</a></li><li><a href=#创建-crypto-configyaml-文件>创建 crypto-config.yaml 文件</a></li><li><a href=#创建-configtxgenyaml-文件>创建 configtxgen.yaml 文件</a></li><li><a href=#生成证书和创世区块>生成证书和创世区块</a></li><li><a href=#启动-fabric>启动 fabric</a></li><li><a href=#创建-channel>创建 Channel</a></li><li><a href=#加入-channel-join>加入 Channel (Join)</a></li><li><a href=#更新组织的-anchor-peer>更新组织的 anchor peer</a></li><li><a href=#安装-chaincode>安装 ChainCode</a></li><li><a href=#chaincode-投票>chaincode 投票</a></li><li><a href=#提交确认--submit->提交确认 ( submit )</a></li><li><a href=#操作-chaincode>操作 chaincode</a></li><li><a href=#查看-docker-container>查看 docker container</a></li></ul></li></ul></nav></div></div><div class=content id=content><blockquote><p>fabric v2.0 , 单机 多节点 RAFT 手动部署, 所有服务均 开启 SSL 认证。</p></blockquote><h1 id=hyperledger-fabric>hyperledger fabric</h1><h2 id=hyperleger-fabric-是什么>Hyperleger fabric 是什么?</h2><ul><li>Linux基金会于2015年创建了Hyperledger项目，以推进跨行业的区块链技术。Hyperledger Fabric是Hyperledger中的区块链项目之一。像其他区块链技术一样，它具有分类帐，使用智能合约，并且是参与者用来管理其交易的系统。Hyperledger Fabric与其他区块链系统最大的不同体现在私有和许可。</li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/fabric/fabric.png data-srcset="http://jicki.me/img/posts/fabric/fabric.png, http://jicki.me/img/posts/fabric/fabric.png 1.5x, http://jicki.me/img/posts/fabric/fabric.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/fabric/fabric.png title=图1></p><ul><li>Hyperledger Fabric 是一个（平台），提供分布式账本解决方案的平台，Hyperledger Fabric 由模块化架构支撑，并具备极佳的<code>保密性</code>、<code>可伸缩性</code>、<code>灵活性</code>、<code>可扩展性</code>，Hyperledger Fabric 被设计成（模块直接插拔，适用多种场景），支持不同的模块组件直接拔插启用，并能适应在经济生态系统中错综复杂的各种场景。</li></ul><h2 id=hyperledger-fabric-交易流程>Hyperledger Fabric 交易流程</h2><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/fabric/fabric-2.png data-srcset="http://jicki.me/img/posts/fabric/fabric-2.png, http://jicki.me/img/posts/fabric/fabric-2.png 1.5x, http://jicki.me/img/posts/fabric/fabric-2.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/fabric/fabric-2.png title=图2></p><h2 id=部署-hyperledger-fabric-v20>部署 Hyperledger Fabric v2.0</h2><blockquote><p>官网 github &mdash; <a href=https://github.com/hyperledger/fabric>https://github.com/hyperledger/fabric</a></p></blockquote><h3 id=准备阶段>准备阶段</h3><ul><li><p>docker-ce</p></li><li><p>docker-compose</p></li><li><p>Hyperledger Fabric images</p></li></ul><h3 id=安装-docker>安装 docker</h3><ul><li>升级内核</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#hyperleger-fabric-是什么>Hyperleger fabric 是什么?</a></li><li><a href=#hyperledger-fabric-交易流程>Hyperledger Fabric 交易流程</a></li><li><a href=#部署-hyperledger-fabric-v20>部署 Hyperledger Fabric v2.0</a><ul><li><a href=#准备阶段>准备阶段</a></li><li><a href=#安装-docker>安装 docker</a></li><li><a href=#安装-docker-compose>安装 docker-compose</a></li><li><a href=#hyperledger-fabric-images>Hyperledger Fabric images</a></li><li><a href=#创建-crypto-configyaml-文件>创建 crypto-config.yaml 文件</a></li><li><a href=#创建-configtxgenyaml-文件>创建 configtxgen.yaml 文件</a></li><li><a href=#生成证书和创世区块>生成证书和创世区块</a></li><li><a href=#启动-fabric>启动 fabric</a></li><li><a href=#创建-channel>创建 Channel</a></li><li><a href=#加入-channel-join>加入 Channel (Join)</a></li><li><a href=#更新组织的-anchor-peer>更新组织的 anchor peer</a></li><li><a href=#安装-chaincode>安装 ChainCode</a></li><li><a href=#chaincode-投票>chaincode 投票</a></li><li><a href=#提交确认--submit->提交确认 ( submit )</a></li><li><a href=#操作-chaincode>操作 chaincode</a></li><li><a href=#查看-docker-container>查看 docker container</a></li></ul></li></ul></nav></div></div><div class=content id=content><blockquote><p>fabric v2.0 , 单机 多节点 RAFT 手动部署, 所有服务均 开启 SSL 认证。</p></blockquote><h1 id=hyperledger-fabric>hyperledger fabric</h1><h2 id=hyperleger-fabric-是什么>Hyperleger fabric 是什么?</h2><ul><li>Linux基金会于2015年创建了Hyperledger项目，以推进跨行业的区块链技术。Hyperledger Fabric是Hyperledger中的区块链项目之一。像其他区块链技术一样，它具有分类帐，使用智能合约，并且是参与者用来管理其交易的系统。Hyperledger Fabric与其他区块链系统最大的不同体现在私有和许可。</li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/fabric/fabric.png data-srcset="http://jicki.cn/img/posts/fabric/fabric.png, http://jicki.cn/img/posts/fabric/fabric.png 1.5x, http://jicki.cn/img/posts/fabric/fabric.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/fabric/fabric.png title=图1></p><ul><li>Hyperledger Fabric 是一个（平台），提供分布式账本解决方案的平台，Hyperledger Fabric 由模块化架构支撑，并具备极佳的<code>保密性</code>、<code>可伸缩性</code>、<code>灵活性</code>、<code>可扩展性</code>，Hyperledger Fabric 被设计成（模块直接插拔，适用多种场景），支持不同的模块组件直接拔插启用，并能适应在经济生态系统中错综复杂的各种场景。</li></ul><h2 id=hyperledger-fabric-交易流程>Hyperledger Fabric 交易流程</h2><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/fabric/fabric-2.png data-srcset="http://jicki.cn/img/posts/fabric/fabric-2.png, http://jicki.cn/img/posts/fabric/fabric-2.png 1.5x, http://jicki.cn/img/posts/fabric/fabric-2.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/fabric/fabric-2.png title=图2></p><h2 id=部署-hyperledger-fabric-v20>部署 Hyperledger Fabric v2.0</h2><blockquote><p>官网 github &mdash; <a href=https://github.com/hyperledger/fabric>https://github.com/hyperledger/fabric</a></p></blockquote><h3 id=准备阶段>准备阶段</h3><ul><li><p>docker-ce</p></li><li><p>docker-compose</p></li><li><p>Hyperledger Fabric images</p></li></ul><h3 id=安装-docker>安装 docker</h3><ul><li>升级内核</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -262,7 +262,7 @@ hyperledger/fabric-ca        1.4.6               3b96a893c1e4        <span class
 </span><span class=lnt>37
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>OrdererOrgs:
   - Name: Orderer
-    Domain: jicki.me
+    Domain: jicki.cn
     CA:
         Country: CN
         Province: GuangDong
@@ -274,7 +274,7 @@ hyperledger/fabric-ca        1.4.6               3b96a893c1e4        <span class
 
 PeerOrgs:
   - Name: Org1
-    Domain: org1.jicki.me
+    Domain: org1.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -286,7 +286,7 @@ PeerOrgs:
       Count: 1
 
   - Name: Org2
-    Domain: org2.jicki.me
+    Domain: org2.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -485,7 +485,7 @@ Organizations:
     - <span class=p>&amp;</span>OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/jicki.me/msp
+        MSPDir: crypto-config/ordererOrganizations/jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -498,11 +498,11 @@ Organizations:
                 Rule: <span class=s2>&#34;OR(&#39;OrdererMSP.admin&#39;)&#34;</span>
 
         OrdererEndpoints:
-            - orderer0.jicki.me:7050
+            - orderer0.jicki.cn:7050
     - <span class=p>&amp;</span>Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org1.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -518,12 +518,12 @@ Organizations:
                 Rule: <span class=s2>&#34;OR(&#39;Org1MSP.peer&#39;)&#34;</span>
 
         AnchorPeers:
-            - Host: peer0.org1.jicki.me
+            - Host: peer0.org1.jicki.cn
               Port: <span class=m>7051</span>
     - <span class=p>&amp;</span>Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org2.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -539,7 +539,7 @@ Organizations:
                 Rule: <span class=s2>&#34;OR(&#39;Org2MSP.peer&#39;)&#34;</span>
 
         AnchorPeers:
-            - Host: peer0.org2.jicki.me
+            - Host: peer0.org2.jicki.cn
               Port: <span class=m>7051</span>
 Capabilities:
     Channel: <span class=p>&amp;</span>ChannelCapabilities
@@ -630,22 +630,22 @@ Profiles:
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                - Host: orderer0.jicki.me
+                - Host: orderer0.jicki.cn
                   Port: <span class=m>7050</span>
-                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/server.crt
-                - Host: orderer1.jicki.me
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/server.crt
+                - Host: orderer1.jicki.cn
                   Port: <span class=m>7050</span>
-                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/server.crt
-                - Host: orderer2.jicki.me
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/tls/server.crt
+                - Host: orderer2.jicki.cn
                   Port: <span class=m>7050</span>
-                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/server.crt
+                  ClientTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/tls/server.crt
             Addresses:
-                - orderer0.jicki.me:7050
-                - orderer1.jicki.me:7050
-                - orderer2.jicki.me:7050
+                - orderer0.jicki.cn:7050
+                - orderer1.jicki.cn:7050
+                - orderer2.jicki.cn:7050
 
             Organizations:
             - *OrdererOrg
@@ -736,8 +736,8 @@ mkdir -p /opt/jicki/channel-artifacts
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 然后这里使用 cryptogen 软件来生成相应的证书了</span>
 
 <span class=o>[</span>root@localhost jicki<span class=o>]</span><span class=c1># cryptogen generate --config=./crypto-config.yaml</span>
-org1.jicki.me
-org2.jicki.me
+org1.jicki.cn
+org2.jicki.cn
 
 </code></pre></td></tr></table></div></div><ul><li>生成区块</li></ul><blockquote><p><code>-profile</code> 在 configtx.yaml 文件中查找 Profiles: 下面字段</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -1291,8 +1291,8 @@ configtxgen <span class=se>\
 </span><span class=lnt>426
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>version: <span class=s1>&#39;2&#39;</span>
 services:
-  orderer0.jicki.me:
-    container_name: orderer0.jicki.me
+  orderer0.jicki.cn:
+    container_name: orderer0.jicki.cn
     image: hyperledger/fabric-orderer:2.0
     environment:
       - <span class=nv>CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE</span><span class=o>=</span>jicki_default
@@ -1317,20 +1317,20 @@ services:
     <span class=c1># 数据持久化,以及存储</span>
     - ./data/orderer0:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/:/etc/hyperledger/crypto/peer1rg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/:/etc/hyperledger/crypto/peer1rg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/:/etc/hyperledger/crypto/peer1rg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/:/etc/hyperledger/crypto/peer1rg2
     networks:
       default:
         aliases:
           - jicki
     ports:
       - 7050:7050
-  orderer1.jicki.me:
-    container_name: orderer1.jicki.me
+  orderer1.jicki.cn:
+    container_name: orderer1.jicki.cn
     image: hyperledger/fabric-orderer:2.0
     environment:
       - <span class=nv>CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE</span><span class=o>=</span>jicki_default
@@ -1355,20 +1355,20 @@ services:
     <span class=c1># 数据持久化,以及存储</span>
     - ./data/orderer1:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer1.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/:/etc/hyperledger/crypto/peer1rg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/:/etc/hyperledger/crypto/peer1rg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer1.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/:/etc/hyperledger/crypto/peer1rg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/:/etc/hyperledger/crypto/peer1rg2
     networks:
       default:
         aliases:
           - jicki
     ports:
       - 8050:7050
-  orderer2.jicki.me:
-    container_name: orderer2.jicki.me
+  orderer2.jicki.cn:
+    container_name: orderer2.jicki.cn
     image: hyperledger/fabric-orderer:2.0
     environment:
       - <span class=nv>CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE</span><span class=o>=</span>jicki_default
@@ -1393,12 +1393,12 @@ services:
     <span class=c1># 数据持久化,以及存储</span>
     - ./data/orderer2:/var/hyperledger/production
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer2.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/:/etc/hyperledger/crypto/peer1rg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/:/etc/hyperledger/crypto/peer1rg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer2.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/:/etc/hyperledger/crypto/peer1rg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/:/etc/hyperledger/crypto/peer1rg2
     networks:
       default:
         aliases:
@@ -1464,18 +1464,18 @@ services:
         aliases:
           - jicki
 
-  peer0.org1.jicki.me:
-    container_name: peer0.org1.jicki.me
+  peer0.org1.jicki.cn:
+    container_name: peer0.org1.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - <span class=nv>CORE_LEDGER_STATE_STATEDATABASE</span><span class=o>=</span>CouchDB
       - <span class=nv>CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS</span><span class=o>=</span>couchdb0:5984
       
-      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer0.org1.jicki.me
+      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer0.org1.jicki.cn
       - <span class=nv>CORE_PEER_NETWORKID</span><span class=o>=</span>jicki
-      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org1.jicki.me:7051
-      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer0.org1.jicki.me:7052
-      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer0.org1.jicki.me:7051
+      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org1.jicki.cn:7051
+      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer0.org1.jicki.cn:7052
+      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer0.org1.jicki.cn:7051
       - <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span>Org1MSP
 
       - <span class=nv>CORE_VM_ENDPOINT</span><span class=o>=</span>unix:///host/var/run/docker.sock
@@ -1495,8 +1495,8 @@ services:
       - <span class=nv>GODEBUG</span><span class=o>=</span><span class=nv>netdns</span><span class=o>=</span>go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls:/etc/hyperledger/fabric/tls
         <span class=c1># 数据持久化, 存储安装，以及实例化智能合约的数据</span>
         - ./data/peer0org1:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -1512,18 +1512,18 @@ services:
     depends_on:
       - couchdb0
 
-  peer1.org1.jicki.me:
-    container_name: peer1.org1.jicki.me
+  peer1.org1.jicki.cn:
+    container_name: peer1.org1.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - <span class=nv>CORE_LEDGER_STATE_STATEDATABASE</span><span class=o>=</span>CouchDB
       - <span class=nv>CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS</span><span class=o>=</span>couchdb1:5984
       
-      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer1.org1.jicki.me
+      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer1.org1.jicki.cn
       - <span class=nv>CORE_PEER_NETWORKID</span><span class=o>=</span>jicki
-      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org1.jicki.me:7051
-      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer1.org1.jicki.me:7052
-      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer1.org1.jicki.me:7051
+      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org1.jicki.cn:7051
+      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer1.org1.jicki.cn:7052
+      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer1.org1.jicki.cn:7051
       - <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span>Org1MSP
 
       - <span class=nv>CORE_VM_ENDPOINT</span><span class=o>=</span>unix:///host/var/run/docker.sock
@@ -1543,8 +1543,8 @@ services:
       - <span class=nv>GODEBUG</span><span class=o>=</span><span class=nv>netdns</span><span class=o>=</span>go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/tls:/etc/hyperledger/fabric/tls
         <span class=c1># 数据持久化, 存储安装，以及实例化智能合约的数据</span>
         - ./data/peer1org1:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -1561,18 +1561,18 @@ services:
       - couchdb1
 
 
-  peer0.org2.jicki.me:
-    container_name: peer0.org2.jicki.me
+  peer0.org2.jicki.cn:
+    container_name: peer0.org2.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - <span class=nv>CORE_LEDGER_STATE_STATEDATABASE</span><span class=o>=</span>CouchDB
       - <span class=nv>CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS</span><span class=o>=</span>couchdb2:5984
 
-      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer0.org2.jicki.me
+      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer0.org2.jicki.cn
       - <span class=nv>CORE_PEER_NETWORKID</span><span class=o>=</span>jicki
-      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org2.jicki.me:7051
-      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer0.org2.jicki.me:7052
-      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer0.org2.jicki.me:7051
+      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org2.jicki.cn:7051
+      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer0.org2.jicki.cn:7052
+      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer0.org2.jicki.cn:7051
       - <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span>Org2MSP
 
       - <span class=nv>CORE_VM_ENDPOINT</span><span class=o>=</span>unix:///host/var/run/docker.sock
@@ -1592,8 +1592,8 @@ services:
       - <span class=nv>GODEBUG</span><span class=o>=</span><span class=nv>netdns</span><span class=o>=</span>go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls:/etc/hyperledger/fabric/tls
         <span class=c1># 数据持久化, 存储安装，以及实例化智能合约的数据</span>
         - ./data/peer0org2:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -1609,18 +1609,18 @@ services:
     depends_on:
       - couchdb2
 
-  peer1.org2.jicki.me:
-    container_name: peer1.org2.jicki.me
+  peer1.org2.jicki.cn:
+    container_name: peer1.org2.jicki.cn
     image: hyperledger/fabric-peer:2.0
     environment:
       - <span class=nv>CORE_LEDGER_STATE_STATEDATABASE</span><span class=o>=</span>CouchDB
       - <span class=nv>CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS</span><span class=o>=</span>couchdb3:5984
 
-      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer1.org2.jicki.me
+      - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>peer1.org2.jicki.cn
       - <span class=nv>CORE_PEER_NETWORKID</span><span class=o>=</span>jicki
-      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org2.jicki.me:7051
-      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer1.org2.jicki.me:7052
-      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer1.org2.jicki.me:7051
+      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org2.jicki.cn:7051
+      - <span class=nv>CORE_PEER_CHAINCODELISTENADDRESS</span><span class=o>=</span>peer1.org2.jicki.cn:7052
+      - <span class=nv>CORE_PEER_GOSSIP_EXTERNALENDPOINT</span><span class=o>=</span>peer1.org2.jicki.cn:7051
       - <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span>Org2MSP
 
       - <span class=nv>CORE_VM_ENDPOINT</span><span class=o>=</span>unix:///host/var/run/docker.sock
@@ -1640,8 +1640,8 @@ services:
       - <span class=nv>GODEBUG</span><span class=o>=</span><span class=nv>netdns</span><span class=o>=</span>go
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/tls:/etc/hyperledger/fabric/tls
         <span class=c1># 数据持久化, 存储安装，以及实例化智能合约的数据</span>
         - ./data/peer1org2:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -1667,13 +1667,13 @@ services:
       <span class=c1># - CORE_LOGGING_LEVEL=ERROR</span>
       - <span class=nv>CORE_LOGGING_LEVEL</span><span class=o>=</span>DEBUG
       - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>org1.cli
-      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org1.jicki.me:7051
+      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org1.jicki.cn:7051
       - <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span>Org1MSP
       - <span class=nv>CORE_PEER_TLS_ENABLED</span><span class=o>=</span><span class=nb>true</span>
-      - <span class=nv>CORE_PEER_TLS_CERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.crt
-      - <span class=nv>CORE_PEER_TLS_KEY_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.key
-      - <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
-      - <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
+      - <span class=nv>CORE_PEER_TLS_CERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.crt
+      - <span class=nv>CORE_PEER_TLS_KEY_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.key
+      - <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
+      - <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
         - /var/run/:/host/var/run/
@@ -1697,13 +1697,13 @@ services:
       <span class=c1># - CORE_LOGGING_LEVEL=ERROR</span>
       - <span class=nv>CORE_LOGGING_LEVEL</span><span class=o>=</span>DEBUG
       - <span class=nv>CORE_PEER_ID</span><span class=o>=</span>org2.cli
-      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org2.jicki.me:7051
+      - <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org2.jicki.cn:7051
       - <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span>Org2MSP
       - <span class=nv>CORE_PEER_TLS_ENABLED</span><span class=o>=</span><span class=nb>true</span>
-      - <span class=nv>CORE_PEER_TLS_CERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/server.crt
-      - <span class=nv>CORE_PEER_TLS_KEY_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/server.key
-      - <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
-      - <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
+      - <span class=nv>CORE_PEER_TLS_CERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/server.crt
+      - <span class=nv>CORE_PEER_TLS_KEY_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/server.key
+      - <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
+      - <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
         - /var/run/:/host/var/run/
@@ -1736,11 +1736,11 @@ services:
 </span><span class=cp></span>
 <span class=nv>CLI_NAME</span><span class=o>=</span>cli
 
-<span class=nv>ORDERER</span><span class=o>=</span>orderer0.jicki.me:7050
+<span class=nv>ORDERER</span><span class=o>=</span>orderer0.jicki.cn:7050
 
 <span class=nv>CORE_PEER_TLS_ENABLED</span><span class=o>=</span><span class=nb>true</span>
 
-<span class=nv>CAFILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+<span class=nv>CAFILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 <span class=c1># Channel 通道ID 不能与 之前 Orderer 之前创建的通道相同,否则报错</span>
 <span class=c1># config update for existing channel did not pass initial checks: implicit policy evaluation failed - 0 sub-policies were satisfied, but this policy requires 1 of the &#39;Writers&#39; sub-policies to be satisfied: permission denied</span>
@@ -1771,15 +1771,15 @@ docker <span class=nb>exec</span> -it -e <span class=s2>&#34;ORDERER=</span><spa
 <span class=o>[</span>root@localhost jicki<span class=o>]</span><span class=c1># docker exec -it org1.cli bash</span>
 
 
-<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
-<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org1.jicki.me:7051
+<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
+<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org1.jicki.cn:7051
 <span class=nb>export</span> <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span><span class=s2>&#34;Org1MSP&#34;</span>
-<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
+<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
 
 
 peer channel join <span class=se>\
 </span><span class=se></span>    -b mychannel.block <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
 </span><span class=se></span>    --cafile <span class=nv>$ORDERER_CA</span>
 
@@ -1800,16 +1800,16 @@ peer channel join <span class=se>\
 </span><span class=lnt>15
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># org1 下的 peer1 节点</span>
 
-<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
-<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org1.jicki.me:7051
+<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
+<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org1.jicki.cn:7051
 <span class=nb>export</span> <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span><span class=s2>&#34;Org1MSP&#34;</span>
-<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/tls/ca.crt
+<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/tls/ca.crt
 
 
 
 peer channel join <span class=se>\
 </span><span class=se></span>    -b mychannel.block <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
 </span><span class=se></span>    --cafile <span class=nv>$ORDERER_CA</span>
 
@@ -1831,15 +1831,15 @@ peer channel join <span class=se>\
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># org2 组织下的 peer0 节点</span>
 
 
-<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
-<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org2.jicki.me:7051
+<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
+<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer0.org2.jicki.cn:7051
 <span class=nb>export</span> <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span><span class=s2>&#34;Org2MSP&#34;</span>
-<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
+<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
 
 
 peer channel join <span class=se>\
 </span><span class=se></span>    -b mychannel.block <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
 </span><span class=se></span>    --cafile <span class=nv>$ORDERER_CA</span>
 
@@ -1861,15 +1861,15 @@ peer channel join <span class=se>\
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># org2 组织下的 peer1 节点</span>
 
 
-<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
-<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org2.jicki.me:7051
+<span class=nb>export</span> <span class=nv>CORE_PEER_MSPCONFIGPATH</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
+<span class=nb>export</span> <span class=nv>CORE_PEER_ADDRESS</span><span class=o>=</span>peer1.org2.jicki.cn:7051
 <span class=nb>export</span> <span class=nv>CORE_PEER_LOCALMSPID</span><span class=o>=</span><span class=s2>&#34;Org2MSP&#34;</span>
-<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/tls/ca.crt
+<span class=nb>export</span> <span class=nv>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=o>=</span>/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/tls/ca.crt
 
 
 peer channel join <span class=se>\
 </span><span class=se></span>    -b mychannel.block <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
 </span><span class=se></span>    --cafile <span class=nv>$ORDERER_CA</span>
 
@@ -1904,7 +1904,7 @@ docker <span class=nb>exec</span> -it org1.cli bash
 
 
 peer channel update <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    -c mychannel <span class=se>\
 </span><span class=se></span>    -f ./channel-artifacts/Org1MSPanchors.tx <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
@@ -1927,7 +1927,7 @@ docker <span class=nb>exec</span> -it org2.cli bash
 
 
 peer channel update <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    -c mychannel <span class=se>\
 </span><span class=se></span>    -f ./channel-artifacts/Org2MSPanchors.tx <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
@@ -2105,7 +2105,7 @@ peer lifecycle chaincode approveformyorg <span class=se>\
 
 2020-03-24 06:24:19.615 UTC <span class=o>[</span>main<span class=o>]</span> InitCmd -&gt; WARN <span class=m>001</span> CORE_LOGGING_LEVEL is no longer supported, please use the FABRIC_LOGGING_SPEC environment variable
 2020-03-24 06:24:19.619 UTC <span class=o>[</span>main<span class=o>]</span> SetOrdererEnv -&gt; WARN <span class=m>002</span> CORE_LOGGING_LEVEL is no longer supported, please use the FABRIC_LOGGING_SPEC environment variable
-2020-03-24 06:24:19.634 UTC <span class=o>[</span>cli.lifecycle.chaincode<span class=o>]</span> setOrdererClient -&gt; INFO <span class=m>003</span> Retrieved channel <span class=o>(</span>mychannel<span class=o>)</span> orderer endpoint: orderer0.jicki.me:7050
+2020-03-24 06:24:19.634 UTC <span class=o>[</span>cli.lifecycle.chaincode<span class=o>]</span> setOrdererClient -&gt; INFO <span class=m>003</span> Retrieved channel <span class=o>(</span>mychannel<span class=o>)</span> orderer endpoint: orderer0.jicki.cn:7050
 2020-03-24 06:24:21.880 UTC <span class=o>[</span>chaincodeCmd<span class=o>]</span> ClientWait -&gt; INFO <span class=m>004</span> txid <span class=o>[</span>fb01bb2497d00ea1b4e63ef1f9afad125f892dd84717c0712e649716f3092493<span class=o>]</span> committed with status <span class=o>(</span>VALID<span class=o>)</span> at 
 
 
@@ -2187,7 +2187,7 @@ peer lifecycle chaincode approveformyorg <span class=se>\
 </span><span class=lnt>4
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># 输出如下:</span>
 
-2020-03-24 06:26:25.523 UTC <span class=o>[</span>cli.lifecycle.chaincode<span class=o>]</span> setOrdererClient -&gt; INFO <span class=m>003</span> Retrieved channel <span class=o>(</span>mychannel<span class=o>)</span> orderer endpoint: orderer0.jicki.me:7050
+2020-03-24 06:26:25.523 UTC <span class=o>[</span>cli.lifecycle.chaincode<span class=o>]</span> setOrdererClient -&gt; INFO <span class=m>003</span> Retrieved channel <span class=o>(</span>mychannel<span class=o>)</span> orderer endpoint: orderer0.jicki.cn:7050
 2020-03-24 06:26:27.675 UTC <span class=o>[</span>chaincodeCmd<span class=o>]</span> ClientWait -&gt; INFO <span class=m>004</span> txid <span class=o>[</span>067cce8f1c3ca9fa8f9239ad78542e30fee5b83d68ae054a8e9b76a01393bb08<span class=o>]</span> committed with status <span class=o>(</span>VALID<span class=o>)</span> at
 </code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -2252,7 +2252,7 @@ peer lifecycle chaincode checkcommitreadiness <span class=se>\
 
 <span class=c1># 提交 commit</span>
 peer lifecycle chaincode commit <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    --channelID mychannel <span class=se>\
 </span><span class=se></span>    --name mycc <span class=se>\
 </span><span class=se></span>    --version <span class=m>1</span> <span class=se>\
@@ -2260,18 +2260,18 @@ peer lifecycle chaincode commit <span class=se>\
 </span><span class=se></span>    --init-required <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
 </span><span class=se></span>    --cafile <span class=nv>$ORDERER_CA</span> <span class=se>\
-</span><span class=se></span>    --peerAddresses peer0.org1.jicki.me:7051 <span class=se>\
-</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt <span class=se>\
-</span><span class=se></span>    --peerAddresses peer0.org2.jicki.me:7051 <span class=se>\
-</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
+</span><span class=se></span>    --peerAddresses peer0.org1.jicki.cn:7051 <span class=se>\
+</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt <span class=se>\
+</span><span class=se></span>    --peerAddresses peer0.org2.jicki.cn:7051 <span class=se>\
+</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
 
 </code></pre></td></tr></table></div></div><ul><li>输出如下信息</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>
-2020-03-24 07:14:12.187 UTC <span class=o>[</span>chaincodeCmd<span class=o>]</span> ClientWait -&gt; INFO <span class=m>003</span> txid <span class=o>[</span>131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93<span class=o>]</span> committed with status <span class=o>(</span>VALID<span class=o>)</span> at peer0.org1.jicki.me:7051
-2020-03-24 07:14:12.199 UTC <span class=o>[</span>chaincodeCmd<span class=o>]</span> ClientWait -&gt; INFO <span class=m>004</span> txid <span class=o>[</span>131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93<span class=o>]</span> committed with status <span class=o>(</span>VALID<span class=o>)</span> at peer0.org2.jicki.me:7051
+2020-03-24 07:14:12.187 UTC <span class=o>[</span>chaincodeCmd<span class=o>]</span> ClientWait -&gt; INFO <span class=m>003</span> txid <span class=o>[</span>131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93<span class=o>]</span> committed with status <span class=o>(</span>VALID<span class=o>)</span> at peer0.org1.jicki.cn:7051
+2020-03-24 07:14:12.199 UTC <span class=o>[</span>chaincodeCmd<span class=o>]</span> ClientWait -&gt; INFO <span class=m>004</span> txid <span class=o>[</span>131d247fb9035ccb832b15ab34b64fd03fa74d1d5db762388a837b31c4c29e93<span class=o>]</span> committed with status <span class=o>(</span>VALID<span class=o>)</span> at peer0.org2.jicki.cn:7051
 
 </code></pre></td></tr></table></div></div><ul><li><p>分别检查是否成功提交 (commit)</p></li><li><p>org1</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -2351,15 +2351,15 @@ Version: 1, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Appr
 <span class=c1># Invoke 操作 ( 初始化 a, b 的值为100 )</span>
 
 peer chaincode invoke <span class=se>\
-</span><span class=se></span>    -o orderer0.jicki.me:7050 <span class=se>\
+</span><span class=se></span>    -o orderer0.jicki.cn:7050 <span class=se>\
 </span><span class=se></span>    --tls <span class=nv>$CORE_PEER_TLS_ENABLED</span> <span class=se>\
 </span><span class=se></span>    --cafile <span class=nv>$ORDERER_CA</span> <span class=se>\
 </span><span class=se></span>    -C mychannel <span class=se>\
 </span><span class=se></span>    -n mycc <span class=se>\
-</span><span class=se></span>    --peerAddresses peer0.org1.jicki.me:7051 <span class=se>\
-</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt <span class=se>\
-</span><span class=se></span>    --peerAddresses peer0.org2.jicki.me:7051 <span class=se>\
-</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt <span class=se>\
+</span><span class=se></span>    --peerAddresses peer0.org1.jicki.cn:7051 <span class=se>\
+</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt <span class=se>\
+</span><span class=se></span>    --peerAddresses peer0.org2.jicki.cn:7051 <span class=se>\
+</span><span class=se></span>    --tlsRootCertFiles /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt <span class=se>\
 </span><span class=se></span>    --isInit <span class=se>\
 </span><span class=se></span>    -c <span class=s1>&#39;{&#34;Args&#34;:[&#34;Init&#34;,&#34;a&#34;,&#34;100&#34;,&#34;b&#34;,&#34;100&#34;]}&#39;</span>
 
@@ -2396,8 +2396,8 @@ peer chaincode query <span class=se>\
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>
 <span class=o>[</span>root@localhost jicki<span class=o>]</span><span class=c1># docker ps -a</span>
 CONTAINER ID        IMAGE                                                                                                                                                              COMMAND                  CREATED             STATUS              PORTS                                                                       NAMES
-439369210b83        jicki-peer0.org2.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-4b4600a44f861b0308c82385aacc3c53c711443e78b5bbfda58137dc13822a5a   <span class=s2>&#34;chaincode -peer.add…&#34;</span>   <span class=m>9</span> minutes ago       Up <span class=m>9</span> minutes                                                                                    jicki-peer0.org2.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
-471657d67a7a        jicki-peer0.org1.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-80a4542fb02360e50a162b4d72841d190b64ed34b9b4a06234a09ed2a8c4d392   <span class=s2>&#34;chaincode -peer.add…&#34;</span>   <span class=m>9</span> minutes ago       Up <span class=m>9</span> minutes                                                                                    jicki-peer0.org1.jicki.me-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
+439369210b83        jicki-peer0.org2.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-4b4600a44f861b0308c82385aacc3c53c711443e78b5bbfda58137dc13822a5a   <span class=s2>&#34;chaincode -peer.add…&#34;</span>   <span class=m>9</span> minutes ago       Up <span class=m>9</span> minutes                                                                                    jicki-peer0.org2.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
+471657d67a7a        jicki-peer0.org1.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be-80a4542fb02360e50a162b4d72841d190b64ed34b9b4a06234a09ed2a8c4d392   <span class=s2>&#34;chaincode -peer.add…&#34;</span>   <span class=m>9</span> minutes ago       Up <span class=m>9</span> minutes                                                                                    jicki-peer0.org1.jicki.cn-mycc-14332eb253d2983dce11dc45734ea312538a70db1b61d79439fe8a42fb7572be
 
 </code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-03-23</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/hyperledger-fabric-2.0/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-title="hyperledger-fabric v2.0" data-via=jicki234 data-hashtags=fabric,docker><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-hashtag=fabric><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-title="hyperledger-fabric v2.0" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-title="hyperledger-fabric v2.0"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-title="hyperledger-fabric v2.0"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-title="hyperledger-fabric v2.0" data-description="hyperledger-fabric v2.0"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-title="hyperledger-fabric v2.0" data-description="hyperledger-fabric v2.0"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/hyperledger-fabric-2.0/ data-title="hyperledger-fabric v2.0"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/fabric/>fabric</a>,&nbsp;<a href=/tags/docker/>docker</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/kubernetes-flannel/ class=prev rel=prev title="Flannel 网络模型"><i class="fas fa-angle-left fa-fw"></i>Flannel 网络模型</a>
 <a href=/rancher-2.x-kubernetes/ class=next rel=next title="Rancher 2.x to kubernetes">Rancher 2.x to kubernetes<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://jicki.cn target=_blank>小炒肉</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>粤ICP备20055633号</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":50},"comment":{},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

@@ -390,13 +390,13 @@ $ docker-compose start
 
 
   [1]: https://github.com/vmware/harbor
-  [2]: http://jicki.me/img/posts/harbor/1.png
-  [3]: http://jicki.me/img/posts/harbor/2.png
-  [4]: http://jicki.me/img/posts/harbor/3.png
-  [5]: http://jicki.me/img/posts/harbor/4.png
-  [6]: http://jicki.me/img/posts/harbor/5.png
-  [7]: http://jicki.me/img/posts/harbor/6.png
-  [8]: http://jicki.me/img/posts/harbor/7.png
-  [9]: http://jicki.me/img/posts/harbor/8.png
-  [10]: http://jicki.me/img/posts/harbor/9.png
+  [2]: http://jicki.cn/img/posts/harbor/1.png
+  [3]: http://jicki.cn/img/posts/harbor/2.png
+  [4]: http://jicki.cn/img/posts/harbor/3.png
+  [5]: http://jicki.cn/img/posts/harbor/4.png
+  [6]: http://jicki.cn/img/posts/harbor/5.png
+  [7]: http://jicki.cn/img/posts/harbor/6.png
+  [8]: http://jicki.cn/img/posts/harbor/7.png
+  [9]: http://jicki.cn/img/posts/harbor/8.png
+  [10]: http://jicki.cn/img/posts/harbor/9.png
 

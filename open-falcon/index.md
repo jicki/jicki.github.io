@@ -1305,5 +1305,5 @@ func GenerateIMContent(event *model.Event) string {
 
 ```
 
-  [1]: https://jicki.me/img/posts/openfalcon/sys.png
+  [1]: https://jicki.cn/img/posts/openfalcon/sys.png
 

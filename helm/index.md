@@ -240,7 +240,7 @@ helm rollback db-mysql 1
 # 添加 额外 repo
 
 
-helm repo add my-repo https://kubernetes-charts.jicki.me/
+helm repo add my-repo https://kubernetes-charts.jicki.cn/
 
 ```
 

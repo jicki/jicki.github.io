@@ -16,7 +16,7 @@
 </span><span class=lnt>4
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 配置jenkins 后端存储, 如 nfs, gfs, cephfs 等， 请自行配置，或者参考 之前的文章。
 
-# 基于单独的 nfs 最为后端 文档在这里 https://jicki.me/2017/01/01/kubernetes-nfs/ 
+# 基于单独的 nfs 最为后端 文档在这里 https://jicki.cn/2017/01/01/kubernetes-nfs/ 
 
 </code></pre></td></tr></table></div></div><h2 id=创建-jenkins-master>创建 jenkins master</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -319,7 +319,7 @@ metadata:
   namespace: jenkins
 spec:  
   rules:  
-  - host: jenkins.jicki.me
+  - host: jenkins.jicki.cn
     http:  
       paths:  
       - path: /  
@@ -393,7 +393,7 @@ jenkins   ClusterIP   10.254.47.35   &lt;none&gt;        8080/TCP,50000/TCP   6m
 [root@kubernetes-64 jenkins]# 
 [root@kubernetes-64 jenkins]# kubectl get ingress -n jenkins   
 NAME      HOSTS              ADDRESS   PORTS     AGE
-jenkins   jenkins.jicki.me             80        6m
+jenkins   jenkins.jicki.cn             80        6m
 
 
 
@@ -422,10 +422,10 @@ This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
 </span><span class=lnt>4
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 登录 web ui
 
-http://jenkins.jicki.me
+http://jenkins.jicki.cn
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins1.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins1.png, http://jicki.me/img/posts/jenkins/jenkins1.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins1.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins1.png title=jenkins1>
-<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins2.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins2.png, http://jicki.me/img/posts/jenkins/jenkins2.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins2.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins2.png title=jenkins2></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins1.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins1.png, http://jicki.cn/img/posts/jenkins/jenkins1.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins1.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins1.png title=jenkins1>
+<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins2.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins2.png, http://jicki.cn/img/posts/jenkins/jenkins2.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins2.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins2.png title=jenkins2></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -441,9 +441,9 @@ http://jenkins.jicki.me
 4. Git Parameter Plug-In  ( git 分支 构建选择)
 
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins3.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins3.png, http://jicki.me/img/posts/jenkins/jenkins3.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins3.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins3.png title=jenkins3></p><h2 id=配置-kubernetes-云>配置 kubernetes 云</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins3.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins3.png, http://jicki.cn/img/posts/jenkins/jenkins3.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins3.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins3.png title=jenkins3></p><h2 id=配置-kubernetes-云>配置 kubernetes 云</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 点击【系统管理】-【系统设置】-【新增一个云】-【Kubernetes】
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins4.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins4.png, http://jicki.me/img/posts/jenkins/jenkins4.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins4.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins4.png title=jenkins4></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins5.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins5.png, http://jicki.me/img/posts/jenkins/jenkins5.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins5.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins5.png title=jenkins5></p><h3 id=基于-pipeline-模式>基于 pipeline 模式</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins4.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins4.png, http://jicki.cn/img/posts/jenkins/jenkins4.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins4.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins4.png title=jenkins4></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins5.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins5.png, http://jicki.cn/img/posts/jenkins/jenkins5.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins5.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins5.png title=jenkins5></p><h3 id=基于-pipeline-模式>基于 pipeline 模式</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -531,16 +531,16 @@ Finished: SUCCESS
 
 具体参数 如下：
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins6.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins6.png, http://jicki.me/img/posts/jenkins/jenkins6.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins6.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins6.png title=jenkins6>
-<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins7.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins7.png, http://jicki.me/img/posts/jenkins/jenkins7.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins7.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins7.png title=jenkins7></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins6.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins6.png, http://jicki.cn/img/posts/jenkins/jenkins6.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins6.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins6.png title=jenkins6>
+<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins7.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins7.png, http://jicki.cn/img/posts/jenkins/jenkins7.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins7.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins7.png title=jenkins7></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 添加一个 自动风格的 pj
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins8.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins8.png, http://jicki.me/img/posts/jenkins/jenkins8.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins8.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins8.png title=jenkins8>
-<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins9.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins9.png, http://jicki.me/img/posts/jenkins/jenkins9.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins9.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins9.png title=jenkins9>
-<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins10.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins10.png, http://jicki.me/img/posts/jenkins/jenkins10.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins10.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins10.png title=jenkins10>
-<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins11.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins11.png, http://jicki.me/img/posts/jenkins/jenkins11.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins11.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins11.png title=jenkins11>
-<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/jenkins/jenkins12.png data-srcset="http://jicki.me/img/posts/jenkins/jenkins12.png, http://jicki.me/img/posts/jenkins/jenkins12.png 1.5x, http://jicki.me/img/posts/jenkins/jenkins12.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/jenkins/jenkins12.png title=jenkins12></p><h2 id=制作-slave-镜像>制作 slave 镜像</h2><blockquote><p>官方默认的 jenkins-slave 里面不存在任何的工具，依赖，项目环境等，我们需要制作一个属于自己项目的 jenkins-slave 镜像。</p></blockquote><blockquote><p>官方 jenkins-slave dockerfile 地址 <a href=https://github.com/jenkinsci/docker-jnlp-slave>https://github.com/jenkinsci/docker-jnlp-slave</a>
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins8.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins8.png, http://jicki.cn/img/posts/jenkins/jenkins8.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins8.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins8.png title=jenkins8>
+<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins9.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins9.png, http://jicki.cn/img/posts/jenkins/jenkins9.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins9.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins9.png title=jenkins9>
+<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins10.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins10.png, http://jicki.cn/img/posts/jenkins/jenkins10.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins10.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins10.png title=jenkins10>
+<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins11.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins11.png, http://jicki.cn/img/posts/jenkins/jenkins11.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins11.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins11.png title=jenkins11>
+<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/jenkins/jenkins12.png data-srcset="http://jicki.cn/img/posts/jenkins/jenkins12.png, http://jicki.cn/img/posts/jenkins/jenkins12.png 1.5x, http://jicki.cn/img/posts/jenkins/jenkins12.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/jenkins/jenkins12.png title=jenkins12></p><h2 id=制作-slave-镜像>制作 slave 镜像</h2><blockquote><p>官方默认的 jenkins-slave 里面不存在任何的工具，依赖，项目环境等，我们需要制作一个属于自己项目的 jenkins-slave 镜像。</p></blockquote><blockquote><p>官方 jenkins-slave dockerfile 地址 <a href=https://github.com/jenkinsci/docker-jnlp-slave>https://github.com/jenkinsci/docker-jnlp-slave</a>
 官方 slave <a href=https://github.com/jenkinsci/docker-slave>https://github.com/jenkinsci/docker-slave</a></p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3

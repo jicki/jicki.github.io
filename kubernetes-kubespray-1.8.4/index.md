@@ -637,7 +637,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -652,13 +652,13 @@ spec:
 
 [root@node1 yaml]# kubectl get ingress
 NAME            HOSTS            ADDRESS   PORTS     AGE
-nginx-ingress   nginx.jicki.me             80        1m
+nginx-ingress   nginx.jicki.cn             80        1m
 
 ```
 
 
 ```
-[root@node1 yaml]# curl nginx.jicki.me
+[root@node1 yaml]# curl nginx.jicki.cn
 
 <!DOCTYPE html>
 <html>

@@ -3561,7 +3561,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -3574,7 +3574,7 @@ spec:
 
 [root@k8s-master-64 ingress]# kubectl get ingress
 NAME            HOSTS            ADDRESS   PORTS     AGE
-nginx-ingress   nginx.jicki.me             80        6s
+nginx-ingress   nginx.jicki.cn             80        6s
 </code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -3608,7 +3608,7 @@ nginx-ingress   nginx.jicki.me             80        6s
 </span><span class=lnt>31
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 测试访问
 
-[root@k8s-master-64 ingress]# curl nginx.jicki.me
+[root@k8s-master-64 ingress]# curl nginx.jicki.cn
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;

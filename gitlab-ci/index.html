@@ -75,7 +75,7 @@ services:
     hostname: gitlab
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url &#39;http://gitlab.jicki.me&#39;
+        external_url &#39;http://gitlab.jicki.cn&#39;
     ports:
       - &#39;80:80&#39;
       - &#39;443:443&#39;
@@ -108,13 +108,13 @@ gitlab   /assets/wrapper   Up (healthy)   0.0.0.0:8022-&gt;22/tcp, 0.0.0.0:443-&
 </code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>浏览器 http://gitlab.jicki.me 访问 gitlab
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>浏览器 http://gitlab.jicki.cn 访问 gitlab
 
 首次访问会提示配置 初始密码，最少8位
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/1.png data-srcset="http://jicki.me/img/posts/gitlab/1.png, http://jicki.me/img/posts/gitlab/1.png 1.5x, http://jicki.me/img/posts/gitlab/1.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/1.png title=图1>
-<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/2.png data-srcset="http://jicki.me/img/posts/gitlab/2.png, http://jicki.me/img/posts/gitlab/2.png 1.5x, http://jicki.me/img/posts/gitlab/2.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/2.png title=图2></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/1.png data-srcset="http://jicki.cn/img/posts/gitlab/1.png, http://jicki.cn/img/posts/gitlab/1.png 1.5x, http://jicki.cn/img/posts/gitlab/1.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/1.png title=图1>
+<img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/2.png data-srcset="http://jicki.cn/img/posts/gitlab/2.png, http://jicki.cn/img/posts/gitlab/2.png 1.5x, http://jicki.cn/img/posts/gitlab/2.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/2.png title=图2></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 创建一个 用户，作为后续 gitlab-ci 的项目关联 用户.
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/3.png data-srcset="http://jicki.me/img/posts/gitlab/3.png, http://jicki.me/img/posts/gitlab/3.png 1.5x, http://jicki.me/img/posts/gitlab/3.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/3.png title=图3></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/4.png data-srcset="http://jicki.me/img/posts/gitlab/4.png, http://jicki.me/img/posts/gitlab/4.png 1.5x, http://jicki.me/img/posts/gitlab/4.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/4.png title=图4></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/5.png data-srcset="http://jicki.me/img/posts/gitlab/5.png, http://jicki.me/img/posts/gitlab/5.png 1.5x, http://jicki.me/img/posts/gitlab/5.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/5.png title=图5></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/3.png data-srcset="http://jicki.cn/img/posts/gitlab/3.png, http://jicki.cn/img/posts/gitlab/3.png 1.5x, http://jicki.cn/img/posts/gitlab/3.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/3.png title=图3></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/4.png data-srcset="http://jicki.cn/img/posts/gitlab/4.png, http://jicki.cn/img/posts/gitlab/4.png 1.5x, http://jicki.cn/img/posts/gitlab/4.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/4.png title=图4></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/5.png data-srcset="http://jicki.cn/img/posts/gitlab/5.png, http://jicki.cn/img/posts/gitlab/5.png 1.5x, http://jicki.cn/img/posts/gitlab/5.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/5.png title=图5></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -122,7 +122,7 @@ gitlab   /assets/wrapper   Up (healthy)   0.0.0.0:8022-&gt;22/tcp, 0.0.0.0:443-&
 
 # 添加 上面创建的用户到此 Groups 中.
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/6.png data-srcset="http://jicki.me/img/posts/gitlab/6.png, http://jicki.me/img/posts/gitlab/6.png 1.5x, http://jicki.me/img/posts/gitlab/6.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/6.png title=图6></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/7.png data-srcset="http://jicki.me/img/posts/gitlab/7.png, http://jicki.me/img/posts/gitlab/7.png 1.5x, http://jicki.me/img/posts/gitlab/7.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/7.png title=图7></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/6.png data-srcset="http://jicki.cn/img/posts/gitlab/6.png, http://jicki.cn/img/posts/gitlab/6.png 1.5x, http://jicki.cn/img/posts/gitlab/6.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/6.png title=图6></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/7.png data-srcset="http://jicki.cn/img/posts/gitlab/7.png, http://jicki.cn/img/posts/gitlab/7.png 1.5x, http://jicki.cn/img/posts/gitlab/7.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/7.png title=图7></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -130,7 +130,7 @@ gitlab   /assets/wrapper   Up (healthy)   0.0.0.0:8022-&gt;22/tcp, 0.0.0.0:443-&
 
 
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/8.png data-srcset="http://jicki.me/img/posts/gitlab/8.png, http://jicki.me/img/posts/gitlab/8.png 1.5x, http://jicki.me/img/posts/gitlab/8.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/8.png title=图8></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/9.png data-srcset="http://jicki.me/img/posts/gitlab/9.png, http://jicki.me/img/posts/gitlab/9.png 1.5x, http://jicki.me/img/posts/gitlab/9.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/9.png title=图9></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/10.png data-srcset="http://jicki.me/img/posts/gitlab/10.png, http://jicki.me/img/posts/gitlab/10.png 1.5x, http://jicki.me/img/posts/gitlab/10.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/10.png title=图10></p><h1 id=生成java项目>生成java项目</h1><blockquote><p>使用 <a href=https://start.spring.io/>https://start.spring.io/</a> 生成一个基于 Gradle 的java 项目</p></blockquote><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/11.png data-srcset="http://jicki.me/img/posts/gitlab/11.png, http://jicki.me/img/posts/gitlab/11.png 1.5x, http://jicki.me/img/posts/gitlab/11.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/11.png title=图11></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/8.png data-srcset="http://jicki.cn/img/posts/gitlab/8.png, http://jicki.cn/img/posts/gitlab/8.png 1.5x, http://jicki.cn/img/posts/gitlab/8.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/8.png title=图8></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/9.png data-srcset="http://jicki.cn/img/posts/gitlab/9.png, http://jicki.cn/img/posts/gitlab/9.png 1.5x, http://jicki.cn/img/posts/gitlab/9.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/9.png title=图9></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/10.png data-srcset="http://jicki.cn/img/posts/gitlab/10.png, http://jicki.cn/img/posts/gitlab/10.png 1.5x, http://jicki.cn/img/posts/gitlab/10.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/10.png title=图10></p><h1 id=生成java项目>生成java项目</h1><blockquote><p>使用 <a href=https://start.spring.io/>https://start.spring.io/</a> 生成一个基于 Gradle 的java 项目</p></blockquote><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/11.png data-srcset="http://jicki.cn/img/posts/gitlab/11.png, http://jicki.cn/img/posts/gitlab/11.png 1.5x, http://jicki.cn/img/posts/gitlab/11.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/11.png title=图11></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -313,20 +313,20 @@ dependencies {
 [root@localhost testproject]# git commit -m &#34;add java project&#34;
 
 [root@localhost testproject]# git push
-Username for &#39;http://gitlab.jicki.me&#39;: jicki
-Password for &#39;http://jicki@gitlab.jicki.me&#39;: 
+Username for &#39;http://gitlab.jicki.cn&#39;: jicki
+Password for &#39;http://jicki@gitlab.jicki.cn&#39;: 
 Counting objects: 36, done.
 Delta compression using up to 4 threads.
 Compressing objects: 100% (15/15), done.
 Writing objects: 100% (20/20), 50.06 KiB | 0 bytes/s, done.
 Total 20 (delta 4), reused 0 (delta 0)
-To http://gitlab.jicki.me/java/testproject.git
+To http://gitlab.jicki.cn/java/testproject.git
    9a25098..d95ec5f  master -&gt; master
 </code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># Gitlab 中项目 Project 内容如下:
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/12.png data-srcset="http://jicki.me/img/posts/gitlab/12.png, http://jicki.me/img/posts/gitlab/12.png 1.5x, http://jicki.me/img/posts/gitlab/12.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/12.png title=图12></p><h1 id=gitlab-ci-配置>GitLab CI 配置</h1><blockquote><p>Gitlab CI 的使用 需要使用 Runner 服务, Runner 主要负责CI任务的执行</p><p>这里 Runner 服务使用 docker 运行 docker-compose 启动</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/12.png data-srcset="http://jicki.cn/img/posts/gitlab/12.png, http://jicki.cn/img/posts/gitlab/12.png 1.5x, http://jicki.cn/img/posts/gitlab/12.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/12.png title=图12></p><h1 id=gitlab-ci-配置>GitLab CI 配置</h1><blockquote><p>Gitlab CI 的使用 需要使用 Runner 服务, Runner 主要负责CI任务的执行</p><p>这里 Runner 服务使用 docker 运行 docker-compose 启动</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -404,7 +404,7 @@ listen_address not defined, metrics &amp; debug endpoints disabled  builds=0
 
 # 一会我们注册的时候需要使用到这个 Token
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/13.png data-srcset="http://jicki.me/img/posts/gitlab/13.png, http://jicki.me/img/posts/gitlab/13.png 1.5x, http://jicki.me/img/posts/gitlab/13.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/13.png title=图13></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/13.png data-srcset="http://jicki.cn/img/posts/gitlab/13.png, http://jicki.cn/img/posts/gitlab/13.png 1.5x, http://jicki.cn/img/posts/gitlab/13.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/13.png title=图13></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -440,7 +440,7 @@ Runtime platform                                    arch=amd64 os=linux pid=19 r
 Running in system-mode.                            
                                                    
 Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):
-http://gitlab.jicki.me
+http://gitlab.jicki.cn
 Please enter the gitlab-ci token for this runner:
 pr5VscoaY2fC_8WiSdc7
 Please enter the gitlab-ci description for this runner:
@@ -462,7 +462,7 @@ Runner registered successfully. Feel free to start it, but if it&#39;s running a
 
 # 登录 gitlab 后台查看 注册的 Runner 服务
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/14.png data-srcset="http://jicki.me/img/posts/gitlab/14.png, http://jicki.me/img/posts/gitlab/14.png 1.5x, http://jicki.me/img/posts/gitlab/14.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/14.png title=图14></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/14.png data-srcset="http://jicki.cn/img/posts/gitlab/14.png, http://jicki.cn/img/posts/gitlab/14.png 1.5x, http://jicki.cn/img/posts/gitlab/14.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/14.png title=图14></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -514,7 +514,7 @@ check_interval = 0
 // 以下为 注册 runner 时填写的信息
 [[runners]]
   name = &#34;TestProject&#34;
-  url = &#34;http://gitlab.jicki.me&#34;
+  url = &#34;http://gitlab.jicki.cn&#34;
   token = &#34;V5tiX7JbKmhJx2gSDDcb&#34;
   executor = &#34;docker&#34;
   [runners.custom_build_dir]
@@ -585,7 +585,7 @@ check_interval = 0
 #  由于我们 Runner 使用docker 运行，所以以上目录配置，需要额外增加配置 volumes 这个配置
 #  volumes = [&#34;/data/gitlab-runner:/gitlab&#34;,&#34;/var/run/docker.sock:/var/run/docker.sock&#34;,&#34;/data/gradle:/data/gradle&#34;,&#34;/data/sonar_cache:/root/.sonar&#34;]
 # extra_hosts 为额外的 dns 配置, 如果有dns 服务器就不需要
-# extra_hosts = [&#34;gitlab.jicki.me:192.168.168.102&#34;]
+# extra_hosts = [&#34;gitlab.jicki.cn:192.168.168.102&#34;]
 
 
 
@@ -598,7 +598,7 @@ check_interval = 0
 
 [[runners]]
   name = &#34;TestProject&#34;
-  url = &#34;http://gitlab.jicki.me&#34;
+  url = &#34;http://gitlab.jicki.cn&#34;
   token = &#34;V5tiX7JbKmhJx2gSDDcb&#34;
   executor = &#34;docker&#34;
   builds_dir = &#34;/gitlab/runner-builds&#34;
@@ -612,7 +612,7 @@ check_interval = 0
     oom_kill_disable = false
     disable_cache = false
     volumes = [&#34;/opt/data/gitlab-runner:/gitlab&#34;,&#34;/var/run/docker.sock:/var/run/docker.sock&#34;,&#34;/opt/data/gradle:/root/.gradle&#34;,&#34;/opt/data/sonar_cache:/root/.sonar&#34;]
-    extra_hosts = [&#34;gitlab.jicki.me:192.168.168.102&#34;]
+    extra_hosts = [&#34;gitlab.jicki.cn:192.168.168.102&#34;]
     shm_size = 0
   [runners.cache]
     [runners.cache.s3]
@@ -1052,7 +1052,7 @@ deploy:
 
 
 # 查看 gitlab  ci 信息
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/15.png data-srcset="http://jicki.me/img/posts/gitlab/15.png, http://jicki.me/img/posts/gitlab/15.png 1.5x, http://jicki.me/img/posts/gitlab/15.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/15.png title=图15></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/16.png data-srcset="http://jicki.me/img/posts/gitlab/16.png, http://jicki.me/img/posts/gitlab/16.png 1.5x, http://jicki.me/img/posts/gitlab/16.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/16.png title=图16></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/17.png data-srcset="http://jicki.me/img/posts/gitlab/17.png, http://jicki.me/img/posts/gitlab/17.png 1.5x, http://jicki.me/img/posts/gitlab/17.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/17.png title=图17></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/18.png data-srcset="http://jicki.me/img/posts/gitlab/18.png, http://jicki.me/img/posts/gitlab/18.png 1.5x, http://jicki.me/img/posts/gitlab/18.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/18.png title=图18></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/19.png data-srcset="http://jicki.me/img/posts/gitlab/19.png, http://jicki.me/img/posts/gitlab/19.png 1.5x, http://jicki.me/img/posts/gitlab/19.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/19.png title=图19></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/gitlab/20.png data-srcset="http://jicki.me/img/posts/gitlab/20.png, http://jicki.me/img/posts/gitlab/20.png 1.5x, http://jicki.me/img/posts/gitlab/20.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/gitlab/20.png title=图20></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/15.png data-srcset="http://jicki.cn/img/posts/gitlab/15.png, http://jicki.cn/img/posts/gitlab/15.png 1.5x, http://jicki.cn/img/posts/gitlab/15.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/15.png title=图15></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/16.png data-srcset="http://jicki.cn/img/posts/gitlab/16.png, http://jicki.cn/img/posts/gitlab/16.png 1.5x, http://jicki.cn/img/posts/gitlab/16.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/16.png title=图16></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/17.png data-srcset="http://jicki.cn/img/posts/gitlab/17.png, http://jicki.cn/img/posts/gitlab/17.png 1.5x, http://jicki.cn/img/posts/gitlab/17.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/17.png title=图17></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/18.png data-srcset="http://jicki.cn/img/posts/gitlab/18.png, http://jicki.cn/img/posts/gitlab/18.png 1.5x, http://jicki.cn/img/posts/gitlab/18.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/18.png title=图18></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/19.png data-srcset="http://jicki.cn/img/posts/gitlab/19.png, http://jicki.cn/img/posts/gitlab/19.png 1.5x, http://jicki.cn/img/posts/gitlab/19.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/19.png title=图19></p><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/gitlab/20.png data-srcset="http://jicki.cn/img/posts/gitlab/20.png, http://jicki.cn/img/posts/gitlab/20.png 1.5x, http://jicki.cn/img/posts/gitlab/20.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/gitlab/20.png title=图20></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4

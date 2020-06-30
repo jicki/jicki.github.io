@@ -37,33 +37,33 @@ export GD_Secret="asdfsdafdsfdsfdsfdsfdsafd"
 # 三、生成DNS TXT记录
 
 ```
-acme.sh --issue --dns dns_gd -d jicki.me
+acme.sh --issue --dns dns_gd -d jicki.cn
 
 
 # 如果报错 可使用
 
-acme.sh  --issue  --dns -d jicki.me
+acme.sh  --issue  --dns -d jicki.cn
 
 
 # 会提示，手动创建一条 txt 记录
 
 Add the following TXT record:
-Domain: '_acme-challenge.jicki.me'
+Domain: '_acme-challenge.jicki.cn'
 TXT value: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 Please be aware that you prepend _acme-challenge. before your domain
-so the resulting subdomain will be: _acme-challenge.jicki.me
+so the resulting subdomain will be: _acme-challenge.jicki.cn
 Please add the TXT records to the domains, and retry again.
 
 
 
 # 等待解析完成之后, 重新生成证书:
 
-acme.sh  --renew  -d jicki.me
+acme.sh  --renew  -d jicki.cn
 
-Renew: 'jicki.me'
-Single domain='jicki.me'
+Renew: 'jicki.cn'
+Single domain='jicki.cn'
 Getting domain auth token for each domain
-Verifying:jicki.me
+Verifying:jicki.cn
 Success
 Verify finished, start to sign.
 Cert success.
@@ -72,7 +72,7 @@ Cert success.
 
 # 如果解析未完成会提示
 
-jicki.me:Verify error:DNS problem: query timed out looking up CAA for jicki.me
+jicki.cn:Verify error:DNS problem: query timed out looking up CAA for jicki.cn
 
 ```
 
@@ -80,14 +80,14 @@ jicki.me:Verify error:DNS problem: query timed out looking up CAA for jicki.me
 # 四、配置证书
 
 ```
-acme.sh  --installcert  -d  jicki.me   \
-        --keypath   /etc/nginx/ssl/jicki.me.key \
-        --fullchainpath /etc/nginx/ssl/jicki.me.cer
+acme.sh  --installcert  -d  jicki.cn   \
+        --keypath   /etc/nginx/ssl/jicki.cn.key \
+        --fullchainpath /etc/nginx/ssl/jicki.cn.cer
 		
 		
 # 提示
-Installing key to:/etc/nginx/ssl/jicki.me.key
-Installing full chain to:/etc/nginx/ssl/jicki.me.cer
+Installing key to:/etc/nginx/ssl/jicki.cn.key
+Installing full chain to:/etc/nginx/ssl/jicki.cn.cer
 ```
 
 
@@ -99,7 +99,7 @@ Installing full chain to:/etc/nginx/ssl/jicki.me.cer
 server {
     listen 80;
     listen [::]:80;
-    server_name jicki.me;
+    server_name jicki.cn;
 
     # Redirect all HTTP requests to HTTPS with a 301 Moved Permanently response.
     return 301 https://$host$request_uri;
@@ -108,7 +108,7 @@ server {
 server
 {
   listen     443;
-  server_name www.jicki.me jicki.me;
+  server_name www.jicki.cn jicki.cn;
 
 
   if ($http_user_agent ~ ApacheBench|WebBench|Jmeter){
@@ -117,8 +117,8 @@ server
 
 ### Begin of SSL config
                 ssl on;
-                ssl_certificate /etc/nginx/ssl/jicki.me.cer;
-                ssl_certificate_key /etc/nginx/ssl/jicki.me.key;
+                ssl_certificate /etc/nginx/ssl/jicki.cn.cer;
+                ssl_certificate_key /etc/nginx/ssl/jicki.cn.key;
                 ssl_session_timeout 1d;
                 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
                 ssl_prefer_server_ciphers on;

@@ -1373,7 +1373,7 @@ kube-flannel-ds-amd64-frmk9          1/1     Running   0          88s    10.18.7
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>kubectl scale deploy/coredns --replicas=3 -n kube-system
 
-</code></pre></td></tr></table></div></div><ul><li><p>使用 <code>NodeLocal DNSCache</code></p><ul><li><p>官方文档 <code>https://kubernetes.io/zh/docs/tasks/administer-cluster/nodelocaldns/</code></p></li><li><p><code>NodeLocal DNSCache</code> - 通过在集群节点上作为 <code>DaemonSet</code> 运行 dns 缓存代理来提高集群 DNS 性能。</p></li><li><p><code>NodeLocal DNSCache</code> - 集群中的 Pods 将可以访问在同一节点上运行的 dns 缓存代理，从而避免了<code>iptables DNAT</code> 规则和连接跟踪。 本地缓存代理将查询 kube-dns 服务以获取集群主机名的缓存缺失（默认为 cluster.local 后缀）。</p></li></ul></li><li><p><code>NodeLocal DNSCache</code> 架构图</p></li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/dashboard/nodelocaldns.jpg data-srcset="http://jicki.me/img/posts/dashboard/nodelocaldns.jpg, http://jicki.me/img/posts/dashboard/nodelocaldns.jpg 1.5x, http://jicki.me/img/posts/dashboard/nodelocaldns.jpg 2x" data-sizes=auto alt=http://jicki.me/img/posts/dashboard/nodelocaldns.jpg title=NodeLocal></p><ul><li><p>部署 <code>NodeLocal DNSCache</code></p><ul><li><p>建议在 <code>kubeadm init</code> 阶段以后就配置整体 dns</p></li><li><p>如果在旧的集群部署 <code>NodeLocal DNSCache</code> 原来的所有应用组件建议重新部署,包括<code>网络组建</code>, 否则会遇到很多莫名其妙问题。</p></li><li><p>如果使用 <code>istio</code> 的话, 会出现一些问题, 暂时还不兼容 <code>istio</code> , 或者是我配置上有问题。</p></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><ul><li><p>使用 <code>NodeLocal DNSCache</code></p><ul><li><p>官方文档 <code>https://kubernetes.io/zh/docs/tasks/administer-cluster/nodelocaldns/</code></p></li><li><p><code>NodeLocal DNSCache</code> - 通过在集群节点上作为 <code>DaemonSet</code> 运行 dns 缓存代理来提高集群 DNS 性能。</p></li><li><p><code>NodeLocal DNSCache</code> - 集群中的 Pods 将可以访问在同一节点上运行的 dns 缓存代理，从而避免了<code>iptables DNAT</code> 规则和连接跟踪。 本地缓存代理将查询 kube-dns 服务以获取集群主机名的缓存缺失（默认为 cluster.local 后缀）。</p></li></ul></li><li><p><code>NodeLocal DNSCache</code> 架构图</p></li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/dashboard/nodelocaldns.jpg data-srcset="http://jicki.cn/img/posts/dashboard/nodelocaldns.jpg, http://jicki.cn/img/posts/dashboard/nodelocaldns.jpg 1.5x, http://jicki.cn/img/posts/dashboard/nodelocaldns.jpg 2x" data-sizes=auto alt=http://jicki.cn/img/posts/dashboard/nodelocaldns.jpg title=NodeLocal></p><ul><li><p>部署 <code>NodeLocal DNSCache</code></p><ul><li><p>建议在 <code>kubeadm init</code> 阶段以后就配置整体 dns</p></li><li><p>如果在旧的集群部署 <code>NodeLocal DNSCache</code> 原来的所有应用组件建议重新部署,包括<code>网络组建</code>, 否则会遇到很多莫名其妙问题。</p></li><li><p>如果使用 <code>istio</code> 的话, 会出现一些问题, 暂时还不兼容 <code>istio</code> , 或者是我配置上有问题。</p></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -2828,7 +2828,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -2854,7 +2854,7 @@ ingress.extensions/nginx-ingress created
 # 查看 ingress
 [root@k8s-node-1 kubeadm]# kubectl get ingress
 NAME            CLASS    HOSTS            ADDRESS   PORTS   AGE
-nginx-ingress   &lt;none&gt;   nginx.jicki.me             80      34s
+nginx-ingress   &lt;none&gt;   nginx.jicki.cn             80      34s
 
 
 </code></pre></td></tr></table></div></div><h3 id=626-测试访问>6.2.6 测试访问</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
@@ -2869,7 +2869,7 @@ nginx-ingress   &lt;none&gt;   nginx.jicki.me             80      34s
 </span><span class=lnt>10
 </span><span class=lnt>11
 </span><span class=lnt>12
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@k8s-node-1 kubeadm]# curl -I nginx.jicki.me
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@k8s-node-1 kubeadm]# curl -I nginx.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.17.8
 Date: Mon, 30 Mar 2020 08:54:56 GMT
@@ -3019,10 +3019,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: kubernetes-dashboard-certs
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -3048,7 +3048,7 @@ ingress.extensions/kubernetes-dashboard created
 
 [root@k8s-node-1 dashboard]# kubectl get ingress -n kubernetes-dashboard
 NAME                   CLASS    HOSTS                ADDRESS   PORTS     AGE
-kubernetes-dashboard   &lt;none&gt;   dashboard.jicki.me             80, 443   2m53s
+kubernetes-dashboard   &lt;none&gt;   dashboard.jicki.cn             80, 443   2m53s
 
 </code></pre></td></tr></table></div></div><h3 id=726-测试访问>7.2.6 测试访问</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
@@ -3062,7 +3062,7 @@ kubernetes-dashboard   &lt;none&gt;   dashboard.jicki.me             80, 443   2
 </span><span class=lnt>10
 </span><span class=lnt>11
 </span><span class=lnt>12
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@k8s-node-1 dashboard]# curl -I -k https://dashboard.jicki.me
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@k8s-node-1 dashboard]# curl -I -k https://dashboard.jicki.cn
 HTTP/2 200 
 server: nginx/1.17.8
 date: Mon, 30 Mar 2020 09:41:02 GMT
@@ -3194,7 +3194,7 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlI4UlpGcTcwR2hkdWZfZWk1X0RUcVI5dkdraXFn
 
 token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IlI4UlpGcTcwR2hkdWZfZWk1X0RUcVI5dkdraXFnNW8yYUV1VVRPQlJYMEkifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbi10b2tlbi05ZGtnNCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImFlZTIzYjMzLTQzYTQtNGZiNC1iNDk4LTZjMmZiMDI5ZDYzYyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlcm5ldGVzLWRhc2hib2FyZDprdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiJ9.oyvo_bIM0Ukbs3ov8XbmJffpdK1nec7oKJBxu8V4vesPY_keQhNS9xiAw6zdF2Db2tiEzcpmN3SAgwGjfid5rlSQxGpNK3mkp1r60WSAhyU5e7RqwA9xRO-EtCZ2akrqFKzEn4j_7FGwbKbNsdRurDdOLtKU5KvFsFh5eRxvB6PECT2mgSugfHorrI1cYOw0jcQKE_hjVa94xUseYX12PyGQfoUyC6ZhwIBkRnCSNdbcb0VcGwTerwysR0HFvozAJALh_iOBTDYDUNh94XIRh2AHCib-KVoJt-e2jUaGH-Z6yniLmNr15q5xLfNBd1qPpZHCgoJ1JYz4TeF6udNxIA
 
-</code></pre></td></tr></table></div></div><h3 id=728>7.2.8</h3><blockquote><p>浏览器访问</p></blockquote><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.me/img/posts/dashboard/dashboard-jicki.png data-srcset="http://jicki.me/img/posts/dashboard/dashboard-jicki.png, http://jicki.me/img/posts/dashboard/dashboard-jicki.png 1.5x, http://jicki.me/img/posts/dashboard/dashboard-jicki.png 2x" data-sizes=auto alt=http://jicki.me/img/posts/dashboard/dashboard-jicki.png title=图1></p><h2 id=faq>FAQ</h2><ul><li><p><code>Failed to get system container stats for "/system.slice/docker.service": failed to get cgroup stats</code> 错误</p></li><li><p>推测是由于 kubernetes 版本与 docker 版本不兼容导致的问题</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><h3 id=728>7.2.8</h3><blockquote><p>浏览器访问</p></blockquote><p><img class=lazyload src=/svg/loading.min.svg data-src=http://jicki.cn/img/posts/dashboard/dashboard-jicki.png data-srcset="http://jicki.cn/img/posts/dashboard/dashboard-jicki.png, http://jicki.cn/img/posts/dashboard/dashboard-jicki.png 1.5x, http://jicki.cn/img/posts/dashboard/dashboard-jicki.png 2x" data-sizes=auto alt=http://jicki.cn/img/posts/dashboard/dashboard-jicki.png title=图1></p><h2 id=faq>FAQ</h2><ul><li><p><code>Failed to get system container stats for "/system.slice/docker.service": failed to get cgroup stats</code> 错误</p></li><li><p>推测是由于 kubernetes 版本与 docker 版本不兼容导致的问题</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4

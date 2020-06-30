@@ -386,8 +386,8 @@ kubectl edit svc/ks-console -n kubesphere-system
 
 kubectl -n kubesphere-system create \
   secret tls tls-kubesphere-ingress \
-  --cert=3258931_kubesphere.jicki.me.pem \
-  --key=3258931_kubesphere.jicki.me.key
+  --cert=3258931_kubesphere.jicki.cn.pem \
+  --key=3258931_kubesphere.jicki.cn.key
 
 ```
 
@@ -406,7 +406,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
 spec:
   rules:
-  - host: kubesphere.jicki.me
+  - host: kubesphere.jicki.cn
     http:
       paths:
       - backend:
@@ -414,7 +414,7 @@ spec:
           servicePort: 80
   tls:
   - hosts:
-    - kubesphere.jicki.me
+    - kubesphere.jicki.cn
     secretName: tls-kubesphere-ingress
 ```
 
@@ -423,7 +423,7 @@ spec:
 ```
 [root@localhost kubesphere]# kubectl get ingress -n kubesphere-system
 NAME                 HOSTS                 ADDRESS   PORTS     AGE
-ks-console-ingress   kubesphere.jicki.me             80, 443   14m
+ks-console-ingress   kubesphere.jicki.cn             80, 443   14m
 ```
 
 
@@ -451,10 +451,10 @@ ks-console-ingress   kubesphere.jicki.me             80, 443   14m
 
 
 
-  [1]: http://jicki.me/img/posts/kubesphere/kubesphere.png
-  [2]: http://jicki.me/img/posts/kubesphere/kubesphere-1.png
-  [3]: http://jicki.me/img/posts/kubesphere/kubesphere-2.png
-  [4]: http://jicki.me/img/posts/kubesphere/kubesphere-3.png
-  [5]: http://jicki.me/img/posts/kubesphere/kubesphere-4.png
-  [6]: http://jicki.me/img/posts/kubesphere/kubesphere-5.png
+  [1]: http://jicki.cn/img/posts/kubesphere/kubesphere.png
+  [2]: http://jicki.cn/img/posts/kubesphere/kubesphere-1.png
+  [3]: http://jicki.cn/img/posts/kubesphere/kubesphere-2.png
+  [4]: http://jicki.cn/img/posts/kubesphere/kubesphere-3.png
+  [5]: http://jicki.cn/img/posts/kubesphere/kubesphere-4.png
+  [6]: http://jicki.cn/img/posts/kubesphere/kubesphere-5.png
 

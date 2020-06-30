@@ -328,18 +328,18 @@ ELK Stack是开源日志处理平台解决方案，背后的商业公司是Elast
 Amazon CloudWatch 是一项针对 AWS 云资源和在 AWS 上运行的应用程序进行监控的服务。您可以使用 Amazon CloudWatch 收集和跟踪各项指标、收集和监控日志文件、设置警报以及自动应对 AWS 资源的更改
 
 
-  [1]: https://jicki.me/img/posts/devops/1.png
-  [2]: https://jicki.me/img/posts/devops/2.png
-  [3]: https://jicki.me/img/posts/devops/3.png
-  [4]: https://jicki.me/img/posts/devops/4.png
-  [5]: https://jicki.me/img/posts/devops/5.png
-  [6]: https://jicki.me/img/posts/devops/6.png
-  [7]: https://jicki.me/img/posts/devops/7.png
-  [8]: https://jicki.me/img/posts/devops/8.png
-  [9]: https://jicki.me/img/posts/devops/9.png
-  [10]: https://jicki.me/img/posts/devops/10.png
-  [11]: https://jicki.me/img/posts/devops/11.png
-  [12]: https://jicki.me/img/posts/devops/12.png
-  [13]: https://jicki.me/img/posts/devops/13.png
-  [14]: https://jicki.me/img/posts/devops/14.png
+  [1]: https://jicki.cn/img/posts/devops/1.png
+  [2]: https://jicki.cn/img/posts/devops/2.png
+  [3]: https://jicki.cn/img/posts/devops/3.png
+  [4]: https://jicki.cn/img/posts/devops/4.png
+  [5]: https://jicki.cn/img/posts/devops/5.png
+  [6]: https://jicki.cn/img/posts/devops/6.png
+  [7]: https://jicki.cn/img/posts/devops/7.png
+  [8]: https://jicki.cn/img/posts/devops/8.png
+  [9]: https://jicki.cn/img/posts/devops/9.png
+  [10]: https://jicki.cn/img/posts/devops/10.png
+  [11]: https://jicki.cn/img/posts/devops/11.png
+  [12]: https://jicki.cn/img/posts/devops/12.png
+  [13]: https://jicki.cn/img/posts/devops/13.png
+  [14]: https://jicki.cn/img/posts/devops/14.png
 

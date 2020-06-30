@@ -487,6 +487,6 @@ log_format main
  
 
 
-  [1]: http://jicki.me/img/posts/elk/1.png
-  [2]: http://jicki.me/img/posts/elk/2.png
+  [1]: http://jicki.cn/img/posts/elk/1.png
+  [2]: http://jicki.cn/img/posts/elk/2.png
 

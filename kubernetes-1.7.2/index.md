@@ -2014,7 +2014,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -2034,13 +2034,13 @@ ingress "nginx-ingress" created
 
 [root@k8s-master-1 Ingress]# kubectl get ingress
 NAME            HOSTS            ADDRESS            PORTS     AGE
-nginx-ingress   nginx.jicki.me   10.6.0.187,10...   80        24s
+nginx-ingress   nginx.jicki.cn   10.6.0.187,10...   80        24s
 
 
 
 # 测试访问
 
-[root@k8s-master-1 ingress]# curl -I nginx.jicki.me
+[root@k8s-master-1 ingress]# curl -I nginx.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.13.2
 Date: Thu, 06 Jul 2017 04:21:43 GMT
@@ -2079,7 +2079,7 @@ metadata:
   namespace: kube-system
 spec:
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - backend:
@@ -2094,7 +2094,7 @@ spec:
 
 [root@k8s-master-1 dashboard]# kubectl get ingress -n kube-system
 NAME                HOSTS                ADDRESS            PORTS     AGE
-dashboard-ingress   dashboard.jicki.me   10.6.0.187,10...   80        1m
+dashboard-ingress   dashboard.jicki.cn   10.6.0.187,10...   80        1m
 
 
 
@@ -2102,7 +2102,7 @@ dashboard-ingress   dashboard.jicki.me   10.6.0.187,10...   80        1m
 
 # 测试访问
 
-[root@k8s-master-1 dashboard]# curl -I dashboard.jicki.me
+[root@k8s-master-1 dashboard]# curl -I dashboard.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.13.2
 Date: Thu, 06 Jul 2017 06:32:00 GMT

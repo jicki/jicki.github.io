@@ -1883,7 +1883,7 @@ systemctl status kube-proxy
 
 </code></pre></td></tr></table></div></div><h1 id=部署-node-节点>部署 Node 节点</h1><blockquote><p>Node 节点 基于 Nginx 负载 API 做 Master HA</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># master 之间除 api server 以外其他组件通过 etcd 选举，api server 默认不作处理；在每个 node 上启动一个 nginx，每个 nginx 反向代理所有 api server，node 上 kubelet、kube-proxy 连接本地的 nginx 代理端口，当 nginx 发现无法连接后端时会自动踢掉出问题的 api server，从而实现 api server 的 HA
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.me/img/posts/kubernetes/hamaster.jpg data-srcset="https://jicki.me/img/posts/kubernetes/hamaster.jpg, https://jicki.me/img/posts/kubernetes/hamaster.jpg 1.5x, https://jicki.me/img/posts/kubernetes/hamaster.jpg 2x" data-sizes=auto alt=https://jicki.me/img/posts/kubernetes/hamaster.jpg title=HAMaster></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/kubernetes/hamaster.jpg data-srcset="https://jicki.cn/img/posts/kubernetes/hamaster.jpg, https://jicki.cn/img/posts/kubernetes/hamaster.jpg 1.5x, https://jicki.cn/img/posts/kubernetes/hamaster.jpg 2x" data-sizes=auto alt=https://jicki.cn/img/posts/kubernetes/hamaster.jpg title=HAMaster></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -3537,7 +3537,7 @@ metadata:
   namespace: kube-system
 spec:
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - backend:
@@ -3557,12 +3557,12 @@ ingress &#34;dashboard-ingress&#34; created
 
 [root@k8s-master-1 dashboard]# kubectl get ingress -n kube-system -o wide
 NAME                HOSTS                ADDRESS                 PORTS     AGE
-dashboard-ingress   dashboard.jicki.me   10.6.0.140,10.6.0.187   80        1h
+dashboard-ingress   dashboard.jicki.cn   10.6.0.140,10.6.0.187   80        1h
 
 
 # 测试访问
 
-[root@k8s-master-1 dashboard]# curl -I dashboard.jicki.me
+[root@k8s-master-1 dashboard]# curl -I dashboard.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.13.2
 Date: Thu, 06 Jul 2017 06:32:00 GMT
@@ -3573,7 +3573,7 @@ Accept-Ranges: bytes
 Cache-Control: no-store
 Last-Modified: Tue, 16 May 2017 12:53:01 GMT
 
-</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.me/img/posts/kubernetes/dashboard.png data-srcset="https://jicki.me/img/posts/kubernetes/dashboard.png, https://jicki.me/img/posts/kubernetes/dashboard.png 1.5x, https://jicki.me/img/posts/kubernetes/dashboard.png 2x" data-sizes=auto alt=https://jicki.me/img/posts/kubernetes/dashboard.png title=Dashboard></p><h1 id=破坏性测试>破坏性测试</h1><blockquote><p>破坏性测试，手动重启服务器，查看各服务间的恢复以及问题</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/kubernetes/dashboard.png data-srcset="https://jicki.cn/img/posts/kubernetes/dashboard.png, https://jicki.cn/img/posts/kubernetes/dashboard.png 1.5x, https://jicki.cn/img/posts/kubernetes/dashboard.png 2x" data-sizes=auto alt=https://jicki.cn/img/posts/kubernetes/dashboard.png title=Dashboard></p><h1 id=破坏性测试>破坏性测试</h1><blockquote><p>破坏性测试，手动重启服务器，查看各服务间的恢复以及问题</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4

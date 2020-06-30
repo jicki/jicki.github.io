@@ -326,7 +326,7 @@ metadata:
   name: traefik-ingress
 spec:
   rules:
-  - host: traefik.test.jicki.me
+  - host: traefik.test.jicki.cn
     http:
       paths:
       - path: /
@@ -343,7 +343,7 @@ spec:
 
 [root@k8s-node-1 ~]#kubectl get ing
 NAME              HOSTS                   ADDRESS   PORTS     AGE
-traefik-ingress   traefik.test.jicki.me             80        32m	
+traefik-ingress   traefik.test.jicki.cn             80        32m	
 	
 </code></pre></td></tr></table></div></div><h2 id=15-创建-traefik-web-ui>1.5 创建 traefik web ui</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -367,7 +367,7 @@ curl -O https://raw.githubusercontent.com/containous/traefik/master/examples/k8s
 </span><span class=lnt> 8
 </span><span class=lnt> 9
 </span><span class=lnt>10
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@k8s-node-1 ~]#curl -I traefik.test.jicki.me
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@k8s-node-1 ~]#curl -I traefik.test.jicki.cn
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
 Content-Length: 612

@@ -3,7 +3,7 @@
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
 <i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">hyperledger-fabric v 1.3</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/fabric/><i class="far fa-folder fa-fw"></i>fabric</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2018-11-06>2018-11-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 13773 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 28 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#环境规划>环境规划</a></li><li><a href=#官方地址>官方地址</a></li><li><a href=#环境准备>环境准备</a></li><li><a href=#hyperledger-fabric-源码>Hyperledger Fabric 源码</a></li><li><a href=#生成-hyperledger-fabric-证书>生成 Hyperledger Fabric 证书</a></li><li><a href=#生成-hyperledger-fabric-创世区块>生成 Hyperledger Fabric 创世区块</a></li><li><a href=#配置-zookeeper-kafka-集群>配置 Zookeeper Kafka 集群</a></li><li><a href=#配置-hyperledger-fabric-orderer>配置 Hyperledger Fabric Orderer</a><ul><li><a href=#启动服务>启动服务</a></li></ul></li><li><a href=#配置-hyperledger-fabric-ca-节点>配置 Hyperledger Fabric ca 节点</a></li><li><a href=#配置-hyperledger-fabric-peer>配置 Hyperledger Fabric peer</a><ul><li><a href=#启动服务-1>启动服务</a></li></ul></li><li><a href=#配置-hyperledger-fabric-cli-客户端>配置 Hyperledger Fabric cli 客户端</a><ul><li><a href=#启动服务-2>启动服务</a></li></ul></li><li><a href=#hyperledger-fabric-创建-channel>Hyperledger Fabric 创建 Channel</a></li><li><a href=#hyperledger-fabric-加入-channel>Hyperledger Fabric 加入 Channel</a></li><li><a href=#hyperledger-fabric-实例化测试>Hyperledger Fabric 实例化测试</a><ul><li><a href=#安装智能合约>安装智能合约</a></li><li><a href=#实例化-chaincode>实例化 Chaincode</a></li><li><a href=#操作智能合约>操作智能合约</a></li></ul></li><li><a href=#hyperledger-fabric-操作命令>Hyperledger Fabric 操作命令</a><ul><li><a href=#peer-命令>peer 命令</a></li></ul></li></ul><ul><li><a href=#安装-nodejs>安装 node.js</a></li><li><a href=#下载源码>下载源码</a></li><li><a href=#修改配置文件>修改配置文件</a></li><li><a href=#拷贝证书文件>拷贝证书文件</a></li><li><a href=#启动-balance-transfer>启动 balance-transfer</a></li><li><a href=#测试-调用-api>测试 调用 API</a><ul><li><a href=#创建用户>创建用户</a></li><li><a href=#创建-channel>创建 channel</a></li><li><a href=#加入-channel>加入 channel</a></li><li><a href=#安装-chaincode>安装 chaincode</a></li><li><a href=#实例化chaincode>实例化chaincode</a></li><li><a href=#查询已创建的-channel>查询已创建的 channel</a></li><li><a href=#查询-chaincode>查询 chaincode</a></li><li><a href=#操作交易>操作交易</a></li><li><a href=#查询-chaininfo>查询 chainInfo</a></li><li><a href=#查询已安装-chaincode>查询已安装 chaincode</a></li><li><a href=#查询实例化-chaincode>查询实例化 chaincode</a></li></ul></li></ul></nav></div></div><div class=content id=content><blockquote><p>fabric v1.3 , 单机 多节点 kafka 手动部署, 所有服务均 开启 SSL 认证。</p></blockquote><h1 id=部署-hyperledger-fabric-v13>部署 hyperledger-fabric v1.3</h1><h2 id=环境规划>环境规划</h2><blockquote><p>相关hostname 必须配置 dns</p><p>关于 orderer 集群</p><p>当orderer 向peer节点提交Transaction的时候，peer节点会得到或返回一个读写集结果，该结果会发送给orderer节点进行共识和排序，此时如果orderer节点突然down掉，就会使请求服务失效而引发的数据丢失等问题，且目前的sdk对orderer发送的Transaction的回调会占用极长的时间，当大批量数据导入的时候该回调可认为不可用。</p></blockquote><table><thead><tr><th>节点标识</th><th>hostname</th><th>IP</th><th>开放端口</th><th>系统</th><th></th><th></th></tr></thead><tbody><tr><td>orderer0节点</td><td>orderer0.jicki.me</td><td>192.168.100.100</td><td>7050</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>orderer1节点</td><td>orderer1.jicki.me</td><td>192.168.100.100</td><td>7050</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>orderer2节点</td><td>orderer2.jicki.me</td><td>192.168.100.100</td><td>7050</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>peer0节点</td><td>peer0.org1.jicki.me</td><td>192.168.100.100</td><td>7051, 7052, 7053</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>peer0节点</td><td>peer0.org2.jicki.me</td><td>192.168.100.100</td><td>7051, 7052, 7053</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>zk0节点</td><td>zookeeper0</td><td>192.168.100.100</td><td>2181</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>zk1节点</td><td>zookeeper1</td><td>192.168.100.100</td><td>2181</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>zk2节点</td><td>zookeeper2</td><td>192.168.100.100</td><td>2181</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>kafka0节点</td><td>kafka0</td><td>192.168.100.100</td><td>9092</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>kafka1节点</td><td>kafka1</td><td>192.168.100.100</td><td>9092</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>kafka2节点</td><td>kafka2</td><td>192.168.100.100</td><td>9092</td><td>CentOS 7 x64</td><td></td><td></td></tr></tbody></table><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#环境规划>环境规划</a></li><li><a href=#官方地址>官方地址</a></li><li><a href=#环境准备>环境准备</a></li><li><a href=#hyperledger-fabric-源码>Hyperledger Fabric 源码</a></li><li><a href=#生成-hyperledger-fabric-证书>生成 Hyperledger Fabric 证书</a></li><li><a href=#生成-hyperledger-fabric-创世区块>生成 Hyperledger Fabric 创世区块</a></li><li><a href=#配置-zookeeper-kafka-集群>配置 Zookeeper Kafka 集群</a></li><li><a href=#配置-hyperledger-fabric-orderer>配置 Hyperledger Fabric Orderer</a><ul><li><a href=#启动服务>启动服务</a></li></ul></li><li><a href=#配置-hyperledger-fabric-ca-节点>配置 Hyperledger Fabric ca 节点</a></li><li><a href=#配置-hyperledger-fabric-peer>配置 Hyperledger Fabric peer</a><ul><li><a href=#启动服务-1>启动服务</a></li></ul></li><li><a href=#配置-hyperledger-fabric-cli-客户端>配置 Hyperledger Fabric cli 客户端</a><ul><li><a href=#启动服务-2>启动服务</a></li></ul></li><li><a href=#hyperledger-fabric-创建-channel>Hyperledger Fabric 创建 Channel</a></li><li><a href=#hyperledger-fabric-加入-channel>Hyperledger Fabric 加入 Channel</a></li><li><a href=#hyperledger-fabric-实例化测试>Hyperledger Fabric 实例化测试</a><ul><li><a href=#安装智能合约>安装智能合约</a></li><li><a href=#实例化-chaincode>实例化 Chaincode</a></li><li><a href=#操作智能合约>操作智能合约</a></li></ul></li><li><a href=#hyperledger-fabric-操作命令>Hyperledger Fabric 操作命令</a><ul><li><a href=#peer-命令>peer 命令</a></li></ul></li></ul><ul><li><a href=#安装-nodejs>安装 node.js</a></li><li><a href=#下载源码>下载源码</a></li><li><a href=#修改配置文件>修改配置文件</a></li><li><a href=#拷贝证书文件>拷贝证书文件</a></li><li><a href=#启动-balance-transfer>启动 balance-transfer</a></li><li><a href=#测试-调用-api>测试 调用 API</a><ul><li><a href=#创建用户>创建用户</a></li><li><a href=#创建-channel>创建 channel</a></li><li><a href=#加入-channel>加入 channel</a></li><li><a href=#安装-chaincode>安装 chaincode</a></li><li><a href=#实例化chaincode>实例化chaincode</a></li><li><a href=#查询已创建的-channel>查询已创建的 channel</a></li><li><a href=#查询-chaincode>查询 chaincode</a></li><li><a href=#操作交易>操作交易</a></li><li><a href=#查询-chaininfo>查询 chainInfo</a></li><li><a href=#查询已安装-chaincode>查询已安装 chaincode</a></li><li><a href=#查询实例化-chaincode>查询实例化 chaincode</a></li></ul></li></ul></nav></div></div><div class=content id=content><blockquote><p>fabric v1.3 , 单机 多节点 kafka 手动部署, 所有服务均 开启 SSL 认证。</p></blockquote><h1 id=部署-hyperledger-fabric-v13>部署 hyperledger-fabric v1.3</h1><h2 id=环境规划>环境规划</h2><blockquote><p>相关hostname 必须配置 dns</p><p>关于 orderer 集群</p><p>当orderer 向peer节点提交Transaction的时候，peer节点会得到或返回一个读写集结果，该结果会发送给orderer节点进行共识和排序，此时如果orderer节点突然down掉，就会使请求服务失效而引发的数据丢失等问题，且目前的sdk对orderer发送的Transaction的回调会占用极长的时间，当大批量数据导入的时候该回调可认为不可用。</p></blockquote><table><thead><tr><th>节点标识</th><th>hostname</th><th>IP</th><th>开放端口</th><th>系统</th><th></th><th></th></tr></thead><tbody><tr><td>orderer0节点</td><td>orderer0.jicki.cn</td><td>192.168.100.100</td><td>7050</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>orderer1节点</td><td>orderer1.jicki.cn</td><td>192.168.100.100</td><td>7050</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>orderer2节点</td><td>orderer2.jicki.cn</td><td>192.168.100.100</td><td>7050</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>peer0节点</td><td>peer0.org1.jicki.cn</td><td>192.168.100.100</td><td>7051, 7052, 7053</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>peer0节点</td><td>peer0.org2.jicki.cn</td><td>192.168.100.100</td><td>7051, 7052, 7053</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>zk0节点</td><td>zookeeper0</td><td>192.168.100.100</td><td>2181</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>zk1节点</td><td>zookeeper1</td><td>192.168.100.100</td><td>2181</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>zk2节点</td><td>zookeeper2</td><td>192.168.100.100</td><td>2181</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>kafka0节点</td><td>kafka0</td><td>192.168.100.100</td><td>9092</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>kafka1节点</td><td>kafka1</td><td>192.168.100.100</td><td>9092</td><td>CentOS 7 x64</td><td></td><td></td></tr><tr><td>kafka2节点</td><td>kafka2</td><td>192.168.100.100</td><td>9092</td><td>CentOS 7 x64</td><td></td><td></td></tr></tbody></table><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -22,11 +22,11 @@
 
 # fabric
 
-192.168.168.100 orderer0.jicki.me
-192.168.168.100 orderer1.jicki.me
-192.168.168.100 orderer2.jicki.me
-192.168.168.100 peer0.org1.jicki.me
-192.168.168.100 peer0.org2.jicki.me
+192.168.168.100 orderer0.jicki.cn
+192.168.168.100 orderer1.jicki.cn
+192.168.168.100 orderer2.jicki.cn
+192.168.168.100 peer0.org1.jicki.cn
+192.168.168.100 peer0.org2.jicki.cn
 
 # fabric
 
@@ -513,7 +513,7 @@ cp /opt/gopath/src/github.com/hyperledger/fabric/examples/e2e_cli/configtx.yaml 
 </span><span class=lnt>42
 </span><span class=lnt>43
 </span><span class=lnt>44
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 这里修改相应 jicki.me 为 jicki.me
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 这里修改相应 jicki.cn 为 jicki.cn
 
 sed -i &#39;s/example\.com/jicki\.me/g&#39; *.yaml
 
@@ -523,7 +523,7 @@ sed -i &#39;s/example\.com/jicki\.me/g&#39; *.yaml
 
 OrdererOrgs:
   - Name: Orderer
-    Domain: jicki.me
+    Domain: jicki.cn
     CA:
         Country: CN
         Province: GuangDong
@@ -535,7 +535,7 @@ OrdererOrgs:
       
 PeerOrgs:
   - Name: Org1
-    Domain: org1.jicki.me
+    Domain: org1.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -546,7 +546,7 @@ PeerOrgs:
     Users:
       Count: 1
   - Name: Org2
-    Domain: org2.jicki.me
+    Domain: org2.jicki.cn
     EnableNodeOUs: true
     CA:
         Country: CN
@@ -820,257 +820,257 @@ PeerOrgs:
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 然后这里使用 cryptogen 软件来生成相应的证书了
 
 [root@localhost jicki]# cryptogen generate --config=./crypto-config.yaml
-org1.jicki.me
-org2.jicki.me
+org1.jicki.cn
+org2.jicki.cn
 
 # 生成一个 crypto-config 证书目录
 
 [root@payment jicki]# tree crypto-config
 crypto-config
 ├── ordererOrganizations
-│   └── jicki.me
+│   └── jicki.cn
 │       ├── ca
 │       │   ├── 1b50e9236c72ccbdf474ecd39ceb300f90b983b8044981895ee8ba4fda466c38_sk
-│       │   └── ca.jicki.me-cert.pem
+│       │   └── ca.jicki.cn-cert.pem
 │       ├── msp
 │       │   ├── admincerts
-│       │   │   └── Admin@jicki.me-cert.pem
+│       │   │   └── Admin@jicki.cn-cert.pem
 │       │   ├── cacerts
-│       │   │   └── ca.jicki.me-cert.pem
+│       │   │   └── ca.jicki.cn-cert.pem
 │       │   └── tlscacerts
-│       │       └── tlsca.jicki.me-cert.pem
+│       │       └── tlsca.jicki.cn-cert.pem
 │       ├── orderers
-│       │   ├── orderer0.jicki.me
+│       │   ├── orderer0.jicki.cn
 │       │   │   ├── msp
 │       │   │   │   ├── admincerts
-│       │   │   │   │   └── Admin@jicki.me-cert.pem
+│       │   │   │   │   └── Admin@jicki.cn-cert.pem
 │       │   │   │   ├── cacerts
-│       │   │   │   │   └── ca.jicki.me-cert.pem
+│       │   │   │   │   └── ca.jicki.cn-cert.pem
 │       │   │   │   ├── keystore
 │       │   │   │   │   └── 4dd2ea13c77739776e2e70a82516fce9836c25c92ab6d762333b468b8824fdfd_sk
 │       │   │   │   ├── signcerts
-│       │   │   │   │   └── orderer0.jicki.me-cert.pem
+│       │   │   │   │   └── orderer0.jicki.cn-cert.pem
 │       │   │   │   └── tlscacerts
-│       │   │   │       └── tlsca.jicki.me-cert.pem
+│       │   │   │       └── tlsca.jicki.cn-cert.pem
 │       │   │   └── tls
 │       │   │       ├── ca.crt
 │       │   │       ├── server.crt
 │       │   │       └── server.key
-│       │   ├── orderer1.jicki.me
+│       │   ├── orderer1.jicki.cn
 │       │   │   ├── msp
 │       │   │   │   ├── admincerts
-│       │   │   │   │   └── Admin@jicki.me-cert.pem
+│       │   │   │   │   └── Admin@jicki.cn-cert.pem
 │       │   │   │   ├── cacerts
-│       │   │   │   │   └── ca.jicki.me-cert.pem
+│       │   │   │   │   └── ca.jicki.cn-cert.pem
 │       │   │   │   ├── keystore
 │       │   │   │   │   └── 2a55c127a61858ddf36cdffe66782f6a3976955ed6ccafa7dd602b9f393cee77_sk
 │       │   │   │   ├── signcerts
-│       │   │   │   │   └── orderer1.jicki.me-cert.pem
+│       │   │   │   │   └── orderer1.jicki.cn-cert.pem
 │       │   │   │   └── tlscacerts
-│       │   │   │       └── tlsca.jicki.me-cert.pem
+│       │   │   │       └── tlsca.jicki.cn-cert.pem
 │       │   │   └── tls
 │       │   │       ├── ca.crt
 │       │   │       ├── server.crt
 │       │   │       └── server.key
-│       │   └── orderer2.jicki.me
+│       │   └── orderer2.jicki.cn
 │       │       ├── msp
 │       │       │   ├── admincerts
-│       │       │   │   └── Admin@jicki.me-cert.pem
+│       │       │   │   └── Admin@jicki.cn-cert.pem
 │       │       │   ├── cacerts
-│       │       │   │   └── ca.jicki.me-cert.pem
+│       │       │   │   └── ca.jicki.cn-cert.pem
 │       │       │   ├── keystore
 │       │       │   │   └── d85da317a39fc3c95c5ddce183bf492e1310decee79dd215ef4cfd4f7130d0c4_sk
 │       │       │   ├── signcerts
-│       │       │   │   └── orderer2.jicki.me-cert.pem
+│       │       │   │   └── orderer2.jicki.cn-cert.pem
 │       │       │   └── tlscacerts
-│       │       │       └── tlsca.jicki.me-cert.pem
+│       │       │       └── tlsca.jicki.cn-cert.pem
 │       │       └── tls
 │       │           ├── ca.crt
 │       │           ├── server.crt
 │       │           └── server.key
 │       ├── tlsca
 │       │   ├── e03e3c85138178da8a03c3cc00aecb0627aa299bdd0b92c4bc82591cd47a2672_sk
-│       │   └── tlsca.jicki.me-cert.pem
+│       │   └── tlsca.jicki.cn-cert.pem
 │       └── users
-│           └── Admin@jicki.me
+│           └── Admin@jicki.cn
 │               ├── msp
 │               │   ├── admincerts
-│               │   │   └── Admin@jicki.me-cert.pem
+│               │   │   └── Admin@jicki.cn-cert.pem
 │               │   ├── cacerts
-│               │   │   └── ca.jicki.me-cert.pem
+│               │   │   └── ca.jicki.cn-cert.pem
 │               │   ├── keystore
 │               │   │   └── fac87a53e4255e8007bf947bda23464b40f46107ebcae48400e33ae5b778ac32_sk
 │               │   ├── signcerts
-│               │   │   └── Admin@jicki.me-cert.pem
+│               │   │   └── Admin@jicki.cn-cert.pem
 │               │   └── tlscacerts
-│               │       └── tlsca.jicki.me-cert.pem
+│               │       └── tlsca.jicki.cn-cert.pem
 │               └── tls
 │                   ├── ca.crt
 │                   ├── client.crt
 │                   └── client.key
 └── peerOrganizations
-    ├── org1.jicki.me
+    ├── org1.jicki.cn
     │   ├── ca
     │   │   ├── aa167e5dcb62e9e1068487484c08f0bc0a13e13cebf53a0fa2f64038a1a76662_sk
-    │   │   └── ca.org1.jicki.me-cert.pem
+    │   │   └── ca.org1.jicki.cn-cert.pem
     │   ├── msp
     │   │   ├── admincerts
-    │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │   │   ├── cacerts
-    │   │   │   └── ca.org1.jicki.me-cert.pem
+    │   │   │   └── ca.org1.jicki.cn-cert.pem
     │   │   ├── config.yaml
     │   │   └── tlscacerts
-    │   │       └── tlsca.org1.jicki.me-cert.pem
+    │   │       └── tlsca.org1.jicki.cn-cert.pem
     │   ├── peers
-    │   │   ├── peer0.org1.jicki.me
+    │   │   ├── peer0.org1.jicki.cn
     │   │   │   ├── msp
     │   │   │   │   ├── admincerts
-    │   │   │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │   │   │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │   │   │   │   ├── cacerts
-    │   │   │   │   │   └── ca.org1.jicki.me-cert.pem
+    │   │   │   │   │   └── ca.org1.jicki.cn-cert.pem
     │   │   │   │   ├── config.yaml
     │   │   │   │   ├── keystore
     │   │   │   │   │   └── 7d20eedce4f8f3417bb1d4b723a0018b701fb2485afd727a2e1f34c09148e4eb_sk
     │   │   │   │   ├── signcerts
-    │   │   │   │   │   └── peer0.org1.jicki.me-cert.pem
+    │   │   │   │   │   └── peer0.org1.jicki.cn-cert.pem
     │   │   │   │   └── tlscacerts
-    │   │   │   │       └── tlsca.org1.jicki.me-cert.pem
+    │   │   │   │       └── tlsca.org1.jicki.cn-cert.pem
     │   │   │   └── tls
     │   │   │       ├── ca.crt
     │   │   │       ├── server.crt
     │   │   │       └── server.key
-    │   │   └── peer1.org1.jicki.me
+    │   │   └── peer1.org1.jicki.cn
     │   │       ├── msp
     │   │       │   ├── admincerts
-    │   │       │   │   └── Admin@org1.jicki.me-cert.pem
+    │   │       │   │   └── Admin@org1.jicki.cn-cert.pem
     │   │       │   ├── cacerts
-    │   │       │   │   └── ca.org1.jicki.me-cert.pem
+    │   │       │   │   └── ca.org1.jicki.cn-cert.pem
     │   │       │   ├── config.yaml
     │   │       │   ├── keystore
     │   │       │   │   └── f4b8c4a0ebe3b34fe08cc2d33ea0c8f1e8a9817ffacc42d0c97323f0ddd57958_sk
     │   │       │   ├── signcerts
-    │   │       │   │   └── peer1.org1.jicki.me-cert.pem
+    │   │       │   │   └── peer1.org1.jicki.cn-cert.pem
     │   │       │   └── tlscacerts
-    │   │       │       └── tlsca.org1.jicki.me-cert.pem
+    │   │       │       └── tlsca.org1.jicki.cn-cert.pem
     │   │       └── tls
     │   │           ├── ca.crt
     │   │           ├── server.crt
     │   │           └── server.key
     │   ├── tlsca
     │   │   ├── 9c549e33c1d594a0f5eaedac0e1e6c753b9c3b2368d27d907d5a4ad59faa06d0_sk
-    │   │   └── tlsca.org1.jicki.me-cert.pem
+    │   │   └── tlsca.org1.jicki.cn-cert.pem
     │   └── users
-    │       ├── Admin@org1.jicki.me
+    │       ├── Admin@org1.jicki.cn
     │       │   ├── msp
     │       │   │   ├── admincerts
-    │       │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │       │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │       │   │   ├── cacerts
-    │       │   │   │   └── ca.org1.jicki.me-cert.pem
+    │       │   │   │   └── ca.org1.jicki.cn-cert.pem
     │       │   │   ├── keystore
     │       │   │   │   └── a9666f561d211e7b7cc170bfe854721431a1038b7914a67555d82dcf6b9eaaf8_sk
     │       │   │   ├── signcerts
-    │       │   │   │   └── Admin@org1.jicki.me-cert.pem
+    │       │   │   │   └── Admin@org1.jicki.cn-cert.pem
     │       │   │   └── tlscacerts
-    │       │   │       └── tlsca.org1.jicki.me-cert.pem
+    │       │   │       └── tlsca.org1.jicki.cn-cert.pem
     │       │   └── tls
     │       │       ├── ca.crt
     │       │       ├── client.crt
     │       │       └── client.key
-    │       └── User1@org1.jicki.me
+    │       └── User1@org1.jicki.cn
     │           ├── msp
     │           │   ├── admincerts
-    │           │   │   └── User1@org1.jicki.me-cert.pem
+    │           │   │   └── User1@org1.jicki.cn-cert.pem
     │           │   ├── cacerts
-    │           │   │   └── ca.org1.jicki.me-cert.pem
+    │           │   │   └── ca.org1.jicki.cn-cert.pem
     │           │   ├── keystore
     │           │   │   └── 543ee272a207c159538c412a2d97f83863031027014a17d2e4a6e3de931cfa3d_sk
     │           │   ├── signcerts
-    │           │   │   └── User1@org1.jicki.me-cert.pem
+    │           │   │   └── User1@org1.jicki.cn-cert.pem
     │           │   └── tlscacerts
-    │           │       └── tlsca.org1.jicki.me-cert.pem
+    │           │       └── tlsca.org1.jicki.cn-cert.pem
     │           └── tls
     │               ├── ca.crt
     │               ├── client.crt
     │               └── client.key
-    └── org2.jicki.me
+    └── org2.jicki.cn
         ├── ca
         │   ├── bcbc85a3992715502c7e7e7d21b792678a9d03668a52bb18a0c10862d45222c3_sk
-        │   └── ca.org2.jicki.me-cert.pem
+        │   └── ca.org2.jicki.cn-cert.pem
         ├── msp
         │   ├── admincerts
-        │   │   └── Admin@org2.jicki.me-cert.pem
+        │   │   └── Admin@org2.jicki.cn-cert.pem
         │   ├── cacerts
-        │   │   └── ca.org2.jicki.me-cert.pem
+        │   │   └── ca.org2.jicki.cn-cert.pem
         │   ├── config.yaml
         │   └── tlscacerts
-        │       └── tlsca.org2.jicki.me-cert.pem
+        │       └── tlsca.org2.jicki.cn-cert.pem
         ├── peers
-        │   ├── peer0.org2.jicki.me
+        │   ├── peer0.org2.jicki.cn
         │   │   ├── msp
         │   │   │   ├── admincerts
-        │   │   │   │   └── Admin@org2.jicki.me-cert.pem
+        │   │   │   │   └── Admin@org2.jicki.cn-cert.pem
         │   │   │   ├── cacerts
-        │   │   │   │   └── ca.org2.jicki.me-cert.pem
+        │   │   │   │   └── ca.org2.jicki.cn-cert.pem
         │   │   │   ├── config.yaml
         │   │   │   ├── keystore
         │   │   │   │   └── ad97de341e17baae8d25d34d1d23808cb77b5eceaf1ab53586cbf751ff9157cb_sk
         │   │   │   ├── signcerts
-        │   │   │   │   └── peer0.org2.jicki.me-cert.pem
+        │   │   │   │   └── peer0.org2.jicki.cn-cert.pem
         │   │   │   └── tlscacerts
-        │   │   │       └── tlsca.org2.jicki.me-cert.pem
+        │   │   │       └── tlsca.org2.jicki.cn-cert.pem
         │   │   └── tls
         │   │       ├── ca.crt
         │   │       ├── server.crt
         │   │       └── server.key
-        │   └── peer1.org2.jicki.me
+        │   └── peer1.org2.jicki.cn
         │       ├── msp
         │       │   ├── admincerts
-        │       │   │   └── Admin@org2.jicki.me-cert.pem
+        │       │   │   └── Admin@org2.jicki.cn-cert.pem
         │       │   ├── cacerts
-        │       │   │   └── ca.org2.jicki.me-cert.pem
+        │       │   │   └── ca.org2.jicki.cn-cert.pem
         │       │   ├── config.yaml
         │       │   ├── keystore
         │       │   │   └── a38c440f80e16a95a808744f4b6409c4f2fc5d718c06047bd4b13e5d71b8c868_sk
         │       │   ├── signcerts
-        │       │   │   └── peer1.org2.jicki.me-cert.pem
+        │       │   │   └── peer1.org2.jicki.cn-cert.pem
         │       │   └── tlscacerts
-        │       │       └── tlsca.org2.jicki.me-cert.pem
+        │       │       └── tlsca.org2.jicki.cn-cert.pem
         │       └── tls
         │           ├── ca.crt
         │           ├── server.crt
         │           └── server.key
         ├── tlsca
         │   ├── 6a4bf592dd12463266fad5f8ef683ad90062ea1913f734a9149046b6269ca73b_sk
-        │   └── tlsca.org2.jicki.me-cert.pem
+        │   └── tlsca.org2.jicki.cn-cert.pem
         └── users
-            ├── Admin@org2.jicki.me
+            ├── Admin@org2.jicki.cn
             │   ├── msp
             │   │   ├── admincerts
-            │   │   │   └── Admin@org2.jicki.me-cert.pem
+            │   │   │   └── Admin@org2.jicki.cn-cert.pem
             │   │   ├── cacerts
-            │   │   │   └── ca.org2.jicki.me-cert.pem
+            │   │   │   └── ca.org2.jicki.cn-cert.pem
             │   │   ├── keystore
             │   │   │   └── d402b684b807080653511978a51fcd2326668156cd8a10fb612b80bc49c9b354_sk
             │   │   ├── signcerts
-            │   │   │   └── Admin@org2.jicki.me-cert.pem
+            │   │   │   └── Admin@org2.jicki.cn-cert.pem
             │   │   └── tlscacerts
-            │   │       └── tlsca.org2.jicki.me-cert.pem
+            │   │       └── tlsca.org2.jicki.cn-cert.pem
             │   └── tls
             │       ├── ca.crt
             │       ├── client.crt
             │       └── client.key
-            └── User1@org2.jicki.me
+            └── User1@org2.jicki.cn
                 ├── msp
                 │   ├── admincerts
-                │   │   └── User1@org2.jicki.me-cert.pem
+                │   │   └── User1@org2.jicki.cn-cert.pem
                 │   ├── cacerts
-                │   │   └── ca.org2.jicki.me-cert.pem
+                │   │   └── ca.org2.jicki.cn-cert.pem
                 │   ├── keystore
                 │   │   └── b7d167da7a974720943d33bd5641d0b306273565a7e715538d3edf1e58f5d3e6_sk
                 │   ├── signcerts
-                │   │   └── User1@org2.jicki.me-cert.pem
+                │   │   └── User1@org2.jicki.cn-cert.pem
                 │   └── tlscacerts
-                │       └── tlsca.org2.jicki.me-cert.pem
+                │       └── tlsca.org2.jicki.cn-cert.pem
                 └── tls
                     ├── ca.crt
                     ├── client.crt
@@ -1267,7 +1267,7 @@ Organizations:
     - &amp;OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/jicki.me/msp
+        MSPDir: crypto-config/ordererOrganizations/jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -1282,7 +1282,7 @@ Organizations:
     - &amp;Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org1.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -1295,13 +1295,13 @@ Organizations:
                 Rule: &#34;OR(&#39;Org1MSP.admin&#39;)&#34;
 
         AnchorPeers:
-            - Host: peer0.org1.jicki.me
+            - Host: peer0.org1.jicki.cn
               Port: 7051
 
     - &amp;Org2
         Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.jicki.me/msp
+        MSPDir: crypto-config/peerOrganizations/org2.jicki.cn/msp
         Policies:
             Readers:
                 Type: Signature
@@ -1314,7 +1314,7 @@ Organizations:
                 Rule: &#34;OR(&#39;Org2MSP.admin&#39;)&#34;
 
         AnchorPeers:
-            - Host: peer0.org2.jicki.me
+            - Host: peer0.org2.jicki.cn
               Port: 7051
 
 Capabilities:
@@ -1352,9 +1352,9 @@ Orderer: &amp;OrdererDefaults
     OrdererType: kafka
 
     Addresses:
-        - orderer0.jicki.me:7050
-        - orderer1.jicki.me:7050
-        - orderer2.jicki.me:7050
+        - orderer0.jicki.cn:7050
+        - orderer1.jicki.cn:7050
+        - orderer2.jicki.cn:7050
 
     BatchTimeout: 2s
 
@@ -2003,8 +2003,8 @@ vi  docker-compose-orderer.yaml
 
 version: &#39;2&#39;
 services:
-  orderer0.jicki.me:
-    container_name: orderer0.jicki.me
+  orderer0.jicki.cn:
+    container_name: orderer0.jicki.cn
     image: hyperledger/fabric-orderer
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -2036,10 +2036,10 @@ services:
     command: orderer
     volumes:
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
     networks:
       default:
         aliases:
@@ -2051,8 +2051,8 @@ services:
       - kafka1
       - kafka2
 
-  orderer1.jicki.me:
-    container_name: orderer1.jicki.me
+  orderer1.jicki.cn:
+    container_name: orderer1.jicki.cn
     image: hyperledger/fabric-orderer
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -2084,10 +2084,10 @@ services:
     command: orderer
     volumes:
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
     networks:
       default:
         aliases:
@@ -2099,8 +2099,8 @@ services:
       - kafka1
       - kafka2
       
-  orderer2.jicki.me:
-    container_name: orderer2.jicki.me
+  orderer2.jicki.cn:
+    container_name: orderer2.jicki.cn
     image: hyperledger/fabric-orderer
     environment:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=jicki_default
@@ -2132,10 +2132,10 @@ services:
     command: orderer
     volumes:
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp:/var/hyperledger/orderer/msp
-    - ./crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/:/var/hyperledger/orderer/tls
-    - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/:/etc/hyperledger/crypto/peerOrg1
-    - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/:/etc/hyperledger/crypto/peerOrg2
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/:/var/hyperledger/orderer/tls
+    - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/:/etc/hyperledger/crypto/peerOrg1
+    - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/:/etc/hyperledger/crypto/peerOrg2
     networks:
       default:
         aliases:
@@ -2226,48 +2226,48 @@ services:
 
 version: &#39;2&#39;
 services:
-  ca.org1.jicki.me:
-    container_name: ca.org1.jicki.me
+  ca.org1.jicki.cn:
+    container_name: ca.org1.jicki.cn
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org1
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/aa167e5dcb62e9e1068487484c08f0bc0a13e13cebf53a0fa2f64038a1a76662_sk
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/aa167e5dcb62e9e1068487484c08f0bc0a13e13cebf53a0fa2f64038a1a76662_sk
     ports:
       - &#34;7054:7054&#34;
-    command: sh -c &#39;fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.me-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/aa167e5dcb62e9e1068487484c08f0bc0a13e13cebf53a0fa2f64038a1a76662_sk -b admin:adminpw -d&#39;
+    command: sh -c &#39;fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.jicki.cn-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/aa167e5dcb62e9e1068487484c08f0bc0a13e13cebf53a0fa2f64038a1a76662_sk -b admin:adminpw -d&#39;
     volumes:
-      - ./crypto-config/peerOrganizations/org1.jicki.me/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/org1.jicki.cn/ca/:/etc/hyperledger/fabric-ca-server-config
     depends_on:
-      - orderer0.jicki.me
-      - orderer1.jicki.me
-      - orderer2.jicki.me
+      - orderer0.jicki.cn
+      - orderer1.jicki.cn
+      - orderer2.jicki.cn
       
 
-  ca.org2.jicki.me:
-    container_name: ca.org2.jicki.me
+  ca.org2.jicki.cn:
+    container_name: ca.org2.jicki.cn
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-org2
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/bcbc85a3992715502c7e7e7d21b792678a9d03668a52bb18a0c10862d45222c3_sk
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.me-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.cn-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/bcbc85a3992715502c7e7e7d21b792678a9d03668a52bb18a0c10862d45222c3_sk
     ports:
       - &#34;8054:7054&#34;
-    command: sh -c &#39;fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.me-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/bcbc85a3992715502c7e7e7d21b792678a9d03668a52bb18a0c10862d45222c3_sk -b admin:adminpw -d&#39;
+    command: sh -c &#39;fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.jicki.cn-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/bcbc85a3992715502c7e7e7d21b792678a9d03668a52bb18a0c10862d45222c3_sk -b admin:adminpw -d&#39;
     volumes:
-      - ./crypto-config/peerOrganizations/org2.jicki.me/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/org2.jicki.cn/ca/:/etc/hyperledger/fabric-ca-server-config
     depends_on:
-      - orderer0.jicki.me
-      - orderer1.jicki.me
-      - orderer2.jicki.me
+      - orderer0.jicki.cn
+      - orderer1.jicki.cn
+      - orderer2.jicki.cn
 
 </code></pre></td></tr></table></div></div><h2 id=配置-hyperledger-fabric-peer>配置 Hyperledger Fabric peer</h2><blockquote><p>peer 节点下都必须启动一个数据存储，如 file 或者 couchdb 等</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>  1
 </span><span class=lnt>  2
@@ -2443,18 +2443,18 @@ services:
         aliases:
           - jicki
           
-  peer0.org1.jicki.me:
-    container_name: peer0.org1.jicki.me
+  peer0.org1.jicki.cn:
+    container_name: peer0.org1.jicki.cn
     image: hyperledger/fabric-peer
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
       
-      - CORE_PEER_ID=peer0.org1.jicki.me
+      - CORE_PEER_ID=peer0.org1.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -2472,8 +2472,8 @@ services:
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         #- ./data/peer0org1:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -2488,24 +2488,24 @@ services:
           - jicki
     depends_on:
       - couchdb0
-      - ca.org1.jicki.me
-      - ca.org2.jicki.me
-      - orderer0.jicki.me
-      - orderer1.jicki.me
-      - orderer2.jicki.me
+      - ca.org1.jicki.cn
+      - ca.org2.jicki.cn
+      - orderer0.jicki.cn
+      - orderer1.jicki.cn
+      - orderer2.jicki.cn
 
-  peer0.org2.jicki.me:
-    container_name: peer0.org2.jicki.me
+  peer0.org2.jicki.cn:
+    container_name: peer0.org2.jicki.cn
     image: hyperledger/fabric-peer
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
       
-      - CORE_PEER_ID=peer0.org2.jicki.me
+      - CORE_PEER_ID=peer0.org2.jicki.cn
       - CORE_PEER_NETWORKID=jicki
-      - CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
-      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org2.jicki.me:7052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org2.jicki.cn:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
 
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
@@ -2523,8 +2523,8 @@ services:
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/msp:/etc/hyperledger/fabric/msp
-        - ./crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls:/etc/hyperledger/fabric/tls
         # 数据持久化, 存储安装，以及实例化智能合约的数据
         #- ./data/peer0org2:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
@@ -2539,11 +2539,11 @@ services:
           - jicki
     depends_on:
       - couchdb1
-      - ca.org1.jicki.me
-      - ca.org2.jicki.me
-      - orderer0.jicki.me
-      - orderer1.jicki.me
-      - orderer2.jicki.me
+      - ca.org1.jicki.cn
+      - ca.org2.jicki.cn
+      - orderer0.jicki.cn
+      - orderer1.jicki.cn
+      - orderer2.jicki.cn
 
 </code></pre></td></tr></table></div></div><h3 id=启动服务-1>启动服务</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -2599,13 +2599,13 @@ services:
       # - CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.org1.jicki.me:7051
+      - CORE_PEER_ADDRESS=peer0.org1.jicki.cn:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     volumes:
         - /var/run/:/host/var/run/
@@ -2644,7 +2644,7 @@ root@0b55c64a9853:/opt/gopath/src/github.com/hyperledger/fabric/peer#
 </span><span class=lnt>7
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 执行 创建命令 (未启动 认证)
 
-peer channel create -c mychannel -f ./channel-artifacts/channel.tx --orderer orderer0.jicki.me:7050
+peer channel create -c mychannel -f ./channel-artifacts/channel.tx --orderer orderer0.jicki.cn:7050
 
 
 # 提示如下表示认证不通过
@@ -2681,7 +2681,7 @@ Error: failed to create deliver client: rpc error: code = Unavailable desc = all
 </span><span class=lnt>30
 </span><span class=lnt>31
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 以下为启用认证
-peer channel create -o orderer0.jicki.me:7050 -c mychannel -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer channel create -o orderer0.jicki.cn:7050 -c mychannel -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 
@@ -2690,7 +2690,7 @@ peer channel create -o orderer0.jicki.me:7050 -c mychannel -f ./channel-artifact
 
 2018-11-05 04:29:11.416 UTC [grpc] DialContext -&gt; DEBU 060 parsed scheme: &#34;&#34;
 2018-11-05 04:29:11.416 UTC [grpc] DialContext -&gt; DEBU 061 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:29:11.416 UTC [grpc] watcher -&gt; DEBU 062 ccResolverWrapper: sending new addresses to cc: [{orderer0.jicki.me:7050 0  &lt;nil&gt;}]
+2018-11-05 04:29:11.416 UTC [grpc] watcher -&gt; DEBU 062 ccResolverWrapper: sending new addresses to cc: [{orderer0.jicki.cn:7050 0  &lt;nil&gt;}]
 2018-11-05 04:29:11.416 UTC [grpc] switchBalancer -&gt; DEBU 063 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:29:11.417 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 064 pickfirstBalancer: HandleSubConnStateChange: 0xc420389240, CONNECTING
 2018-11-05 04:29:11.417 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 065 pickfirstBalancer: HandleSubConnStateChange: 0xc420389240, READY
@@ -2718,7 +2718,7 @@ drwxr-xr-x 4 root root    69 Nov  5 03:53 crypto
 </span><span class=lnt>5
 </span><span class=lnt>6
 </span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># peer0.org1.jicki.me 加入 此 channel 中，首先需要查看如下 环境变量
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># peer0.org1.jicki.cn 加入 此 channel 中，首先需要查看如下 环境变量
 
 
 echo $CORE_PEER_LOCALMSPID
@@ -2756,7 +2756,7 @@ peer channel join -b mychannel.block
 </span><span class=lnt>21
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 加入 channel (开启认证)
 
-peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer channel join -b mychannel.block -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 # 输出如下: 
@@ -2766,7 +2766,7 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 2018-11-07 03:12:21.050 UTC [msp] GetDefaultSigningIdentity -&gt; DEBU 037 Obtaining default signing identity
 2018-11-07 03:12:21.051 UTC [grpc] DialContext -&gt; DEBU 038 parsed scheme: &#34;&#34;
 2018-11-07 03:12:21.051 UTC [grpc] DialContext -&gt; DEBU 039 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:12:21.051 UTC [grpc] watcher -&gt; DEBU 03a ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-07 03:12:21.051 UTC [grpc] watcher -&gt; DEBU 03a ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-07 03:12:21.051 UTC [grpc] switchBalancer -&gt; DEBU 03b ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:12:21.051 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc42053dd30, CONNECTING
 2018-11-07 03:12:21.056 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03d pickfirstBalancer: HandleSubConnStateChange: 0xc42053dd30, READY
@@ -2782,13 +2782,13 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 </span><span class=lnt>5
 </span><span class=lnt>6
 </span><span class=lnt>7
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># peer1.org2.jicki.me 加入 此 channel 中，这里配置一下环境变量
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># peer1.org2.jicki.cn 加入 此 channel 中，这里配置一下环境变量
 
 
 export CORE_PEER_LOCALMSPID=&#34;Org2MSP&#34;
-export CORE_PEER_ADDRESS=peer0.org2.jicki.me:7051
-export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
-export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp
+export CORE_PEER_ADDRESS=peer0.org2.jicki.cn:7051
+export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp
 </code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
@@ -2822,7 +2822,7 @@ peer channel join -b mychannel.block
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>
 # 加入 channel (开启认证)
 
-peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer channel join -b mychannel.block -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 # 输入如下:
@@ -2832,7 +2832,7 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 2018-11-07 03:13:15.351 UTC [msp] GetDefaultSigningIdentity -&gt; DEBU 037 Obtaining default signing identity
 2018-11-07 03:13:15.351 UTC [grpc] DialContext -&gt; DEBU 038 parsed scheme: &#34;&#34;
 2018-11-07 03:13:15.351 UTC [grpc] DialContext -&gt; DEBU 039 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:13:15.352 UTC [grpc] watcher -&gt; DEBU 03a ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-07 03:13:15.352 UTC [grpc] watcher -&gt; DEBU 03a ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-07 03:13:15.352 UTC [grpc] switchBalancer -&gt; DEBU 03b ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:13:15.352 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc420311d00, CONNECTING
 2018-11-07 03:13:15.356 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03d pickfirstBalancer: HandleSubConnStateChange: 0xc420311d00, READY
@@ -2991,9 +2991,9 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 <span class=err>#</span> <span class=nx>同样需要先配置变量</span>
 
 <span class=nx>export</span> <span class=nx>CORE_PEER_LOCALMSPID</span><span class=p>=</span><span class=s>&#34;Org1MSP&#34;</span>
-<span class=nx>export</span> <span class=nx>CORE_PEER_ADDRESS</span><span class=p>=</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=p>:</span><span class=mi>7051</span>
-<span class=nx>export</span> <span class=nx>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>peers</span><span class=o>/</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>tls</span><span class=o>/</span><span class=nx>ca</span><span class=p>.</span><span class=nx>crt</span>
-<span class=nx>export</span> <span class=nx>CORE_PEER_MSPCONFIGPATH</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>users</span><span class=o>/</span><span class=nx>Admin</span><span class=err>@</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>msp</span>
+<span class=nx>export</span> <span class=nx>CORE_PEER_ADDRESS</span><span class=p>=</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=p>:</span><span class=mi>7051</span>
+<span class=nx>export</span> <span class=nx>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>peers</span><span class=o>/</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>tls</span><span class=o>/</span><span class=nx>ca</span><span class=p>.</span><span class=nx>crt</span>
+<span class=nx>export</span> <span class=nx>CORE_PEER_MSPCONFIGPATH</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>users</span><span class=o>/</span><span class=nx>Admin</span><span class=err>@</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>msp</span>
 
 
 
@@ -3009,13 +3009,13 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.461</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>msp</span><span class=p>]</span> <span class=nx>Validate</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>036</span> <span class=nx>MSP</span> <span class=nx>Org1MSP</span> <span class=nx>validating</span> <span class=nx>identity</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.462</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>037</span> <span class=nx>parsed</span> <span class=nx>scheme</span><span class=p>:</span> <span class=s>&#34;&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.462</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=mi>8</span> <span class=nx>scheme</span> <span class=s>&#34;&#34;</span> <span class=nx>not</span> <span class=nx>registered</span><span class=p>,</span> <span class=nx>fallback</span> <span class=nx>to</span> <span class=k>default</span> <span class=nx>scheme</span>
-<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.463</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=mi>9</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
+<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.463</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=mi>9</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.463</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>switchBalancer</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>a</span> <span class=nx>ClientConn</span> <span class=nx>switching</span> <span class=nx>balancer</span> <span class=nx>to</span> <span class=s>&#34;pick_first&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.463</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>b</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc42054f730</span><span class=p>,</span> <span class=nx>CONNECTING</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.464</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>c</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc42054f730</span><span class=p>,</span> <span class=nx>READY</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.466</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>d</span> <span class=nx>parsed</span> <span class=nx>scheme</span><span class=p>:</span> <span class=s>&#34;&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.466</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>e</span> <span class=nx>scheme</span> <span class=s>&#34;&#34;</span> <span class=nx>not</span> <span class=nx>registered</span><span class=p>,</span> <span class=nx>fallback</span> <span class=nx>to</span> <span class=k>default</span> <span class=nx>scheme</span>
-<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.466</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>f</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
+<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.466</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>f</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org1</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.466</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>switchBalancer</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>040</span> <span class=nx>ClientConn</span> <span class=nx>switching</span> <span class=nx>balancer</span> <span class=nx>to</span> <span class=s>&#34;pick_first&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.466</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>041</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc4205ad630</span><span class=p>,</span> <span class=nx>CONNECTING</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>32.467</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>042</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc4205ad630</span><span class=p>,</span> <span class=nx>READY</span>
@@ -3089,9 +3089,9 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 <span class=err>#</span> <span class=nx>同样需要先配置变量</span>
 
 <span class=nx>export</span> <span class=nx>CORE_PEER_LOCALMSPID</span><span class=p>=</span><span class=s>&#34;Org2MSP&#34;</span>
-<span class=nx>export</span> <span class=nx>CORE_PEER_ADDRESS</span><span class=p>=</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=p>:</span><span class=mi>7051</span>
-<span class=nx>export</span> <span class=nx>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>peers</span><span class=o>/</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>tls</span><span class=o>/</span><span class=nx>ca</span><span class=p>.</span><span class=nx>crt</span>
-<span class=nx>export</span> <span class=nx>CORE_PEER_MSPCONFIGPATH</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>users</span><span class=o>/</span><span class=nx>Admin</span><span class=err>@</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=o>/</span><span class=nx>msp</span>
+<span class=nx>export</span> <span class=nx>CORE_PEER_ADDRESS</span><span class=p>=</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=p>:</span><span class=mi>7051</span>
+<span class=nx>export</span> <span class=nx>CORE_PEER_TLS_ROOTCERT_FILE</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>peers</span><span class=o>/</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>tls</span><span class=o>/</span><span class=nx>ca</span><span class=p>.</span><span class=nx>crt</span>
+<span class=nx>export</span> <span class=nx>CORE_PEER_MSPCONFIGPATH</span><span class=p>=</span><span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>gopath</span><span class=o>/</span><span class=nx>src</span><span class=o>/</span><span class=nx>github</span><span class=p>.</span><span class=nx>com</span><span class=o>/</span><span class=nx>hyperledger</span><span class=o>/</span><span class=nx>fabric</span><span class=o>/</span><span class=nx>peer</span><span class=o>/</span><span class=nx>crypto</span><span class=o>/</span><span class=nx>peerOrganizations</span><span class=o>/</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>users</span><span class=o>/</span><span class=nx>Admin</span><span class=err>@</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=o>/</span><span class=nx>msp</span>
 
 
 
@@ -3107,13 +3107,13 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.684</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>msp</span><span class=p>]</span> <span class=nx>Validate</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>036</span> <span class=nx>MSP</span> <span class=nx>Org2MSP</span> <span class=nx>validating</span> <span class=nx>identity</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.685</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>037</span> <span class=nx>parsed</span> <span class=nx>scheme</span><span class=p>:</span> <span class=s>&#34;&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.685</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=mi>8</span> <span class=nx>scheme</span> <span class=s>&#34;&#34;</span> <span class=nx>not</span> <span class=nx>registered</span><span class=p>,</span> <span class=nx>fallback</span> <span class=nx>to</span> <span class=k>default</span> <span class=nx>scheme</span>
-<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.685</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=mi>9</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
+<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.685</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=mi>9</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.685</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>switchBalancer</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>a</span> <span class=nx>ClientConn</span> <span class=nx>switching</span> <span class=nx>balancer</span> <span class=nx>to</span> <span class=s>&#34;pick_first&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.685</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>b</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc420533700</span><span class=p>,</span> <span class=nx>CONNECTING</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.686</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>c</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc420533700</span><span class=p>,</span> <span class=nx>READY</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.688</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>d</span> <span class=nx>parsed</span> <span class=nx>scheme</span><span class=p>:</span> <span class=s>&#34;&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.688</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>DialContext</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>e</span> <span class=nx>scheme</span> <span class=s>&#34;&#34;</span> <span class=nx>not</span> <span class=nx>registered</span><span class=p>,</span> <span class=nx>fallback</span> <span class=nx>to</span> <span class=k>default</span> <span class=nx>scheme</span>
-<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.688</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>f</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>me</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
+<span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.688</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>watcher</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>03</span><span class=nx>f</span> <span class=nx>ccResolverWrapper</span><span class=p>:</span> <span class=nx>sending</span> <span class=nx>new</span> <span class=nx>addresses</span> <span class=nx>to</span> <span class=nx>cc</span><span class=p>:</span> <span class=p>[{</span><span class=nx>peer0</span><span class=p>.</span><span class=nx>org2</span><span class=p>.</span><span class=nx>jicki</span><span class=p>.</span><span class=nx>cn</span><span class=p>:</span><span class=mi>7051</span> <span class=mi>0</span>  <span class=p>&lt;</span><span class=kc>nil</span><span class=p>&gt;}]</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.688</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>switchBalancer</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>040</span> <span class=nx>ClientConn</span> <span class=nx>switching</span> <span class=nx>balancer</span> <span class=nx>to</span> <span class=s>&#34;pick_first&#34;</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.689</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>041</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc420598d60</span><span class=p>,</span> <span class=nx>CONNECTING</span>
 <span class=mi>2018</span><span class=o>-</span><span class=mi>11</span><span class=o>-</span><span class=mo>05</span> <span class=mo>04</span><span class=p>:</span><span class=mi>34</span><span class=p>:</span><span class=mf>52.689</span> <span class=nx>UTC</span> <span class=p>[</span><span class=nx>grpc</span><span class=p>]</span> <span class=nx>HandleSubConnStateChange</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>DEBU</span> <span class=mo>042</span> <span class=nx>pickfirstBalancer</span><span class=p>:</span> <span class=nx>HandleSubConnStateChange</span><span class=p>:</span> <span class=mh>0xc420598d60</span><span class=p>,</span> <span class=nx>READY</span>
@@ -3136,7 +3136,7 @@ peer channel join -b mychannel.block -o orderer0.jicki.me:7050 --tls $CORE_PEER_
 </code></pre></td></tr></table></div></div><h3 id=实例化-chaincode>实例化 Chaincode</h3><blockquote><p>这里无论多少个 peer 节点, 实例化只需要实例化一次，就可以。</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 实例化合约 (未认证)
-peer chaincode instantiate -o orderer0.jicki.me:7050 -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;200&#34;,&#34;B&#34;,&#34;500&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.0
+peer chaincode instantiate -o orderer0.jicki.cn:7050 -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;200&#34;,&#34;B&#34;,&#34;500&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.0
 </code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -3174,7 +3174,7 @@ peer chaincode instantiate -o orderer0.jicki.me:7050 -C mychannel -n example2 -c
 </span><span class=lnt>35
 </span><span class=lnt>36
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 实例化合约 (已认证)
-peer chaincode instantiate -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;200&#34;,&#34;B&#34;,&#34;500&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.0
+peer chaincode instantiate -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;200&#34;,&#34;B&#34;,&#34;500&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.0
 
 
 
@@ -3185,20 +3185,20 @@ peer chaincode instantiate -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLE
 2018-11-07 03:17:30.242 UTC [msp] Validate -&gt; DEBU 036 MSP Org2MSP validating identity
 2018-11-07 03:17:30.243 UTC [grpc] DialContext -&gt; DEBU 037 parsed scheme: &#34;&#34;
 2018-11-07 03:17:30.243 UTC [grpc] DialContext -&gt; DEBU 038 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:17:30.244 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-07 03:17:30.244 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-07 03:17:30.244 UTC [grpc] switchBalancer -&gt; DEBU 03a ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:17:30.244 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03b pickfirstBalancer: HandleSubConnStateChange: 0xc4205e5be0, CONNECTING
 2018-11-07 03:17:30.248 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc4205e5be0, READY
 2018-11-07 03:17:30.249 UTC [grpc] DialContext -&gt; DEBU 03d parsed scheme: &#34;&#34;
 2018-11-07 03:17:30.249 UTC [grpc] DialContext -&gt; DEBU 03e scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:17:30.249 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-07 03:17:30.249 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-07 03:17:30.249 UTC [grpc] switchBalancer -&gt; DEBU 040 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:17:30.249 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 041 pickfirstBalancer: HandleSubConnStateChange: 0xc4205b0780, CONNECTING
 2018-11-07 03:17:30.252 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 042 pickfirstBalancer: HandleSubConnStateChange: 0xc4205b0780, READY
 2018-11-07 03:17:30.253 UTC [msp] GetDefaultSigningIdentity -&gt; DEBU 043 Obtaining default signing identity
 2018-11-07 03:17:30.254 UTC [grpc] DialContext -&gt; DEBU 044 parsed scheme: &#34;&#34;
 2018-11-07 03:17:30.254 UTC [grpc] DialContext -&gt; DEBU 045 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:17:30.254 UTC [grpc] watcher -&gt; DEBU 046 ccResolverWrapper: sending new addresses to cc: [{orderer0.jicki.me:7050 0  &lt;nil&gt;}]
+2018-11-07 03:17:30.254 UTC [grpc] watcher -&gt; DEBU 046 ccResolverWrapper: sending new addresses to cc: [{orderer0.jicki.cn:7050 0  &lt;nil&gt;}]
 2018-11-07 03:17:30.254 UTC [grpc] switchBalancer -&gt; DEBU 047 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:17:30.254 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 048 pickfirstBalancer: HandleSubConnStateChange: 0xc42029ee50, CONNECTING
 2018-11-07 03:17:30.257 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 049 pickfirstBalancer: HandleSubConnStateChange: 0xc42029ee50, READY
@@ -3254,13 +3254,13 @@ peer chaincode query -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;quer
 2018-11-05 04:35:47.212 UTC [msp] Validate -&gt; DEBU 036 MSP Org1MSP validating identity
 2018-11-05 04:35:47.212 UTC [grpc] DialContext -&gt; DEBU 037 parsed scheme: &#34;&#34;
 2018-11-05 04:35:47.212 UTC [grpc] DialContext -&gt; DEBU 038 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:35:47.213 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:35:47.213 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:35:47.213 UTC [grpc] switchBalancer -&gt; DEBU 03a ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:35:47.213 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03b pickfirstBalancer: HandleSubConnStateChange: 0xc4205355e0, CONNECTING
 2018-11-05 04:35:47.214 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc4205355e0, READY
 2018-11-05 04:35:47.216 UTC [grpc] DialContext -&gt; DEBU 03d parsed scheme: &#34;&#34;
 2018-11-05 04:35:47.216 UTC [grpc] DialContext -&gt; DEBU 03e scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:35:47.216 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:35:47.216 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:35:47.216 UTC [grpc] switchBalancer -&gt; DEBU 040 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:35:47.216 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 041 pickfirstBalancer: HandleSubConnStateChange: 0xc4203d2790, CONNECTING
 2018-11-05 04:35:47.217 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 042 pickfirstBalancer: HandleSubConnStateChange: 0xc4203d2790, READY
@@ -3310,13 +3310,13 @@ peer chaincode query -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;quer
 2018-11-05 04:36:00.734 UTC [msp] Validate -&gt; DEBU 036 MSP Org1MSP validating identity
 2018-11-05 04:36:00.735 UTC [grpc] DialContext -&gt; DEBU 037 parsed scheme: &#34;&#34;
 2018-11-05 04:36:00.735 UTC [grpc] DialContext -&gt; DEBU 038 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:36:00.735 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:36:00.735 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:36:00.735 UTC [grpc] switchBalancer -&gt; DEBU 03a ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:36:00.735 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03b pickfirstBalancer: HandleSubConnStateChange: 0xc4203e5470, CONNECTING
 2018-11-05 04:36:00.737 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc4203e5470, READY
 2018-11-05 04:36:00.738 UTC [grpc] DialContext -&gt; DEBU 03d parsed scheme: &#34;&#34;
 2018-11-05 04:36:00.739 UTC [grpc] DialContext -&gt; DEBU 03e scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:36:00.739 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:36:00.739 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:36:00.739 UTC [grpc] switchBalancer -&gt; DEBU 040 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:36:00.739 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 041 pickfirstBalancer: HandleSubConnStateChange: 0xc42039b0c0, CONNECTING
 2018-11-05 04:36:00.740 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 042 pickfirstBalancer: HandleSubConnStateChange: 0xc42039b0c0, READY
@@ -3383,7 +3383,7 @@ peer chaincode invoke -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;inv
 </span><span class=lnt>38
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 从A账户 转账 100 个币 到 B 账户 (开启认证)
 
-peer chaincode invoke -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;invoke&#34;, &#34;A&#34;, &#34;B&#34;, &#34;100&#34;]}&#39; -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer chaincode invoke -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;invoke&#34;, &#34;A&#34;, &#34;B&#34;, &#34;100&#34;]}&#39; -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 
@@ -3393,20 +3393,20 @@ peer chaincode invoke -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;inv
 2018-11-07 03:19:54.832 UTC [msp] Validate -&gt; DEBU 036 MSP Org2MSP validating identity
 2018-11-07 03:19:54.833 UTC [grpc] DialContext -&gt; DEBU 037 parsed scheme: &#34;&#34;
 2018-11-07 03:19:54.833 UTC [grpc] DialContext -&gt; DEBU 038 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:19:54.833 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-07 03:19:54.833 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-07 03:19:54.833 UTC [grpc] switchBalancer -&gt; DEBU 03a ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:19:54.833 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03b pickfirstBalancer: HandleSubConnStateChange: 0xc4203b7ce0, CONNECTING
 2018-11-07 03:19:54.837 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc4203b7ce0, READY
 2018-11-07 03:19:54.838 UTC [grpc] DialContext -&gt; DEBU 03d parsed scheme: &#34;&#34;
 2018-11-07 03:19:54.839 UTC [grpc] DialContext -&gt; DEBU 03e scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:19:54.839 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-07 03:19:54.839 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org2.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-07 03:19:54.839 UTC [grpc] switchBalancer -&gt; DEBU 040 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:19:54.839 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 041 pickfirstBalancer: HandleSubConnStateChange: 0xc4206c67f0, CONNECTING
 2018-11-07 03:19:54.842 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 042 pickfirstBalancer: HandleSubConnStateChange: 0xc4206c67f0, READY
 2018-11-07 03:19:54.843 UTC [msp] GetDefaultSigningIdentity -&gt; DEBU 043 Obtaining default signing identity
 2018-11-07 03:19:54.843 UTC [grpc] DialContext -&gt; DEBU 044 parsed scheme: &#34;&#34;
 2018-11-07 03:19:54.843 UTC [grpc] DialContext -&gt; DEBU 045 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-07 03:19:54.843 UTC [grpc] watcher -&gt; DEBU 046 ccResolverWrapper: sending new addresses to cc: [{orderer0.jicki.me:7050 0  &lt;nil&gt;}]
+2018-11-07 03:19:54.843 UTC [grpc] watcher -&gt; DEBU 046 ccResolverWrapper: sending new addresses to cc: [{orderer0.jicki.cn:7050 0  &lt;nil&gt;}]
 2018-11-07 03:19:54.843 UTC [grpc] switchBalancer -&gt; DEBU 047 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-07 03:19:54.843 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 048 pickfirstBalancer: HandleSubConnStateChange: 0xc4201b2390, CONNECTING
 2018-11-07 03:19:54.846 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 049 pickfirstBalancer: HandleSubConnStateChange: 0xc4201b2390, READY
@@ -3460,13 +3460,13 @@ peer chaincode query -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;quer
 2018-11-05 04:36:26.574 UTC [msp] Validate -&gt; DEBU 036 MSP Org1MSP validating identity
 2018-11-05 04:36:26.575 UTC [grpc] DialContext -&gt; DEBU 037 parsed scheme: &#34;&#34;
 2018-11-05 04:36:26.575 UTC [grpc] DialContext -&gt; DEBU 038 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:36:26.575 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:36:26.575 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:36:26.575 UTC [grpc] switchBalancer -&gt; DEBU 03a ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:36:26.575 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03b pickfirstBalancer: HandleSubConnStateChange: 0xc42066b6f0, CONNECTING
 2018-11-05 04:36:26.577 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc42066b6f0, READY
 2018-11-05 04:36:26.578 UTC [grpc] DialContext -&gt; DEBU 03d parsed scheme: &#34;&#34;
 2018-11-05 04:36:26.578 UTC [grpc] DialContext -&gt; DEBU 03e scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:36:26.579 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:36:26.579 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:36:26.579 UTC [grpc] switchBalancer -&gt; DEBU 040 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:36:26.579 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 041 pickfirstBalancer: HandleSubConnStateChange: 0xc4206dfdf0, CONNECTING
 2018-11-05 04:36:26.579 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 042 pickfirstBalancer: HandleSubConnStateChange: 0xc4206dfdf0, READY
@@ -3514,13 +3514,13 @@ peer chaincode query -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;quer
 2018-11-05 04:36:39.259 UTC [msp] Validate -&gt; DEBU 036 MSP Org1MSP validating identity
 2018-11-05 04:36:39.260 UTC [grpc] DialContext -&gt; DEBU 037 parsed scheme: &#34;&#34;
 2018-11-05 04:36:39.260 UTC [grpc] DialContext -&gt; DEBU 038 scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:36:39.260 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:36:39.260 UTC [grpc] watcher -&gt; DEBU 039 ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:36:39.260 UTC [grpc] switchBalancer -&gt; DEBU 03a ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:36:39.260 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03b pickfirstBalancer: HandleSubConnStateChange: 0xc4203b5470, CONNECTING
 2018-11-05 04:36:39.261 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 03c pickfirstBalancer: HandleSubConnStateChange: 0xc4203b5470, READY
 2018-11-05 04:36:39.263 UTC [grpc] DialContext -&gt; DEBU 03d parsed scheme: &#34;&#34;
 2018-11-05 04:36:39.263 UTC [grpc] DialContext -&gt; DEBU 03e scheme &#34;&#34; not registered, fallback to default scheme
-2018-11-05 04:36:39.263 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.me:7051 0  &lt;nil&gt;}]
+2018-11-05 04:36:39.263 UTC [grpc] watcher -&gt; DEBU 03f ccResolverWrapper: sending new addresses to cc: [{peer0.org1.jicki.cn:7051 0  &lt;nil&gt;}]
 2018-11-05 04:36:39.263 UTC [grpc] switchBalancer -&gt; DEBU 040 ClientConn switching balancer to &#34;pick_first&#34;
 2018-11-05 04:36:39.263 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 041 pickfirstBalancer: HandleSubConnStateChange: 0xc4205e8d50, CONNECTING
 2018-11-05 04:36:39.264 UTC [grpc] HandleSubConnStateChange -&gt; DEBU 042 pickfirstBalancer: HandleSubConnStateChange: 0xc4205e8d50, READY
@@ -3535,11 +3535,11 @@ peer chaincode query -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;quer
 </span><span class=lnt>4
 </span><span class=lnt>5
 </span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 查看 peer0.org1.jicki.me 节点里 生成的容器
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 查看 peer0.org1.jicki.cn 节点里 生成的容器
 
 [root@localhost jicki]# docker ps -a
 CONTAINER ID        IMAGE                                                                                                     COMMAND                  CREATED             STATUS              PORTS                                                                                         NAMES
-526b6b46a60e        jicki-peer0.org1.jicki.me-example2-1.0-58e362edb293b97212b572bd603337608795d8168a8a3632d2a14ac12fa6ae70   &#34;chaincode -peer.add…&#34;   About a minute ago   Up About a minute                                                                                                                                            jicki-peer0.org1.jicki.me-example2-1.0
+526b6b46a60e        jicki-peer0.org1.jicki.cn-example2-1.0-58e362edb293b97212b572bd603337608795d8168a8a3632d2a14ac12fa6ae70   &#34;chaincode -peer.add…&#34;   About a minute ago   Up About a minute                                                                                                                                            jicki-peer0.org1.jicki.cn-example2-1.0
 
 </code></pre></td></tr></table></div></div><h2 id=hyperledger-fabric-操作命令>Hyperledger Fabric 操作命令</h2><h3 id=peer-命令>peer 命令</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -3578,11 +3578,11 @@ peer chaincode install -n example2 -p github.com/hyperledger/fabric/jicki/chainc
 
 
 # 更新版本为 1.1 的合约 (未开启认证)
-peer chaincode upgrade -o orderer0.jicki.me:7050 -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;100&#34;,&#34;B&#34;,&#34;50&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.1 
+peer chaincode upgrade -o orderer0.jicki.cn:7050 -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;100&#34;,&#34;B&#34;,&#34;50&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.1 
 
 
 # 更新版本为 1.1 的合约 (开启认证)
-peer chaincode upgrade -o orderer0.jicki.me:7050 -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;100&#34;,&#34;B&#34;,&#34;50&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.1 -o orderer0.jicki.me:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/msp/tlscacerts/tlsca.jicki.me-cert.pem
+peer chaincode upgrade -o orderer0.jicki.cn:7050 -C mychannel -n example2 -c &#39;{&#34;Args&#34;:[&#34;init&#34;,&#34;A&#34;,&#34;100&#34;,&#34;B&#34;,&#34;50&#34;]}&#39; -P &#34;OR (&#39;Org1MSP.member&#39;,&#39;Org2MSP.member&#39;)&#34; -v 1.1 -o orderer0.jicki.cn:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/msp/tlscacerts/tlsca.jicki.cn-cert.pem
 
 
 # 旧版本的合约, 目前，fabric不支持合约的启动与暂停。要暂停或删除合约，只能到peer上手动删除容器。
@@ -3866,27 +3866,27 @@ version: &#34;1.0&#34;
 channels:
   mychannel:
     orderers:
-      - orderer0.jicki.me
+      - orderer0.jicki.cn
     peers:
-      peer0.org1.jicki.me:
+      peer0.org1.jicki.cn:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: true
 
-      #peer1.org1.jicki.me:
+      #peer1.org1.jicki.cn:
       #  endorsingPeer: false
       #  chaincodeQuery: true
       #  ledgerQuery: true
       #  eventSource: false
 
-      peer0.org2.jicki.me:
+      peer0.org2.jicki.cn:
         endorsingPeer: true
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: true
 
-      #peer1.org2.jicki.me:
+      #peer1.org2.jicki.cn:
       #  endorsingPeer: false
       #  chaincodeQuery: true
       #  ledgerQuery: true
@@ -3900,70 +3900,70 @@ organizations:
     mspid: Org1MSP
 
     peers:
-      - peer0.org1.jicki.me
-      #- peer1.org1.jicki.me
+      - peer0.org1.jicki.cn
+      #- peer1.org1.jicki.cn
 
     certificateAuthorities:
       - ca-org1
     adminPrivateKey:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp/keystore/a9666f561d211e7b7cc170bfe854721431a1038b7914a67555d82dcf6b9eaaf8_sk
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp/keystore/a9666f561d211e7b7cc170bfe854721431a1038b7914a67555d82dcf6b9eaaf8_sk
     signedCert:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/users/Admin@org1.jicki.me/msp/signcerts/Admin@org1.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/users/Admin@org1.jicki.cn/msp/signcerts/Admin@org1.jicki.cn-cert.pem
 
   Org2:
     mspid: Org2MSP
     peers:
-      - peer0.org2.jicki.me
-      #- peer1.org2.jicki.me
+      - peer0.org2.jicki.cn
+      #- peer1.org2.jicki.cn
 
     certificateAuthorities:
       - ca-org2
     adminPrivateKey:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp/keystore/d402b684b807080653511978a51fcd2326668156cd8a10fb612b80bc49c9b354_sk
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp/keystore/d402b684b807080653511978a51fcd2326668156cd8a10fb612b80bc49c9b354_sk
     signedCert:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/users/Admin@org2.jicki.me/msp/signcerts/Admin@org2.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/users/Admin@org2.jicki.cn/msp/signcerts/Admin@org2.jicki.cn-cert.pem
 
 orderers:
-  orderer0.jicki.me:
+  orderer0.jicki.cn:
     url: grpcs://localhost:7050
 
     grpcOptions:
-      ssl-target-name-override: orderer0.jicki.me
+      ssl-target-name-override: orderer0.jicki.cn
 
     tlsCACerts:
-      path: artifacts/channel/crypto-config/ordererOrganizations/jicki.me/orderers/orderer0.jicki.me/tls/ca.crt
+      path: artifacts/channel/crypto-config/ordererOrganizations/jicki.cn/orderers/orderer0.jicki.cn/tls/ca.crt
 
 peers:
-  peer0.org1.jicki.me:
+  peer0.org1.jicki.cn:
     # this URL is used to send endorsement and query requests
     url: grpcs://localhost:7051
 
     grpcOptions:
-      ssl-target-name-override: peer0.org1.jicki.me
+      ssl-target-name-override: peer0.org1.jicki.cn
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/peers/peer0.org1.jicki.me/tls/ca.crt
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/peers/peer0.org1.jicki.cn/tls/ca.crt
 
-  #peer1.org1.jicki.me:
+  #peer1.org1.jicki.cn:
   #  url: grpcs://localhost:7056
   #  grpcOptions:
-  #    ssl-target-name-override: peer1.org1.jicki.me
+  #    ssl-target-name-override: peer1.org1.jicki.cn
   #  tlsCACerts:
-  #    path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/peers/peer1.org1.jicki.me/tls/ca.crt
+  #    path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/peers/peer1.org1.jicki.cn/tls/ca.crt
 
-  peer0.org2.jicki.me:
+  peer0.org2.jicki.cn:
     url: grpcs://localhost:8051
     grpcOptions:
-      ssl-target-name-override: peer0.org2.jicki.me
+      ssl-target-name-override: peer0.org2.jicki.cn
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/peers/peer0.org2.jicki.me/tls/ca.crt
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/peers/peer0.org2.jicki.cn/tls/ca.crt
 
-  #peer1.org2.jicki.me:
+  #peer1.org2.jicki.cn:
   #  url: grpcs://localhost:8056
   #  eventUrl: grpcs://localhost:8058
   #  grpcOptions:
-  #    ssl-target-name-override: peer1.org2.jicki.me
+  #    ssl-target-name-override: peer1.org2.jicki.cn
   #  tlsCACerts:
-  #    path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/peers/peer1.org2.jicki.me/tls/ca.crt
+  #    path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/peers/peer1.org2.jicki.cn/tls/ca.crt
 
 certificateAuthorities:
   ca-org1:
@@ -3971,7 +3971,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.me/ca/ca.org1.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org1.jicki.cn/ca/ca.org1.jicki.cn-cert.pem
 
     registrar:
       - enrollId: admin
@@ -3983,7 +3983,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.me/ca/ca.org2.jicki.me-cert.pem
+      path: artifacts/channel/crypto-config/peerOrganizations/org2.jicki.cn/ca/ca.org2.jicki.cn-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -4065,7 +4065,7 @@ node app
 
 # 本文中只运行了 2个 peer 
 
-# 所以需要 编辑 testAPIs.sh 修改文件中 删除 peer1.org1.jicki.me  以及 peer1.org2.jicki.me
+# 所以需要 编辑 testAPIs.sh 修改文件中 删除 peer1.org1.jicki.cn  以及 peer1.org2.jicki.cn
 
 # 修改  &#34;channelConfigPath&#34;:&#34;../artifacts/channel/mychannel.tx&#34; 中 mychannel.tx 为 channel.tx
 
@@ -4200,7 +4200,7 @@ curl -s -X POST \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34; \
   -d &#39;{
-    &#34;peers&#34;: [&#34;peer0.org1.jicki.me&#34;]
+    &#34;peers&#34;: [&#34;peer0.org1.jicki.cn&#34;]
 }&#39;
 
 </code></pre></td></tr></table></div></div><h3 id=安装-chaincode>安装 chaincode</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
@@ -4244,7 +4244,7 @@ curl -s -X POST \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34; \
   -d &#39;{
-    &#34;peers&#34;: [&#34;peer0.org1.jicki.me&#34;],
+    &#34;peers&#34;: [&#34;peer0.org1.jicki.cn&#34;],
     &#34;chaincodeName&#34;:&#34;mycc&#34;,
     &#34;chaincodePath&#34;:&#34;github.com/example_cc/go&#34;,
     &#34;chaincodeType&#34;: &#34;golang&#34;,
@@ -4289,7 +4289,7 @@ curl -s -X POST \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34; \
   -d &#39;{
-    &#34;peers&#34;: [&#34;peer0.org1.jicki.me&#34;],
+    &#34;peers&#34;: [&#34;peer0.org1.jicki.cn&#34;],
     &#34;chaincodeName&#34;:&#34;mycc&#34;,
     &#34;chaincodeVersion&#34;:&#34;v0&#34;,
     &#34;chaincodeType&#34;: &#34;golang&#34;,
@@ -4313,7 +4313,7 @@ curl -s -X POST \
 </span><span class=lnt>14
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>
 curl -s -X GET \
-  &#34;http://localhost:4000/channels?peer=peer0.org1.jicki.me&#34; \
+  &#34;http://localhost:4000/channels?peer=peer0.org1.jicki.cn&#34; \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34;
 
@@ -4364,7 +4364,7 @@ curl -s -X GET \
 # 查询 a 的值
 
 curl -s -X GET \
-  &#34;http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.me&amp;fcn=query&amp;args=%5B%22a%22%5D&#34; \
+  &#34;http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.cn&amp;fcn=query&amp;args=%5B%22a%22%5D&#34; \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34;
 
@@ -4378,7 +4378,7 @@ curl -s -X GET \
 
 
 curl -s -X GET \
-  &#34;http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.me&amp;fcn=query&amp;args=%5B%22b%22%5D&#34; \
+  &#34;http://localhost:4000/channels/mychannel/chaincodes/mycc?peer=peer0.org1.jicki.cn&amp;fcn=query&amp;args=%5B%22b%22%5D&#34; \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34;
 
@@ -4443,7 +4443,7 @@ curl -s -X POST \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34; \
   -d &#39;{
-    &#34;peers&#34;: [&#34;peer0.org1.jicki.me&#34;, &#34;peer0.org2.jicki.me&#34;],
+    &#34;peers&#34;: [&#34;peer0.org1.jicki.cn&#34;, &#34;peer0.org2.jicki.cn&#34;],
     &#34;fcn&#34;:&#34;move&#34;,
     &#34;args&#34;:[&#34;a&#34;,&#34;b&#34;,&#34;10&#34;]
 }&#39;
@@ -4487,7 +4487,7 @@ Transaction ID is 70a5157704b950cca09a6a46f5be7fca61355b43ed83f3d9a5b633f3e38b36
 </span><span class=lnt>28
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>
 curl -s -X GET \
-  &#34;http://localhost:4000/channels/mychannel?peer=peer0.org1.jicki.me&#34; \
+  &#34;http://localhost:4000/channels/mychannel?peer=peer0.org1.jicki.cn&#34; \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34;
   
@@ -4528,7 +4528,7 @@ curl -s -X GET \
 </span><span class=lnt>13
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>
 curl -s -X GET \
-  &#34;http://localhost:4000/chaincodes?peer=peer0.org1.jicki.me&amp;type=installed&#34; \
+  &#34;http://localhost:4000/chaincodes?peer=peer0.org1.jicki.cn&amp;type=installed&#34; \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34;
 
@@ -4555,7 +4555,7 @@ curl -s -X GET \
 </span><span class=lnt>14
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>
 curl -s -X GET \
-  &#34;http://localhost:4000/chaincodes?peer=peer0.org1.jicki.me&amp;type=instantiated&#34; \
+  &#34;http://localhost:4000/chaincodes?peer=peer0.org1.jicki.cn&amp;type=instantiated&#34; \
   -H &#34;authorization: Bearer $ORG1_TOKEN&#34; \
   -H &#34;content-type: application/json&#34;
 

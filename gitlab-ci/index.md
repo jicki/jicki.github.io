@@ -68,7 +68,7 @@ services:
     hostname: gitlab
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.jicki.me'
+        external_url 'http://gitlab.jicki.cn'
     ports:
       - '80:80'
       - '443:443'
@@ -95,7 +95,7 @@ gitlab   /assets/wrapper   Up (healthy)   0.0.0.0:8022->22/tcp, 0.0.0.0:443->443
 
 
 ```
-浏览器 http://gitlab.jicki.me 访问 gitlab
+浏览器 http://gitlab.jicki.cn 访问 gitlab
 
 首次访问会提示配置 初始密码，最少8位
 ```
@@ -251,14 +251,14 @@ public class HomeController {
 [root@localhost testproject]# git commit -m "add java project"
 
 [root@localhost testproject]# git push
-Username for 'http://gitlab.jicki.me': jicki
-Password for 'http://jicki@gitlab.jicki.me': 
+Username for 'http://gitlab.jicki.cn': jicki
+Password for 'http://jicki@gitlab.jicki.cn': 
 Counting objects: 36, done.
 Delta compression using up to 4 threads.
 Compressing objects: 100% (15/15), done.
 Writing objects: 100% (20/20), 50.06 KiB | 0 bytes/s, done.
 Total 20 (delta 4), reused 0 (delta 0)
-To http://gitlab.jicki.me/java/testproject.git
+To http://gitlab.jicki.cn/java/testproject.git
    9a25098..d95ec5f  master -> master
 ```
 
@@ -352,7 +352,7 @@ Runtime platform                                    arch=amd64 os=linux pid=19 r
 Running in system-mode.                            
                                                    
 Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):
-http://gitlab.jicki.me
+http://gitlab.jicki.cn
 Please enter the gitlab-ci token for this runner:
 pr5VscoaY2fC_8WiSdc7
 Please enter the gitlab-ci description for this runner:
@@ -398,7 +398,7 @@ check_interval = 0
 // 以下为 注册 runner 时填写的信息
 [[runners]]
   name = "TestProject"
-  url = "http://gitlab.jicki.me"
+  url = "http://gitlab.jicki.cn"
   token = "V5tiX7JbKmhJx2gSDDcb"
   executor = "docker"
   [runners.custom_build_dir]
@@ -430,7 +430,7 @@ check_interval = 0
 #  由于我们 Runner 使用docker 运行，所以以上目录配置，需要额外增加配置 volumes 这个配置
 #  volumes = ["/data/gitlab-runner:/gitlab","/var/run/docker.sock:/var/run/docker.sock","/data/gradle:/data/gradle","/data/sonar_cache:/root/.sonar"]
 # extra_hosts 为额外的 dns 配置, 如果有dns 服务器就不需要
-# extra_hosts = ["gitlab.jicki.me:192.168.168.102"]
+# extra_hosts = ["gitlab.jicki.cn:192.168.168.102"]
 
 
 
@@ -443,7 +443,7 @@ check_interval = 0
 
 [[runners]]
   name = "TestProject"
-  url = "http://gitlab.jicki.me"
+  url = "http://gitlab.jicki.cn"
   token = "V5tiX7JbKmhJx2gSDDcb"
   executor = "docker"
   builds_dir = "/gitlab/runner-builds"
@@ -457,7 +457,7 @@ check_interval = 0
     oom_kill_disable = false
     disable_cache = false
     volumes = ["/opt/data/gitlab-runner:/gitlab","/var/run/docker.sock:/var/run/docker.sock","/opt/data/gradle:/root/.gradle","/opt/data/sonar_cache:/root/.sonar"]
-    extra_hosts = ["gitlab.jicki.me:192.168.168.102"]
+    extra_hosts = ["gitlab.jicki.cn:192.168.168.102"]
     shm_size = 0
   [runners.cache]
     [runners.cache.s3]
@@ -796,24 +796,24 @@ jicki/test                    master-4e4fcd5c-20190620122155   f2a4e4ab1ff1     
 ```
 
 
-  [1]: http://jicki.me/img/posts/gitlab/1.png
-  [2]: http://jicki.me/img/posts/gitlab/2.png
-  [3]: http://jicki.me/img/posts/gitlab/3.png 
-  [4]: http://jicki.me/img/posts/gitlab/4.png 
-  [5]: http://jicki.me/img/posts/gitlab/5.png 
-  [6]: http://jicki.me/img/posts/gitlab/6.png 
-  [7]: http://jicki.me/img/posts/gitlab/7.png 
-  [8]: http://jicki.me/img/posts/gitlab/8.png 
-  [9]: http://jicki.me/img/posts/gitlab/9.png 
-  [10]: http://jicki.me/img/posts/gitlab/10.png 
-  [11]: http://jicki.me/img/posts/gitlab/11.png 
-  [12]: http://jicki.me/img/posts/gitlab/12.png 
-  [13]: http://jicki.me/img/posts/gitlab/13.png 
-  [14]: http://jicki.me/img/posts/gitlab/14.png 
-  [15]: http://jicki.me/img/posts/gitlab/15.png 
-  [16]: http://jicki.me/img/posts/gitlab/16.png 
-  [17]: http://jicki.me/img/posts/gitlab/17.png 
-  [18]: http://jicki.me/img/posts/gitlab/18.png 
-  [19]: http://jicki.me/img/posts/gitlab/19.png 
-  [20]: http://jicki.me/img/posts/gitlab/20.png 
+  [1]: http://jicki.cn/img/posts/gitlab/1.png
+  [2]: http://jicki.cn/img/posts/gitlab/2.png
+  [3]: http://jicki.cn/img/posts/gitlab/3.png 
+  [4]: http://jicki.cn/img/posts/gitlab/4.png 
+  [5]: http://jicki.cn/img/posts/gitlab/5.png 
+  [6]: http://jicki.cn/img/posts/gitlab/6.png 
+  [7]: http://jicki.cn/img/posts/gitlab/7.png 
+  [8]: http://jicki.cn/img/posts/gitlab/8.png 
+  [9]: http://jicki.cn/img/posts/gitlab/9.png 
+  [10]: http://jicki.cn/img/posts/gitlab/10.png 
+  [11]: http://jicki.cn/img/posts/gitlab/11.png 
+  [12]: http://jicki.cn/img/posts/gitlab/12.png 
+  [13]: http://jicki.cn/img/posts/gitlab/13.png 
+  [14]: http://jicki.cn/img/posts/gitlab/14.png 
+  [15]: http://jicki.cn/img/posts/gitlab/15.png 
+  [16]: http://jicki.cn/img/posts/gitlab/16.png 
+  [17]: http://jicki.cn/img/posts/gitlab/17.png 
+  [18]: http://jicki.cn/img/posts/gitlab/18.png 
+  [19]: http://jicki.cn/img/posts/gitlab/19.png 
+  [20]: http://jicki.cn/img/posts/gitlab/20.png 
 

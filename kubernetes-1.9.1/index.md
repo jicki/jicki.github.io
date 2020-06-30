@@ -2337,7 +2337,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -2350,13 +2350,13 @@ spec:
 
 [root@kubernetes-64 ingress]# kubectl get ingress
 NAME            HOSTS            ADDRESS   PORTS     AGE
-nginx-ingress   nginx.jicki.me             80        6s
+nginx-ingress   nginx.jicki.cn             80        6s
 ```
 
 ```
 # 测试访问
 
-[root@kubernetes-64 ingress]# curl nginx.jicki.me
+[root@kubernetes-64 ingress]# curl nginx.jicki.cn
 <!DOCTYPE html>
 <html>
 <head>
@@ -2450,7 +2450,7 @@ Events:  <none>
 
 # 测试访问
 
-[root@kubernetes-64 dashboard]# curl -I -k https://dashboard.jicki.me:8888
+[root@kubernetes-64 dashboard]# curl -I -k https://dashboard.jicki.cn:8888
 
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
@@ -2597,8 +2597,8 @@ kubectl uncordon [nodeid]
 ```
 
 
-  [1]: https://jicki.me/img/posts/kubernetes/dashboard.png
-  [2]: https://jicki.me/img/posts/kubernetes/hamaster.jpg
-  [3]: https://jicki.me/img/posts/kubernetes/dashboard-new.jpeg
+  [1]: https://jicki.cn/img/posts/kubernetes/dashboard.png
+  [2]: https://jicki.cn/img/posts/kubernetes/hamaster.jpg
+  [3]: https://jicki.cn/img/posts/kubernetes/dashboard-new.jpeg
 
 

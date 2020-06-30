@@ -2061,7 +2061,7 @@ metadata:
   name: nginx-ingress
 spec:
   rules:
-  - host: nginx.jicki.me
+  - host: nginx.jicki.cn
     http:
       paths:
       - backend:
@@ -2082,7 +2082,7 @@ ingress.extensions/nginx-ingress created
 # 查看 ingress
 [root@k8s-node-1 kubeadm]# kubectl get ingress
 NAME            CLASS    HOSTS            ADDRESS   PORTS   AGE
-nginx-ingress   <none>   nginx.jicki.me             80      34s
+nginx-ingress   <none>   nginx.jicki.cn             80      34s
 
 
 ```
@@ -2094,7 +2094,7 @@ nginx-ingress   <none>   nginx.jicki.me             80      34s
 
 
 ```
-[root@k8s-node-1 kubeadm]# curl -I nginx.jicki.me
+[root@k8s-node-1 kubeadm]# curl -I nginx.jicki.cn
 HTTP/1.1 200 OK
 Server: nginx/1.17.8
 Date: Mon, 30 Mar 2020 08:54:56 GMT
@@ -2235,10 +2235,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - dashboard.jicki.me
+    - dashboard.jicki.cn
     secretName: kubernetes-dashboard-certs
   rules:
-  - host: dashboard.jicki.me
+  - host: dashboard.jicki.cn
     http:
       paths:
       - path: /
@@ -2261,7 +2261,7 @@ ingress.extensions/kubernetes-dashboard created
 
 [root@k8s-node-1 dashboard]# kubectl get ingress -n kubernetes-dashboard
 NAME                   CLASS    HOSTS                ADDRESS   PORTS     AGE
-kubernetes-dashboard   <none>   dashboard.jicki.me             80, 443   2m53s
+kubernetes-dashboard   <none>   dashboard.jicki.cn             80, 443   2m53s
 
 ```
 
@@ -2270,7 +2270,7 @@ kubernetes-dashboard   <none>   dashboard.jicki.me             80, 443   2m53s
 
 
 ```
-[root@k8s-node-1 dashboard]# curl -I -k https://dashboard.jicki.me
+[root@k8s-node-1 dashboard]# curl -I -k https://dashboard.jicki.cn
 HTTP/2 200 
 server: nginx/1.17.8
 date: Mon, 30 Mar 2020 09:41:02 GMT
@@ -2450,6 +2450,6 @@ k8s-node-1   Ready    <none>   63s   v1.18.0
 
 ```
 
-  [1]: http://jicki.me/img/posts/dashboard/dashboard-jicki.png
-  [2]: http://jicki.me/img/posts/dashboard/nodelocaldns.jpg
+  [1]: http://jicki.cn/img/posts/dashboard/dashboard-jicki.png
+  [2]: http://jicki.cn/img/posts/dashboard/nodelocaldns.jpg
 

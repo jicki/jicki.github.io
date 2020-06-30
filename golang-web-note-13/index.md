@@ -9,7 +9,7 @@
 
 * templates 的基础语法以及概念在前面的文章中有记录
 
-* [HTML 基础概念](https://jicki.me/golang/go/2000/01/01/golang-study-note-8 "HTML 基础")
+* [HTML 基础概念](https://jicki.cn/golang/go/2000/01/01/golang-study-note-8 "HTML 基础")
 
 
 ### gin 下的例子
@@ -420,7 +420,7 @@ func main() {
     </div>
 
     <div id="footer" style="background-color:cornflowerblue;clear:both;text-align:center;">
-    联系方式: https://jicki.me</div>
+    联系方式: https://jicki.cn</div>
 </div>
 </body>
 </html>

@@ -1047,15 +1047,15 @@ type: kubernetes.io/service-account-token
 
 
 
-  [1]: http://jicki.me/img/posts/kubernetes/kubernetes.png
+  [1]: http://jicki.cn/img/posts/kubernetes/kubernetes.png
 
-  [2]: http://jicki.me/img/posts/kubernetes/pod.png
+  [2]: http://jicki.cn/img/posts/kubernetes/pod.png
 
-  [3]: http://jicki.me/img/posts/kubernetes/node-pod.png
+  [3]: http://jicki.cn/img/posts/kubernetes/node-pod.png
 
-  [4]: http://jicki.me/img/posts/kubernetes/node-pod-pod.png
+  [4]: http://jicki.cn/img/posts/kubernetes/node-pod-pod.png
 
-  [5]: http://jicki.me/img/posts/kubernetes/node-node-pod.gif
+  [5]: http://jicki.cn/img/posts/kubernetes/node-node-pod.gif
 
-  [6]: http://jicki.me/img/posts/kubernetes/rbac.png
+  [6]: http://jicki.cn/img/posts/kubernetes/rbac.png
 

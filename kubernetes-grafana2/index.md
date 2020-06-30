@@ -92,6 +92,6 @@ http://node-ip:30002/
 ![Grafana Dashboard][1]
 
 
-  [1]: https://jicki.me/img/posts/grafana/1.png
+  [1]: https://jicki.cn/img/posts/grafana/1.png
 
 

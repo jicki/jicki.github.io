@@ -362,7 +362,7 @@ metadata:
   namespace: kube-system
 spec:
   rules:
-  - host: kibana.jicki.me
+  - host: kibana.jicki.cn
     http:
       paths:
       - backend:
@@ -400,7 +400,7 @@ pod/kibana-logging-5bf6bbccf9-jv4d2            1/1     Running   0          4m31
 
 service/kibana-logging          ClusterIP   10.254.31.15    <none>        5601/TCP                 4m26s
 
-ingress.extensions/kibana-ingress         kibana.jicki.me                80        47s
+ingress.extensions/kibana-ingress         kibana.jicki.cn                80        47s
 
 ```
 
@@ -565,10 +565,10 @@ green  open   nginx-log-2019.07.02 TuXuOOONTL-aIZt2wq_hHQ   5   1         20    
 ![图6][6]
 
 
-  [1]: http://jicki.me/img/posts/elk/new-1.png
-  [2]: http://jicki.me/img/posts/elk/new-2.png
-  [3]: http://jicki.me/img/posts/elk/3.png 
-  [4]: http://jicki.me/img/posts/elk/4.png 
-  [5]: http://jicki.me/img/posts/elk/5.png 
-  [6]: http://jicki.me/img/posts/elk/6.png 
+  [1]: http://jicki.cn/img/posts/elk/new-1.png
+  [2]: http://jicki.cn/img/posts/elk/new-2.png
+  [3]: http://jicki.cn/img/posts/elk/3.png 
+  [4]: http://jicki.cn/img/posts/elk/4.png 
+  [5]: http://jicki.cn/img/posts/elk/5.png 
+  [6]: http://jicki.cn/img/posts/elk/6.png 
 
