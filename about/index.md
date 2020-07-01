@@ -2,15 +2,14 @@
 
 
 
-{{< figure src="/img/pexels/book-glass.jpeg" width="780" height="300" title="小炒肉" >}}
-
-
-# 关于网站
+{{< image src="/img/pexels/book-glass.jpeg" width="780" height="300" caption="小炒肉 (`技术博客`)" >}}
 
 
 {{< music auto="https://music.163.com/#/playlist?id=5088826407" >}}
 
-| 个人技术博客
+# 关于网站
+
+| 小炒肉的个人技术博客
 
 
 ## 关于小炒肉
