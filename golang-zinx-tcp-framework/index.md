@@ -187,5 +187,5 @@ func main() {
 
 
 
-  [1]: http://jicki.cn/img/posts/zinx/zinx.png
+  [1]: https://jicki.cn/img/posts/zinx/zinx.png
 

@@ -796,24 +796,24 @@ jicki/test                    master-4e4fcd5c-20190620122155   f2a4e4ab1ff1     
 ```
 
 
-  [1]: http://jicki.cn/img/posts/gitlab/1.png
-  [2]: http://jicki.cn/img/posts/gitlab/2.png
-  [3]: http://jicki.cn/img/posts/gitlab/3.png 
-  [4]: http://jicki.cn/img/posts/gitlab/4.png 
-  [5]: http://jicki.cn/img/posts/gitlab/5.png 
-  [6]: http://jicki.cn/img/posts/gitlab/6.png 
-  [7]: http://jicki.cn/img/posts/gitlab/7.png 
-  [8]: http://jicki.cn/img/posts/gitlab/8.png 
-  [9]: http://jicki.cn/img/posts/gitlab/9.png 
-  [10]: http://jicki.cn/img/posts/gitlab/10.png 
-  [11]: http://jicki.cn/img/posts/gitlab/11.png 
-  [12]: http://jicki.cn/img/posts/gitlab/12.png 
-  [13]: http://jicki.cn/img/posts/gitlab/13.png 
-  [14]: http://jicki.cn/img/posts/gitlab/14.png 
-  [15]: http://jicki.cn/img/posts/gitlab/15.png 
-  [16]: http://jicki.cn/img/posts/gitlab/16.png 
-  [17]: http://jicki.cn/img/posts/gitlab/17.png 
-  [18]: http://jicki.cn/img/posts/gitlab/18.png 
-  [19]: http://jicki.cn/img/posts/gitlab/19.png 
-  [20]: http://jicki.cn/img/posts/gitlab/20.png 
+  [1]: https://jicki.cn/img/posts/gitlab/1.png
+  [2]: https://jicki.cn/img/posts/gitlab/2.png
+  [3]: https://jicki.cn/img/posts/gitlab/3.png 
+  [4]: https://jicki.cn/img/posts/gitlab/4.png 
+  [5]: https://jicki.cn/img/posts/gitlab/5.png 
+  [6]: https://jicki.cn/img/posts/gitlab/6.png 
+  [7]: https://jicki.cn/img/posts/gitlab/7.png 
+  [8]: https://jicki.cn/img/posts/gitlab/8.png 
+  [9]: https://jicki.cn/img/posts/gitlab/9.png 
+  [10]: https://jicki.cn/img/posts/gitlab/10.png 
+  [11]: https://jicki.cn/img/posts/gitlab/11.png 
+  [12]: https://jicki.cn/img/posts/gitlab/12.png 
+  [13]: https://jicki.cn/img/posts/gitlab/13.png 
+  [14]: https://jicki.cn/img/posts/gitlab/14.png 
+  [15]: https://jicki.cn/img/posts/gitlab/15.png 
+  [16]: https://jicki.cn/img/posts/gitlab/16.png 
+  [17]: https://jicki.cn/img/posts/gitlab/17.png 
+  [18]: https://jicki.cn/img/posts/gitlab/18.png 
+  [19]: https://jicki.cn/img/posts/gitlab/19.png 
+  [20]: https://jicki.cn/img/posts/gitlab/20.png 
 

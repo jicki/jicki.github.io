@@ -13,5 +13,5 @@
 ![ubuntu 界面][1]
 
 
-  [1]: http://jicki.cn/img/posts/ubuntu/ubuntu.png
+  [1]: https://jicki.cn/img/posts/ubuntu/ubuntu.png
 

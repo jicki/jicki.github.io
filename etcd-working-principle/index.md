@@ -642,9 +642,9 @@ done
 
 
 
-  [1]: http://jicki.cn/img/posts/etcd/etcd.png
-  [2]: http://jicki.cn/img/posts/etcd/etcd-1.png
-  [3]: http://jicki.cn/img/posts/etcd/etcd-2.png
-  [4]: http://jicki.cn/img/posts/etcd/etcd-3.png
-  [5]: http://jicki.cn/img/posts/etcd/etcd-4.png
+  [1]: https://jicki.cn/img/posts/etcd/etcd.png
+  [2]: https://jicki.cn/img/posts/etcd/etcd-1.png
+  [3]: https://jicki.cn/img/posts/etcd/etcd-2.png
+  [4]: https://jicki.cn/img/posts/etcd/etcd-3.png
+  [5]: https://jicki.cn/img/posts/etcd/etcd-4.png
 

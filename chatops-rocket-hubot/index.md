@@ -363,11 +363,11 @@ exit 0
 ![图7][7]
 
 
-  [1]: http://jicki.cn/img/posts/chatops/1.png
-  [2]: http://jicki.cn/img/posts/chatops/2.png
-  [3]: http://jicki.cn/img/posts/chatops/3.png 
-  [4]: http://jicki.cn/img/posts/chatops/4.png 
-  [5]: http://jicki.cn/img/posts/chatops/5.png 
-  [6]: http://jicki.cn/img/posts/chatops/6.png 
-  [7]: http://jicki.cn/img/posts/chatops/7.png 
+  [1]: https://jicki.cn/img/posts/chatops/1.png
+  [2]: https://jicki.cn/img/posts/chatops/2.png
+  [3]: https://jicki.cn/img/posts/chatops/3.png 
+  [4]: https://jicki.cn/img/posts/chatops/4.png 
+  [5]: https://jicki.cn/img/posts/chatops/5.png 
+  [6]: https://jicki.cn/img/posts/chatops/6.png 
+  [7]: https://jicki.cn/img/posts/chatops/7.png 
 

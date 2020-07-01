@@ -824,5 +824,5 @@ ansible-playbook -i inventory/inventory.cfg reset.yml -b -v --private-key=~/.ssh
 
 ```
 
-  [1]: http://jicki.cn/img/posts/kagro/1.png
+  [1]: https://jicki.cn/img/posts/kagro/1.png
 

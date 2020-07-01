@@ -241,5 +241,5 @@ kata-runtime list
 
 ```
 
-  [1]: http://jicki.cn/img/posts/kata/kata.png
+  [1]: https://jicki.cn/img/posts/kata/kata.png
 

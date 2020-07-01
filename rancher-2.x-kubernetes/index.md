@@ -1053,24 +1053,24 @@ kubectl patch namespace user-6jntr  -p '{"metadata":{"finalizers":[]}}' --type='
 
 
 
-  [1]: http://jicki.cn/img/posts/rancher/rancher.png
-  [2]: http://jicki.cn/img/posts/rancher/rancher-1.png
-  [3]: http://jicki.cn/img/posts/rancher/webui-1.png
-  [4]: http://jicki.cn/img/posts/rancher/webui-2.png
-  [5]: http://jicki.cn/img/posts/rancher/webui-3.png
-  [6]: http://jicki.cn/img/posts/rancher/webui-4.png
-  [7]: http://jicki.cn/img/posts/rancher/webui-5.png
-  [8]: http://jicki.cn/img/posts/rancher/webui-6.png
-  [9]: http://jicki.cn/img/posts/rancher/webui-7.png
-  [10]: http://jicki.cn/img/posts/rancher/webui-8.png
-  [11]: http://jicki.cn/img/posts/rancher/webui-9.png
-  [12]: http://jicki.cn/img/posts/rancher/webui-10.png
-  [13]: http://jicki.cn/img/posts/rancher/webui-11.png
-  [14]: http://jicki.cn/img/posts/rancher/webui-12.png
-  [15]: http://jicki.cn/img/posts/rancher/webui-13.png
-  [16]: http://jicki.cn/img/posts/rancher/webui-14.png
-  [17]: http://jicki.cn/img/posts/rancher/webui-15.png
-  [18]: http://jicki.cn/img/posts/rancher/webui-16.png
-  [19]: http://jicki.cn/img/posts/rancher/webui-17.png
+  [1]: https://jicki.cn/img/posts/rancher/rancher.png
+  [2]: https://jicki.cn/img/posts/rancher/rancher-1.png
+  [3]: https://jicki.cn/img/posts/rancher/webui-1.png
+  [4]: https://jicki.cn/img/posts/rancher/webui-2.png
+  [5]: https://jicki.cn/img/posts/rancher/webui-3.png
+  [6]: https://jicki.cn/img/posts/rancher/webui-4.png
+  [7]: https://jicki.cn/img/posts/rancher/webui-5.png
+  [8]: https://jicki.cn/img/posts/rancher/webui-6.png
+  [9]: https://jicki.cn/img/posts/rancher/webui-7.png
+  [10]: https://jicki.cn/img/posts/rancher/webui-8.png
+  [11]: https://jicki.cn/img/posts/rancher/webui-9.png
+  [12]: https://jicki.cn/img/posts/rancher/webui-10.png
+  [13]: https://jicki.cn/img/posts/rancher/webui-11.png
+  [14]: https://jicki.cn/img/posts/rancher/webui-12.png
+  [15]: https://jicki.cn/img/posts/rancher/webui-13.png
+  [16]: https://jicki.cn/img/posts/rancher/webui-14.png
+  [17]: https://jicki.cn/img/posts/rancher/webui-15.png
+  [18]: https://jicki.cn/img/posts/rancher/webui-16.png
+  [19]: https://jicki.cn/img/posts/rancher/webui-17.png
 
 

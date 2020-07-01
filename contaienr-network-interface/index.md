@@ -241,6 +241,6 @@ total 4
 
 
 
-  [1]: http://jicki.cn/img/posts/cni/cni.png
+  [1]: https://jicki.cn/img/posts/cni/cni.png
 
 

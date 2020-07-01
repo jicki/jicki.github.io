@@ -549,16 +549,16 @@ Finished: SUCCESS
 ```
 
 
-  [1]: http://jicki.cn/img/posts/jenkins/jenkins1.png
-  [2]: http://jicki.cn/img/posts/jenkins/jenkins2.png
-  [3]: http://jicki.cn/img/posts/jenkins/jenkins3.png
-  [4]: http://jicki.cn/img/posts/jenkins/jenkins4.png
-  [5]: http://jicki.cn/img/posts/jenkins/jenkins5.png
-  [6]: http://jicki.cn/img/posts/jenkins/jenkins6.png
-  [7]: http://jicki.cn/img/posts/jenkins/jenkins7.png
-  [8]: http://jicki.cn/img/posts/jenkins/jenkins8.png
-  [9]: http://jicki.cn/img/posts/jenkins/jenkins9.png
-  [10]: http://jicki.cn/img/posts/jenkins/jenkins10.png
-  [11]: http://jicki.cn/img/posts/jenkins/jenkins11.png
-  [12]: http://jicki.cn/img/posts/jenkins/jenkins12.png
+  [1]: https://jicki.cn/img/posts/jenkins/jenkins1.png
+  [2]: https://jicki.cn/img/posts/jenkins/jenkins2.png
+  [3]: https://jicki.cn/img/posts/jenkins/jenkins3.png
+  [4]: https://jicki.cn/img/posts/jenkins/jenkins4.png
+  [5]: https://jicki.cn/img/posts/jenkins/jenkins5.png
+  [6]: https://jicki.cn/img/posts/jenkins/jenkins6.png
+  [7]: https://jicki.cn/img/posts/jenkins/jenkins7.png
+  [8]: https://jicki.cn/img/posts/jenkins/jenkins8.png
+  [9]: https://jicki.cn/img/posts/jenkins/jenkins9.png
+  [10]: https://jicki.cn/img/posts/jenkins/jenkins10.png
+  [11]: https://jicki.cn/img/posts/jenkins/jenkins11.png
+  [12]: https://jicki.cn/img/posts/jenkins/jenkins12.png
 

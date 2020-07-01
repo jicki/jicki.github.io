@@ -1613,6 +1613,6 @@ CONTAINER ID        IMAGE                                                       
 
 
 
-  [1]: http://jicki.cn/img/posts/fabric/fabric.png
-  [2]: http://jicki.cn/img/posts/fabric/fabric-2.png
+  [1]: https://jicki.cn/img/posts/fabric/fabric.png
+  [2]: https://jicki.cn/img/posts/fabric/fabric-2.png
 

@@ -451,10 +451,10 @@ ks-console-ingress   kubesphere.jicki.cn             80, 443   14m
 
 
 
-  [1]: http://jicki.cn/img/posts/kubesphere/kubesphere.png
-  [2]: http://jicki.cn/img/posts/kubesphere/kubesphere-1.png
-  [3]: http://jicki.cn/img/posts/kubesphere/kubesphere-2.png
-  [4]: http://jicki.cn/img/posts/kubesphere/kubesphere-3.png
-  [5]: http://jicki.cn/img/posts/kubesphere/kubesphere-4.png
-  [6]: http://jicki.cn/img/posts/kubesphere/kubesphere-5.png
+  [1]: https://jicki.cn/img/posts/kubesphere/kubesphere.png
+  [2]: https://jicki.cn/img/posts/kubesphere/kubesphere-1.png
+  [3]: https://jicki.cn/img/posts/kubesphere/kubesphere-2.png
+  [4]: https://jicki.cn/img/posts/kubesphere/kubesphere-3.png
+  [5]: https://jicki.cn/img/posts/kubesphere/kubesphere-4.png
+  [6]: https://jicki.cn/img/posts/kubesphere/kubesphere-5.png
 

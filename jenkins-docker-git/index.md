@@ -233,14 +233,14 @@ Recipient List 添加 收件邮箱 多个邮件以空格 隔开
 ![此处输入图片的描述][10]
 
 
-  [1]: http://jicki.cn/img/posts/jenkins/4.png
-  [2]: http://jicki.cn/img/posts/jenkins/1.png
-  [3]: http://jicki.cn/img/posts/jenkins/2.png
-  [4]: http://jicki.cn/img/posts/jenkins/3.png
-  [5]: http://jicki.cn/img/posts/jenkins/5.png
-  [6]: http://jicki.cn/img/posts/jenkins/6.png
-  [7]: http://jicki.cn/img/posts/jenkins/7.png
-  [8]: http://jicki.cn/img/posts/jenkins/8.png
-  [9]: http://jicki.cn/img/posts/jenkins/9.png
-  [10]: http://jicki.cn/img/posts/jenkins/10.png
+  [1]: https://jicki.cn/img/posts/jenkins/4.png
+  [2]: https://jicki.cn/img/posts/jenkins/1.png
+  [3]: https://jicki.cn/img/posts/jenkins/2.png
+  [4]: https://jicki.cn/img/posts/jenkins/3.png
+  [5]: https://jicki.cn/img/posts/jenkins/5.png
+  [6]: https://jicki.cn/img/posts/jenkins/6.png
+  [7]: https://jicki.cn/img/posts/jenkins/7.png
+  [8]: https://jicki.cn/img/posts/jenkins/8.png
+  [9]: https://jicki.cn/img/posts/jenkins/9.png
+  [10]: https://jicki.cn/img/posts/jenkins/10.png
 

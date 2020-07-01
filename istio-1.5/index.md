@@ -1161,13 +1161,13 @@ istioctl manifest generate --set profile=demo |kubectl delete -f -
 
 
 
-  [1]: http://jicki.cn/img/posts/istio/kiali.png
-  [2]: http://jicki.cn/img/posts/istio/kiali-1.png
-  [3]: http://jicki.cn/img/posts/istio/kiali-2.png
-  [4]: http://jicki.cn/img/posts/istio/kiali-3.png
-  [5]: http://jicki.cn/img/posts/istio/kiali-4.png
-  [6]: http://jicki.cn/img/posts/istio/istio-proxy.png
-  [7]: http://jicki.cn/img/posts/istio/istio.svg
-  [8]: http://jicki.cn/img/posts/istio/discovery.svg
-  [9]: http://jicki.cn/img/posts/istio/virtualservice.png
+  [1]: https://jicki.cn/img/posts/istio/kiali.png
+  [2]: https://jicki.cn/img/posts/istio/kiali-1.png
+  [3]: https://jicki.cn/img/posts/istio/kiali-2.png
+  [4]: https://jicki.cn/img/posts/istio/kiali-3.png
+  [5]: https://jicki.cn/img/posts/istio/kiali-4.png
+  [6]: https://jicki.cn/img/posts/istio/istio-proxy.png
+  [7]: https://jicki.cn/img/posts/istio/istio.svg
+  [8]: https://jicki.cn/img/posts/istio/discovery.svg
+  [9]: https://jicki.cn/img/posts/istio/virtualservice.png
 

@@ -330,11 +330,11 @@ Finished: SUCCESS
 
 
 
-  [1]: http://jicki.cn/img/posts/jenkins/wechat-bot.png
-  [2]: http://jicki.cn/img/posts/jenkins/wechat-bot2.png
-  [3]: http://jicki.cn/img/posts/jenkins/wechat-bot3.png
-  [4]: http://jicki.cn/img/posts/jenkins/wechat-bot4.png
-  [5]: http://jicki.cn/img/posts/jenkins/wechat-bot5.png
-  [6]: http://jicki.cn/img/posts/jenkins/wechat-bot6.png
+  [1]: https://jicki.cn/img/posts/jenkins/wechat-bot.png
+  [2]: https://jicki.cn/img/posts/jenkins/wechat-bot2.png
+  [3]: https://jicki.cn/img/posts/jenkins/wechat-bot3.png
+  [4]: https://jicki.cn/img/posts/jenkins/wechat-bot4.png
+  [5]: https://jicki.cn/img/posts/jenkins/wechat-bot5.png
+  [6]: https://jicki.cn/img/posts/jenkins/wechat-bot6.png
 
 

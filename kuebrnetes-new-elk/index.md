@@ -565,10 +565,10 @@ green  open   nginx-log-2019.07.02 TuXuOOONTL-aIZt2wq_hHQ   5   1         20    
 ![图6][6]
 
 
-  [1]: http://jicki.cn/img/posts/elk/new-1.png
-  [2]: http://jicki.cn/img/posts/elk/new-2.png
-  [3]: http://jicki.cn/img/posts/elk/3.png 
-  [4]: http://jicki.cn/img/posts/elk/4.png 
-  [5]: http://jicki.cn/img/posts/elk/5.png 
-  [6]: http://jicki.cn/img/posts/elk/6.png 
+  [1]: https://jicki.cn/img/posts/elk/new-1.png
+  [2]: https://jicki.cn/img/posts/elk/new-2.png
+  [3]: https://jicki.cn/img/posts/elk/3.png 
+  [4]: https://jicki.cn/img/posts/elk/4.png 
+  [5]: https://jicki.cn/img/posts/elk/5.png 
+  [6]: https://jicki.cn/img/posts/elk/6.png 
 

@@ -116,5 +116,5 @@ availability:az==2
 
 
 
-  [1]: http://jicki.cn/img/posts/docker-compose/1.png
+  [1]: https://jicki.cn/img/posts/docker-compose/1.png
 

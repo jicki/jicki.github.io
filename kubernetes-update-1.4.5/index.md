@@ -352,5 +352,5 @@ kubeadm init
 ```
 
 
-  [1]: http://jicki.cn/img/posts/kubernetes/1.png
+  [1]: https://jicki.cn/img/posts/kubernetes/1.png
 

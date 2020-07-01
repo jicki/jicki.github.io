@@ -2450,6 +2450,6 @@ k8s-node-1   Ready    <none>   63s   v1.18.0
 
 ```
 
-  [1]: http://jicki.cn/img/posts/dashboard/dashboard-jicki.png
-  [2]: http://jicki.cn/img/posts/dashboard/nodelocaldns.jpg
+  [1]: https://jicki.cn/img/posts/dashboard/dashboard-jicki.png
+  [2]: https://jicki.cn/img/posts/dashboard/nodelocaldns.jpg
 
