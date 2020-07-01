@@ -1,6 +1,10 @@
 # 关于
 
 
+
+{{< figure src="/img/pexels/book-glass.jpeg" title="Hugo" >}}
+
+
 # 关于网站
 
 
