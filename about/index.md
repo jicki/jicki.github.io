@@ -2,7 +2,7 @@
 
 
 
-{{< figure src="/img/pexels/book-glass.jpeg" title="Hugo" >}}
+{{< figure src="/img/pexels/book-glass.jpeg" width="780" height="300" title="小炒肉" >}}
 
 
 # 关于网站
