@@ -13,9 +13,9 @@
 
 {{< mermaid >}}
 graph LR;
-    A[我] -->|Git push| B(Github -> hugo source)
-    B -->|自动构建流程| C(Github Actions)
-    C -->|生成静态HTML文件并自动推送| D(Github -> jicki.github.io)
+    A[小炒肉] -->|Git Push| B(Github hugo source)
+    B -->|自动构建流程| C{Github Actions}
+    C -->|生成静态文件并推送| D(Github jicki.github.io)
 {{< /mermaid >}}
 
 
