@@ -1,7 +1,7 @@
 # Github Actions 构建 Hugo
 
 
-{{< figure src="/img/post-bg-alitrip.jpg" title="Lighthouse (figure)" >}}
+{{< figure src="/img/post-bg-alitrip.jpg" title="Hugo" >}}
 
 # Hugo
 
