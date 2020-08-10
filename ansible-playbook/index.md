@@ -79,3 +79,8 @@
 
 {{< figure src="/img/posts/ansible/ansible-jg.png" >}}
 
+
+
+{{< figure src="/img/posts/ansible/ansible-yl.png" >}}
+
+
