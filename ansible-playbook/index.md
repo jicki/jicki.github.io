@@ -88,6 +88,8 @@
 
   * `ansible playbooks`: 任务剧本(任务集), 通过编排定义`ansible`任务集合的配置文件, 由`ansible` 顺序依次执行, 文件通常是 `JSON`格式的`YML`文件。
 
+  * `Roles`: 角色, 多个 `ansilbe playbooks` 的集合.
+
   * `Inventory`: `ansible` 管理主机的清单 默认为 `/etc/ansible/hosts` 文件。
 
   * `Modules`: `ansible` 执行命令的功能模块, 一般为`ansible`内置核心模块, 也可以自定义第三方模块.
@@ -132,6 +134,28 @@ ansible 2.9.10
   python version = 2.7.5 (default, Apr  2 2020, 13:16:51) [GCC 4.8.5 20150623 (Red Hat 4.8.5-39)]
 
 ```
+
+
+* `ansible` 相关说明
+
+  * `/etc/ansible/ansible.cfg` 主配置文件, 配置`ansible`的工作特性.
+
+  * `/etc/ansible/hosts` 主机清单.
+
+  * `/etc/ansible/roles/` 存放(roles)角色的目录.
+
+  * `/usr/bin/ansible` 二进制执行文件, `ansible` 主程序.
+
+  * `/usr/bin/ansilbe-doc` 配置文档, 模块功能查看工具.
+
+  * `/usr/bin/ansible-galaxy` 用于上传/下载 `roles` 模块到官方平台的工具.
+
+  * `/usr/bin/ansible-playbook` 自动化任务、编排剧本工具`/usr/bin/ansible-pull` 远程执行命令的工具.
+
+  * `/usr/bin/ansible-vault` 文件(如: playbook 文件) 加密工具.
+
+  * `/usr/bin/ansible-console` 基于 界面的用户交互执行工具.     
+
 
 
 
