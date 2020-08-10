@@ -84,3 +84,54 @@
 {{< figure src="/img/posts/ansible/ansible-yl.png" >}}
 
 
+* `ansible` 主要组成部分:
+
+  * `ansible playbooks`: 任务剧本(任务集), 通过编排定义`ansible`任务集合的配置文件, 由`ansible` 顺序依次执行, 文件通常是 `JSON`格式的`YML`文件。
+
+  * `Inventory`: `ansible` 管理主机的清单 默认为 `/etc/ansible/hosts` 文件。
+
+  * `Modules`: `ansible` 执行命令的功能模块, 一般为`ansible`内置核心模块, 也可以自定义第三方模块.
+
+  * `plugins`: `ansible` 功能插件, 是功能模块的补充. 如: 连接类型插件、循环插件、变量插件、过滤插件等等.
+
+  * `Api`: 提供第三方程序调用的开放接口.
+
+  * `ansible`: `ansible` 的客户端命令工具. 执行 `ansible` 命令的主要程序.
+
+    * `Ad-Hoc` 用户执行单条或多条的 `ansible` 命令.
+
+    * `ansible playbook` 通过编写编排文件 `ansible` 执行命令集合.
+
+      * `ansible playbook` 执行过程 -> 将编排好的任务写入 `ansible-playbook` 编排文件中 -> 通过 `ansible-playbook` 命令拆分任务集合, 然后按照预定的顺序逐条执行`ansible` 命令.
+
+
+
+## ansible 安装
+
+* `ansible` 安装很简单, 也有很多种方式.
+
+  * 安装 `epel` 源以后 执行 `yum -y install ansible`
+
+  * 使用 源码包 进行 安装
+
+  * 通过 `git clone https://github.com/ansible/ansible` 以后进行安装
+
+  * 使用 pip 命令安装
+
+
+
+
+```shell
+
+[root@jicki ~]# ansible --version
+ansible 2.9.10
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = [u'/root/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/site-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.5 (default, Apr  2 2020, 13:16:51) [GCC 4.8.5 20150623 (Red Hat 4.8.5-39)]
+
+```
+
+
+
