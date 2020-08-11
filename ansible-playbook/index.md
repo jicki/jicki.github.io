@@ -512,15 +512,37 @@ ansible-doc -s ping
 
   * `ansible all -m cron -a 'weekday=1-5  job="echo `date`  >> /root/1.txt" name=echocron'`
 
-    * `day`: 表示 天.  支持 `1-31`, `*`, `*/2` 写法
+    * `day`: 表示 天.  支持 ( 1-31, *, */2 ) 写法
 
-    * `hour`: 表示 小时.  支持 `0-23`, `*`, `*/2` 写法
+    * `hour`: 表示 小时.  支持 ( 0-23, *, */2 ) 写法
 
-    * `minute`: 表示 分钟. 支持 `0-59`, `*`, `*/2` 写法
+    * `minute`: 表示 分钟. 支持 ( 0-59, *, */2 ) 写法
 
-    * `month`: 表示 月. 支持 `1-12`, `*`, `*/2` 写法
+    * `month`: 表示 月. 支持 ( 1-12, *, */2 ) 写法
 
-    * `weekday`: 表示 星期. 支持 `0-6`, `Sunday-Saturday`, `*` 写法
+    * `weekday`: 表示 星期. 支持 ( 0-6, Sunday-Saturday, * )写法
+
+    * `job`: 表示 计划任务的内容. 
+
+    * `name`: 表示 计划任务名称. 相同的计划任务名称会覆盖. 
+
+  * `ansible all -m cron -a 'disabled=true  job="echo `date`  >> /root/1.txt" name=echocron'
+
+    * `disabled`: 只是注释掉计划任务 并非删除. 
+
+      * `true`、`yes` : 关闭计划任务. 关闭计划任务 必须指定 `job` 和 `name`.
+      * `false`、`no`: 重新打开计划任务. 必须指定 `job` 和 `name`.
+
+
+  * ansible all -m cron -a 'name=echocron state=absent'
+
+    * `state`
+      * `absent` 删除计划任务. 删除计划任务 只需要指定 `name` 既可.
+
+
+
+
+
 
 
 
