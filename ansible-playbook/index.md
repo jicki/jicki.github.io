@@ -159,3 +159,80 @@ ansible 2.9.10
 
 
 
+## /etc/ansible/hosts
+
+> 创建秘钥 `ssh-keygen -t rsa -f ~/.ssh/id_rsa  -C "jicki"`
+
+
+**主机清单文件**
+
+
+```shell
+# #号为注释
+
+# []包含的为主机组 如下 
+[webservers]
+192.168.168.10
+192.168.168.11
+192.168.168.12
+192.168.168.13
+
+# 主机也支持 nameserver 如下
+[dbservers]
+db1.example.com
+db2.example.com
+db3.example.com
+db4.example.com
+
+# 主机支持 [1:10] 类型的多主机 如下 
+[docker]
+# 等同于 192.168.168.10 ~ 192.168.168.120
+192.168.168.1[0:20]
+
+
+# 主机也支持 [a:z] 类型的 nameserver 如下
+[kubernetes]
+# 等同于 master-a ~ master-c
+master-[a:c]
+# 等同于 node-c ~ node-g
+node-[c:g]
+
+```
+
+
+* 操作主机
+
+  * `-m` 为指定模块 `ping` 为 模块名称
+
+  * `-k` 为密码方式, 默认为 ssh-key 免密码方式登录
+
+
+```shell
+# ansible 通过 单主机进行操作 ( -k 为用户密码方式, 默认为 ssh-key )
+ansible 192.168.168.10 -m ping -k
+
+
+# ansible 通过 hosts 组名称 进行操作
+ansible webservers -m ping -k
+
+
+# ansible 通过 all 对 hosts 清单下所有主机进行操作
+ansible all -m ping -k
+
+```
+
+* 输出结果
+
+```shell
+[root@jicki opt]# ansible all -m ping
+10.0.3.13 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+
+
