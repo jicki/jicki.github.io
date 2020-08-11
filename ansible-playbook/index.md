@@ -401,5 +401,155 @@ ansible-doc -s ping
   * `-b / --become`: 代替旧版的 `sudo` 切换。 
 
 
+### ansible 常用模块
+
+> 截止 2020-08-10 ansible 模块为 3387 个.
+
+
+* `command` 模块: 在远程主机上执行命令, 支持条件判断. ansible 默认模块, 可忽略 `-m` 参数直接操作.  注: `command` 模块 不支持 `$VARNAME` `<` `>` `|` `;` `&` 等符号. 
+
+  * `ansible all -m command -a 'systemctl stop docker'
+
+  * `ansible all -a 'docker ps -a'
+
+  * `ansible all -a 'removes=/opt/ansible df -h'` 
+
+    * 如果 /opt/ansible 不存在 就不执行 `df -h` 操作, 如果 /opt/ansible 存在, 就执行 `df -h` 操作.
+ 
+  * `ansible all -a 'creates=/opt/ansible df -h'`
+    
+    * 如果 /opt/ansible 不存在 就执行 `df -h` 操作, 如果存在 /opt/ansible 就不执行 `df -h` 操作.
+
+  * `ansible all -a 'chdir=/opt ls -lt'` 
+
+    * 切换目录, 等于 `cd /opt && ls -lt` 操作
+
+
+---
+
+* `shell` 模块: shell 模块支持 command 所有的操作, 而且支持 `$VARNAME` `<` `>` `|` `;` `&` 等符号操作.  
+
+  * `ansible all -m shell  -a 'ps -ef|grep docker'`
+
+
+
+---
+
+* `script` 模块: 执行脚本的命令. 只需要调用 ansible 本机上的脚本就可以在所有的选择主机上面执行脚本中的内容.
+
+  * `ansible all -m script -a '/root/1.sh'`  
+
+    * `/root/1.sh` 脚本只需要在 ansible 管理主机上既可.
+
+
+---
+
+* `copy` 模块: 拷贝文件到远程主机.  
+
+  * `ansible all -m copy -a 'src=/root/xxx.txt dest=/root/1.txt backup=yes'
+
+    * `src`: 原文件路径
+
+    * `dest`: 目标主机路径
+
+    * `backup`: 如果目标主机文件存在, 会先进行备份, 再进行覆盖.
+
+
+  * `ansible all -m copy -a 'src=/root/1.txt dest=/root/2.txt mode=0644 owner=jicki group=jicki'` 
+
+    * `mode`: 修改权限
+
+    * `owner`: 修改用户
+
+    * `group`: 修改用户组
+
+
+  * `ansible all -m copy -a 'content="hello\nworld\n" dest=/root/2.txt'` 
+
+    * `content`: 将内容写入到目标文件中.
+
+---
+
+* `fetch` 模块: 将远程主机的文件, 下载到本机中, 下载成功会存放在以 主机 IP/名称 的文件夹中, 会包含原文件的整体路径.  (只能下载单个文件, 不支持目录, 可先打包成压缩包, 再进行下载)
+
+  * `ansible all -m fetch -a 'src=/var/log/messages dest=/root/'`
+
+    * `src`: 远程主机的文件路径
+
+    * `dest`: 本机的文件夹路径
+
+
+---
+
+* `file` 模块: 操作远程主机的文件. 如: 创建文件 `touch`、 删除文件 `absent` 等 
+
+  * `ansible all -m file -a 'name=/root/1.txt owner=jicki group=jicki mode=0755'`
+
+    * `mode`: 修改权限
+
+    * `owner`: 修改用户
+
+    * `group`: 修改用户组  
+
+  * `ansible all -m file -a 'name=/root/1.txt state=touch'` 
+
+    * `dest`、`name`、`path`: 指定远程主机的文件路径.
+
+    * `state`: 文件操作类型.
+
+      * `touch`: 创建空文件.
+      * `directory`: 创建文件夹.
+      * `absent`: 递归删除文件夹/文件.
+      * `link`: 创建软连接.
+
+  * `ansible all -m file -a 'src=/root/1.txt dest=/root/1.link state=link'
+
+    * `src`: 源文件, 这里用于指定 软连接的源文件.
+
+---
+
+* `cron` 模块: 为远程主机添加定时任务. 
+
+  * `ansible all -m cron -a 'weekday=1-5  job="echo `date`  >> /root/1.txt" name=echocron'`
+
+    * `day`: 表示 天.  支持 `1-31`, `*`, `*/2` 写法
+
+    * `hour`: 表示 小时.  支持 `0-23`, `*`, `*/2` 写法
+
+    * `minute`: 表示 分钟. 支持 `0-59`, `*`, `*/2` 写法
+
+    * `month`: 表示 月. 支持 `1-12`, `*`, `*/2` 写法
+
+    * `weekday`: 表示 星期. 支持 `0-6`, `Sunday-Saturday`, `*` 写法
+
+
+
+
+## ansible 执行过程
+
+
+1. 加载配置文件 `/etc/ansible/ansible.cfg`.
+
+2. 加载对应的模块文件.
+
+3. 通过 ansible 将模块或命令生成对应的临时 `py` 文件, 并将该临时文件 传输至远程服务器的对应 执行用户 临时目录下 `$HOME/.ansible/tmp/ansible-tmp-2123/xxx.py` 文件.
+
+4. 对临时 `py` 文件授权 ( chmod u+x xx.py ).
+
+5. 执行 `py` 文件,并返回执行结果.
+
+6. 删除临时的 `py` 文件, sleep 0 退出.
+
+
+---
+
+* 执行状态 
+
+  * 绿色: 执行操作成功并且不需要做更改的操作.
+
+  * 黄色: 执行操作成功, 并且对目标主机进行了变更操作. 如 更改文件内容, 重启服务,  删除文件等.
+
+  * 红色: 执行操作失败.
+
 
 
