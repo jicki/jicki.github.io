@@ -162,6 +162,8 @@ ansible 2.9.10
 ## /etc/ansible/hosts
 
 > 创建秘钥 `ssh-keygen -t rsa -f ~/.ssh/id_rsa  -C "jicki"`
+>
+> 拷贝秘钥到其他被控端 `ssh-copy-id ip`
 
 
 **主机清单文件**
@@ -170,12 +172,21 @@ ansible 2.9.10
 ```shell
 # #号为注释
 
+# 单主机 直接写入 ip 或 nameserver
+192.168.168.10
+
+# 非标准22端口可直接用 : 填入
+192.168.168.10:999
+db1.example.com:999
+
+
 # []包含的为主机组 如下 
 [webservers]
 192.168.168.10
 192.168.168.11
 192.168.168.12
 192.168.168.13
+
 
 # 主机也支持 nameserver 如下
 [dbservers]
@@ -212,12 +223,33 @@ node-[c:g]
 ansible 192.168.168.10 -m ping -k
 
 
+
+# ansible 通过 ':' 组合进行操作
+ansible "192.168.168.10:192.168.168.20" -m ping -k
+
+
+# ansible 通过 通配符加主机 进行操作
+ansible 192.168.168.* -m ping -k
+
+
 # ansible 通过 hosts 组名称 进行操作
 ansible webservers -m ping -k
 
 
+# ansible 通过 ":" 组合组进行操作
+ansible "webservers:dbservers" -m ping -k
+
+
+# ansible 通过 通配符 进行操作
+ansible *servers -m ping -k
+
+
 # ansible 通过 all 对 hosts 清单下所有主机进行操作
 ansible all -m ping -k
+
+
+# ansible 通过 通配符 对 hosts 清单下所有主机进行操作
+ansible "*" -m ping -k
 
 ```
 
@@ -233,6 +265,126 @@ ansible all -m ping -k
     "ping": "pong"
 }
 ```
+
+
+## /etc/ansible/ansible.cfg
+
+**ansible 主配置文件**
+
+
+```shell
+# defaults 为默认配置
+[defaults]
+
+# 主机清单的路径, 默认为如下
+#inventory      = /etc/ansible/hosts
+
+# 模块存放的路径 
+#library        = /usr/share/my_modules/
+
+# utils 模块存放路径
+#module_utils   = /usr/share/my_module_utils/
+
+# 远程主机脚本临时存放目录
+#remote_tmp     = ~/.ansible/tmp
+
+# 管理节点脚本临时存放目录 
+#local_tmp      = ~/.ansible/tmp
+
+# 插件的配置文件路径
+#plugin_filters_cfg = /etc/ansible/plugin_filters.yml
+
+# 执行并发数
+#forks          = 5
+
+# 异步任务查询间隔 单位秒
+#poll_interval  = 15
+
+# sudo 指定用户
+#sudo_user      = root
+
+# 运行 ansible 是否提示输入sudo密码
+#ask_sudo_pass = True
+
+# 运行 ansible 是否提示输入密码 同 -k
+#ask_pass      = True
+
+# 远程传输模式
+#transport      = smart
+
+# SSH 默认端口
+#remote_port    = 22
+
+# 模块运行默认语言环境
+#module_lang    = C
+
+
+# roles 存放路径
+#roles_path    = /etc/ansible/roles
+
+# 不检查 /root/.ssh/known_hosts 文件 建议取消
+#host_key_checking = False
+
+
+# ansible 操作日志路径 建议打开
+#log_path = /var/log/ansible.log
+
+
+```
+
+
+
+## ansible 命令
+
+
+### ansible-doc
+
+* 显示模块帮助
+
+  * `-l, --list` 列出可用模块
+
+  * `-s, --snippet` 显示指定模块的 `playbook` 片段
+
+
+```shell
+# 例子
+
+ansible-doc -l
+
+ansible-doc ping
+
+ansible-doc -s ping
+
+```
+
+
+
+### ansible
+
+* `ansible <host-pattern>  [-m module_name] [-a args]`
+
+  * `host-pattern`: 主机ip、主机名、主机组。
+
+  * `module_name`: 模块的名称。如果不写 默认为 `-m command` 。
+
+  * `args`: 模块的参数, 需要加上 `-a` 进行指定模块的参数。如: `ansible all -a 'hostname'
+
+  * `-v、-vv、-vvv`: 显示详细的命令输出日志, v 越多越详细。如: `ansible all -m ping -vvv`
+
+  * `--list`: 显示主机的列表。 如: `ansible all --list`
+
+  * `-k / --ask-pass`: 提示输入ssh连接密码, 默认为 ssh-key 认证。如: `ansible all -m ping -k`
+
+  * `-K / --ask-become-pass`: 提示输入 sudo 的密码。
+
+  * `-C / --check`: 检查命令操作, 并不会执行。如: `ansible all -m ping -C` 
+
+  * `-T / --timeout`: 执行命令的超时时间, 默认为 10s。如: `ansible all -m ping -T=2` 
+
+  * `-u / --user`: 执行远程操作的用户. 如: `ansible all -m ping -u=root`
+
+  * `-b / --become`: 代替旧版的 `sudo` 切换。 
+
 
 
 
