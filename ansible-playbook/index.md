@@ -223,7 +223,6 @@ node-[c:g]
 ansible 192.168.168.10 -m ping -k
 
 
-
 # ansible 通过 ':' 组合进行操作
 ansible "192.168.168.10:192.168.168.20" -m ping -k
 
@@ -236,12 +235,28 @@ ansible 192.168.168.* -m ping -k
 ansible webservers -m ping -k
 
 
-# ansible 通过 ":" 组合组进行操作
-ansible "webservers:dbservers" -m ping -k
+# ansible 通过 ':' 组合组进行操作
+ansible 'webservers:dbservers' -m ping -k
 
 
 # ansible 通过 通配符 进行操作
-ansible *servers -m ping -k
+ansible '*servers' -m ping -k
+
+
+# ansible 通过 ':&' 逻辑与 (两个组中都包含的主机)
+ansible 'webservers:&dbservers' -m ping -k
+
+
+# ansible 通过 ':!' 逻辑非 (在webservers 但不在 dbservers的主机)
+ansible 'webservers:!dbservers' -m ping -k
+
+
+# ansible 也支持多逻辑的组合
+ansible 'webservers:dbserver:&appserver:!ftpservers' -m ping -k
+
+
+# ansible 也支持正则表达式
+ansible '~(web|db)serever' -m ping -k
 
 
 # ansible 通过 all 对 hosts 清单下所有主机进行操作
@@ -249,7 +264,7 @@ ansible all -m ping -k
 
 
 # ansible 通过 通配符 对 hosts 清单下所有主机进行操作
-ansible "*" -m ping -k
+ansible '*' -m ping -k
 
 ```
 
