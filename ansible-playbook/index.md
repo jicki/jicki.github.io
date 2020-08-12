@@ -1,4 +1,4 @@
-# ansible playbook 从入门到放弃
+# Ansible 从入门到放弃
 
 
 {{< figure src="/img/posts/ansible/ansible.png" >}}
@@ -751,6 +751,9 @@ ansible-doc -s ping
 
 
 ### ansible playbook
+
+
+* `ansible-playbook [options] playbook.yml [playbook 2  ...]`
 
 
 
