@@ -526,7 +526,7 @@ ansible-doc -s ping
 
     * `name`: 表示 计划任务名称. 相同的计划任务名称会覆盖. 
 
-  * `ansible all -m cron -a 'disabled=true  job="echo `date`  >> /root/1.txt" name=echocron'
+  * `ansible all -m cron -a 'disabled=true  job="echo `date`  >> /root/1.txt" name=echocron'`
 
     * `disabled`: 只是注释掉计划任务 并非删除. 
 
@@ -534,7 +534,7 @@ ansible-doc -s ping
       * `false`、`no`: 重新打开计划任务. 必须指定 `job` 和 `name`.
 
 
-  * ansible all -m cron -a 'name=echocron state=absent'
+  * `ansible all -m cron -a 'name=echocron state=absent'`
 
     * `state`
       * `absent` 删除计划任务. 删除计划任务 只需要指定 `name` 既可.
