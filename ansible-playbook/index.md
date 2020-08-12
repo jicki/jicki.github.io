@@ -502,7 +502,7 @@ ansible-doc -s ping
       * `absent`: 递归删除文件夹/文件.
       * `link`: 创建软连接.
 
-  * `ansible all -m file -a 'src=/root/1.txt dest=/root/1.link state=link'
+  * `ansible all -m file -a 'src=/root/1.txt dest=/root/1.link state=link'`
 
     * `src`: 源文件, 这里用于指定 软连接的源文件.
 
@@ -541,9 +541,40 @@ ansible-doc -s ping
 
 
 
+---
+
+* `yum` 模块: 利用 yum 操作软件包, 如 安装、查询、卸载等.
+
+  * `ansible all -m yum -a 'name=sysstat state=present'`
+
+  * `ansible all -m yum -a 'name=/tmp/sysstat-12.3.3-1.2.x86_64.rpm'`
+
+  * `ansible all -m yum -a 'name=sysstat update_cache=yes disable_gpg_check=yes'`
+
+    * `name`: 软件包的名称, 或者rpm包, 远程服务器必须存在 rpm 包. 安装多个软件使用 `,` 号隔开. 如 `name=sysstat,mysql,redis`
+
+    * `state`
+
+      * `present`、`installed`:  安装软件. 默认为 `present`, 可不填 `state=present` .
+      * `absent`、`removed`: 卸载/删除软件. 
+
+    * `update_cache=yes`: 更新 yum 缓存后 在安装软件.
+
+    * `disable_gpg_check=yes`: 禁用 gpg 检查.
+
+  * `ansible all -m yum -a 'list=installed'`
+
+    * `list`: 列出安装包.
+
+      * `installed`: 已安装的软件
+      * `updates`: 可以升级的软件
+      * `available`: 可以安装的软件
+      * `repos`: yum 源 
 
 
+---
 
+* `service`: 软件服务管理模块.
 
 
 
