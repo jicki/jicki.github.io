@@ -405,6 +405,10 @@ ansible-doc -s ping
 
 > 截止 2020-08-10 ansible 模块为 3387 个.
 
+---
+
+
+#### Command 模块
 
 * `command` 模块: 在远程主机上执行命令, 支持条件判断. ansible 默认模块, 可忽略 `-m` 参数直接操作.  注: `command` 模块 不支持 `$VARNAME` `<` `>` `|` `;` `&` 等符号. 
 
@@ -427,6 +431,10 @@ ansible-doc -s ping
 
 ---
 
+
+#### shell 模块
+
+
 * `shell` 模块: shell 模块支持 command 所有的操作, 而且支持 `$VARNAME` `<` `>` `|` `;` `&` 等符号操作.  
 
   * `ansible all -m shell  -a 'ps -ef|grep docker'`
@@ -434,6 +442,9 @@ ansible-doc -s ping
 
 
 ---
+
+
+#### Script 模块
 
 * `script` 模块: 执行脚本的命令. 只需要调用 ansible 本机上的脚本就可以在所有的选择主机上面执行脚本中的内容.
 
@@ -443,6 +454,11 @@ ansible-doc -s ping
 
 
 ---
+
+
+
+#### Copy 模块
+
 
 * `copy` 模块: 拷贝文件到远程主机.  
 
@@ -470,6 +486,11 @@ ansible-doc -s ping
 
 ---
 
+
+
+#### Fetch 模块
+
+
 * `fetch` 模块: 将远程主机的文件, 下载到本机中, 下载成功会存放在以 主机 IP/名称 的文件夹中, 会包含原文件的整体路径.  (只能下载单个文件, 不支持目录, 可先打包成压缩包, 再进行下载)
 
   * `ansible all -m fetch -a 'src=/var/log/messages dest=/root/'`
@@ -480,6 +501,11 @@ ansible-doc -s ping
 
 
 ---
+
+
+
+#### File 模块
+
 
 * `file` 模块: 操作远程主机的文件. 如: 创建文件 `touch`、 删除文件 `absent` 等 
 
@@ -507,6 +533,11 @@ ansible-doc -s ping
     * `src`: 源文件, 这里用于指定 软连接的源文件.
 
 ---
+
+
+
+#### Cron 模块
+
 
 * `cron` 模块: 为远程主机添加定时任务. 
 
@@ -543,6 +574,11 @@ ansible-doc -s ping
 
 ---
 
+
+#### Yum 模块
+
+
+
 * `yum` 模块: 利用 yum 操作软件包, 如 安装、查询、卸载等.
 
   * `ansible all -m yum -a 'name=sysstat state=present'`
@@ -574,7 +610,28 @@ ansible-doc -s ping
 
 ---
 
+
+#### Service 模块
+
+
+
 * `service`: 软件服务管理模块.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
