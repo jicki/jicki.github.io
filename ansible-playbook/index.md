@@ -349,8 +349,40 @@ ansible '*' -m ping -k
 
 
 
-## ansible 命令
+## ansible 相关操作
 
+
+
+
+
+### ansible 执行过程
+
+
+1. 加载配置文件 `/etc/ansible/ansible.cfg`.
+
+2. 加载对应的模块文件.
+
+3. 通过 ansible 将模块或命令生成对应的临时 `py` 文件, 并将该临时文件 传输至远程服务器的对应 执行用户 临时目录下 `$HOME/.ansible/tmp/ansible-tmp-2123/xxx.py` >文件.
+
+4. 对临时 `py` 文件授权 ( chmod u+x xx.py ).
+
+5. 执行 `py` 文件,并返回执行结果.
+
+6. 删除临时的 `py` 文件, sleep 0 退出.
+
+
+---
+
+* 执行状态
+
+  * 绿色: 执行操作成功并且不需要做更改的操作.
+
+  * 黄色: 执行操作成功, 并且对目标主机进行了变更操作. 如 更改文件内容, 重启服务,  删除文件等.
+
+  * 红色: 执行操作失败.
+
+
+---
 
 ### ansible-doc
 
@@ -373,6 +405,7 @@ ansible-doc -s ping
 ```
 
 
+---
 
 ### ansible
 
@@ -694,68 +727,30 @@ ansible-doc -s ping
 
 ### ansible-galaxy
 
+> 通过 https://galaxy.ansible.com/ 页面下载
+
 **ansible-galaxy 工具用于下载对应的`roles`**
 
 
+* `ansible-galaxy list geerlingguy.nginx`
+
+  * `list`: 查看本地的 roles 角色.
 
 
+* `ansible-galaxy install geerlingguy.nginx`
+
+  * `install`: 下载 `roles` 角色. 会下载到 `$HOME/.ansible/roles/` 目录下
 
 
+* `ansible-galaxy remove geerlingguy.nginx`
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  * `remove`: 删除已下载的 `roles` 角色. 在目录中删除也可以.
 
 
 ---
 
-## ansible 执行过程
 
-
-1. 加载配置文件 `/etc/ansible/ansible.cfg`.
-
-2. 加载对应的模块文件.
-
-3. 通过 ansible 将模块或命令生成对应的临时 `py` 文件, 并将该临时文件 传输至远程服务器的对应 执行用户 临时目录下 `$HOME/.ansible/tmp/ansible-tmp-2123/xxx.py` 文件.
-
-4. 对临时 `py` 文件授权 ( chmod u+x xx.py ).
-
-5. 执行 `py` 文件,并返回执行结果.
-
-6. 删除临时的 `py` 文件, sleep 0 退出.
-
-
----
-
-* 执行状态 
-
-  * 绿色: 执行操作成功并且不需要做更改的操作.
-
-  * 黄色: 执行操作成功, 并且对目标主机进行了变更操作. 如 更改文件内容, 重启服务,  删除文件等.
-
-  * 红色: 执行操作失败.
-
+### ansible playbook
 
 
 
