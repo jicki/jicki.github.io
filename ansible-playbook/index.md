@@ -753,8 +753,111 @@ ansible-doc -s ping
 ### ansible playbook
 
 
+> playbook 流程图
+
+{{< figure src="/img/posts/ansible/playbooks.jpg" >}}
+
+
+
+
+
+
+---
+
+* `playbook` 由一个或多个 `play` 组成.
+
+* `playbook` 中 每个`play` 必须包含 `hosts` 和 `tasks`.
+
+* `playbook` 以 `YAML` 语法编写.
+
+  * `YAML` 约定以 `---` 开头.
+
+  * `YAML` 以 `#` 作为注释.
+
+
+
 * `ansible-playbook [options] playbook.yml [playbook 2  ...]`
 
+
+* Example 
+
+```yml
+---
+# 指定主机组
+- hosts: all
+  # 指定执行 用户
+  remote_user: root
+
+  # 任务
+  tasks:
+    # 任务的名称
+    - name: hostname
+      # shell 为模块名, 后面等同于 -a '' 参数
+      shell: hostname
+```
+
+
+* `ansible-playbook hello.yml` 运行 `playbook`
+
+  * 输出如下:
+
+```shell
+PLAY [all] **********************************************************
+
+TASK [Gathering Facts] **********************************************
+ok: [10.0.3.13]
+
+TASK [hostname] *****************************************************
+changed: [10.0.3.13]
+
+PLAY RECAP **********************************************************
+10.0.3.13   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+```
+
+
+---
+
+### ansible-vault
+
+* `playbook` 文件加密工具
+
+
+* `ansible-vault encrypt hello.yml`
+
+  * `encrypt`: AES256 加密 ( 会提示输入密码 )
+
+  * `view`: 加密的情况下 查看 原来的内容.
+
+  * `edit`: 编辑加密的 playbook 文件.
+
+  * `decrypt`: 解密.
+
+  * `rekey`: 修改加密密码.
+
+
+---
+
+### ansible-console
+
+* `ansible-console`: 可交互执行命令, 支持 `Tab` 键.
+
+
+```shell
+[root@jicki ~]# ansible-console
+Welcome to the ansible console.
+Type help or ? to list commands.
+
+root@all (1)[f:5]$
+
+```
+
+* `root@all (1) [f:5]$`
+
+  * `root`: 当前执行用户.
+  * `all`: 表示当前主机清单.
+  * `(1)`: 表示当前主机清单下包含 `1` 台主机. 
+  * `[f:5]`: 表示并发执行任务数为 `5` 个. 
 
 
 
