@@ -614,26 +614,121 @@ ansible-doc -s ping
 #### Service 模块
 
 
+* `service`: 软件服务管理模块. 启动、关闭、重启 等操作.
 
-* `service`: 软件服务管理模块.
+  * `ansible all -m service -a 'name=vsftpd state=started enabled=yes'`
 
+    * `name`: 服务名称.
 
+    * `state`
+      * `started`: 启动服务.
+      * `stopped`: 停止服务.
+      * `restarted`: 重启服务.
+      * `reloaded`: 重新加载配置.
 
-
-
-
-
-
-
-
-
-
-
-
-
+    * `enabled`:  设置是否开机启动.
+      * `yes、true`
+      * `no、false`
 
 
 
+---
+
+
+
+#### User 模块
+
+* `user`: 管理系统用户的模块
+
+  * `ansible all -m user -a 'name=nginx shell=/sbin/nologin system=yes home=/var/nginx groups=root uid=80 comment="nginx service user"'`
+
+    * `name`: 用户名
+
+    * `shell`: 指定用户的 `shell` 类型
+   
+    * `system`: 指定是否为 系统用户
+
+    * `home`: 指定用户额外的home目录,默认为 /home/用户名 .
+
+    * `groups`: 用户额外的 `groups` 组. 
+
+    * `uid`: 指定用户的 uid 号.
+
+    * `comment`: 用户额外说明. 
+
+
+  * `ansible all -m user -a 'name=nginx state=absent remove=yes'`
+
+    * `state`
+      * `present`: 创建用户 (默认为present)
+      * `absent`: 删除用户
+
+    * `remove`: 是否删除 用户 home 目录.
+
+
+---
+
+
+
+#### Group 模块
+
+
+* `group`: 管理系统用户组的模块
+
+  * `ansible all -m group -a 'name=nginx system=yes gid=80'`
+
+    * `name`: 用户组名
+
+    * `system`: 是否为系统用户组
+
+    * `gid`: 指定 gid 号
+
+    * `state`
+      * `present`: 创建用户组 (默认为present)
+      * `absent`: 删除用户组
+
+  * `ansible all -m group -a 'name=nginx state=absent'`
+
+
+---
+
+### ansible-galaxy
+
+**ansible-galaxy 工具用于下载对应的`roles`**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
 
 ## ansible 执行过程
 
@@ -660,6 +755,8 @@ ansible-doc -s ping
   * 黄色: 执行操作成功, 并且对目标主机进行了变更操作. 如 更改文件内容, 重启服务,  删除文件等.
 
   * 红色: 执行操作失败.
+
+
 
 
 
