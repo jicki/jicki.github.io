@@ -758,11 +758,11 @@ ansible-doc -s ping
 {{< figure src="/img/posts/ansible/playbooks.jpg" >}}
 
 
-
-
-
-
 ---
+
+
+#### playbook 与 YAML 描述
+
 
 * `playbook` 由一个或多个 `play` 组成.
 
@@ -770,16 +770,78 @@ ansible-doc -s ping
 
 * `playbook` 以 `YAML` 语法编写.
 
-  * `YAML` 约定以 `---` 开头.
+  * `YAML` 约定以 `---` 开头 和 开始不同的 `play` .
 
   * `YAML` 以 `#` 作为注释.
 
+  * `YAML` 必须统一缩进, 空格 与 `tab` 不能混用, 缩进的级别也必须相同, 同级缩进代表同样的级别.
+
+  * `YAML` 文件内容 是大小写敏感的, 跟 Linux 一样区分大小写.
+
+  * `YAML`  key/value 形式可写在同一行也可以换行写. 同行使用 `:` 隔开.
+
+  * `YAML`  一个完整的代码块功能最少包含2个元素. 如 name: task
+
+  * `YAML`  一个 name 下只能包含一个 task
+
+  * `YAML`  `-` 开头的为列表, `key/value` 形式的为字典.
+
+  * `YAML` 特性
+    * 可读性好
+    * 和脚本语言交互性好
+    * 使用实现语言的数据类型
+    * 一致性的信息模型
+    * 易于实现
+    * 基于流处理
+    * 表达能力好, 扩展性强
+  
 
 
-* `ansible-playbook [options] playbook.yml [playbook 2  ...]`
+---
+
+#### playbook 核心元素
 
 
-* Example 
+* `hosts` : 远程主机列表 ( ip / 主机名 / 组名 )
+
+* `tasks` : 任务集, 任务列表, 有两种写法
+
+  * `action: module args` : action: 模块名 参数
+
+  * `module: args` : 模块名: 参数 (一般使用这种)
+
+  * `ignore_errors: True` 当前 task 出错时仍然会向下执行
+
+* `varniables` : 内置变量或自定义变量在 `playbook` 文件中调用
+
+* `templates` : 模板, 可替换模板文件中的变量并实现一些简单逻辑的文件
+
+* `handles` : 与 `notity` 结合使用, 由特定条件触发的操作, 满足条件才执行, 否则不执行
+
+* `tags` : 标签 指定任务执行, 用于执行一个 `playbook` 中的部分代码. 主要用于测试.
+
+---
+
+
+* `ansible-playbook` 命令
+
+  * `-C / --check` : Check 检查脚本运行情况, 不会在远程服务器里运行.
+
+  * `--list-hosts` : 列出运行此 任务 的主机.
+
+  * `--list-tasks` : 列出任务组的具体任务列表.
+
+  * `--limit` : 只对主机列表中的某台主机执行.
+
+  * `-v -vv -vvv` : 显示详细的执行过程, `v` 越多就越详细.
+
+
+---
+
+
+#### Example 1
+
+* 基础的例子 
 
 ```yml
 ---
@@ -791,15 +853,26 @@ ansible-doc -s ping
   # 任务
   tasks:
     # 任务的名称
-    - name: hostname
+    - name: ping server
+      ping:
+    - name: echo hostname
       # shell 为模块名, 后面等同于 -a '' 参数
       shell: hostname
+    - name: touch file
+      file: name=/tmp/file.txt state=touch
+    - name: echo file
+      shell: ls -l /tmp/file.txt
 ```
 
+---
 
 * `ansible-playbook hello.yml` 运行 `playbook`
 
   * 输出如下:
+
+    * `ok` : ok 表示没有任何更改, 绿色
+
+    * `changed` : changed 表示有修改, 黄色
 
 ```shell
 PLAY [all] **********************************************************
@@ -807,13 +880,118 @@ PLAY [all] **********************************************************
 TASK [Gathering Facts] **********************************************
 ok: [10.0.3.13]
 
-TASK [hostname] *****************************************************
+TASK [ping server] **************************************************
+ok: [10.0.3.13]
+
+TASK [echo hostname] ************************************************
 changed: [10.0.3.13]
 
+TASK [touch file] ***************************************************
+changed: [10.0.3.13]
+
+TASK [echo file] ****************************************************
+changed: [10.0.3.13]
+
+
 PLAY RECAP **********************************************************
-10.0.3.13   : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+10.0.3.13   : ok=5    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ```
+
+
+---
+
+#### Example 2
+
+* `handles` 与 `notity` 结合的例子 
+
+
+
+```shell
+
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: install httpd
+      yum: name=httpd
+    - name: copy httpd.conf
+      copy: src=/root/ansible/httpd.conf dest=/etc/httpd/conf/httpd.conf backup=yes
+      # 此任务 如果有变动会触发如下定义名称的触发器
+      notify: restart httpd
+    - name: start httpd
+      service: name=httpd state=started enabled=yes
+
+  # 触发器, 需要配置 notify 触发
+  handlers:
+    - name: restart httpd
+      service: name=httpd state=restarted
+
+```
+
+---
+
+* `ansible-playbook httpd.yml` 
+
+  * 第一次执行输出如下:
+
+```shell
+
+PLAY [all] ********************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************
+ok: [10.0.3.13]
+
+TASK [install httpd] **********************************************************************************************
+changed: [10.0.3.13]
+
+TASK [copy httpd.conf] ********************************************************************************************
+ok: [10.0.3.13]
+
+TASK [start httpd] ************************************************************************************************
+changed: [10.0.3.13]
+
+PLAY RECAP ********************************************************************************************************
+10.0.3.13                  : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+```
+
+---
+
+* 修改 httpd.conf 文件以后
+
+  * 第二次执行输出如下:
+
+```shell
+
+PLAY [all] ********************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************
+ok: [10.0.3.13]
+
+TASK [install httpd] **********************************************************************************************
+ok: [10.0.3.13]
+
+TASK [copy httpd.conf] ********************************************************************************************
+changed: [10.0.3.13]
+
+TASK [start httpd] ************************************************************************************************
+ok: [10.0.3.13]
+
+RUNNING HANDLER [restart httpd] ***********************************************************************************
+changed: [10.0.3.13]
+
+PLAY RECAP ********************************************************************************************************
+10.0.3.13                  : ok=5    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+```
+
+
+
+
+
 
 
 ---
