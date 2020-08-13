@@ -822,8 +822,9 @@ ansible-doc -s ping
 
 ---
 
+#### ansible-playbook 命令
 
-* `ansible-playbook` 命令
+* `ansible-playbook`
 
   * `-C / --check` : Check 检查脚本运行情况, 不会在远程服务器里运行.
 
@@ -873,6 +874,7 @@ ansible-doc -s ping
     * `ok` : ok 表示没有任何更改, 绿色
 
     * `changed` : changed 表示有修改, 黄色
+
 
 ```shell
 PLAY [all] **********************************************************
