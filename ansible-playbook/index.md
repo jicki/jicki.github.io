@@ -1226,7 +1226,29 @@ PLAY RECAP *********************************************************************
     * 元素列表 支持 `字符串` 和 `字典` .
 
 
+* `playbook` 文件
 
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: create some files
+      # {{ item }} 为特殊变量, 代表 with_items 列表中的内容
+      file: name=/tmp/{{ item }} state=touch
+      with_items:
+        - file1
+        - file2
+        - file3
+        - file4
+    - name: install some software
+      yum: name={{ item }}
+      with_items:
+        - htop
+        - sl
+        - hping3
+```
 
 
 
