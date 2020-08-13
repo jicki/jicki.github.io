@@ -701,8 +701,6 @@ ansible-doc -s ping
 
 ---
 
-
-
 #### Group 模块
 
 
@@ -899,6 +897,7 @@ domain_name=jicki.cn
   
   * `ansible-playbook -e varname=valur`
 
+---
   
 * 在 `playbook` 文件里 定义变量.
 
@@ -990,11 +989,245 @@ PLAY RECAP *********************************************************************
 
 ```
 
-
-
+---
 
 
 #### ansible-playbook template
+
+* template 是一个模块,并且只能用于 playbook 下.
+
+
+---
+* `templates` 文件, 可嵌套脚本 ( 利用模板编程语言 Jinja2 编写 )
+
+  * `Jinja2` 语言, 使用字面量.
+  
+    * 字符串: 使用单引号或双引号.
+
+    * 数字: 整数, 浮点数.
+
+    * 列表: [A1, A2, ...]
+
+    * 元组: (B1, B2, ...)
+
+    * 字典: {key1:value1, key2:value2, ...}
+
+    * 布尔值: true/false
+
+    * 算术运算: `+`, `-`, `*`, `/`, `//`, `%`, `**` 
+
+    * 比较操作: `==`, `!=`, `>`, `>=`, `<`, `<=` 
+
+    * 逻辑运算: and, or, not
+
+    * 流表达式: for,  if,  when
+
+
+
+---
+
+* `templates` 根据模板块文件动态生成对应的配置文件
+
+  * `templates` 文件一般约定存放于 templates 目录下, 并且以 `.j2` 为后缀
+
+  * templates 目录需要与 `playbook` 的 `yml` 文件在同级目录中.
+
+
+```shell
+[root@jicki nginx]# tree .
+.
+|-- nginx.yml
+`-- templates
+    `-- nginx.conf.j2
+```
+
+---
+
+
+* 算术运算 例子 
+
+
+
+* nginx.conf.j2 文件
+
+```j2
+user nginx;
+# 这里使用 环境变量 vcpus * 2 
+worker_processes {{ ansible_processor_vcpus * 2 }};
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  _;
+        root         /usr/share/nginx/html;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+}
+
+```
+
+
+---
+
+* nginx.yml `playbook` 文件
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: install nginx
+      yum: name=nginx
+    - name: template conf
+      # 如果 yml 与 templates 目录同级, src 直接写.j2 文件
+      template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+      notify:
+        - restart nginx
+    - name: start nginx
+      service: name=nginx state=started enabled=yes
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+
+```
+
+
+---
+
+* `when` 条件语句 例子
+
+```shell
+[root@jicki nginx]# tree .
+.
+|-- nginx.yml
+`-- templates
+    |-- nginx.conf.centos7.j2
+    `-- nginx.conf.centos8.j2
+```
+
+---
+
+*  `playbook`  文件
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: install nginx
+      yum: name=nginx
+    - name: template centos 7 conf
+      # 如果 yml 与 templates 目录同级, src 直接写.j2 文件
+      template: src=nginx.conf.centos7.j2 dest=/etc/nginx/nginx.conf
+      # 使用 when 语句进行判断 如果变量为 "7" 执行这个
+      when: ansible_distribution_major_version == "7"
+      notify:
+        - restart nginx
+    - name: template centos 8 conf
+      # 如果 yml 与 templates 目录同级, src 直接写.j2 文件
+      template: src=nginx.conf.centos8.j2 dest=/etc/nginx/nginx.conf
+      # 使用 when 语句进行判断 如果变量为 "8" 执行这个
+      when: ansible_distribution_major_version == "8"
+      notify:
+        - restart nginx
+    - name: start nginx
+      service: name=nginx state=started enabled=yes
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+
+```
+
+
+* 执行 playbook 文件
+
+  * `skipping` 状态表示跳过执行这个 TASK .
+
+```shell
+
+[root@jicki nginx]# ansible-playbook nginx.yml
+
+PLAY [all] *******************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************
+ok: [10.0.3.13]
+
+TASK [install nginx] *********************************************************************************
+ok: [10.0.3.13]
+
+TASK [template centos 7 conf] ************************************************************************
+changed: [10.0.3.13]
+
+TASK [template centos 8 conf] ************************************************************************
+skipping: [10.0.3.13]
+
+TASK [start nginx] ***********************************************************************************
+ok: [10.0.3.13]
+
+RUNNING HANDLER [restart nginx] **********************************************************************
+changed: [10.0.3.13]
+
+PLAY RECAP *******************************************************************************************
+10.0.3.13      : ok=5    changed=2    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
+
+```
+
+
+
+---
+
+* 迭代 `with_items` 执行重复任务.
+
+  * 对于迭代选项, 固定变量名为 `item` .
+  * 在 `task` 中使用 `with_items` 指定需要迭代的元素列表.
+    * 元素列表 支持 `字符串` 和 `字典` .
+
+
+
+
 
 
 
@@ -1010,6 +1243,7 @@ PLAY RECAP *********************************************************************
 
 
 ---
+
 
 
 #### Example - tasks
