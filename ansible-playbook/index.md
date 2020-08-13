@@ -855,6 +855,7 @@ ansible-doc -s ping
     * `ansible all -m setup -a 'filter=*addresses*'` , 可使用 filter 参数进行过滤.
 
 ---
+
 * 通过文件自定义变量:
 
   * `/etc/ansible/hosts` 文件中定义
@@ -922,6 +923,85 @@ domain_name=jicki.cn
       yum: name={{ pkg_name }}
 
 ```
+
+
+---
+
+* 通过定义单独的变量文件 用于统一存放变量, 可避免变量的重复定义.
+
+  * 定义单独的 变量文件, 只需要将所有变量以 `key: value` 形式写入到 `yml` 文件中既可.
+
+  * 在 `playbook` 文件中, 只需要使用 `vars_files:` 指定 `yml` 文件路径既可.
+
+
+---
+
+* vars.yml 变量文件
+
+```yml
+---
+pkg_name: httpd
+file_name: jicki.cn
+
+```
+
+
+* install.yml  playbook 文件
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  # 配置模板文件
+  vars_files:
+    # 指定文件的路径
+    - vars.yml
+
+  tasks:
+    - name: install {{ pkg_name }}
+      yum: name={{ pkg_name }}
+    - name: create {{ file_name }} file
+      file: name=/root/{{ file_name }}.txt state=touch
+
+```
+
+
+* 执行 playbook 操作
+
+
+```shell
+
+[root@jicki ansible]# ansible-playbook install.yml
+
+PLAY [all] *******************************************************************************************************
+
+TASK [Gathering Facts] *******************************************************************************************
+ok: [10.0.3.13]
+
+TASK [install httpd] *********************************************************************************************
+changed: [10.0.3.13]
+
+TASK [create jicki.cn file] **************************************************************************************
+changed: [10.0.3.13]
+
+PLAY RECAP *******************************************************************************************************
+10.0.3.13                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+```
+
+
+
+
+
+#### ansible-playbook template
+
+
+
+
+
+
+
 
 
 
