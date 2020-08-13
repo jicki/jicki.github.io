@@ -840,7 +840,7 @@ ansible-doc -s ping
 ---
 
 
-#### Example 1
+#### Example - tasks
 
 * 基础的例子 
 
@@ -903,14 +903,34 @@ PLAY RECAP **********************************************************
 
 ---
 
-#### Example 2
+#### Example - handles
 
 * `handles` 与 `notity` 结合的例子 
 
+  * 同一个`name` 下可以定义多个 `notify` 配置关联到不同的 `handlers` 中.
+
+---
+
+```yml
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: copy httpd.conf
+      copy: src=/root/ansible/httpd.conf dest=/etc/httpd/conf/httpd.conf backup=yes
+      # 关联多个触发器的写法
+      notify:
+        - restart httpd
+        - check status httpd
+        - check network port
+
+```
+---
 
 
-```shell
+* 例子:
 
+```yml
 ---
 - hosts: all
   remote_user: root
@@ -990,6 +1010,62 @@ PLAY RECAP *********************************************************************
 
 ```
 
+
+---
+
+#### Example - tags
+
+* 基于 `tags` 的例子
+
+  * 定义了 `tags` 后可通过定义的 `tags` 单独运行该 `tags`. 运行多个可用 `,` 号隔开.
+
+  * 多个不同的任务 可以定义相同名称的 `tags`. 
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: install httpd
+      yum: name=httpd
+    - name: copy httpd.conf
+      copy: src=/root/ansible/httpd.conf dest=/etc/httpd/conf/httpd.conf backup=yes
+      # 此任务 如果有变动会触发如下定义名称的触发器
+      notify:
+        - restart httpd
+      # 定义标签
+      tags: cpconf
+    - name: start httpd
+      service: name=httpd state=started enabled=yes
+      # 定义标签
+      tags: sthttpd
+
+  # 触发器, 需要配置 notify 触发
+  handlers:
+    - name: restart httpd
+      service: name=httpd state=restarted
+```
+
+---
+
+* 执行命令 `-t` 指定标签
+
+```shell
+[root@jicki ansible]# ansible-playbook -t sthttpd httpd.yml
+
+PLAY [all] ********************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************
+ok: [10.0.3.13]
+
+TASK [start httpd] ************************************************************************************************
+changed: [10.0.3.13]
+
+PLAY RECAP ********************************************************************************************************
+10.0.3.13                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+```
 
 
 
