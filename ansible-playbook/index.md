@@ -836,6 +836,97 @@ ansible-doc -s ping
 
   * `-v -vv -vvv` : 显示详细的执行过程, `v` 越多就越详细.
 
+---
+
+
+#### ansible-playbook 变量
+
+* 变量名要求: 只允许使用 `字母` 、`数字` 、 `_` 组成, 而且只能以 `字母`开头.
+
+
+---
+
+
+* 内置的公共变量: 
+
+
+  * 使用 `ansible all -m setup` 可以获取到主机的系统变量名称.
+
+    * `ansible all -m setup -a 'filter=*addresses*'` , 可使用 filter 参数进行过滤.
+
+---
+* 通过文件自定义变量:
+
+  * `/etc/ansible/hosts` 文件中定义
+
+    * 对主机组中的主机单独定义变量, 优先级高于公共变量.
+
+    * 对主机组中的所有主机定义统一变量, 优先级低于对单独主机定义的变量.
+
+
+```ini
+
+[appserver]
+# 对单独主机 定义变量 node_id
+10.0.3.13 node_id=13
+
+# 对主机组 定义统一变量 domain_name
+[appserver:vars]
+domain_name=jicki.cn
+
+
+```
+
+* 使用变量 就可以灵活配置不同主机的 `hostname`
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: set hostname
+      hostname: name={{ node_id }}.{{ domain_name }}
+
+```
+
+
+
+---
+
+* 通过命令行定义变量:
+  
+  * `ansible-playbook -e varname=valur`
+
+  * 在 `playbook` 文件里 定义变量.
+
+    * 通过 `{{ 变量名 }}` 使用变量.
+
+    * 通过 `vars:` 列表 定义多个 变量. 
+
+
+```yml
+
+---
+- hosts: all
+  remote_user: root
+
+  # 定义变量
+  vars:
+    - pkg_name: httpd 
+
+  tasks:
+    - name: install {{ pkg_name }}
+      # 使用变量
+      yum: name={{ pkg_name }}
+
+```
+
+
+
+
+
+
 
 ---
 
