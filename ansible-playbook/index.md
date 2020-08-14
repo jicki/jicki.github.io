@@ -998,7 +998,6 @@ PLAY RECAP *********************************************************************
 
 * template 是一个模块,并且只能用于 playbook 下.
 
-
 ---
 * `templates` 文件, 可嵌套脚本 ( 利用模板编程语言 Jinja2 编写 )
 
@@ -1046,7 +1045,7 @@ PLAY RECAP *********************************************************************
 ---
 
 
-* 算术运算 例子 
+> 算术运算 
 
 
 
@@ -1137,6 +1136,8 @@ http {
 
 ---
 
+> when 条件语句
+
 * `when` 条件语句 例子
 
 ```shell
@@ -1221,6 +1222,8 @@ PLAY RECAP *********************************************************************
 
 ---
 
+> 迭代变量 `with_tiems`
+
 * 迭代 `with_items` 执行重复任务.
 
   * 对于迭代选项, 固定变量名为 `item` .
@@ -1255,6 +1258,8 @@ PLAY RECAP *********************************************************************
 
 ---
 
+
+> 代嵌套子变量 (字典)
 
 * 迭代嵌套子变量.
 
@@ -1348,18 +1353,77 @@ PLAY RECAP *********************************************************************
 
 ```
 
+---
+
+---
+
+
+> 流程控制、循环 for 与 if
 
 
 
+* for 循环
+
+  * `{% for 语句块 %} ...  {% endfor %}`
+
+---
+
+* ansible-playbook 文件
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  vars:
+    listen_port:
+      - 80
+      - 81
+      - 82
+
+  tasks:
+    - name: copy template conf
+      template: src=for.conf.j2 dest=/root/for.conf
+```
 
 
+* for.conf.j2 文件
+
+  * `{% for port in listen_port %}` 语句 `listen_port` 为 playbook 中定义的 `vars` .
+
+```conf
+{% for port in listen_port %}
+
+server {
+   listen {{ port }}
+}
+
+{% endfor %}
+
+```
 
 
+* 查看最终生成 for.conf 文件
 
 
+```shell
+[root@jicki ~]# cat /root/for.conf
+
+server {
+   listen 80
+}
 
 
+server {
+   listen 81
+}
 
+
+server {
+   listen 82
+}
+
+```
 
 
 
@@ -1367,6 +1431,35 @@ PLAY RECAP *********************************************************************
 
 
 ---
+
+* if 流程控制
+
+  * `{% if 语句块 %} ... {% endif %}`  
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

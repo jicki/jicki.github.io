@@ -28,6 +28,8 @@
 
 ### 一、 序
 
+> **Regain Extended Dream**
+
 > **Your future depends on your dreams**
 
 > **不要活在别人的眼里，不要活在别人的嘴里**
