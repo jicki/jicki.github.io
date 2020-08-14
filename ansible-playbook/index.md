@@ -1964,7 +1964,7 @@ root@all (1)[f:5]$
     `-- nginx
 ```
 
-
+---
 
 > roles 目录结构
 
@@ -1973,6 +1973,7 @@ root@all (1)[f:5]$
 * 目录结构说明
 
   * `roles`: - 所有的角色必须放在roles目录下, 这个目录可以自定义位置. 默认的位置在 `/etc/ansible/roles`
+    * `playbook.yml`: - 剧本文件.
     * `project`: - 具体的角色项目名称, 比如 nginx、tomcat、php .
       * `files`: - 用于存放由`copy` 或`script` 模块调用的文件.
       * `templates`: - 用于存放 `Jinja2` 模板,  `template` 模块会自动在此目录中寻找 `Jinja2` 模板文件.
@@ -1981,6 +1982,28 @@ root@all (1)[f:5]$
       * `vars`: - 此目录应当包含一个`main.yml`文件, 用于定义此角色用到的变量.
       * `defaults`: - 目录应当包含一个`main.yml`文件, 用于为当前角色设定默认变量.
       * `meta`: - 此目录应当包含一个`main.yml`文件, 用于定义此角色的特殊设定及其依赖关系.
+
+
+---
+
+
+* roles - nginx
+
+
+```shell
+[root@jicki roles]# tree .
+.
+`-- nginx
+    |-- defaults
+    |-- files
+    |-- handlers
+    |-- meta
+    |-- tasks
+    |-- templates
+    `-- vars
+``` 
+
+
 
 
 
