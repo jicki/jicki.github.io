@@ -189,6 +189,54 @@ pipeline {
 ```
 
 
+* `script` 与 `sh` 间 
+
+```shell
+pipeline {
+   agent none
+   environment {
+       FOO = "bar"
+   }
+   stages {
+       stage('Stage1') {
+           agent { label "jnlp-dev-android" }
+           steps {
+               script {
+                   echo "这是 jnlp-dev-android 第一个被执行 开始."
+                   withEnv(["FOO=newbar"]) {
+                       echo "FOO = ${env.FOO}"
+                   }
+                   echo "这是 jnlp-dev-android 第一个被执行 结束."
+               }
+           }
+       }
+       stage('Stage2') {
+            agent { label "jnlp-test-java" }
+            steps {
+                script {
+                    env.FOOOO = "test3"
+                    echo "在 agent jnlp-test-java 第二个被执行 开始."
+                    echo "FOO = ${env.FOO}"
+                    echo "在 agent jnlp-test-java 第二个被执行 结束."
+                }
+             
+            }
+        }
+       stage('Stage3') {
+            agent { label "jnlp-test-java" }
+            steps {
+                 sh '''
+                    echo $FOOOO
+                '''
+            }
+        }
+   }
+}
+```
+
+
+
+
 ### stage 中修改 全局环境变量
 
 * 修改后只作用于 stages 这一阶段

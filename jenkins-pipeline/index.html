@@ -1,7 +1,7 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Jenkins Pipeline 语法 - 小炒肉</title><meta name=Description content="Jenkins Pipeline 语法"><meta property="og:title" content="Jenkins Pipeline 语法"><meta property="og:description" content="Jenkins Pipeline 语法"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/jenkins-pipeline/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-01-01T00:00:00+00:00"><meta property="article:modified_time" content="2020-01-01T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Jenkins Pipeline 语法"><meta name=twitter:description content="Jenkins Pipeline 语法"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/jenkins-pipeline/><link rel=prev href=https://jicki.cn/what-is-a-fulfilling-life/><link rel=next href=https://jicki.cn/etcd-working-principle/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Jenkins Pipeline 语法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/jenkins-pipeline\/"},"genre":"posts","keywords":"jenkins, docker","wordcount":1192,"url":"https:\/\/jicki.cn\/jenkins-pipeline\/","datePublished":"2020-01-01T00:00:00+00:00","dateModified":"2020-01-01T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Jenkins Pipeline 语法"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Jenkins Pipeline 语法 - 小炒肉</title><meta name=Description content="Jenkins Pipeline 语法"><meta property="og:title" content="Jenkins Pipeline 语法"><meta property="og:description" content="Jenkins Pipeline 语法"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/jenkins-pipeline/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-01-01T00:00:00+00:00"><meta property="article:modified_time" content="2020-01-01T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Jenkins Pipeline 语法"><meta name=twitter:description content="Jenkins Pipeline 语法"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/jenkins-pipeline/><link rel=prev href=https://jicki.cn/what-is-a-fulfilling-life/><link rel=next href=https://jicki.cn/etcd-working-principle/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Jenkins Pipeline 语法","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/jenkins-pipeline\/"},"genre":"posts","keywords":"jenkins, docker","wordcount":1400,"url":"https:\/\/jicki.cn\/jenkins-pipeline\/","datePublished":"2020-01-01T00:00:00+00:00","dateModified":"2020-01-01T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Jenkins Pipeline 语法"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Jenkins Pipeline 语法</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/docker/><i class="far fa-folder fa-fw"></i>docker</a>&nbsp;<a href=/categories/jenkins/><i class="far fa-folder fa-fw"></i>jenkins</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-01-01>2020-01-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1192 字&nbsp;
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Jenkins Pipeline 语法</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/docker/><i class="far fa-folder fa-fw"></i>docker</a>&nbsp;<a href=/categories/jenkins/><i class="far fa-folder fa-fw"></i>jenkins</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-01-01>2020-01-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1400 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;<span id=/jenkins-pipeline/ class=leancloud_visitors data-flag-title="Jenkins Pipeline 语法">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
@@ -237,6 +237,86 @@ ehco &#34;${params.Greeting} World!&#34;
    }
 }
 
+</code></pre></td></tr></table></div></div><ul><li><code>script</code> 与 <code>sh</code> 间</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>pipeline <span class=o>{</span>
+   agent none
+   environment <span class=o>{</span>
+       <span class=nv>FOO</span> <span class=o>=</span> <span class=s2>&#34;bar&#34;</span>
+   <span class=o>}</span>
+   stages <span class=o>{</span>
+       stage<span class=o>(</span><span class=s1>&#39;Stage1&#39;</span><span class=o>)</span> <span class=o>{</span>
+           agent <span class=o>{</span> label <span class=s2>&#34;jnlp-dev-android&#34;</span> <span class=o>}</span>
+           steps <span class=o>{</span>
+               script <span class=o>{</span>
+                   <span class=nb>echo</span> <span class=s2>&#34;这是 jnlp-dev-android 第一个被执行 开始.&#34;</span>
+                   withEnv<span class=o>([</span><span class=s2>&#34;FOO=newbar&#34;</span><span class=o>])</span> <span class=o>{</span>
+                       <span class=nb>echo</span> <span class=s2>&#34;FOO = </span><span class=si>${</span><span class=nv>env</span><span class=p>.FOO</span><span class=si>}</span><span class=s2>&#34;</span>
+                   <span class=o>}</span>
+                   <span class=nb>echo</span> <span class=s2>&#34;这是 jnlp-dev-android 第一个被执行 结束.&#34;</span>
+               <span class=o>}</span>
+           <span class=o>}</span>
+       <span class=o>}</span>
+       stage<span class=o>(</span><span class=s1>&#39;Stage2&#39;</span><span class=o>)</span> <span class=o>{</span>
+            agent <span class=o>{</span> label <span class=s2>&#34;jnlp-test-java&#34;</span> <span class=o>}</span>
+            steps <span class=o>{</span>
+                script <span class=o>{</span>
+                    env.FOOOO <span class=o>=</span> <span class=s2>&#34;test3&#34;</span>
+                    <span class=nb>echo</span> <span class=s2>&#34;在 agent jnlp-test-java 第二个被执行 开始.&#34;</span>
+                    <span class=nb>echo</span> <span class=s2>&#34;FOO = </span><span class=si>${</span><span class=nv>env</span><span class=p>.FOO</span><span class=si>}</span><span class=s2>&#34;</span>
+                    <span class=nb>echo</span> <span class=s2>&#34;在 agent jnlp-test-java 第二个被执行 结束.&#34;</span>
+                <span class=o>}</span>
+             
+            <span class=o>}</span>
+        <span class=o>}</span>
+       stage<span class=o>(</span><span class=s1>&#39;Stage3&#39;</span><span class=o>)</span> <span class=o>{</span>
+            agent <span class=o>{</span> label <span class=s2>&#34;jnlp-test-java&#34;</span> <span class=o>}</span>
+            steps <span class=o>{</span>
+                 sh <span class=s1>&#39;&#39;&#39;
+</span><span class=s1>                    echo $FOOOO
+</span><span class=s1>                &#39;&#39;&#39;</span>
+            <span class=o>}</span>
+        <span class=o>}</span>
+   <span class=o>}</span>
+<span class=o>}</span>
 </code></pre></td></tr></table></div></div><h3 id=stage-中修改-全局环境变量>stage 中修改 全局环境变量</h3><ul><li>修改后只作用于 stages 这一阶段</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
