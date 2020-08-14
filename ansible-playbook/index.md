@@ -542,19 +542,21 @@ ansible-doc -s ping
 
 * `file` 模块: 操作远程主机的文件. 如: 创建文件 `touch`、 删除文件 `absent` 等 
 
-  * `ansible all -m file -a 'name=/root/1.txt owner=jicki group=jicki mode=0755'`
+  * `ansible all -m file -a 'name=/root/1.txt owner=jicki group=jicki mode=0755 recurse=yes'`
 
     * `mode`: 修改权限
 
     * `owner`: 修改用户
 
-    * `group`: 修改用户组  
+    * `group`: 修改用户组
+
+    * `recurse=yes`: 递归, 指对目录递归授权.
 
   * `ansible all -m file -a 'name=/root/1.txt state=touch'` 
 
     * `dest`、`name`、`path`: 指定远程主机的文件路径.
 
-    * `state`: 文件操作类型.
+    * `state`: 文件操作类型. ( 默认为 `absent` )
 
       * `touch`: 创建空文件.
       * `directory`: 创建文件夹.
@@ -1249,6 +1251,106 @@ PLAY RECAP *********************************************************************
         - sl
         - hping3
 ```
+
+
+---
+
+
+* 迭代嵌套子变量.
+
+  * 对迭代中的变量进行嵌套关联的操作.
+ 
+
+* `playbook` 文件
+
+
+```yml
+
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: create some files
+      # {{ item }} 为特殊变量, 代表 with_itmes 列表中的内容
+      file: name=/tmp/{{ item }} state=touch
+      with_items:
+        - file1
+        - file2
+        - file3
+        - file4
+
+    - name: create some group
+      group: name={{ item }}
+      with_items:
+        - j1
+        - j2
+        - j3
+        - j4
+
+    - name: create some user
+      # 使用 item.key值 进行引用
+      user: name={{ item.name }} group={{ item.group }}
+      # 使用 字典 定义 嵌套的子 变量
+      with_items:
+        - { name: 'file1', group: 'j1' }
+        - { name: 'file2', group: 'j2' }
+        - { name: 'file3', group: 'j3' }
+        - { name: 'file4', group: 'j4' }
+
+    - name: permission some files
+      file: name=/tmp/{{ item.name }} owner={{ item.name }} group={{ item.group }}
+      with_items:
+        - { file: 'file1', name: 'file1', group: 'j1' }
+        - { file: 'file2', name: 'file2', group: 'j2' }
+        - { file: 'file3', name: 'file3', group: 'j3' }
+        - { file: 'file4', name: 'file4', group: 'j4' }
+
+
+```
+
+* 执行 `playbook` 文件
+
+```shell
+[root@jicki ansible]# ansible-playbook file.yml
+
+PLAY [all] *****************************************************************************************
+
+TASK [Gathering Facts] *****************************************************************************
+ok: [10.0.3.13]
+
+TASK [create some files] ***************************************************************************
+changed: [10.0.3.13] => (item=file1)
+changed: [10.0.3.13] => (item=file2)
+changed: [10.0.3.13] => (item=file3)
+changed: [10.0.3.13] => (item=file4)
+
+TASK [create some group] ***************************************************************************
+changed: [10.0.3.13] => (item=j1)
+changed: [10.0.3.13] => (item=j2)
+changed: [10.0.3.13] => (item=j3)
+changed: [10.0.3.13] => (item=j4)
+
+TASK [create some user] ****************************************************************************
+changed: [10.0.3.13] => (item={u'group': u'j1', u'name': u'file1'})
+changed: [10.0.3.13] => (item={u'group': u'j2', u'name': u'file2'})
+changed: [10.0.3.13] => (item={u'group': u'j3', u'name': u'file3'})
+changed: [10.0.3.13] => (item={u'group': u'j4', u'name': u'file4'})
+
+TASK [permission some files] ***********************************************************************
+changed: [10.0.3.13] => (item={u'group': u'j1', u'name': u'file1', u'file': u'file1'})
+changed: [10.0.3.13] => (item={u'group': u'j2', u'name': u'file2', u'file': u'file2'})
+changed: [10.0.3.13] => (item={u'group': u'j3', u'name': u'file3', u'file': u'file3'})
+changed: [10.0.3.13] => (item={u'group': u'j4', u'name': u'file4', u'file': u'file4'})
+
+PLAY RECAP *****************************************************************************************
+10.0.3.13    : ok=5    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+```
+
+
+
+
 
 
 
