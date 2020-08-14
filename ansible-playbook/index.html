@@ -1,11 +1,11 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Ansible 从入门到放弃 - 小炒肉</title><meta name=Description content="Ansible 从入门到放弃"><meta property="og:title" content="Ansible 从入门到放弃"><meta property="og:description" content="Ansible 从入门到放弃"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/ansible-playbook/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-10T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-10T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Ansible 从入门到放弃"><meta name=twitter:description content="Ansible 从入门到放弃"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/ansible-playbook/><link rel=prev href=https://jicki.cn/gitops-kubernetes/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible 从入门到放弃","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/ansible-playbook\/"},"genre":"posts","keywords":"linux, ansible","wordcount":7774,"url":"https:\/\/jicki.cn\/ansible-playbook\/","datePublished":"2020-08-10T00:00:00+00:00","dateModified":"2020-08-10T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Ansible 从入门到放弃"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Ansible 从入门到放弃 - 小炒肉</title><meta name=Description content="Ansible 从入门到放弃"><meta property="og:title" content="Ansible 从入门到放弃"><meta property="og:description" content="Ansible 从入门到放弃"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/ansible-playbook/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-10T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-10T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Ansible 从入门到放弃"><meta name=twitter:description content="Ansible 从入门到放弃"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/ansible-playbook/><link rel=prev href=https://jicki.cn/gitops-kubernetes/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Ansible 从入门到放弃","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/ansible-playbook\/"},"genre":"posts","keywords":"linux, ansible","wordcount":8864,"url":"https:\/\/jicki.cn\/ansible-playbook\/","datePublished":"2020-08-10T00:00:00+00:00","dateModified":"2020-08-10T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Ansible 从入门到放弃"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Ansible 从入门到放弃</h1><h2 class=single-subtitle>Ansible 从入门到放弃</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/linux/><i class="far fa-folder fa-fw"></i>linux</a>&nbsp;<a href=/categories/ansible/><i class="far fa-folder fa-fw"></i>ansible</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-10>2020-08-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7774 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 16 分钟&nbsp;<span id=/ansible-playbook/ class=leancloud_visitors data-flag-title="Ansible 从入门到放弃">
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Ansible 从入门到放弃</h1><h2 class=single-subtitle>Ansible 从入门到放弃</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/linux/><i class="far fa-folder fa-fw"></i>linux</a>&nbsp;<a href=/categories/ansible/><i class="far fa-folder fa-fw"></i>ansible</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-10>2020-08-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8864 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 18 分钟&nbsp;<span id=/ansible-playbook/ class=leancloud_visitors data-flag-title="Ansible 从入门到放弃">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#ansible-简介>ansible 简介</a></li><li><a href=#ansible-架构>ansible 架构</a></li><li><a href=#ansible-安装>ansible 安装</a></li><li><a href=#etcansiblehosts>/etc/ansible/hosts</a></li><li><a href=#etcansibleansiblecfg>/etc/ansible/ansible.cfg</a></li><li><a href=#ansible-相关操作>ansible 相关操作</a><ul><li><a href=#ansible-执行过程>ansible 执行过程</a></li><li><a href=#ansible-doc>ansible-doc</a></li><li><a href=#ansible-1>ansible</a></li><li><a href=#ansible-常用模块>ansible 常用模块</a><ul><li><a href=#command-模块>Command 模块</a></li><li><a href=#shell-模块>shell 模块</a></li><li><a href=#script-模块>Script 模块</a></li><li><a href=#copy-模块>Copy 模块</a></li><li><a href=#fetch-模块>Fetch 模块</a></li><li><a href=#file-模块>File 模块</a></li><li><a href=#cron-模块>Cron 模块</a></li><li><a href=#yum-模块>Yum 模块</a></li><li><a href=#service-模块>Service 模块</a></li><li><a href=#user-模块>User 模块</a></li><li><a href=#group-模块>Group 模块</a></li></ul></li><li><a href=#ansible-galaxy>ansible-galaxy</a></li><li><a href=#ansible-playbook>ansible playbook</a><ul><li><a href=#playbook-与-yaml-描述>playbook 与 YAML 描述</a></li><li><a href=#playbook-核心元素>playbook 核心元素</a></li><li><a href=#ansible-playbook-命令>ansible-playbook 命令</a></li><li><a href=#ansible-playbook-变量>ansible-playbook 变量</a></li><li><a href=#ansible-playbook-template>ansible-playbook template</a></li><li><a href=#example---tasks>Example - tasks</a></li><li><a href=#example---handles>Example - handles</a></li><li><a href=#example---tags>Example - tags</a></li></ul></li><li><a href=#ansible-vault>ansible-vault</a></li><li><a href=#ansible-console>ansible-console</a></li></ul></li></ul></nav></div></div><div class=content id=content><figure><img src=/img/posts/ansible/ansible.png></figure><h1 id=前言>前言</h1><p><strong>运维自动化的发展历程以及技术应用</strong></p><ol><li>本地部署 <code>On-Premises</code> 如下都需要自己 <code>部署/配置</code> 以及维护。</li></ol><ul><li><code>Application</code></li><li><code>Data</code></li><li><code>Runtime</code></li><li><code>Middleware</code></li><li><code>OS</code></li><li><code>Virtualization</code></li><li><code>Servers</code></li><li><code>Storage</code></li><li><code>NetWorking</code></li></ul><ol start=2><li>基础设施既服务 ( 如 阿里云 ) <code>IaaS</code> - <code>Infrastructure as a Service</code> 如下需要自己 <code>部署/配置</code> 以及维护。</li></ol><ul><li><code>Application</code></li><li><code>Data</code></li><li><code>Runtime</code></li><li><code>Middleware</code></li><li><code>OS</code></li></ul><ol start=3><li>平台既服务 ( 如 阿里云- ACK 容器服务 ) <code>PaaS</code> - <code>Platform as a Service</code> 如下需要自己 <code>部署/配置</code> 以及维护。</li></ol><ul><li><code>Application</code></li><li><code>Data</code></li></ul><ol start=4><li>软件既服务 ( 如 各类软件 微信、钉钉、邮箱 ) <code>SaaS</code> - <code>Software as a Service</code> 所有的服务软件都不需要自己维护, 直接使用既可。</li></ol><h1 id=ansible>ansible</h1><h2 id=ansible-简介>ansible 简介</h2><blockquote><p>ansible 是基于 <code>python2-paramiko</code> 模块开发的自动化运维工具。 实现了批量系统配置, 批量程序部署, 批量运行命令等功能。<code>ansible</code> 是基于模块工作的, 本身没有批量部署的能力。真正具有批量部署的是 <code>ansible</code> 所运行的模块, <code>ansible</code> 只是提供了一种框架。</p></blockquote><p><strong>ansible 集合了众多运维工具（ pupet、cfengine、chef、func、fabric、saltstack ）的优点</strong></p><ul><li><p>ansible 发展史</p><ul><li><p>ansible 作者是 <code>Michael DeHaan</code> 同时他也是 <code>Cobbler 与 Func</code> 作者。</p></li><li><p>2012-03-09 发布 0.0.1 版本。</p></li><li><p>2015-10-17 被 <code>Red Hat</code> 收购。</p></li></ul></li><li><p>ansible 特性</p><ul><li><p>基于 Python 开发</p></li><li><p>模块化: 调用特定的模块(如: Paramiko、PyYAML、jinja2 等), 完成特定的任务。</p></li><li><p>支持自定义模块</p></li><li><p>部署简单, 基于<code>Linux</code>内置的 <code>Python</code> 、<code>Open-SSH</code> 和另一个 <code>agentless</code> 组件.</p></li><li><p>支持 <code>PlayBook</code> 编排任务</p></li><li><p>幂等性: 任务重复执行等于只执行一次, 不会重复执行多次相同命令。</p></li><li><p>无需代理不依赖PKI.</p></li><li><p>支持多语言模块编写.</p></li><li><p><code>YAML</code>格式编排任务,支持丰富的数据结构.</p></li></ul></li></ul><h2 id=ansible-架构>ansible 架构</h2><figure><img src=/img/posts/ansible/ansible-jg.png></figure><figure><img src=/img/posts/ansible/ansible-yl.png></figure><ul><li><p><code>ansible</code> 主要组成部分:</p><ul><li><p><code>ansible playbooks</code>: 任务剧本(任务集), 通过编排定义<code>ansible</code>任务集合的配置文件, 由<code>ansible</code> 顺序依次执行, 文件通常是 <code>JSON</code>格式的<code>YML</code>文件。</p></li><li><p><code>Roles</code>: 角色, 多个 <code>ansilbe playbooks</code> 的集合.</p></li><li><p><code>Inventory</code>: <code>ansible</code> 管理主机的清单 默认为 <code>/etc/ansible/hosts</code> 文件。</p></li><li><p><code>Modules</code>: <code>ansible</code> 执行命令的功能模块, 一般为<code>ansible</code>内置核心模块, 也可以自定义第三方模块.</p></li><li><p><code>plugins</code>: <code>ansible</code> 功能插件, 是功能模块的补充. 如: 连接类型插件、循环插件、变量插件、过滤插件等等.</p></li><li><p><code>Api</code>: 提供第三方程序调用的开放接口.</p></li><li><p><code>ansible</code>: <code>ansible</code> 的客户端命令工具. 执行 <code>ansible</code> 命令的主要程序.</p><ul><li><p><code>Ad-Hoc</code> 用户执行单条或多条的 <code>ansible</code> 命令.</p></li><li><p><code>ansible playbook</code> 通过编写编排文件 <code>ansible</code> 执行命令集合.</p><ul><li><code>ansible playbook</code> 执行过程 -> 将编排好的任务写入 <code>ansible-playbook</code> 编排文件中 -> 通过 <code>ansible-playbook</code> 命令拆分任务集合, 然后按照预定的顺序逐条执行<code>ansible</code> 命令.</li></ul></li></ul></li></ul></li></ul><h2 id=ansible-安装>ansible 安装</h2><ul><li><p><code>ansible</code> 安装很简单, 也有很多种方式.</p><ul><li><p>安装 <code>epel</code> 源以后 执行 <code>yum -y install ansible</code></p></li><li><p>使用 源码包 进行 安装</p></li><li><p>通过 <code>git clone https://github.com/ansible/ansible</code> 以后进行安装</p></li><li><p>使用 pip 命令安装</p></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#ansible-简介>ansible 简介</a></li><li><a href=#ansible-架构>ansible 架构</a></li><li><a href=#ansible-安装>ansible 安装</a></li><li><a href=#etcansiblehosts>/etc/ansible/hosts</a></li><li><a href=#etcansibleansiblecfg>/etc/ansible/ansible.cfg</a></li><li><a href=#ansible-相关操作>ansible 相关操作</a><ul><li><a href=#ansible-执行过程>ansible 执行过程</a></li><li><a href=#ansible-doc>ansible-doc</a></li><li><a href=#ansible-1>ansible</a></li><li><a href=#ansible-常用模块>ansible 常用模块</a><ul><li><a href=#command-模块>Command 模块</a></li><li><a href=#shell-模块>shell 模块</a></li><li><a href=#script-模块>Script 模块</a></li><li><a href=#copy-模块>Copy 模块</a></li><li><a href=#fetch-模块>Fetch 模块</a></li><li><a href=#file-模块>File 模块</a></li><li><a href=#cron-模块>Cron 模块</a></li><li><a href=#yum-模块>Yum 模块</a></li><li><a href=#service-模块>Service 模块</a></li><li><a href=#user-模块>User 模块</a></li><li><a href=#group-模块>Group 模块</a></li></ul></li><li><a href=#ansible-galaxy>ansible-galaxy</a></li><li><a href=#ansible-playbook>ansible playbook</a><ul><li><a href=#playbook-与-yaml-描述>playbook 与 YAML 描述</a></li><li><a href=#playbook-核心元素>playbook 核心元素</a></li><li><a href=#ansible-playbook-命令>ansible-playbook 命令</a></li><li><a href=#ansible-playbook-变量>ansible-playbook 变量</a></li><li><a href=#ansible-playbook-template>ansible-playbook template</a></li><li><a href=#example---tasks>Example - tasks</a></li><li><a href=#example---handles>Example - handles</a></li><li><a href=#example---tags>Example - tags</a></li></ul></li><li><a href=#ansible-vault>ansible-vault</a></li><li><a href=#ansible-console>ansible-console</a></li><li><a href=#ansible-roles>ansible Roles</a></li></ul></li></ul></nav></div></div><div class=content id=content><figure><img src=/img/posts/ansible/ansible.png></figure><h1 id=前言>前言</h1><p><strong>运维自动化的发展历程以及技术应用</strong></p><ol><li>本地部署 <code>On-Premises</code> 如下都需要自己 <code>部署/配置</code> 以及维护。</li></ol><ul><li><code>Application</code></li><li><code>Data</code></li><li><code>Runtime</code></li><li><code>Middleware</code></li><li><code>OS</code></li><li><code>Virtualization</code></li><li><code>Servers</code></li><li><code>Storage</code></li><li><code>NetWorking</code></li></ul><ol start=2><li>基础设施既服务 ( 如 阿里云 ) <code>IaaS</code> - <code>Infrastructure as a Service</code> 如下需要自己 <code>部署/配置</code> 以及维护。</li></ol><ul><li><code>Application</code></li><li><code>Data</code></li><li><code>Runtime</code></li><li><code>Middleware</code></li><li><code>OS</code></li></ul><ol start=3><li>平台既服务 ( 如 阿里云- ACK 容器服务 ) <code>PaaS</code> - <code>Platform as a Service</code> 如下需要自己 <code>部署/配置</code> 以及维护。</li></ol><ul><li><code>Application</code></li><li><code>Data</code></li></ul><ol start=4><li>软件既服务 ( 如 各类软件 微信、钉钉、邮箱 ) <code>SaaS</code> - <code>Software as a Service</code> 所有的服务软件都不需要自己维护, 直接使用既可。</li></ol><h1 id=ansible>ansible</h1><h2 id=ansible-简介>ansible 简介</h2><blockquote><p>ansible 是基于 <code>python2-paramiko</code> 模块开发的自动化运维工具。 实现了批量系统配置, 批量程序部署, 批量运行命令等功能。<code>ansible</code> 是基于模块工作的, 本身没有批量部署的能力。真正具有批量部署的是 <code>ansible</code> 所运行的模块, <code>ansible</code> 只是提供了一种框架。</p></blockquote><p><strong>ansible 集合了众多运维工具（ pupet、cfengine、chef、func、fabric、saltstack ）的优点</strong></p><ul><li><p>ansible 发展史</p><ul><li><p>ansible 作者是 <code>Michael DeHaan</code> 同时他也是 <code>Cobbler 与 Func</code> 作者。</p></li><li><p>2012-03-09 发布 0.0.1 版本。</p></li><li><p>2015-10-17 被 <code>Red Hat</code> 收购。</p></li></ul></li><li><p>ansible 特性</p><ul><li><p>基于 Python 开发</p></li><li><p>模块化: 调用特定的模块(如: Paramiko、PyYAML、jinja2 等), 完成特定的任务。</p></li><li><p>支持自定义模块</p></li><li><p>部署简单, 基于<code>Linux</code>内置的 <code>Python</code> 、<code>Open-SSH</code> 和另一个 <code>agentless</code> 组件.</p></li><li><p>支持 <code>PlayBook</code> 编排任务</p></li><li><p>幂等性: 任务重复执行等于只执行一次, 不会重复执行多次相同命令。</p></li><li><p>无需代理不依赖PKI.</p></li><li><p>支持多语言模块编写.</p></li><li><p><code>YAML</code>格式编排任务,支持丰富的数据结构.</p></li></ul></li></ul><h2 id=ansible-架构>ansible 架构</h2><figure><img src=/img/posts/ansible/ansible-jg.png></figure><figure><img src=/img/posts/ansible/ansible-yl.png></figure><ul><li><p><code>ansible</code> 主要组成部分:</p><ul><li><p><code>ansible playbooks</code>: 任务剧本(任务集), 通过编排定义<code>ansible</code>任务集合的配置文件, 由<code>ansible</code> 顺序依次执行, 文件通常是 <code>JSON</code>格式的<code>YML</code>文件。</p></li><li><p><code>Roles</code>: 角色, 多个 <code>ansilbe playbooks</code> 的集合.</p></li><li><p><code>Inventory</code>: <code>ansible</code> 管理主机的清单 默认为 <code>/etc/ansible/hosts</code> 文件。</p></li><li><p><code>Modules</code>: <code>ansible</code> 执行命令的功能模块, 一般为<code>ansible</code>内置核心模块, 也可以自定义第三方模块.</p></li><li><p><code>plugins</code>: <code>ansible</code> 功能插件, 是功能模块的补充. 如: 连接类型插件、循环插件、变量插件、过滤插件等等.</p></li><li><p><code>Api</code>: 提供第三方程序调用的开放接口.</p></li><li><p><code>ansible</code>: <code>ansible</code> 的客户端命令工具. 执行 <code>ansible</code> 命令的主要程序.</p><ul><li><p><code>Ad-Hoc</code> 用户执行单条或多条的 <code>ansible</code> 命令.</p></li><li><p><code>ansible playbook</code> 通过编写编排文件 <code>ansible</code> 执行命令集合.</p><ul><li><code>ansible playbook</code> 执行过程 -> 将编排好的任务写入 <code>ansible-playbook</code> 编排文件中 -> 通过 <code>ansible-playbook</code> 命令拆分任务集合, 然后按照预定的顺序逐条执行<code>ansible</code> 命令.</li></ul></li></ul></li></ul></li></ul><h2 id=ansible-安装>ansible 安装</h2><ul><li><p><code>ansible</code> 安装很简单, 也有很多种方式.</p><ul><li><p>安装 <code>epel</code> 源以后 执行 <code>yum -y install ansible</code></p></li><li><p>使用 源码包 进行 安装</p></li><li><p>通过 <code>git clone https://github.com/ansible/ansible</code> 以后进行安装</p></li><li><p>使用 pip 命令安装</p></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -950,15 +950,51 @@ PLAY RECAP *********************************************************************
 </span><span class=lnt>11
 </span><span class=lnt>12
 </span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yml data-lang=yml>---<span class=w>
 </span><span class=w></span>- <span class=k>hosts</span><span class=p>:</span><span class=w> </span>all<span class=w>
 </span><span class=w>  </span><span class=k>remote_user</span><span class=p>:</span><span class=w> </span>root<span class=w>
 </span><span class=w>
 </span><span class=w>  </span><span class=k>vars</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=c># 列表的形式</span><span class=w>
 </span><span class=w>    </span><span class=k>listen_port</span><span class=p>:</span><span class=w>
 </span><span class=w>      </span>- <span class=m>80</span><span class=w>
 </span><span class=w>      </span>- <span class=m>81</span><span class=w>
 </span><span class=w>      </span>- <span class=m>82</span><span class=w>
+</span><span class=w>    </span><span class=c># 字典的形式</span><span class=w>
+</span><span class=w>    </span><span class=k>service</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web1<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>90</span><span class=w>
+</span><span class=w>        </span><span class=k>user</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w> 
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web2<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>91</span><span class=w>
+</span><span class=w>        </span><span class=k>user</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web3<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>92</span><span class=w>
+</span><span class=w>        </span><span class=k>user</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
 </span><span class=w>
 </span><span class=w>  </span><span class=k>tasks</span><span class=p>:</span><span class=w>
 </span><span class=w>    </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>copy<span class=w> </span>template<span class=w> </span>conf<span class=w>
@@ -1011,7 +1047,299 @@ server <span class=o>{</span>
    listen <span class=m>82</span>
 <span class=o>}</span>
 
-</code></pre></td></tr></table></div></div><hr><ul><li><p>if 流程控制</p><ul><li><code>{% if 语句块 %} ... {% endif %}</code></li></ul></li></ul><hr><h4 id=example---tasks>Example - tasks</h4><ul><li>基础的例子</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><hr><ul><li>字典形式</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yml data-lang=yml>---<span class=w>
+</span><span class=w></span>- <span class=k>hosts</span><span class=p>:</span><span class=w> </span>all<span class=w>
+</span><span class=w>  </span><span class=k>remote_user</span><span class=p>:</span><span class=w> </span>root<span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=k>vars</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=c># 字典的形式</span><span class=w>
+</span><span class=w>    </span><span class=k>service</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web1<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>90</span><span class=w>
+</span><span class=w>        </span><span class=k>user</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web2<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>91</span><span class=w>
+</span><span class=w>        </span><span class=k>user</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web3<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>92</span><span class=w>
+</span><span class=w>        </span><span class=k>user</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=k>tasks</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>copy<span class=w> </span>template<span class=w> </span>conf<span class=w>
+</span><span class=w>      </span><span class=k>template</span><span class=p>:</span><span class=w> </span>src=nginx.conf.j2<span class=w> </span>dest=/root/nginx.conf<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>nginx.conf.j2 文件</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>{% for s in service %}
+user {{ s.user }};
+worker_processes {{ ansible_processor_vcpus + 2 }};
+pid /run/nginx.pid;
+    server {
+        listen       {{ s.port }} default_server;
+        listen       [::]:{{ s.port }} default_server;
+        server_name  {{ s.name }}.{{ s.domain }};
+        root         {{ s.path }};
+    }
+
+{% endfor %}
+
+</code></pre></td></tr></table></div></div><ul><li>查看生成后的 nginx.conf</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>
+user nginx<span class=p>;</span>
+worker_processes 3<span class=p>;</span>
+pid /run/nginx.pid<span class=p>;</span>
+    server <span class=o>{</span>
+        listen       <span class=m>90</span> default_server<span class=p>;</span>
+        listen       <span class=o>[</span>::<span class=o>]</span>:90 default_server<span class=p>;</span>
+        server_name  web1.jicki.cn<span class=p>;</span>
+        root         /var/www/html<span class=p>;</span>
+    <span class=o>}</span>
+
+user nginx<span class=p>;</span>
+worker_processes 3<span class=p>;</span>
+pid /run/nginx.pid<span class=p>;</span>
+    server <span class=o>{</span>
+        listen       <span class=m>91</span> default_server<span class=p>;</span>
+        listen       <span class=o>[</span>::<span class=o>]</span>:91 default_server<span class=p>;</span>
+        server_name  web2.jicki.cn<span class=p>;</span>
+        root         /var/www/html<span class=p>;</span>
+    <span class=o>}</span>
+
+user nginx<span class=p>;</span>
+worker_processes 3<span class=p>;</span>
+pid /run/nginx.pid<span class=p>;</span>
+    server <span class=o>{</span>
+        listen       <span class=m>92</span> default_server<span class=p>;</span>
+        listen       <span class=o>[</span>::<span class=o>]</span>:92 default_server<span class=p>;</span>
+        server_name  web3.jicki.cn<span class=p>;</span>
+        root         /var/www/html<span class=p>;</span>
+    <span class=o>}</span>
+</code></pre></td></tr></table></div></div><hr><ul><li><p>if 流程控制</p><ul><li><code>{% if 语句块 %} ... {% else %} ... {% endif %}</code></li></ul></li></ul><hr><ul><li><p>playbook 文件</p><ul><li>其中 web1, web2 不没有 user 变量, web3 包含 user 变量.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yml data-lang=yml><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span>- <span class=k>hosts</span><span class=p>:</span><span class=w> </span>all<span class=w>
+</span><span class=w>  </span><span class=k>remote_user</span><span class=p>:</span><span class=w> </span>root<span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=k>vars</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=c># 字典的形式</span><span class=w>
+</span><span class=w>    </span><span class=k>service</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web1<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>90</span><span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
+</span><span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web2<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>91</span><span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
+</span><span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>web3<span class=w>
+</span><span class=w>        </span><span class=k>domain</span><span class=p>:</span><span class=w> </span>jicki.cn<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w> </span><span class=m>92</span><span class=w>
+</span><span class=w>        </span><span class=k>user</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>        </span><span class=k>path</span><span class=p>:</span><span class=w> </span>/var/www/html<span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=k>tasks</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>copy<span class=w> </span>template<span class=w> </span>conf<span class=w>
+</span><span class=w>      </span><span class=k>template</span><span class=p>:</span><span class=w> </span>src=nginx.conf.j2<span class=w> </span>dest=/root/nginx.conf<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li><p>nginx.conf.j2 文件</p><ul><li><code>{% if s.user is defined %}</code> 判断 是否有 s.user 这个变量</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>
+{% for s in service %}
+
+{% if s.user is defined %}
+user {{ s.user }};
+{% else %}
+user root;
+{% endif %}
+worker_processes {{ ansible_processor_vcpus + 2 }};
+pid /run/nginx.pid;
+    server {
+        listen       {{ s.port }} default_server;
+        server_name  {{ s.name }}.{{ s.domain }};
+        root         {{ s.path }};
+    }
+
+{% endfor %}
+
+</code></pre></td></tr></table></div></div><ul><li><p>查看生成后的 nginx.conf</p><ul><li>第一个 不包含 s.user 变量 所以 <code>user root;</code></li><li>第二个 不包含 s.user 变量 所以 <code>user root;</code></li><li>第三个 包含 s.user 变量 所以 <code>user nginx;</code> 等于变量值</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>
+user root<span class=p>;</span>
+worker_processes 3<span class=p>;</span>
+pid /run/nginx.pid<span class=p>;</span>
+    server <span class=o>{</span>
+        listen       <span class=m>90</span> default_server<span class=p>;</span>
+        server_name  web1.jicki.cn<span class=p>;</span>
+        root         /var/www/html<span class=p>;</span>
+    <span class=o>}</span>
+
+
+user root<span class=p>;</span>
+worker_processes 3<span class=p>;</span>
+pid /run/nginx.pid<span class=p>;</span>
+    server <span class=o>{</span>
+        listen       <span class=m>91</span> default_server<span class=p>;</span>
+        server_name  web2.jicki.cn<span class=p>;</span>
+        root         /var/www/html<span class=p>;</span>
+    <span class=o>}</span>
+
+
+user nginx<span class=p>;</span>
+worker_processes 3<span class=p>;</span>
+pid /run/nginx.pid<span class=p>;</span>
+    server <span class=o>{</span>
+        listen       <span class=m>92</span> default_server<span class=p>;</span>
+        server_name  web3.jicki.cn<span class=p>;</span>
+        root         /var/www/html<span class=p>;</span>
+    <span class=o>}</span>
+
+
+</code></pre></td></tr></table></div></div><hr><h4 id=example---tasks>Example - tasks</h4><ul><li>基础的例子</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -1315,5 +1643,17 @@ Type <span class=nb>help</span> or ? to list commands.
 
 root@all <span class=o>(</span>1<span class=o>)[</span>f:5<span class=o>]</span>$
 
-</code></pre></td></tr></table></div></div><ul><li><p><code>root@all (1) [f:5]$</code></p><ul><li><code>root</code>: 当前执行用户.</li><li><code>all</code>: 表示当前主机清单.</li><li><code>(1)</code>: 表示当前主机清单下包含 <code>1</code> 台主机.</li><li><code>[f:5]</code>: 表示并发执行任务数为 <code>5</code> 个.</li></ul></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-08-10</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/ansible-playbook/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-via=jicki234 data-hashtags=linux,ansible><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/ansible-playbook/ data-hashtag=linux><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-description="Ansible 从入门到放弃"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-description="Ansible 从入门到放弃"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/linux/>linux</a>,&nbsp;<a href=/tags/ansible/>ansible</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/gitops-kubernetes/ class=prev rel=prev title="GitOps 实现云原生的持续交付"><i class="fas fa-angle-left fa-fw"></i>GitOps 实现云原生的持续交付</a>
+</code></pre></td></tr></table></div></div><ul><li><p><code>root@all (1) [f:5]$</code></p><ul><li><code>root</code>: 当前执行用户.</li><li><code>all</code>: 表示当前主机清单.</li><li><code>(1)</code>: 表示当前主机清单下包含 <code>1</code> 台主机.</li><li><code>[f:5]</code>: 表示并发执行任务数为 <code>5</code> 个.</li></ul></li></ul><hr><h3 id=ansible-roles>ansible Roles</h3><ul><li><p><code>Roles</code> 既 (角色) 是 ansible v1.2 版本引入的新特性, 用于 层次性、结构化的组织 <code>playbook</code>.</p></li><li><p><code>Roles</code> 能够根据层次结构自动加载- 变量文件、tasks、handler、template 文件等. 简单来讲就是将 这些文件归类到各自单独的文件目录中, 使 playbook 文件可以更好的通过 <code>include</code> 这些文件目录.</p></li><li><p><code>Roles</code> 一般用于基于 <code>主机构建服务</code> 的场景中, 但也可以用于构建 <code>守护进程</code> 等场景.</p></li><li><p><code>Roles</code> 官方定义默认的目录为 <code>/etc/ansible/roles</code> 下.</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell><span class=o>[</span>root@jicki ansible<span class=o>]</span><span class=c1># tree .</span>
+.
+<span class=p>|</span>-- ansible.cfg
+<span class=p>|</span>-- hosts
+<span class=sb>`</span>-- roles
+    <span class=sb>`</span>-- nginx
+</code></pre></td></tr></table></div></div><blockquote><p>roles 目录结构</p></blockquote><figure><img src=/img/posts/ansible/ansible-roles.png></figure><ul><li><p>目录结构说明</p><ul><li><code>roles</code>: - 所有的角色必须放在roles目录下, 这个目录可以自定义位置. 默认的位置在 <code>/etc/ansible/roles</code><ul><li><code>project</code>: - 具体的角色项目名称, 比如 nginx、tomcat、php .<ul><li><code>files</code>: - 用于存放由<code>copy</code> 或<code>script</code> 模块调用的文件.</li><li><code>templates</code>: - 用于存放 <code>Jinja2</code> 模板, <code>template</code> 模块会自动在此目录中寻找 <code>Jinja2</code> 模板文件.</li><li><code>tasks</code>: - 此目录应当包含一个<code>main.yml</code>文件, 用于定义此角色的任务列表, 此文件可以使用<code>include</code>包含其它的位于此目录的 <code>task</code> 文件.</li><li><code>handlers</code>: - 此目录应当包含一个<code>main.yml</code>文件, 用于定义此角色中触发条件时执行的动作.</li><li><code>vars</code>: - 此目录应当包含一个<code>main.yml</code>文件, 用于定义此角色用到的变量.</li><li><code>defaults</code>: - 目录应当包含一个<code>main.yml</code>文件, 用于为当前角色设定默认变量.</li><li><code>meta</code>: - 此目录应当包含一个<code>main.yml</code>文件, 用于定义此角色的特殊设定及其依赖关系.</li></ul></li></ul></li></ul></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-08-10</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/ansible-playbook/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-via=jicki234 data-hashtags=linux,ansible><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/ansible-playbook/ data-hashtag=linux><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-description="Ansible 从入门到放弃"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃" data-description="Ansible 从入门到放弃"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/ansible-playbook/ data-title="Ansible 从入门到放弃"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/linux/>linux</a>,&nbsp;<a href=/tags/ansible/>ansible</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/gitops-kubernetes/ class=prev rel=prev title="GitOps 实现云原生的持续交付"><i class="fas fa-angle-left fa-fw"></i>GitOps 实现云原生的持续交付</a>
 <a href=/golang-study-web-notes/ class=next rel=next title="Go Web编程">Go Web编程<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://jicki.cn target=_blank>小炒肉</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a href=http://beian.miit.gov.cn target=_blank>粤ICP备20055633号</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/valine/Valine.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":200},"comment":{"valine":{"appId":"1LTTCvDe4Nt8XSdFzejtUsVF-gzGzoHsz","appKey":"cvpPM7sbgOw0pTXbh6YVKrjc","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

@@ -1376,10 +1376,28 @@ PLAY RECAP *********************************************************************
   remote_user: root
 
   vars:
+    # 列表的形式
     listen_port:
       - 80
       - 81
       - 82
+    # 字典的形式
+    service:
+      - name: web1
+        domain: jicki.cn
+        port: 90
+        user: nginx
+        path: /var/www/html 
+      - name: web2
+        domain: jicki.cn
+        port: 91
+        user: nginx
+        path: /var/www/html
+      - name: web3
+        domain: jicki.cn
+        port: 92
+        user: nginx
+        path: /var/www/html
 
   tasks:
     - name: copy template conf
@@ -1425,6 +1443,98 @@ server {
 
 ```
 
+---
+
+
+* 字典形式
+
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  vars:
+    # 字典的形式
+    service:
+      - name: web1
+        domain: jicki.cn
+        port: 90
+        user: nginx
+        path: /var/www/html
+      - name: web2
+        domain: jicki.cn
+        port: 91
+        user: nginx
+        path: /var/www/html
+      - name: web3
+        domain: jicki.cn
+        port: 92
+        user: nginx
+        path: /var/www/html
+
+  tasks:
+    - name: copy template conf
+      template: src=nginx.conf.j2 dest=/root/nginx.conf
+```
+
+
+* nginx.conf.j2 文件
+
+
+```conf
+{% for s in service %}
+user {{ s.user }};
+worker_processes {{ ansible_processor_vcpus + 2 }};
+pid /run/nginx.pid;
+    server {
+        listen       {{ s.port }} default_server;
+        listen       [::]:{{ s.port }} default_server;
+        server_name  {{ s.name }}.{{ s.domain }};
+        root         {{ s.path }};
+    }
+
+{% endfor %}
+
+```
+
+
+* 查看生成后的 nginx.conf
+
+
+```shell
+
+user nginx;
+worker_processes 3;
+pid /run/nginx.pid;
+    server {
+        listen       90 default_server;
+        listen       [::]:90 default_server;
+        server_name  web1.jicki.cn;
+        root         /var/www/html;
+    }
+
+user nginx;
+worker_processes 3;
+pid /run/nginx.pid;
+    server {
+        listen       91 default_server;
+        listen       [::]:91 default_server;
+        server_name  web2.jicki.cn;
+        root         /var/www/html;
+    }
+
+user nginx;
+worker_processes 3;
+pid /run/nginx.pid;
+    server {
+        listen       92 default_server;
+        listen       [::]:92 default_server;
+        server_name  web3.jicki.cn;
+        root         /var/www/html;
+    }
+```
+
 
 
 
@@ -1434,29 +1544,118 @@ server {
 
 * if 流程控制
 
-  * `{% if 语句块 %} ... {% endif %}`  
+  * `{% if 语句块 %} ... {% else %} ... {% endif %}`  
 
 
 ---
 
 
 
+* playbook 文件
+
+  * 其中 web1, web2 不没有 user 变量, web3 包含 user 变量.
+
+```yml
+
+---
+- hosts: all
+  remote_user: root
+
+  vars:
+    # 字典的形式
+    service:
+      - name: web1
+        domain: jicki.cn
+        port: 90
+        path: /var/www/html
+
+      - name: web2
+        domain: jicki.cn
+        port: 91
+        path: /var/www/html
+
+      - name: web3
+        domain: jicki.cn
+        port: 92
+        user: nginx
+        path: /var/www/html
+
+  tasks:
+    - name: copy template conf
+      template: src=nginx.conf.j2 dest=/root/nginx.conf
+
+```
 
 
+* nginx.conf.j2 文件
+
+  * `{% if s.user is defined %}`  判断 是否有 s.user 这个变量 
 
 
+```conf
+
+{% for s in service %}
+
+{% if s.user is defined %}
+user {{ s.user }};
+{% else %}
+user root;
+{% endif %}
+worker_processes {{ ansible_processor_vcpus + 2 }};
+pid /run/nginx.pid;
+    server {
+        listen       {{ s.port }} default_server;
+        server_name  {{ s.name }}.{{ s.domain }};
+        root         {{ s.path }};
+    }
+
+{% endfor %}
+
+```
 
 
+* 查看生成后的 nginx.conf
+
+  * 第一个 不包含 s.user 变量 所以  `user root;`
+  * 第二个 不包含 s.user 变量 所以  `user root;`
+  * 第三个 包含 s.user 变量 所以 `user nginx;` 等于变量值
+
+```shell
+
+user root;
+worker_processes 3;
+pid /run/nginx.pid;
+    server {
+        listen       90 default_server;
+        server_name  web1.jicki.cn;
+        root         /var/www/html;
+    }
 
 
+user root;
+worker_processes 3;
+pid /run/nginx.pid;
+    server {
+        listen       91 default_server;
+        server_name  web2.jicki.cn;
+        root         /var/www/html;
+    }
 
 
+user nginx;
+worker_processes 3;
+pid /run/nginx.pid;
+    server {
+        listen       92 default_server;
+        server_name  web3.jicki.cn;
+        root         /var/www/html;
+    }
 
 
+```
 
 
-
-
+---
 
 
 
@@ -1737,6 +1936,51 @@ root@all (1)[f:5]$
   * `all`: 表示当前主机清单.
   * `(1)`: 表示当前主机清单下包含 `1` 台主机. 
   * `[f:5]`: 表示并发执行任务数为 `5` 个. 
+
+
+---
+
+
+### ansible Roles 
+
+
+
+* `Roles` 既 (角色) 是 ansible v1.2 版本引入的新特性, 用于 层次性、结构化的组织 `playbook`.  
+  
+* `Roles` 能够根据层次结构自动加载- 变量文件、tasks、handler、template 文件等. 简单来讲就是将 这些文件归类到各自单独的文件目录中, 使 playbook 文件可以更好的通过 `include` 这些文件目录.
+
+* `Roles` 一般用于基于 `主机构建服务` 的场景中, 但也可以用于构建 `守护进程` 等场景.
+
+
+* `Roles` 官方定义默认的目录为 `/etc/ansible/roles` 下.
+
+
+```shell
+[root@jicki ansible]# tree .
+.
+|-- ansible.cfg
+|-- hosts
+`-- roles
+    `-- nginx
+```
+
+
+
+> roles 目录结构
+
+{{< figure src="/img/posts/ansible/ansible-roles.png" >}}
+
+* 目录结构说明
+
+  * `roles`: - 所有的角色必须放在roles目录下, 这个目录可以自定义位置. 默认的位置在 `/etc/ansible/roles`
+    * `project`: - 具体的角色项目名称, 比如 nginx、tomcat、php .
+      * `files`: - 用于存放由`copy` 或`script` 模块调用的文件.
+      * `templates`: - 用于存放 `Jinja2` 模板,  `template` 模块会自动在此目录中寻找 `Jinja2` 模板文件.
+      * `tasks`: - 此目录应当包含一个`main.yml`文件, 用于定义此角色的任务列表, 此文件可以使用`include`包含其它的位于此目录的 `task` 文件.
+      * `handlers`: - 此目录应当包含一个`main.yml`文件, 用于定义此角色中触发条件时执行的动作.
+      * `vars`: - 此目录应当包含一个`main.yml`文件, 用于定义此角色用到的变量.
+      * `defaults`: - 目录应当包含一个`main.yml`文件, 用于为当前角色设定默认变量.
+      * `meta`: - 此目录应当包含一个`main.yml`文件, 用于定义此角色的特殊设定及其依赖关系.
 
 
 
