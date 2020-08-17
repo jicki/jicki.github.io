@@ -2005,5 +2005,228 @@ root@all (1)[f:5]$
 
 
 
+---
+
+* 创建对应的文件
+
+
+```shell
+[root@jicki ansible]# tree  roles/
+roles/
+`-- nginx
+    |-- defaults
+    |-- files
+    |-- handlers
+    |-- meta
+    |-- tasks
+    |   |-- group.yml
+    |   |-- main.yml
+    |   |-- restart.yml
+    |   |-- start.yml
+    |   |-- template.yml
+    |   |-- user.yml
+    |   `-- yum.yml
+    |-- templates
+    |   `-- nginx.conf.j2
+    `-- vars
+```
+
+---
+
+
+* `/etc/ansible/nginx_roles.yml` 与 roles 同级
+
+
+```yml
+
+---
+- hosts: all
+  remote_user: root
+
+  # 选择 roles 属性
+  roles:
+      # 调用 role 目录. roles 同级的目录
+    - role: nginx
+
+```
+
+
+
+
+
+* `/etc/ansible/roles/nginx/tasks/main.yml` 入口文件 配置 task 执行顺序
+
+  * 跨 roles 调用 tasks, 需要写 roles 目录级的全路径. 如:
+
+    * `-include: roles/httpd/tasks/copyfile.yml` 
+
+
+```yml
+- include: group.yml
+- include: user.yml
+- include: yum.yml
+- include: template.yml
+- include: start.yml
+
+```
+
+
+
+* `/etc/ansible/roles/nginx/tasks/group.yml` 单独的 tasks 文件只写单独的内容 如下:
+
+```yml
+- name: create group
+  group: name=nginx gid=80
+```
+
+
+
+
+---
+
+* 执行 `/etc/ansible/nginx_roles.yml` 文件
+
+
+```shell
+
+[root@jicki ansible]# ansible-playbook nginx_roles.yml
+
+PLAY [all] ****************************************************************************************
+
+TASK [Gathering Facts] ****************************************************************************
+ok: [10.0.3.13]
+
+TASK [nginx : create group] ***********************************************************************
+changed: [10.0.3.13]
+
+TASK [nginx : create user] ************************************************************************
+changed: [10.0.3.13]
+
+TASK [nginx : install package] ********************************************************************
+changed: [10.0.3.13]
+
+TASK [nginx : copy conf] **************************************************************************
+changed: [10.0.3.13]
+
+TASK [nginx : start service] **********************************************************************
+changed: [10.0.3.13]
+
+PLAY RECAP ****************************************************************************************
+10.0.3.13   : ok=6    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+``` 
+
+
+---
+
+
+> roles tags 标签
+
+* 在 playbook 文件中 对 roles 配置相应的 tags .
+
+
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  # 选择 roles 属性
+  roles:
+    # 配置相应的 tags 用 { } 引用
+    - { role: nginx, tags: ['web', 'nginx'] }
+    - { role: mysql, tags: ['db', 'mysql'] }
+    - { role: redis, tags: ['db', 'redis'] }
+    - { role: golang, tags: ['web', 'golang'] }
+    - { role: app, tags: "app" }
+
+```
+
+---
+
+* 通过 `ansible-playbook -t` 参数指定 tags 进行单独调用
+
+  * 如下指定 tags 为 web 的 role 执行. 为 nginx 和 golang
+
+```shell
+[root@jicki ansible]# ansible-playbook -t web playbook.yml
+
+```
+
+
+
+
+
+---
+
+> roles when 语句
+
+* 对 role 进行条件的判断. 
+  * `ansible_distribution_major_version == "7"`
+
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  # 选择 roles 属性
+  roles:
+    # 配置相应的 tags 用 { } 引用
+    - { role: nginx, tags: ['web', 'nginx'] }
+    - { role: mysql, tags: ['db', 'mysql'] }
+    - { role: redis, tags: ['db', 'redis'] }
+    # 只针对 系统的 版本 为 7 的执行
+    - { role: golang, tags: ['web', 'golang'], when: ansible_distribution_major_version == "7" }
+    - { role: app, tags: "app" }
+
+```
+
+
+
+
+---
+
+
+#### Example - roles
+
+* 一个综合的例子
+
+
+
+
+*  roles 目录如下
+
+
+```shell
+
+[root@jicki ansible]# tree .
+.
+|-- ansible.cfg
+|-- hosts
+|-- nginx_roles.yml
+`-- roles
+    `-- nginx
+        |-- defaults
+        |-- files
+        |-- handlers
+        |-- meta
+        |-- tasks
+        |   |-- group.yml
+        |   |-- main.yml
+        |   |-- restart.yml
+        |   |-- start.yml
+        |   |-- template.yml
+        |   |-- user.yml
+        |   `-- yum.yml
+        |-- templates
+        |   `-- nginx.conf.j2
+        `-- vars
+
+```
+
+
+
 
 
