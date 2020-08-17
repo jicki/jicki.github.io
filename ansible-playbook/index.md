@@ -2200,7 +2200,6 @@ PLAY RECAP *********************************************************************
 
 
 ```shell
-
 [root@jicki ansible]# tree .
 .
 |-- ansible.cfg
@@ -2210,12 +2209,14 @@ PLAY RECAP *********************************************************************
     `-- nginx
         |-- defaults
         |-- files
+        |   `-- default.conf
         |-- handlers
+        |   `-- main.yml
         |-- meta
         |-- tasks
+        |   |-- copyfile.yml
         |   |-- group.yml
         |   |-- main.yml
-        |   |-- restart.yml
         |   |-- start.yml
         |   |-- template.yml
         |   |-- user.yml
@@ -2223,10 +2224,95 @@ PLAY RECAP *********************************************************************
         |-- templates
         |   `-- nginx.conf.j2
         `-- vars
+            `-- main.yml
 
 ```
 
 
+* `nginx_roles.yml` 文件
+
+
+```yml
+---
+- hosts: all
+  remote_user: root
+
+  # 选择 roles 属性
+  roles:
+      # 调用 role 目录. roles 同级的目录
+    - role: nginx
+```
+
+
+---
+
+* `roles/tasks/main.yml` 文件
+
+  * 按照导入顺序执行如下 task
+
+```yml
+- include: group.yml
+- include: user.yml
+- include: yum.yml
+- include: template.yml
+- include: copyfile.yml
+- include: start.yml
+
+```
+
+
+* `roles/tasks/template.yml` 文件
+
+  * template 文件引用了 notify
+
+
+```yml
+- name: copy conf
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify: restart service
+```
+
+
+
+* `roles/tasks/copyfile.yml` 文件
+
+  * copyfile 文件引用了 变量, 以及引用了 files 目录下的文件
+
+
+```yml
+- name: copy conf
+  copy: src=default.conf dest=/etc/nginx/conf.d/ owner={{ username }} group={{ groupname }}
+
+```
+
+
+
+---
+
+* `roles/nginx/handlers/main.yml` 文件
+
+  * handlers 下必须包含一个 `mian.yml` 文件
+
+```yml
+- name: restart service
+  service: name=nginx state=restarted
+```
+
+
+---
+
+
+* `roles/nginx/vars/main.yml` 文件
+
+  * 以 `key/value` 形式写入内容
+
+```yml
+username: nginx
+groupname: nginx
+
+```
+
+---
 
 
 
