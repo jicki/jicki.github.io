@@ -2,7 +2,7 @@
 
 
 
-# Helm v2
+# Helm
 
 *  Helm 是 Kubernetes 的包管理器, 可以帮我们简化 kubernetes 应用部署操作, 在多项目的环境下, 应用的部署与管理就会变的频繁与复杂. Helm 通过包的方式, 可简化应用的版本发布、管理、控制.  
 
@@ -10,46 +10,63 @@
 * Helm 本质是在 Kubernetes 的应用管理上模板化, 能动态的生成如`Deployment`、`Service` 等的 yaml 资源文件.
 
 
-* 注: 当前 2020年8月 Helm v2 系列发布了 v2.16.10 版本， 这是 Helm v2 的最后一个 bugfix 版本，此后不会再为 Helm v2 提供错误修复。并且在三个月后，将停止为 Helm v2 提供安全补丁。届时， Helm v2 也就完全废弃，不会再去维护了。 
-
-
-
 * Helm 有两个重要概念
 
-  * `chart` 是创建一个应用的信息集合, 既一个应用所包含的所有需要部署的服务如`deployment`、`service`、`pv`、`pvc` 等的各种 kubernetes 对象的配置模板、参数定义、依赖关系、文档、帮助信息等. `chart` 是应用部署的自包含逻辑单元, 类似于 `Yum` 中的软件rpm安装包. 
+  * `chart` :是创建一个应用的信息集合, 既一个应用所包含的所有需要部署的服务如`deployment`、`service`、`pv`、`pvc` 等的各种 kubernetes 对象的配置模板、参数定义、依赖关系、文档、帮助信息等. `chart` 是应用部署的自包含逻辑单元, 类似于 `Yum` 中的软件rpm安装包. 
 
-  * `release` 是`chart` 的运行实例, 代表了一个正在运行的应用. 当 `chart` 被安装到 kubernetes 集群中时就生成一个 `release`. 每执行一次 `chart` 安装就会生成一个 `release`.  
-
-
+  * `release` :是`chart` 的运行实例, 代表了一个正在运行的应用. 当 `chart` 被安装到 kubernetes 集群中时就生成一个 `release`. 每执行一次 `chart` 安装就会生成一个 `release`.  
 
 
-## Helm 流程图
+---
+
+## Helm v2
+
+
+* 注: 当前 2020年8月 Helm v2 系列发布了 v2.16.10 版本， 这是 Helm v2 的最后一个 bugfix 版本，此后不会再为 Helm v2 提供错误修复。并且在三个月后，将停止为 Helm v2 提供安全补丁。届时， Helm v2 也就完全废弃，不会再去维护了。
+
+
+
+
+
+### Helm 流程图
 
 
 {{< figure src="/img/posts/helm/helm-flow.png" >}}
 
 
 
+* Helm - 客户端 Helm Client 负责 `chart` 和 `release` 的创建、管理, 通过 gRPC 与 Tiller 服务端进行交互.
+
+* Tiller - 服务端 运行在 Kubernetes 中, 处理 Helm Client 的请求, 通过 REST、JSON 与 kubernetes Api Server 进行交互.
 
 
-## 安装依赖
 
-```
+
+
+
+### 客户端部署
+
+
+>  安装依赖
+
+
+```shell
 # 首先要在所有 node 里安装 socat 软件
 
 yum -y install socat
 
 ```
 
+---
 
-## 下载文件
 
-```
-# 下载 安装包 (googleapis.com 有可能访问不到，多试几次，或者自己翻墙下载)
+> 下载 helm 二进制文件
 
-wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
+```shell
 
-tar zxvf helm-v2.11.0-linux-amd64.tar.gz 
+wget https://get.helm.sh/helm-v2.16.10-linux-amd64.tar.gz
+
+tar zxvf helm-v2.16.10-linux-amd64.tar.gz 
 
 cd linux-amd64/
 
@@ -59,12 +76,13 @@ mv helm /usr/local/bin/
 # 验证服务
 
 [root@kubernetes-1 ~]# helm version
-Client: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
+Client: &version.Version{SemVer:"v2.16.10", GitCommit:"bceca24a91639f045f22ab0f41e47589a932cf5e", GitTreeState:"clean"}
+Error: Get "http://localhost:8080/api/v1/namespaces/kube-system/pods?labelSelector=app%3Dhelm%2Cname%3Dtiller": dial tcp [::1]:8080: connect: connection refused
 
 ```
 
 
-## 初始化 helm
+### 部署 Helm Tiller
 
 ```
 # 初始化 helm
