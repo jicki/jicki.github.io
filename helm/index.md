@@ -34,10 +34,12 @@
 {{< figure src="/img/posts/helm/helm-flow.png" >}}
 
 
+---
+
 
 * Helm - 客户端 Helm Client 负责 `chart` 和 `release` 的创建、管理, 通过 gRPC 与 Tiller 服务端进行交互.
 
-* Tiller - 服务端 运行在 Kubernetes 中, 处理 Helm Client 的请求, 通过 REST、JSON 与 kubernetes Api Server 进行交互.
+* Tiller - 服务端 运行在 Kubernetes 中, 处理 Helm Client 的请求, 通过 REST、JSON 与 kubernetes API Server 进行交互.
 
 
 
@@ -125,7 +127,7 @@ Tiller (the Helm server-side component) has been installed into your Kubernetes 
 Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
 To prevent this, run `helm init` with the --tiller-tls-verify flag.
 For more information on securing your installation see: https://v2.helm.sh/docs/securing_installation/
-
+Happy Helming!
 ```
 
 
