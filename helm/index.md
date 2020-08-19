@@ -788,7 +788,13 @@ helm3 plugin install https://github.com/helm/helm-2to3
 
 ---
 
-* 将 helm v2 的配置文件, 转换配置文件为 helm v3 
+* 将 helm v2 的配置文件, 转换配置文件为 helm v3 , 转换包含:
+
+  * `Chart`
+
+  * `repo`
+
+  * `Plugins`
 
 
 ```shell
@@ -811,13 +817,10 @@ Helm v2 configuration was moved successfully to Helm v3 configuration.
 ```shell
 helm3 2to3 convert release_name 
 
- 
 ```
 
 
 ---
-
-
 
 
 
@@ -848,15 +851,19 @@ helm3 2to3 convert release_name
 
 ---
 
-5. Helm v3 中 使用 `JSON Schema` 验证 charts 的 Values .
+5. `requirements.yaml` 文件合并到 `Chart.yaml` 文件中.
 
 ---
 
-6. Helm v3 中 支持将 `chart`  Push 到 Docker 镜像仓库中.
+6. Helm v3 中 使用 `JSON Schema` 验证 charts 的 Values .
 
 ---
 
-7. 移动 `helm serve` , Helm v2 中可以通过 helm serve 来启动一个简单的 HTTP 服务, 用于托管 local repo 中的 `chart`. Helm v3 移除了此命令, 因为 Helm v3 中可以将`chart` 推送到 Docker 镜像仓库中.
+7. Helm v3 中 支持将 `chart`  Push 到 Docker 镜像仓库中.
+
+---
+
+8. 移动 `helm serve` , Helm v2 中可以通过 helm serve 来启动一个简单的 HTTP 服务, 用于托管 local repo 中的 `chart`. Helm v3 移除了此命令, 因为 Helm v3 中可以将`chart` 推送到 Docker 镜像仓库中.
 
 
 ---
