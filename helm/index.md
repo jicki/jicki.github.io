@@ -749,11 +749,6 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 ---
 
 
-
-
-
-
-
 ---
 
 ### Helm FAQ
@@ -762,4 +757,54 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 * `Error: no available release name found`
 
   * 出现这个错误是因为 rbac 的问题。
+
+
+
+
+---
+
+
+
+## Helm v3
+
+
+{{< figure src="/img/posts/helm/helm3.jpg" >}}
+
+
+
+### Helm v3 新特性
+
+
+1. Helm v3 移除了 `Tiller`. -- Helm v2 是 C/S 架构, 主要分为客户端 `helm` 和服务端 `Tiller`.  `Tiller` 主要用于在 Kubernetes 集群中管理各种应用发布的版本, 在 Helm v3 中移除了 `Tiller`, 版本相关的数据直接存储在了 Kubernetes 中.
+
+
+2. Helm v2 中通过 `Tiller` 进行管理 Kubernetes 集群中应用, 而 `Tiller` 需要管理员的 `ClusterRole` 才能创建使用, 这就是一直被诟病的安全性问题. 而 Helm v3 中通过Helm 管理 Kubernetes 集群中的应用, Helm 使用 `KUBECONFIG` 配置权限 与 `kubectl` 上下文相同的访问权限.
+
+
+3. Helm v2 在 `install` 时如果不指定 `release` 名称, 会随机生成一个, Helm v3 中 `install` 必须强制指定 `release` 名称, 或者使用 `--generate-name` 参数.
+
+
+4. Helm v3 中 `release` 位于命名空间中, 既 不同的 namespace 可以使用相同的 `release` 名称.
+
+
+5. Helm v3 中 使用 `JSON Schema` 验证 charts 的 Values .
+
+
+6. Helm v3 中 支持将 `chart`  Push 到 Docker 镜像仓库中.
+
+
+7. 移动 `helm serve` , Helm v2 中可以通过 helm serve 来启动一个简单的 HTTP 服务, 用于托管 local repo 中的 `chart`. Helm v3 移除了此命令, 因为 Helm v3 中可以将`chart` 推送到 Docker 镜像仓库中.
+
+
+
+
+
+
+### Helm v3 流程图
+
+
+
+{{< figure src="/img/posts/helm/helm-v3-flow.jpeg" >}}
+
+
 
