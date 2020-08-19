@@ -935,6 +935,7 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
   * `--kube-context` : 配置 kubernetes 上下文.  ( 在 kubeconfig 文件中 context 选项中的 use 值 ).
 
 
+---
 
 
 ### Helm v3 命令
@@ -954,6 +955,8 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
   4. 通过指定 url 进行安装. -- `helm install -n mysql http://127.0.0.1:8879/charts/mysql`
 
+
+---
 
 
 
