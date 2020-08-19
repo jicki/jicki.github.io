@@ -482,13 +482,212 @@ REVISION	UPDATED                 	STATUS    	CHART         	APP VERSION	DESCRIPT
 
 #### 自定义模板之 变量
 
+*  创建一个 `values.yaml` 文件,  `values.yaml` 文件与 `Chart.yaml` 在同级目录下.
+
+  * 在 `values.yaml` 文件中定义对应的变量 ( `key/value` 值). 在 templates 下的 kubernetes 资源清单文件中引用定义的 变量.
+
+  * 在 `helm install --values xxx.yaml` 也可以指定 变量文件, 变量优先级 高于 默认 `values.yaml` 中定义的变量.
+
+  * 在 `helm install --set image.tag='2.0'` 也可以定义 变量, 变量优先级 最高。 高于 `--values`  和 `values.yaml` 
+
+
+---
+
+
+* `Chart.yaml`
+
+```shell
+name: myapp
+version: v1
+
+```
 
 
 
 
+* `values.yaml` 
+
+
+```shell
+image:
+  repository: jicki/myapp
+  tag: 'v1'
+
+```
 
 
 
+
+* `templates/deployment.yaml` 
+
+
+```shell
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v1
+    spec:
+      containers:
+        - name: myapp
+          # {{ }} 表示引用变量, Values 表示 values.yaml 文件本身
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+```
+
+
+* `templates/service.yaml`
+
+
+```shell
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-svc
+  labels:
+    app: myapp
+spec:
+  ports:
+    - port: 80
+      name: http
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: myapp
+
+```
+
+
+
+---
+
+* 创建 应用 `release` myapp
+
+
+```shell
+
+root@kubernetes:/opt/helm/myapp# helm install -n myapp .
+
+NAME:   myapp
+LAST DEPLOYED: Wed Aug 19 03:20:04 2020
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/Deployment
+NAME   READY  UP-TO-DATE  AVAILABLE  AGE
+myapp  0/2    2           0          0s
+
+==> v1/Pod(related)
+NAME                   READY  STATUS             RESTARTS  AGE
+myapp-846dbc5c6-2c58f  0/1    ContainerCreating  0         0s
+myapp-846dbc5c6-qb7jv  0/1    ContainerCreating  0         0s
+
+==> v1/Service
+NAME       TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)  AGE
+myapp-svc  ClusterIP  10.254.90.247  <none>       80/TCP   0s
+
+```
+
+---
+
+* 测试访问
+
+```shell
+root@kubernetes:/opt/helm/myapp# curl 10.254.90.247
+
+Hello MyApp | Version: v1 | <a href="hostname.html">Pod Name</a>
+
+```
+
+
+---
+
+> 通过变量更新 release 应用 
+
+
+1. 可以通过修改 `values.yaml` 文件的版本号进行更新.
+
+2. 可以通过 `--set key:value` 的形式进行更新.
+
+
+
+* 修改 `values.yaml` 
+
+```shell
+image:
+  repository: jicki/myapp
+  tag: 'v2'
+```
+
+
+* 执行更新操作
+
+```shell
+
+root@kubernetes:/opt/helm/myapp# helm upgrade myapp .
+
+
+Release "myapp" has been upgraded.
+LAST DEPLOYED: Wed Aug 19 03:30:24 2020
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/Deployment
+NAME   READY  UP-TO-DATE  AVAILABLE  AGE
+myapp  2/2    1           2          10m
+
+==> v1/Pod(related)
+NAME                    READY  STATUS             RESTARTS  AGE
+myapp-554ff5979c-5k8w5  0/1    ContainerCreating  0         0s
+myapp-846dbc5c6-2c58f   1/1    Running            0         10m
+myapp-846dbc5c6-qb7jv   1/1    Running            0         10m
+
+==> v1/Service
+NAME       TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)  AGE
+myapp-svc  ClusterIP  10.254.90.247  <none>       80/TCP   10m
+
+```
+
+
+
+---
+
+* 测试访问
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm history myapp
+
+REVISION	UPDATED                 	STATUS    	CHART   	APP VERSION	DESCRIPTION
+1       	Wed Aug 19 03:20:04 2020	SUPERSEDED	myapp-v1	           	Install complete
+2       	Wed Aug 19 03:30:24 2020	DEPLOYED  	myapp-v1	           	Upgrade complete
+
+```
+
+
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# curl 10.254.90.247
+
+Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
+```
 
 
 
@@ -497,103 +696,6 @@ REVISION	UPDATED                 	STATUS    	CHART         	APP VERSION	DESCRIPT
 > Helm 一些常用命令
 
 
-```
-# 查询 charts 包
-
-[root@kubernetes-1 ~]# helm search mysql
-
-NAME                            CHART VERSION   APP VERSION     DESCRIPTION                                                 
-stable/mysql                    0.3.5                           Fast, reliable, scalable, and easy to use open-source rel...
-stable/percona                  0.3.0                           free, fully compatible, enhanced, open source drop-in rep...
-stable/percona-xtradb-cluster   0.0.2           5.7.19          free, fully compatible, enhanced, open source drop-in rep...
-stable/gcloud-sqlproxy          0.2.3                           Google Cloud SQL Proxy                                      
-stable/mariadb                  2.1.6           10.1.31         Fast, reliable, scalable, and easy to use open-source rel...
-```
-
-
-```
-# 查询 包 的具体信息
-
-
-[root@kubernetes-1 ~]# helm inspect stable/mysql
-description: Fast, reliable, scalable, and easy to use open-source relational database
-  system.
-engine: gotpl
-home: https://www.mysql.com/
-icon: https://www.mysql.com/common/logos/logo-mysql-170x115.png
-keywords:
-......
-
-```
-
-
-```
-# 部署 程序
-
-helm install stable/mysql
-```
-
-
-
-```
-# 查询支持的选项,用于set 参数
-
-
-[root@kubernetes-1 ~]# helm inspect values stable/mysql
-## mysql image version
-## ref: https://hub.docker.com/r/library/mysql/tags/
-##
-image: "mysql"
-imageTag: "5.7.14"
-
-## Specify password for root user
-##
-## Default: random 10 character string
-# mysqlRootPassword: testing
-.......
-
-```
-
-```
-# 根据上面 查询 values 的mysqlRootPassword ，修改为 jicki
-
-
-helm install --name mysql --set mysqlRootPassword=jicki  stable/mysql
-````
-
-
-```
-# 升级 设置，或者版本
-
-
-helm upgrade db-mysql --set mysqlRootPassword=passwd --set image="jicki/mysql" --set imageTag="5.7.20" stable/mysql
-
-```
-
-```
-# 回滚 到upgrade 之前的版本
-
-
-helm rollback db-mysql 1
-
-```
-
-
-```
-# 添加 额外 repo
-
-
-helm repo add my-repo https://kubernetes-charts.jicki.cn/
-
-```
-
-
-```
-# 查询 repo 列表
-
-
-helm repo list
-```
 
 
 ---
