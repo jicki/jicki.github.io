@@ -694,6 +694,18 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 > Helm 一些常用命令
 
 
+
+* `install` 部署应用 `release`.
+
+  * `helm install .` 创建一个随机 release 名称的自定义应用,  `.` 表示当前应用目录.
+
+  * `helm install -n release_name .`  , `-n / --name` 为指定 release 名称.
+
+  * `helm install -n mysql stable/mysql` 创建 repo 仓库中的应用,  `stable` 表示 repo 仓库名称.
+
+
+---
+
 * `list / ls` 列出已经部署的应用 `release` .
   
   * `helm list` / `helm ls` 不包含 `DELETE` 状态的应用.
@@ -731,7 +743,6 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 * `rollback` 回滚指定 release 应用的指定 `REVISION` 版本.
 
   * `helm rollback release_name 1`
-
 
 
 ---
