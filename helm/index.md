@@ -78,6 +78,7 @@ mv helm /usr/local/bin/
 # 验证服务
 
 [root@kubernetes ~]# helm version
+
 Client: &version.Version{SemVer:"v2.16.10", GitCommit:"bceca24a91639f045f22ab0f41e47589a932cf5e", GitTreeState:"clean"}
 Error: could not find tiller
 
@@ -110,6 +111,7 @@ kubectl patch deploy --namespace=kube-system tiller-deploy -p '{"spec":{"templat
 ```shell
 
 root@kubernetes:/opt/helm# helm init --skip-refresh
+
 Creating /root/.helm
 Creating /root/.helm/repository
 Creating /root/.helm/repository/cache
@@ -135,6 +137,7 @@ Happy Helming!
 
 ```shell
 root@kubernetes:/opt/helm# kubectl get pods --all-namespaces
+
 NAMESPACE     NAME                                 READY   STATUS    RESTARTS   AGE
 kube-system   coredns-66bff467f8-n7bc5             1/1     Running   0          16m
 kube-system   coredns-66bff467f8-nln8j             1/1     Running   0          16m
@@ -152,6 +155,7 @@ kube-system   tiller-deploy-55f5dfddc9-lqv9d       1/1     Running   0          
 ```shell
 
 root@kubernetes:/opt# helm version
+
 Client: &version.Version{SemVer:"v2.16.10", GitCommit:"bceca24a91639f045f22ab0f41e47589a932cf5e", GitTreeState:"clean"}
 Server: &version.Version{SemVer:"v2.16.10", GitCommit:"bceca24a91639f045f22ab0f41e47589a932cf5e", GitTreeState:"clean"}
 
@@ -166,6 +170,7 @@ Server: &version.Version{SemVer:"v2.16.10", GitCommit:"bceca24a91639f045f22ab0f4
 # helm 的 repo 默认是使用 谷歌的 repo ，国内访问不到，修改为 阿里云 的 repo
 
 [root@kubernetes ~]# helm repo list
+
 NAME    URL                                             
 stable  https://kubernetes-charts.storage.googleapis.com
 local   http://127.0.0.1:8879/charts 
@@ -173,15 +178,18 @@ local   http://127.0.0.1:8879/charts
 
 
 [root@kubernetes ~]# helm repo remove stable
+
 "stable" has been removed from your repositories
 
 
 
 [root@kubernetes ~]# helm repo add stable https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+
 "stable" has been added to your repositories
 
 
 [root@kubernetes ~]# helm repo update
+
 Hang tight while we grab the latest from your chart repositories...
 ...Skip local chart repository
 ...Successfully got an update from the "stable" chart repository
@@ -190,6 +198,7 @@ Update Complete. ⎈ Happy Helming!⎈
 
 
 [root@kubernetes ~]# helm repo list
+
 NAME    URL                                                   
 local   http://127.0.0.1:8879/charts                          
 stable  https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
@@ -301,6 +310,7 @@ spec:
 ```shell
 
 root@kubernetes:/opt/helm/nginx# helm install -n my-nginx .
+
 NAME:   my-nginx
 LAST DEPLOYED: Tue Aug 18 09:55:12 2020
 NAMESPACE: default
@@ -329,6 +339,7 @@ nginx-svc  ClusterIP  10.254.143.201  <none>       80/TCP   1s
 ```shell
 
 root@kubernetes:/opt/helm/nginx# helm ls
+
 NAME    	REVISION	UPDATED                 	STATUS  	CHART         	APP VERSION	NAMESPACE
 my-nginx	1       	Tue Aug 18 09:55:12 2020	DEPLOYED	my-nginx-1.0.0	           	default
 
@@ -338,6 +349,7 @@ my-nginx	1       	Tue Aug 18 09:55:12 2020	DEPLOYED	my-nginx-1.0.0	           	d
 
 ```shell
 root@kubernetes:/opt/helm/nginx# kubectl get pods,svc
+
 NAME                            READY   STATUS    RESTARTS   AGE
 pod/nginx-dm-5f7cb96cd8-qjttm   1/1     Running   0          2m2s
 pod/nginx-dm-5f7cb96cd8-rdrsh   1/1     Running   0          2m2s
@@ -354,6 +366,7 @@ service/nginx-svc    ClusterIP   10.254.143.201   <none>        80/TCP    2m2s
 
 ```shell
 root@kubernetes:/opt/helm/nginx# curl -I 10.254.143.201
+
 HTTP/1.1 200 OK
 Server: nginx/1.19.2
 Date: Tue, 18 Aug 2020 09:57:48 GMT
@@ -379,6 +392,7 @@ Accept-Ranges: bytes
 
 ```shell
 root@kubernetes:/opt/helm/nginx# helm upgrade my-nginx .
+
 Release "my-nginx" has been upgraded.
 LAST DEPLOYED: Tue Aug 18 10:05:13 2020
 NAMESPACE: default
@@ -404,6 +418,7 @@ nginx-svc  ClusterIP  10.254.143.201  <none>       80/TCP   10m
 
 ```shell
 root@kubernetes:/opt/helm/nginx# helm ls
+
 NAME    	REVISION	UPDATED                 	STATUS  	CHART         	APP VERSION	NAMESPACE
 my-nginx	2       	Tue Aug 18 10:05:13 2020	DEPLOYED	my-nginx-1.0.0	           	default
 ```
@@ -421,6 +436,7 @@ my-nginx	2       	Tue Aug 18 10:05:13 2020	DEPLOYED	my-nginx-1.0.0	           	d
 
 ```shell
 root@kubernetes:/opt/helm/nginx# helm history my-nginx
+
 REVISION	UPDATED                 	STATUS    	CHART         	APP VERSION	DESCRIPTION
 1       	Tue Aug 18 09:55:12 2020	SUPERSEDED	my-nginx-1.0.0	           	Install complete
 2       	Tue Aug 18 10:05:13 2020	DEPLOYED  	my-nginx-1.0.0	           	Upgrade complete
@@ -441,6 +457,7 @@ REVISION	UPDATED                 	STATUS    	CHART         	APP VERSION	DESCRIPT
 
 ```shell
 root@kubernetes:/opt/helm/nginx# helm rollback my-nginx 1
+
 Rollback was a success.
 
 ```
@@ -449,8 +466,8 @@ Rollback was a success.
 
 
 ```shell
-
 root@kubernetes:/opt/helm/nginx# helm history my-nginx
+
 REVISION	UPDATED                 	STATUS    	CHART         	APP VERSION	DESCRIPTION
 1       	Tue Aug 18 09:55:12 2020	SUPERSEDED	my-nginx-1.0.0	           	Install complete
 2       	Tue Aug 18 10:05:13 2020	SUPERSEDED	my-nginx-1.0.0	           	Upgrade complete
@@ -484,6 +501,7 @@ REVISION	UPDATED                 	STATUS    	CHART         	APP VERSION	DESCRIPT
 # 查询 charts 包
 
 [root@kubernetes-1 ~]# helm search mysql
+
 NAME                            CHART VERSION   APP VERSION     DESCRIPTION                                                 
 stable/mysql                    0.3.5                           Fast, reliable, scalable, and easy to use open-source rel...
 stable/percona                  0.3.0                           free, fully compatible, enhanced, open source drop-in rep...
