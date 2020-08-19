@@ -10,9 +10,11 @@
 * Helm 本质是在 Kubernetes 的应用管理上模板化, 能动态的生成如`Deployment`、`Service` 等的 yaml 资源文件.
 
 
-* Helm 有两个重要概念
+* Helm 有三个重要概念
 
   * `chart` :是创建一个应用的信息集合, 既一个应用所包含的所有需要部署的服务如`deployment`、`service`、`pv`、`pvc` 等的各种 kubernetes 对象的配置模板、参数定义、依赖关系、文档、帮助信息等. `chart` 是应用部署的自包含逻辑单元, 类似于 `Yum` 中的软件rpm安装包. 
+
+  * `reporitory` :是`chart` 的仓库, Helm v2 中需要一个 HTTP 服务器存放 `Charts` 包. Helm v3 中 可以将 Docker 私有仓库当做 `chart` 仓库.
 
   * `release` :是`chart` 的运行实例, 代表了一个正在运行的应用. 当 `chart` 被安装到 kubernetes 集群中时就生成一个 `release`. 每执行一次 `chart` 安装就会生成一个 `release`.  
 
@@ -28,7 +30,7 @@
 
 
 
-### Helm 流程图
+### Helm v2 流程图
 
 
 {{< figure src="/img/posts/helm/helm-flow.png" >}}
@@ -209,7 +211,7 @@ stable  https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 ---
 
-### Helm 自定义模板
+### Helm v2 自定义模板
 
 
 * 自定义 Helm 模板 需要包含 `Chart.yaml` 文件、`templates` 模板目录.
@@ -689,7 +691,7 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 
 
 
-### helm 命令
+### helm v2 命令
 
 > Helm 一些常用命令
 
@@ -751,7 +753,7 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 
 ---
 
-### Helm FAQ
+### Helm v2 FAQ
 
 
 * `Error: no available release name found`
@@ -919,6 +921,39 @@ root@kubernetes:/opt/helm# helm version
 version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec3742105", GitTreeState:"dirty", GoVersion:"go1.14.7"}
 
 ```
+
+
+>  配置 Helm
+
+
+* Helm 默认情况下不需要配置就可以直接使用. 
+
+* Helm 会使用到的一直参数: 
+
+  * `--kubeconfig` : 指定 kubernetes 的 config 文件, 不配置默认会读取 `$HOME/.kube/config`
+
+  * `--kube-context` : 配置 kubernetes 上下文.  ( 在 kubeconfig 文件中 context 选项中的 use 值 ).
+
+
+
+
+### Helm v3 命令
+
+
+
+> helm install 命令
+
+
+* helm 支持四种安装方式. 
+
+  1. 通过指定 repo 安装. -- `helm install -n mysql stable/mysql`
+
+  2. 通过指定 chart 的 tgz 包 安装. -- `helm install  -n mysql mysql-2.3.tgz`
+
+  3. 通过自定义 chart 目录安装. -- `helm install -n mysql .`
+
+  4. 通过指定 url 进行安装. -- `helm install -n mysql http://127.0.0.1:8879/charts/mysql`
+
 
 
 
