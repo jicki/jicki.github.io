@@ -681,8 +681,6 @@ REVISION	UPDATED                 	STATUS    	CHART   	APP VERSION	DESCRIPTION
 ```
 
 
-
-
 ```shell
 root@kubernetes:/opt/helm/myapp# curl 10.254.90.247
 
@@ -694,6 +692,52 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 ### helm 命令
 
 > Helm 一些常用命令
+
+
+* `list / ls` 列出已经部署的应用 `release` .
+  
+  * `helm list` / `helm ls` 不包含 `DELETE` 状态的应用.
+
+  * `helm list -a` 列出包含 所有状态 的所有应用
+
+---
+
+* `status` 查看指定 release 的状态
+
+  * `helm status release_name`
+
+
+
+---
+
+
+* `delete / del` 删除指定 release 应用. 只删除 历史 并非完全删除 release , 可用 rollback 回滚.
+
+  * `helm delete release_name`
+
+  * `helm delete release_name --purge`  完全删除 release 应用.
+
+
+
+---
+
+* `history` 列出指定 release 应用的 所有 `REVISION` 版本.
+
+  * `helm history release_name`
+
+
+---
+
+* `rollback` 回滚指定 release 应用的指定 `REVISION` 版本.
+
+  * `helm rollback release_name 1`
+
+
+
+---
+
+
+
 
 
 
