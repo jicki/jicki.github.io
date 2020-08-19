@@ -703,6 +703,7 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 
   * `helm install -n mysql stable/mysql` 创建 repo 仓库中的应用,  `stable` 表示 repo 仓库名称.
 
+  * `helm install --dry-run -n release_name .`  测试应用, 不会部署应用, 显示对应的 kubernetes 资源清单以及测试部署信息.
 
 ---
 
