@@ -768,9 +768,10 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 ## Helm v3
 
 
-{{< figure src="/img/posts/helm/helm3.jpg" >}}
+{{< figure src="/img/posts/helm/helm3.png" >}}
 
 
+---
 
 ### Helm v3 新特性
 
@@ -796,15 +797,20 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 7. 移动 `helm serve` , Helm v2 中可以通过 helm serve 来启动一个简单的 HTTP 服务, 用于托管 local repo 中的 `chart`. Helm v3 移除了此命令, 因为 Helm v3 中可以将`chart` 推送到 Docker 镜像仓库中.
 
 
-
-
-
+---
 
 ### Helm v3 流程图
 
 
 
 {{< figure src="/img/posts/helm/helm-v3-flow.jpeg" >}}
+
+
+
+
+
+---
+
 
 
 
