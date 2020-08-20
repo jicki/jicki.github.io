@@ -1440,6 +1440,7 @@ metadata:
 
 ```
 
+---
 
 * `templates/ingress.yaml` 文件
 
