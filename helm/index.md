@@ -1552,5 +1552,48 @@ spec:
 
 ---
 
+---
 
+
+> helm template 命令
+
+* `helm template chart_name` : 显示 chart 的 templates 模板内容. 既完整的 kubernetes  YAML 资源清单. 
+
+  * `--show-only` : 只显示 templates 目录下的指定 模板资源内容. 例: `helm template myapp --show-only template/deployment.yaml`
+
+  * `--output-dir` : 将模板资源内容输出到指定目录中. 例: `helm template myapp --output-dir /tmp/app/`
+
+  * `--validate` :  模板的内容是否进行 kubernetes 资源校验.
+
+  * `--no-hooks` : 不触发 hook 钩子操作.
+
+  * `--dependency-update` : 是否更新依赖.
+
+  * `--devel` : 显示开发版本的 `chart`. 
+
+
+---
+
+
+> helm package 命令
+
+* `helm package ` : 用于将 自定义的 `chart` 打包成 `chart` 压缩包, 以及生成 gpg 文件.
+
+  * `--sign` : 此选项会生成 gpg 校验文件. 用于校验 `chart` 完整性以及来源. 如: `helm package --sign --key "markkey" --keyring path/key/keryring.gpg myapp` .
+
+    * `--key` : 在 `--sign` 中需要指定 此 key 密码.
+
+    * `--keyring` : 指定 keyring 文件.
+
+  * `--version` : 打包时指定 `chart` 版本号.
+
+  * `--app-version` : 打包时指定 应用的 版本号.
+
+  * `--destination` : 输出到指定目录. `--destination /tmp`
+
+  * `--dependency-update` : 是否更新依赖.
+
+
+
+---
 
