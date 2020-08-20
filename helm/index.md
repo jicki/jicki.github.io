@@ -926,6 +926,8 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 >  配置 Helm
 
 
+
+---
 * Helm 默认情况下不需要配置就可以直接使用. 
 
 * Helm 会使用到的一直参数: 
@@ -995,6 +997,65 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 
 ---
+
+---
+
+> helm repo 命令
+
+
+* `helm repo list` : 显示本地配置的 repo .
+
+  * `-o` : 格式化输出, 支持 `table|json|yaml`. 例: `helm repo list -o json`
+
+* `helm repo index chart` : 将本地的 chart 包生成一个 charts 索引文件.
+
+* `helm repo add` : 添加 repo 到本地列表中. 例: `helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts`
+  
+  * `--ca-file` : 指定 HTTPS 的 repo  tls 的 ca 证书文件.
+
+  * `--cert-file` : 指定 HTTPS 的 repo tls 的 cert 证书文件.
+
+  * `--key-file` : 指定 HTTPS 的 repo tls 的 key 证书文件.
+
+  * `--insecure-skip-tls-verify` : 跳过 repo tls 检测.
+
+  * `--no-update` : 只添加 repo 但是不更新 index 索引文件. 默认添加以后会自动更新 index 索引文件.
+
+  * `--username` :  指定 repo 所需要的 用户名.
+
+  * `--password` :  指定 repo 所需要的 密码. 
+
+* `helm repo remove` : 删除本地列表中指定的 repo. 例: `helm repo remove aliyun`
+
+* `helm repo update` : 更新本地列表中的 repo 的 index 索引文件. 
+
+
+
+
+---
+
+> helm search 命令
+
+
+* `helm search hub` : 从 docker 仓库中查找可用的 `chart`. 默认会从 `https://hub.helm.sh/charts` 官方 hub 中搜索.
+
+  * `--endpoint` : 默认地址是 `https://hub.helm.sh/charts` 官方 hub . 通过此命令可指定自己的 hub .
+
+  * `-o` : 格式化输出, 支持 `table、json、yaml` .
+
+
+* `helm search repo` : 从本地配置的 repo 中查找可用的 `chart` . `helm repo list` 可查看本地配置的 repo .
+
+  * `-o` : 格式化输出, 支持 `table、json、yaml` .
+
+  * `--regexp` : 正则过滤 search . 例: `helm search repo --regexp ".*sql$"`
+
+  * `--versions` : 列出 repo 仓库中所有的版本. 默认只会列出最新版本.
+
+  * `--version` : 指定 `CHART` 版本搜索.
+
+  * `--devel` : 会显示 开发版本的 `chart`.
+
 
 ---
 
@@ -1075,8 +1136,420 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
     * `--password` : 配置 repo 库 的密码. 
 
 
+
 ---
 
+
+> helm uninstall 命令
+
+
+* `helm uninstall / un / del / delete  release_name ` : 删除已部署的 `release` .  
+
+  * `-n` : 指定命名空间 ( namespace ) .
+
+  * `--dry-run` : 测试删除, 不会实际删除.
+
+  * `--no-hooks` : 不触发 hooks 的操作.
+
+  * `--keep-history` : 删除后会在 `kubernetes 的 secret` 中保留历史记录 ( kubectl get secret ).  helm v2 的数据保存于 helm 数据中, 而 helm v3 的数据会保存在 kubernetes 中.
+ 
+  * `--timeout 300s` : 设置删除超时时间. (default 5m0s)
+
+
+---
+
+
+> helm status 命令
+
+* `helm status release_name`  查看具体 `release` 的状态信息.
+
+  * ` -o, --output` : 指定输出格式, `table|json|yaml` 默认为 table .
+
+  * `--revision` : 指定查看 revision 版本.
+
+
+
+
+---
+
+
+
+> helm list 命令
+
+* `helm list` : 显示已经部署的 `release` .
+
+  * `-n` :  指定 namespace 命名空间的 `release`. 不指定为 `defaule`命名空间下的 `release`. 
+
+  * `--all-namespaces` : 显示所有 命名空间下的 `release`.
+
+  * `helm list --all` : 列出所有 状态的 `release` . 默认不会列出 `uninstalled` 的 `release`.
+
+    * `helm list --deployed` : 列出 deployed 状态的 `release`.
+
+    * `helm list --failed` : 列出 failed 状态的 `release`.
+
+    * `helm list --superseded` : 列出 superseded  状态的 `release`.
+
+    * `helm list --uninstalled` : 列出 uninstalled 状态的 `release`.
+
+    * `helm list --uninstalling` : 列出 uninstalling 状态的 `release`.
+
+  * `helm list --data` :  按照 `UPDATED` 时间排序.   
+
+  * `helm list --max int`: 最多列出多少个 `release`.
+
+  * `helm list --offset int`: 从第几个 `release` 开始列出, 从 0 开始.
+
+  * `helm list --filter ` : 过滤规则, 支持正则表达式.  例: `helm list --filter ".*app"` 
+
+  * `helm list -o ` : 格式化输出, 支持 `table、json、yaml`. 例: `helm list -o json`
+
+
+---
+
+
+> helm create 命令
+
+  * `helm create chart_name` 创建一个 chart 所需要用到的模板目录.
+
+    * `--starter` : 指定 chart 模板 进行创建. 例: `helm create myredis --starter /tmp/redis`
+
+
+---
+
+```shell
+# 会初始化如下文件以及目录结构
+
+root@kubernetes:/opt/helm/app# tree .
+
+.
+├── Chart.yaml
+├── charts
+├── templates
+│   ├── NOTES.txt
+│   ├── _helpers.tpl
+│   ├── deployment.yaml
+│   ├── hpa.yaml
+│   ├── ingress.yaml
+│   ├── service.yaml
+│   ├── serviceaccount.yaml
+│   └── tests
+│       └── test-connection.yaml
+└── values.yaml
+
+```
+
+---
+
+* `Chart.yaml` 文件
+
+```yaml
+apiVersion: v2
+name: app
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: 1.16.0
+```
+
+
+---
+
+* `values.yaml` 文件
+
+
+```yaml
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+```
+
+---
+
+* `templates/deployment.yaml` 文件
+
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "app.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+```
+
+---
+
+* `templates/service.yaml` 文件
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "app.selectorLabels" . | nindent 4 }}
+```
+
+---
+
+* `templates/serviceaccount.yaml` 文件
+
+
+```yaml
+{{- if .Values.serviceAccount.create -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "app.serviceAccountName" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  {{- with .Values.serviceAccount.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
+
+```
+
+
+* `templates/ingress.yaml` 文件
+
+```yaml
+
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "app.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ . }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+          {{- end }}
+    {{- end }}
+  {{- end }}
+```
+
+
+---
+
+* `templates/hpa.yaml` 文件
+
+```yaml
+
+{{- if .Values.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "app.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+  {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+  {{- end }}
+  {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+  {{- end }}
+{{- end }}
+
+```
+
+---
+
+* `templates/tests/test-connection.yaml` 文件
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "app.fullname" . }}-test-connection"
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "app.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
+
+```
+
+---
 
 
 
