@@ -940,6 +940,64 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
 ### Helm v3 命令
 
+> helm env 命令
+
+* `helm env` 命令主要用于输出 helm 所在本地环境的环境变量.
+
+
+```shell
+root@kubernetes:/opt/helm# helm env
+
+# helm 二进制文件名称
+HELM_BIN="helm"
+# helm 的缓存 目录
+HELM_CACHE_HOME="/root/.cache/helm"
+# helm 配置文件 目录
+HELM_CONFIG_HOME="/root/.config/helm"
+# helm 数据目录
+HELM_DATA_HOME="/root/.local/share/helm"
+# 是否开启 debug 模式
+HELM_DEBUG="false"
+# kubernetes 的 kube-apiserver
+HELM_KUBEAPISERVER=""
+# kubernetes 的 kube-context
+HELM_KUBECONTEXT=""
+# kubernetes 的 用户 Token 
+HELM_KUBETOKEN=""
+# helm 默认命名空间
+HELM_NAMESPACE="default"
+# helm 插件目录
+HELM_PLUGINS="/root/.local/share/helm/plugins"
+# helm 注册中心的配置文件
+HELM_REGISTRY_CONFIG="/root/.config/helm/registry.json"
+# helm 仓库的缓存目录
+HELM_REPOSITORY_CACHE="/root/.cache/helm/repository"
+# helm 仓库的配置文件
+HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
+
+```
+
+---
+
+* 可通过修改如下 变量 修改 `helm env` .
+
+
+| Name                                 | Description                                                                       |
+|--------------------------------------|-----------------------------------------------------------------------------------|
+| `$HELM_CACHE_HOME`                   | set an alternative location for storing cached files.                             |
+| `$HELM_CONFIG_HOME`                  | set an alternative location for storing Helm configuration.                       |
+| `$HELM_DATA_HOME`                    | set an alternative location for storing Helm data.                                |
+| `$HELM_DRIVER`                       | set the backend storage driver. Values are: configmap, secret, memory, postgres   |
+| `$HELM_DRIVER_SQL_CONNECTION_STRING` | set the connection string the SQL storage driver should use.                      |
+| `$HELM_NO_PLUGINS`                   | disable plugins. Set `HELM_NO_PLUGINS=1` to disable plugins.                      |
+| `$KUBECONFIG`                        | set an alternative Kubernetes configuration file (default "~/.kube/config")       |
+
+
+
+---
+
+---
+
 
 > helm install 命令
 
@@ -975,9 +1033,9 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
    
   * `--replace` : 重用被 `delete` 删除的 同名 `release`. 重用现有 `release` 并替换其资源, 而非重新创建. 
 
-  * `--timeout ` : 设置超时时间 (default 5m0s). 
+  * `--wait` : 等待应用 Successful 后才返回, 既 kubernetes 资源都 `Running`. 如果出错会在 `--timeout` 时间后返回. 
 
-  * `--wait` : 等待时间, 既等待时间结束后才 successful. 
+  * `--timeout ` : 设置超时时间 (default 5m0s).
 
   * `--generate-name` : 随机命名 `release` ,  默认必须指定 `release` 名称.
 
@@ -993,6 +1051,8 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
   * `--skip-crds` : 跳过 CRD 资源的添加.  
 
+  * `--render-subchart-notes` : 显示 subchart notes .
+
   * `-o --output [table|json|yaml|` : 以什么格式输出安装结果.
 
   * `--values -f values.yaml` : 指定 `values` 变量的文件.
@@ -1003,7 +1063,7 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
   * `--set-file` : 设置变量等于文件, `key=script.sh` .
 
-  * `--version ` : 设置 `release` 安装版本.
+  * `--version ` : 指定 `chart` 的安装版本.
 
   * `--verify` : 校验需要安装的 `chart` 完整性.
 
