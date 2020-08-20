@@ -941,7 +941,6 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 ### Helm v3 命令
 
 
-
 > helm install 命令
 
 
@@ -955,6 +954,25 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
   4. 通过指定 url 进行安装. -- `helm install -n mysql http://127.0.0.1:8879/charts/mysql`
 
+---
+
+* `helm install ` 的一些参数
+
+  * `--dry-run` : 测试安装, 不会实际部署.
+
+  * `--no-hooks` : 不触发 hooks 的操作.
+
+    * `Hooks` 包含如下:
+      * `pre-install`: 预安装, 在模板渲染后, kubernetes 创建任何资源之前执行.
+      * `post-install`: 安装后, 在所有 kubernetes 资源安装到集群后执行.
+      * `pre-delete`: 预删除在从 kubernetes 删除任何资源之前执行删除请求.
+      * `post-delete`: 删除后, 删除所有 release 的资源后执行.
+      * `pre-upgrade`: 升级前, 在模板渲染后, 但在任何资源升级之前执行.
+      * `post-upgrade`: 升级后, 在所有资源升级后执行.
+      * `pre-rollback`: 预回滚, 在模板渲染后, 在任何资源回滚之前执行.
+      * `post-rollback`: 回滚后, 在修改所有资源后执行回滚请求. 
+      * `crd-install`: 预检查, 在运行其他检查之前添加 CRD 资源, 只能用于 chart 中其他的资源清单定义的 CRD 资源.
+   
 
 ---
 
