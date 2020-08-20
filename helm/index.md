@@ -956,7 +956,7 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
 ---
 
-* `helm install ` 的一些参数
+* `helm install ` 的一些常用参数:
 
   * `--dry-run` : 测试安装, 不会实际部署.
 
@@ -973,6 +973,47 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
       * `post-rollback`: 回滚后, 在修改所有资源后执行回滚请求. 
       * `crd-install`: 预检查, 在运行其他检查之前添加 CRD 资源, 只能用于 chart 中其他的资源清单定义的 CRD 资源.
    
+  * `--replace` : 重用被 `delete` 删除的 同名 `release`. 重用现有 `release` 并替换其资源, 而非重新创建. 
+
+  * `--timeout ` : 设置超时时间 (default 5m0s). 
+
+  * `--wait` : 等待时间, 既等待时间结束后才 successful. 
+
+  * `--generate-name` : 随机命名 `release` ,  默认必须指定 `release` 名称.
+
+  * `--name-template` : 指定包含 `release` 命名的 模板. 
+
+  * `--description` : 添加 `release` 备注, 说明.
+
+  * `--devel` :  安装 `Beta` 版的 Chart.
+
+  * `--dependency-update` : 更新依赖, 将 Helm v2 版本中的 `requirement.yaml` 更新到 `Chart.yaml` 中.
+
+  * `--atomic` : 原子性, 既创建 `release` 失败就直接删除.
+
+  * `--skip-crds` : 跳过 CRD 资源的添加.  
+
+  * `-o --output [table|json|yaml|` : 以什么格式输出安装结果.
+
+  * `--values -f values.yaml` : 指定 `values` 变量的文件.
+
+  * `--set value` : 设置 变量 `key=value` 格式. 
+
+  * `--set-string` : 设置字符串类型的变量.
+
+  * `--set-file` : 设置变量等于文件, `key=script.sh` .
+
+  * `--version ` : 设置 `release` 版本, 同 `Chart.yaml` 中配置的 version 变量.
+
+  * `--verify` : 校验需要安装的 `chart` 完整性.
+
+    * `--keyring` : 指定校验 `chart` 需要使用的 gpg 文件.
+
+  * `--repo` : 指定安装的 repo 库.
+ 
+    * `--username` : 配置 repo 库 的用户名.
+    * `--password` : 配置 repo 库 的密码. 
+
 
 ---
 
