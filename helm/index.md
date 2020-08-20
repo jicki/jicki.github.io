@@ -946,13 +946,13 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
 * helm 支持四种安装方式. 
 
-  1. 通过指定 repo 安装. -- `helm install -n mysql stable/mysql`
+  1. 通过指定 repo 安装. -- `helm install mysql -n mysql stable/mysql`
 
-  2. 通过指定 chart 的 tgz 包 安装. -- `helm install  -n mysql mysql-2.3.tgz`
+  2. 通过指定 chart 的 tgz 包 安装. -- `helm install  mysql -n mysql mysql-2.3.tgz`
 
-  3. 通过自定义 chart 目录安装. -- `helm install -n mysql .`
+  3. 通过自定义 chart 目录安装. -- `helm install mysql -n mysql .`
 
-  4. 通过指定 url 进行安装. -- `helm install -n mysql http://127.0.0.1:8879/charts/mysql`
+  4. 通过指定 url 进行安装. -- `helm install mysql -n mysql http://127.0.0.1:8879/charts/mysql`
 
 ---
 
@@ -1003,7 +1003,7 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
   * `--set-file` : 设置变量等于文件, `key=script.sh` .
 
-  * `--version ` : 设置 `release` 版本, 同 `Chart.yaml` 中配置的 version 变量.
+  * `--version ` : 设置 `release` 安装版本.
 
   * `--verify` : 校验需要安装的 `chart` 完整性.
 
