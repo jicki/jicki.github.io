@@ -1726,7 +1726,174 @@ spec:
 
 > helm show 命令
 
+* `helm show all myapp` : 显示 `chart` 所有的信息. 
+
+* `helm show chart myapp` : 显示 `chart` 的 `Chart.yaml` 中的信息.
+
+* `helm show readme myapp` : 显示 `chart` 的 README 中信息.
+
+* `helm show values myapp` : 显示 `chart` 的 values 变量.
+
+  * `--version` : 指定 version 版本号查看当前 `chart` 信息.
+
+  * `--verify` : 显示 `chart` 信息并进行 校验.
+
+  * `--repo` : 指定 repo 地址.
+
+    * `--username` : 指定 repo 的验证 用户名.
+
+    * `--password` : 指定 repo 的验证 密码.
 
 
 ---
+
+#### get 命令
+
+> helm get 命令
+
+* `helm get all release_name` : 显示 `release` 所有的信息.
+
+* `helm get hooks release_name` : 显示 `release` 钩子的信息. 
+
+* `helm get manifest release_name` : 显示 `release`  kubernetes 资源清单YAML文件.
+
+* `helm get notes release_name` : 显示 `release` 的 NOTES 提示信息. 
+
+* `helm get values release_name` : 显示 `release` 部署时通过 `--set` 指定的 values 变量. `--all` 可以显示所有的 values 变量信息.
+
+  * `--revision` : 指定 `release` 历史版本, 显示.
+
+  * `-o、--output` : 格式化输出信息 支持 `table|json|yaml` .
+
+
+
+---
+
+#### dependency 命令
+
+
+> helm dependency 命令 
+
+* `dependency|dep|dependencies` 支持三个别名.
+
+
+* `helm dependency update chart_name` : 根据 `Chart.yaml` 文件信息更新 `chart` 依赖并下载到 `chart` 的 `charts` 目录下.  
+
+* `helm dependency list chart_name` :  显示 `chart` 的依赖信息. 如: app 依赖 mysql , redis 才能运行.
+
+* `helm dependency build chart_path` : 根据 `Chart.lock` 文件信息构造 `chart` 的依赖包, 并生成到 `charts` 目录. 如果 `Chart.lock` 文件不存在, 会根据 `Chart.yaml` 文件构建.
+
+---
+
+
+#### plugin 命令
+
+> helm plugin 命令
+
+
+* `helm plugin list | ls` : 查看本地已安装的 插件列表.
+
+* `helm plugin install | add` : 安装指定插件到本地.
+
+  * `helm plugin install https://github.com/chartmuseum/helm-push` : URL 安装方式.
+
+  * `helm plugin install /root/helm-push` : 插件目录方式安装.
+
+* `helm plugin unstall | remove | rm ` : 删除本地已安装的插件.
+
+* `helm plugin update | up` : 更新本地已安装的插件. 通过仓库以及URL安装方式才可以更新.
+
+---
+
+#### test 命令
+
+> helm test 命令
+
+
+* `helm test release_name` : 测试  `release` 是否正常.
+
+
+
+---
+
+#### pull 命令
+
+> helm pull 命令
+
+
+* `helm pull repo/chart_name` : 将 repo 仓库中指定的 `chart` 压缩包下载到本地.
+
+  * `--devel` : 开发版本的 `chart` .
+
+  * `--prov` : 下载 prov 文件.
+
+  * `--untar` : 将下载的 `chart` 压缩包进行解压.
+
+  * `--untardir` : 将下载的 `chart` 压缩包解压缩到指定目录. `helm pull stable/redis --untardir /root/redis`
+
+  * `--destination` : 将下载的 `chart` 压缩包存到指定目录. `helm pull stable/redis --destination /root ` 
+
+  * `--version` : 指定下载 `chart` 的版本.
+
+  * `--verify` : 验证下载的 `chart` 压缩包完整性.
+
+  * `--repo` : 从指定的 repo 中下载 `chart` .
+
+    * `--username` :  设置 repo 所需的验证 用户名.
+    * `--password` :  设置 repo 所需的验证 密码.
+
+---
+
+#### verify 命令
+
+> helm verify 命令
+
+* `helm verify myapp-1.0.0.tgz --keyring secring.gpg` : 检验 `chart` 包的完整性. 使用 gpg 进行校验.
+
+
+
+
+---
+
+#### registry 命令
+
+> helm registry 命令
+
+* 注: 使用 registry 命令, 需要将环境变量 `export HELM_EXPERIMENTAL_OCI=1` 才可以开启.
+
+
+* `helm registry login docker_registry_url --username admin  --password admin` : 登录 docker registry 私有仓库.
+
+* `helm registry logout docker_registry_url` : 登出 docker registry 私有仓库.
+
+
+ 
+
+---
+
+
+#### chart 命令
+
+> helm chart 命令
+
+* 注: 使用 chart 命令, 需要将环境变量 `export HELM_EXPERIMENTAL_OCI=1` 才可以开启.
+
+
+* `helm chart list` : 显示本地已下载的 `chart` 包信息. 
+
+* `helm chart pull` : 从指定 registry 下载 `chart` 包到本地. 例: `helm chart pull jicki.cn/myapp:1.0`
+
+* `helm chart remove` : 删除已下载的本地 `chart` 包.
+
+* `helm chart save` :  将本地的 `chart` 包, 保存到 `helm chart list` 列表中. 
+
+* `helm chart push` : 将 `helm chart list` 列表中的 chart 提交到远程 registry 仓库中.
+
+
+
+---
+
+
+
+  
 
