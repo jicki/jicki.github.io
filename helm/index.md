@@ -942,6 +942,10 @@ version.BuildInfo{Version:"v3.3.0", GitCommit:"8a4aeec08d67a7b84472007529e8097ec
 
 ### Helm v3 命令
 
+
+
+#### env 命令
+
 > helm env 命令
 
 * `helm env` 命令主要用于输出 helm 所在本地环境的环境变量.
@@ -1000,6 +1004,8 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 ---
 
+#### repo 命令
+
 > helm repo 命令
 
 
@@ -1034,6 +1040,8 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 ---
 
+#### search 命令
+
 > helm search 命令
 
 
@@ -1059,6 +1067,7 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 ---
 
+#### install 命令
 
 > helm install 命令
 
@@ -1139,6 +1148,7 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 ---
 
+#### uninstall 命令
 
 > helm uninstall 命令
 
@@ -1158,6 +1168,7 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 ---
 
+#### status 命令
 
 > helm status 命令
 
@@ -1167,11 +1178,10 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
   * `--revision` : 指定查看 revision 版本.
 
-
-
-
 ---
 
+
+#### list 命令
 
 
 > helm list 命令
@@ -1207,13 +1217,13 @@ HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 ---
 
+#### create 命令
 
 > helm create 命令
 
   * `helm create chart_name` 创建一个 chart 所需要用到的模板目录.
 
     * `--starter` : 指定 chart 模板 进行创建. 例: `helm create myredis --starter /tmp/redis`
-
 
 ---
 
@@ -1554,6 +1564,7 @@ spec:
 
 ---
 
+#### template 命令
 
 > helm template 命令
 
@@ -1574,6 +1585,7 @@ spec:
 
 ---
 
+#### package 命令
 
 > helm package 命令
 
@@ -1599,6 +1611,8 @@ spec:
 
 ---
 
+#### lint 命令
+
 
 > helm lint 命令
 
@@ -1612,7 +1626,7 @@ spec:
 
 ---
 
-
+#### upgrade 命令
 
 > helm upgrade 命令
 
@@ -1636,9 +1650,11 @@ spec:
 
   * `--wait` : 更新后等待应用 Successful 后才返回, 既 kubernetes 资源都 Running. 如果出错会在 --timeout 时间后返回.  
 
+  * `--history-max ` : 保留 `release` 版本记录. 默认是 10 条. 使用 `helm history` 的记录信息.
+
   * `--atomic` : 如果更新失败就回滚. 
 
-  * `--cleanup-on-fail` : 如果更新失败会清除其次更新的信息. 
+  * `--cleanup-on-fail` : 如果更新失败会 清除此次更新. 
 
   * `--description` : 添加此次更新的说明/描述信息. 使用 `helm history myapp` 可查看到 DESCRIPTION .
 
@@ -1666,4 +1682,51 @@ spec:
 
 
 
+---
+
+#### rollback 命令
+
+> helm rollback 命令
+
+
+* `helm rollback myapp 2` : 回滚 `relesae` 到 REVISION 2 的版本. 如果不指定默认回滚到上一个版本 ( 上一个版本如果是 rollback 操作会回滚到之上的版本,如此类推 ).
+
+  * `--dry-run` : 测试回滚, 不会实际操作回滚.
+
+  * `--recreate-pods` :  强制重新创建 kubernetes 资源 pods .
+
+  * `--no-hooks` : 不执行 hooks 钩子.
+
+  * `--wait` : 回滚后等待应用 Successful 后才返回, 既 kubernetes 资源都 Running. 如果出错会在 --timeout 时间后返回.
+
+  * `--timeout` : 超时的等待时间. (default 5m0s)
+
+  * `--cleanup-on-fail` : 如果回滚 失败会清除此次回滚.
+  
+
+
+---
+
+#### history 命令
+
+> helm history 命令
+
+
+* `helm history myapp` : 查看 `release` 历史版本的记录信息.
+
+  * `--max` : 显示指定历史记录信息的条数.
+
+  * `-o、--output` : 格式化输出 支持 `table|json|yaml` .
+
+
+
+---
+
+#### show 命令
+
+> helm show 命令
+
+
+
+---
 
