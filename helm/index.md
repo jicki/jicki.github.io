@@ -1585,15 +1585,76 @@ spec:
 
     * `--keyring` : 指定 keyring 文件.
 
-  * `--version` : 打包时指定 `chart` 版本号.
+      * `GNU Privacy Guard` :  简称 `GnuPG` 或 `GPG` 是一种加密软件, 依照由IETF订定的`OpenPGP`技术标准设计. `GnuPG` 用于加密、数位签章及产生非对称钥匙对的软件.
+      * `gpg --gen-key` : 在Linux 下生成 gpg 密钥文件.
 
-  * `--app-version` : 打包时指定 应用的 版本号.
+  * `--version` : 打包时指定 `chart` 版本号. `helm package myapp --version 2.0.1`
 
-  * `--destination` : 输出到指定目录. `--destination /tmp`
+  * `--app-version` : 打包时指定 应用的 版本号. `helm package myapp --app-version v2`
+
+  * `--destination` : 输出到指定目录. `--destination /tmp`. 默认会生成到当前目录下.
 
   * `--dependency-update` : 是否更新依赖.
 
 
+---
+
+
+> helm lint 命令
+
+* `helm lint myapp` : 用于验证 `chart` 是否包含语法上的错误.
+
+  * `--strict` : 严谨模式, 出现 warnings 警告类的错误, 也会验证失败.
+
+  * `--with-subcharts` : 验证 `chart` 的同时会验证相关 子 `chart`. 
+
+
 
 ---
+
+
+
+> helm upgrade 命令
+
+* `helm upgrade myapp .` : 用于更新升级 `chart` .
+
+  * `--install` :  如果 `release` 不存在, 会创建一个 `release`, 如果存在就更新.
+
+  * `--devel` : 升级开发版本的 `release`.
+
+  * `--dry-run` : 测试升级, 不会实际更新.
+
+  * `--force` : 强制更新 `release` .
+
+  * `--no-hooks` : 更新 `release` 不运行 hooks 钩子.
+
+  * `--timeout` : 超时的等待时间. (default 5m0s)
+
+  * `--reset-values` : 如果之前有使用 `--set` 设置 values , 可通过此命令, 不使用 `--set` 设置的 values.
+
+  * `--reuse-values` : 使用原来 `--set` 设置的 values.
+
+  * `--wait` : 更新后等待应用 Successful 后才返回, 既 kubernetes 资源都 Running. 如果出错会在 --timeout 时间后返回.  
+
+  * `--atomic` : 如果更新失败就回滚. 
+
+  * `--cleanup-on-fail` : 如果更新失败会清除其次更新的信息. 
+
+  * `--description` : 添加此次更新的说明/描述信息. 使用 `helm history myapp` 可查看到 DESCRIPTION .
+
+  * `--version` : 更新到某个 version 中.
+
+  * `--verify` : 验证更新的 `chart` 包的完整性.
+
+    * `--keyring` : 指定验证 `chart` 包所需要的 gpg 文件.
+
+  * `--repo` : 指定更新的 `repo` 地址.
+
+    * `--username` : 指定 repo 仓库认证的 用户名.
+
+    * `--password` : 指定 repo 仓库认证的 密码.
+
+
+
+
 
