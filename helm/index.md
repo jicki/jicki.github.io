@@ -232,10 +232,25 @@ stable  https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 
 ```yaml
+# api 版本 helm 2 只支持 v1 版本
+apiVersion: v1
 
+# chart 名称
 name: my-nginx
+
+# chart 版本
 version: 1.0.0
 
+# kubernetes 的 version
+kubeVersion: 1.18.1
+
+# chart 的描述信息
+description: "my-nginx"
+
+# chart 关键词, 用于 chart 搜索
+keywords: 
+  - mynginx
+  - nginx
 ```
 
 
@@ -1898,12 +1913,38 @@ spec:
 ### Helm Chart
 
 
-**Chart 是 helm 管理引用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.**
+**Chart 是 helm 管理应用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.**
 
 ---
 
+
+
 #### Chart 目录结构
 
+
+* `Chart.yaml` :  chart 的描述文件, 包含版本信息, 名称 等.
+
+* `Chart.lock` : chart 依赖的版本信息. ( apiVersion: v2 )
+
+* `values.yaml` :  用于配置 `templates/` 目录下的模板文件使用的变量.
+
+* `values.schema.json` : 用于校检 `values.yaml` 的完整性.
+
+* `charts` : 依赖包的存储目录.
+
+* `README` : 说明文件.
+
+* `LICENSE` : 版权信息文件.
+
+* `crd` : 存放 CRD 资源的文件的目录.
+
+* `templates` : 模板文件存放目录.
+
+  * `NOTES.txt` : 模板须知/说明文件. `helm install ` 成功后会显示此文件内容到屏幕.
+
+  * `deployment.yaml` : kubernetes 资源文件. ( 所有类型的 kubernetes 资源文件都存放于 templates 目录下 )
+
+  * `_helpers.tpl` :  以 `_` 开头的文件, 可以被其他模板引用. 
 
 
 
