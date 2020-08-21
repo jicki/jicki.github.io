@@ -1895,5 +1895,16 @@ spec:
 
 
 
-  
+### Helm Chart
+
+
+**Chart 是 helm 管理引用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.**
+
+---
+
+#### Chart 目录结构
+
+
+
+
 
