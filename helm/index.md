@@ -1654,6 +1654,15 @@ spec:
 
     * `--password` : 指定 repo 仓库认证的 密码.
 
+  * `--values -f` : 指定 values 变量文件.
+
+  * `--set` : 设置 values 变量.
+
+  * `--set-string` : 设置 string 类型 values 变量.
+
+  * `--set-file` : 设置 values 为 脚本的 变量.
+
+  * `-o、--output` : 格式化输出格式 支持 `table|json|yaml`.
 
 
 
