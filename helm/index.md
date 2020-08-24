@@ -232,25 +232,52 @@ stable  https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 
 ```yaml
-# api 版本 helm 2 只支持 v1 版本
+# api 版本 helm 2 只支持 v1 版本 (必填)
 apiVersion: v1
 
-# chart 名称
+# chart 名称 (必填)
 name: my-nginx
 
-# chart 版本
+# chart 版本 (必填)
 version: 1.0.0
 
-# kubernetes 的 version
-kubeVersion: 1.18.1
+# 约束此 Chart 支持的 kubernetes 版本, 如果不支持会失败 (可选)
+kubeVersion: >= 1.18.0
 
-# chart 的描述信息
+# chart 的描述信息 (可选)
 description: "my-nginx"
 
-# chart 关键词, 用于 chart 搜索
+# chart 关键词, 用于 chart 搜索 (可选)
 keywords: 
   - mynginx
   - nginx
+
+# 主页连接 (可选)
+home: "https://jicki.cn"
+
+# 源码路径,一般为 github 地址 (可选)
+sources: "https://github.com/jicki"
+
+# 此项目维护者信息(可选)
+maintainers:
+  - name: 小炒肉
+    email: jicki@qq.com
+    url: "https://jicki.cn"
+
+# 默认都使用 gotpl (可选)
+engine: gotpl 
+
+# icon 地址 (可选)
+icon: "https://jicki.cn/images/favicon.ico"
+
+# App 的版本 (可选)
+appVersion: 1.19.2
+
+# 标注是否为过期 (可选)
+deprecated:
+
+# Tiller 版本. (可选)
+tillerVersion: > 2.0.0
 ```
 
 
@@ -844,6 +871,18 @@ helm3 2to3 convert release_name
 
 ---
 
+
+* 清理 helm v2 `release` .
+
+  * 执行完后, `Tiller Pod` 会被删除, 并且 `kube-system` 命名空间中 `configmaps` 历史版本信息也会被清理.
+
+```shell
+helm3 2to3 cleanup
+
+```
+
+
+---
 
 
 ## Helm v3
@@ -1950,6 +1989,127 @@ spec:
   * `deployment.yaml` : kubernetes 资源文件. ( 所有类型的 kubernetes 资源文件都存放于 templates 目录下 )
 
   * `_helpers.tpl` :  以 `_` 开头的文件, 可以被其他模板引用. 
+
+
+
+---
+
+
+#### Chart.yaml 文件
+
+
+> chart 的描述文件, 包含版本信息, Chart 名称,说明等.
+
+* 这里仅说明 `apiVersion v2 版本`
+
+```yaml
+# Helm api 版本 (必填)
+apiVersion: v2
+
+# Chart 的名称 (必填)
+name: myapp
+
+# 此 Chart 的版本 (必填)
+version: v1.0
+
+# 约束此 Chart 支持的 kubernetes 版本, 如果不支持会失败 (可选)
+kubeVersion: >= 1.18.0
+
+# 此 Chart 说明信息 (可选)
+description: "My App"
+
+# Chart 的应用类型, 分别为 application (默认)和 library. (可选)
+type: application
+
+# Chart 关键词, 用于搜索时使用 (可选)
+keywords
+  - app
+  - myapp
+
+# Chart 的 home 的地址 (可选)
+home: https://jicki.cn
+
+# Chart 的源码地址 (可选)
+sources:
+  - https://github.com/jicki
+  - https://jicki.cn
+
+
+# Chart 的依赖信息, helm v2 是在 requirements.yaml 中. (可选)
+dependencies:
+  # 依赖的 chart 名称
+  - name: nginx
+  # 依赖的版本
+    version: 1.2.3
+  # 依赖的 repo 地址
+    repository: https://kubernetes-charts.storage.googleapis.com
+  # 依赖的 条件 如 nginx 启动
+    condition: nginx.enabled
+  # 依赖的标签 tags
+    tags:
+      - myapp-web
+      - nginx-slb
+    enabled: true
+  # 传递值到 Chart 中. 
+    import-values:
+      - child:
+      - parent:
+  # 依赖的 别名
+    alias: nginx-slb 
+
+
+# Chart 维护人员信息 (可选) 
+maintainers:
+  - name: 小炒肉
+    email: jicki@qq.com
+    url: https://jicki.cn
+
+# icon 地址 (可选)
+icon: "https://jicki.cn/images/favicon.ico"
+
+# App 的版本 (可选)
+appVersion: 1.19.2
+
+# 标注是否为过期 (可选)
+deprecated: false
+
+# 注释 (可选)
+annotations:
+  # 注释的例子
+  example: 
+```
+
+
+
+---
+
+#### Helm 内置变量
+
+* Helm 内置对象包含
+
+  * `Release` 相关的内置属性.
+
+  * `Chart` 属性 - `Chart.yaml` 文件中定义的内容.
+
+  * `Values` 属性 - `Values.yaml` 文件中定义的内容.
+
+
+---
+
+* `Release` 内置变量
+
+| 变量名称           | 变量说明                                              |
+|--------------------|-------------------------------------------------------|
+| Release.Name       | release 名称                                          |
+| Release.Namespace  | release 所在命名空间                                  |
+| Release.Service    | release 发布的服务                                    |
+| Release.IsUpgrade  | 如果 release 操作状态为 更新 / 回滚 , 此变量值为 true | 
+| Release.IsInstall  | 如果 release 操作状态为 安装 , 此变量值为 true        | 
+| Release.Revision   | release 版本序号, 初始为 1 , 执行 更新/ 回滚 版本 +1  |
+
+
+
+---
 
 
 
