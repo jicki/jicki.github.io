@@ -2637,9 +2637,211 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 > Chart 函数
 
 
-* Hello 函数
+---
+
+* hello 函数
+
+  * 输出 Hello! .
+
+```yaml
+hello: {{ hello }}
+```
+
+* 运行 template
+
+```yaml
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/hello.yaml
+---
+# Source: myapp/templates/hello.yaml
+hello: Hello!
+```
 
 
+---
+
+* ago 函数
+
+  * 当前时间减去过去时间
+
+```yaml
+ago {{ ago now }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/ago.yaml
+---
+# Source: myapp/templates/ago.yaml
+ago: 0s
+```
+
+
+---
+
+* date 函数
+
+  * 格式化时间输出 Go 语言的时间格式化
+
+```yaml
+date: {{ date "2006-01-02 15:04:05" (now) }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/date.yaml
+---
+# Source: myapp/templates/date.yaml
+date: 2020-08-24 09:40:34
+```
+
+
+
+---
+
+* dateInZone 函数
+
+  * 带时区的时间格式化
+
+
+```yaml
+dateInZone: {{ dateInZone "2006-01-02 15:04:05" (now) "Asia/Shanghai" }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/dateInZone.yaml
+---
+# Source: myapp/templates/dateInZone.yaml
+dateInZone: 2020-08-24 17:48:42
+
+```
+
+
+---
+
+
+* `date_modify` 函数
+
+  * 修改时间
+
+
+```yaml
+dateNow: {{ now }}
+dateModify: {{ now | date_modify "-2h" }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/datemodify.yaml
+---
+# Source: myapp/templates/datemodify.yaml
+dateNow: 2020-08-24 09:52:41.016693113 +0000 UTC m=+0.045451911
+dateModify: 2020-08-24 07:52:41.016733093 +0000 UTC m=-7199.954508131
+
+```
+
+
+
+---
+
+* durationRound 函数
+
+  * 将指定秒 粗略转换成分钟 (m)
+
+```yaml
+durationRound: {{ durationRound "500s" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/durationRound.yaml
+---
+# Source: myapp/templates/durationRound.yaml
+durationRound: 8m
+```
+
+
+---
+
+
+* htmlDate 函数
+
+  * 格式化时间为 年-月-日
+
+```yaml
+htmlDate: {{ now | htmlDate }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/htmlDate.yaml
+---
+# Source: myapp/templates/htmlDate.yaml
+htmlDate: 2020-08-24
+
+```
+
+
+---
+
+
+* htmlDateInZone 函数
+
+  * 带时区的格式化时间 年-月-日
+
+```yaml
+htmlDateInZone: {{ htmlDateInZone now "Asia/Shanghai" }}
+```
+
+
+* 运行 template
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/htmlDateInZone.yaml
+---
+# Source: myapp/templates/htmlDateInZone.yaml
+htmlDateInZone: 2020-08-24
+
+```
+
+
+---
+
+* mustDateModify 函数
+
+  * mustDateModify 与 DateModify 函数一样, mustDateModify 会返回一个错误.
+
+```yaml
+DateNow: {{ now }}
+mustDateModify: {{ mustDateModify "500s" now}}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/mustDateModify.yaml
+---
+# Source: myapp/templates/mustDateModify.yaml
+DateNow: 2020-08-24 10:06:00.4835164 +0000 UTC m=+0.048029319
+mustDateModify: 2020-08-24 10:14:20.483551062 +0000 UTC m=+500.048063982
+
+```
+
+
+---
 
 
 
