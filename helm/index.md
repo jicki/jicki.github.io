@@ -1953,7 +1953,6 @@ spec:
 ---
 
 
-
 ### Helm Chart
 
 
@@ -2112,5 +2111,181 @@ annotations:
 ---
 
 
+#### Helm 模板函数
+
+
+> 模板函数 之 流程控制
+
+
+* `values.yaml` 文件内容如下
+
+```yaml
+favorite:
+  game: LOL
+  drink: coffee
+like:
+  - football
+  - basketball
+  - volleyball
+  - doubleball
+global:
+  service: web
+image:
+  repository: jicki/myapp
+  tag: 'v2'
+hostsPort:
+  http: 80
+  https: 443
+containerPort:
+  http: 80
+  https: 443
+```
+
+---
+
+* `if` / `else`  条件控制
+
+  * `templates/if.yaml` 文件, 模板语法使用 go语言 template 语法
+
+```yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "hello world"
+  {{- if eq .Values.favorite.game "LOL" }}
+  msg: "Good Game"
+  {{- else }}
+  msg: "Null"
+  {{- end }}
+
+```
+
+* 查看 template
+
+```shell
+
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/if.yaml
+
+---
+# Source: myapp/templates/if.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: "hello world"
+  msg: "Good Game"
+
+```
+
+
+---
+
+
+* `with` 范围控制, 加载范围主体为当前'.' , 后续通过 `.game | .drink` 直接调用
+
+  * `templates/with.yaml` 文件内容
+
+
+```yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "hello world"
+  {{- with .Values.favorite }}
+  # default 设置默认值. quote 是加上引号
+  game: {{ .game | default "King" | quote }}
+  # upper 将输出转换为 大写. quote 是加上引号 
+  drink: {{ .drink | upper | quote }}
+  {{- end }}
+
+```
+
+
+* 查看 template 
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/with.yaml
+---
+# Source: myapp/templates/with.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: "hello world"
+  game: "LOL"
+  drink: "COFFEE"
+
+```
+
+
+
+---
+
+* `range` 循环控制
+
+  * `templates/range.yaml` 文件内容
+
+
+```yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "hello world"
+  like: |-
+    # 遍历 数组
+    {{- range .Values.like }}
+    - {{ . }}
+    {{- end }}
+    # 遍历 map
+    {{- range $key, $val := .Values.favorite }}
+    {{ $key }} = {{ $val | quote }}
+    {{- end }}
+
+```
+
+
+* 查看 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/range.yaml
+---
+# Source: myapp/templates/range.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: "hello world"
+  like: |-
+    # 遍历 数组
+    - football
+    - basketball
+    - volleyball
+    - doubleball
+    # 遍历 map
+    drink = "coffee"
+    game = "LOL"
+```
+
+
+
+---
+
+
+> Chart 内置的函数
+
+
+| 函数 | 含义 |
 
 

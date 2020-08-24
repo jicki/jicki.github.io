@@ -16,7 +16,7 @@
 
 5. {{< link "https://jicki.cn/golang-web-note-2" "Go Web编程 - Gin 简介" "Gin 简介" >}}
 
-6. {{< link "https://jicki.cn/golang-web-note-8" "Go Web编程 - Go HTML 基础" "HTML 基础" >}}
+6. {{< link "https://jicki.cn/golang-study-note-8" "Go Web编程 - Go HTML 基础" "HTML 基础" >}}
 
 7. {{< link "https://jicki.cn/golang-web-note-13" "Go Web编程 - Gin HTML 应用" "Gin HTML 应用" >}}
 
