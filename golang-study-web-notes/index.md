@@ -6,6 +6,8 @@
 
 # Go 学习目录
 
+[note-7]({{< ref "golang-web-note-7" >}})
+
 1. {{< link "https://jicki.cn/golang-web-note-7" "Go Web编程 - PV UV IP PR 并发" "PV UV IP PR 并发" >}}
 
 2. {{< link "https://jicki.cn/golang-web-note-14" "Go Web编程 - 通讯协议 TLV" "通讯协议 TLV" >}}
