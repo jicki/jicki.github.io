@@ -708,8 +708,13 @@ Hello MyApp | Version: v2 | <a href="hostname.html">Pod Name</a>
 
 ### helm v2 命令
 
+
 > Helm 一些常用命令
 
+
+* 由于本文主要讲的是 v3 版本, 所以 v2 版本的命令就只记录了一些最最基础的.
+
+---
 
 
 * `install` 部署应用 `release`.
