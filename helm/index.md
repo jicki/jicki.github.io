@@ -2342,6 +2342,89 @@ msg: true
 ```
 
 
+---
+
+* `or` 函数
+
+  * `templates/or.yaml` 文件内容
+
+```yaml
+# 判断 1 大于 2  或  1 小于 2 返回为 true
+{{- if or (gt 1 2 ) (le 1 2) }}
+msg: true
+{{- else }}
+msg: false
+{{- end }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/or.yaml
+---
+# Source: myapp/templates/or.yaml
+# 判断 1 大于 2  或  1 小于 2 返回为 true
+msg: true
+```
+
+
+
+---
+
+* `not` 函数
+
+  * `templates/not.yaml` 文件内容
+
+
+```yaml
+# 判断 如果 1 大于 2 返回 false 取非 为 true
+{{- if not (gt 1 2 ) }}
+msg: true
+{{- end}}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/not.yaml
+---
+# Source: myapp/templates/not.yaml
+# 判断 如果 1 大于 2 返回 false 取非 为 true
+msg: true
+
+```
+
+
+
+---
+
+* `len` 函数
+
+  * `templates/len.yaml` 文件内容
+
+```yaml
+service: {{ .Values.global.service }}
+
+len: {{ len .Values.global.service }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/len.yaml
+---
+# Source: myapp/templates/len.yaml
+service: web
+
+len: 3
+
+```
+
+
 
 ---
 
@@ -2412,6 +2495,32 @@ html: |
 
 ---
 
+* `js` 函数
+
+  * `templates/js.yaml` 文件内容
+
+
+```yaml
+js: {{ js "<script>var a = 1; var b = a + 1; </scrpit>" }}
+
+```
+
+
+* 运行 template
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/js.yaml
+---
+# Source: myapp/templates/js.yaml
+js: \x3Cscript\x3Evar a \x3D 1; var b \x3D a + 1; \x3C/scrpit\x3E
+
+```
+
+
+
+---
+
 
 * `slice` 函数
 
@@ -2436,6 +2545,7 @@ root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/slice.yam
 # 定义一个 slice slice{1, 3, 5, 7, 9}
 
 # 取 $li 中的 第2 第4 个值 从0开始
+# 根据 go语言 slice 的取值 左包含右不包含 所以是5, 7
 slice: [5 7]
 ```
 
