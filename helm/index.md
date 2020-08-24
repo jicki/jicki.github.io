@@ -2284,7 +2284,7 @@ data:
 ---
 
 
-> Chart 内置的函数
+> Helm 内置的函数
 
 
 * 比较函数
@@ -2628,6 +2628,17 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 
 
 ---
+
+---
+
+---
+
+
+> Chart 函数
+
+
+* Hello 函数
+
 
 
 

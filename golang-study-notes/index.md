@@ -31,37 +31,37 @@ go env -w GOPROXY=https://goproxy.cn,https://mirrors.aliyun.com/goproxy,direct
 
 # Go 学习目录
 
-[ 【Go学习笔记 - Go 语言结构】](golang-study-note-0 "Go 语言基础")
+1. [ 【Go学习笔记 - Go 语言结构】]({{< ref "golang-study-note-0" >}})
 
-[ 【Go学习笔记 - Go 常量变量 && 数据类型】](golang-study-note-1 "Go 语言基础")
+2. [ 【Go学习笔记 - Go 常量变量 && 数据类型】]({{< ref "golang-study-note-1" >}})
 
-[ 【Go学习笔记 - Go 运算符 && 流程控制】](golang-study-note-2 "Go 语言基础")
+3. [ 【Go学习笔记 - Go 运算符 && 流程控制】]({{< ref "golang-study-note-2" >}})
 
-[ 【Go学习笔记 - Go 数组 切片 Map】](golang-study-note-3 "Go 语言基础")
+4. [ 【Go学习笔记 - Go 数组 切片 Map】]({{< ref "golang-study-note-3" >}})
 
-[ 【Go学习笔记 - Go 值类型与引用类型】](golang-study-note-3-1 "Go 语言基础")
+5. [ 【Go学习笔记 - Go 值类型与引用类型】]({{< ref "golang-study-note-3-1" >}})
 
-[ 【Go学习笔记 - Go 函数 闭包 panic 指针】](golang-study-note-4 "Go 语言基础")
+6. [ 【Go学习笔记 - Go 函数 闭包 panic 指针】]({{< ref "golang-study-note-4" >}})
 
-[ 【Go学习笔记 - Go 结构体 方法 Json序列化】](golang-study-note-4-1 "Go 语言基础")
+7. [ 【Go学习笔记 - Go 结构体 方法 Json序列化】]({{< ref "golang-study-note-4-1" >}})
 
-[ 【Go学习笔记 - Go 包package 】](golang-study-note-4-2 "Go 语言基础")
+8. [ 【Go学习笔记 - Go 包package 】]({{< ref "golang-study-note-4-2" >}})
 
-[ 【Go学习笔记 - Go 文件操作 】](golang-study-note-4-3 "Go 语言基础")
+9. [ 【Go学习笔记 - Go 文件操作 】]({{< ref "golang-study-note-4-3" >}})
 
-[ 【Go学习笔记 - Go 接口 interface 类型断言 】](golang-study-note-4-4 "Go 语言基础")
+10. [ 【Go学习笔记 - Go 接口 interface 类型断言 】]({{< ref "golang-study-note-4-4" >}})
 
-[ 【Go学习笔记 - 反射】](golang-study-note-5 "Go 语言基础")
+11. [ 【Go学习笔记 - 反射】]({{< ref "golang-study-note-5" >}})
 
-[ 【Go学习笔记 - 并发 goroutine && 锁】](golang-study-note-6 "Go 语言基础")
+12. [ 【Go学习笔记 - 并发 goroutine && 锁】]({{< ref "golang-study-note-6" >}})
 
-[ 【Go学习笔记 - 网络编程-HTTP-TCP-UDP】](golang-study-note-7 "Go 语言基础")
+13. [ 【Go学习笔记 - 网络编程-HTTP-TCP-UDP】]({{< ref "golang-study-note-7" >}})
 
-[ 【Go学习笔记 - Golang 性能调优】](golang-study-note-9 "Go 语言基础")
+14. [ 【Go学习笔记 - Golang 性能调优】]({{< ref "golang-study-note-9" >}})
 
-[ 【Go学习笔记 - 基础库 flag 库】](golang-study-note-10 "Go 语言基础")
+15. [ 【Go学习笔记 - 基础库 flag 库】]({{< ref "golang-study-note-10" >}})
 
-[ 【Go学习笔记 - regexp 库 正则】](golang-study-note-11 "Go 正则表达式")
+16. [ 【Go学习笔记 - regexp 库 正则】]({{< ref "golang-study-note-11" >}})
 
   [1]: https://jicki.cn/img/posts/golang/logo.jpg
 
