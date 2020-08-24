@@ -2113,6 +2113,7 @@ annotations:
 
 #### Helm 模板函数
 
+* Helm 的模板语法使用Golang 语言的 template 模块 参考: https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95 
 
 > 模板函数 之 流程控制
 
@@ -2297,10 +2298,147 @@ data:
 | gt   | 如果 arg1 > arg2 返回 真  |
 | ge   | 如果 arg1 >= arg2 返回 真 |
 
+---
+
+* 内置函数
+
+| 函数  |          含义                                         |
+| ----- | ----------------------------------------------------- | 
+| and   | 函数返回它的第一个 empty 参数或者最后一个参数         |
+| or    | 函数返回它的第一个非 empty 参数或者最后一个参数       |
+| not   | 函数返回它的单个参数的布尔值是否定                    |
+| len   | 函数返回它的参数的整数类型长度                        |    
+| index | 函数执行结果为第一个参数以剩下的参数为索引/键指向的值 |
+| html  | 函数返回其参数文本表示的 html 逸码等价表示            |
+| js    | 函数返回其参数文本表示的 JavaScrpit 逸码等价表示      | 
+| slice | 函数返回值为 slice 中的选定项                         |
 
 ---
 
-| 函数 | 含义 |
+
+* `and` 函数 
+
+  * `templates/and.yaml` 文件内容
+
+```yaml
+# 如果 5 大于 1  and 3 小于等于 10
+{{- if and (gt 5 1 ) (le 3 10) }}
+msg: true
+{{- else }}
+msg: false
+{{- end }}
+```
+
+
+* 运行 template 
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/and.yaml
+---
+# Source: myapp/templates/and.yaml
+# 如果 5 大于 1  and 3 小于等于 10
+msg: true
+
+```
+
+
+
+---
+
+* `index` 函数
+
+  * `templates/index.yaml` 文件内容
+
+```yaml
+# 定义一个变量 hostsPort
+{{- $hostsPort := .Values.hostsPort -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: "hello world"
+  # 遍历 containerPort 的 k,v 值
+  {{- range $name, $val := .Values.containerPort }}
+  # $name 变量取值为 $hostsPort 中 $name 变量的值
+  {{ $name }}: {{ index $hostsPort $name | default $val }}
+  {{- end }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/index.yaml
+---
+# Source: myapp/templates/index.yaml
+# 定义一个变量 hostsPort
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: "hello world"
+  http: 80
+  https: 443
+
+```
+
+
+---
+
+* `html` 函数
+
+  * `templates/html.yaml` 文件内容
+
+```yaml
+
+html: |
+  {{ html "<html><head><title>Title</title></head></html>" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/html.yaml
+---
+# Source: myapp/templates/html.yaml
+html: |
+  &lt;html&gt;&lt;head&gt;&lt;title&gt;Title&lt;/title&gt;&lt;/head&gt;&lt;/html&gt;
+
+```
+
+---
+
+
+* `slice` 函数
+
+  * `templates/slice.yaml` 文件内容
+
+
+```yaml
+# 定义一个 slice slice{1, 3, 5, 7, 9}
+{{ $li := list 1 3 5 7 9 }}
+
+# 取 $li 中的 第2 第4 个值 从0开始
+slice: {{ slice $li 2 4 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/slice.yaml
+---
+# Source: myapp/templates/slice.yaml
+# 定义一个 slice slice{1, 3, 5, 7, 9}
+
+# 取 $li 中的 第2 第4 个值 从0开始
+slice: [5 7]
+```
+
 
 
 
