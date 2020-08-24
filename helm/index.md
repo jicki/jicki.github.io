@@ -2558,5 +2558,77 @@ slice: [5 7]
 ---
 
 
+* `print`、`printf`、`println`  函数
+
+  * `templates/print.yaml` 文件内容 
+
+
+```yaml
+apiVersion: v1
+kind: Configmap
+matadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  {{- $name := .Release.Name }}
+
+  print: {{- print $name }}
+
+  printf: {{- printf "game - %s drink - %s" .Values.favorite.game .Values.favorite.drink }}
+
+  println: {{- println "The Game - " .Values.favorite.game }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/print.yaml
+---
+# Source: myapp/templates/print.yaml
+apiVersion: v1
+kind: Configmap
+matadata:
+  name: RELEASE-NAME-configmap
+data:
+
+  print:RELEASE-NAME
+
+  printf:game - LOL drink - coffee
+
+  println:The Game -  LOL
+
+```
+
+
+---
+
+
+* `urlquery`  函数
+
+  * `templates/urlquery.yaml` 文件内容
+
+
+```yaml
+
+{{- $password := "https://jicki.cn/abc/" }}
+
+password: {{ $password | urlquery }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/urlquery.yaml
+---
+# Source: myapp/templates/urlquery.yaml
+password: https%3A%2F%2Fjicki.cn%2Fabc%2F
+
+```
+
+
+---
+
+
 
 
