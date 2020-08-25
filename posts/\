@@ -1,5 +1,22 @@
-# Kubernetes 包管理 Helm
-
+---
+# 文章标题
+title: "Kubernetes 包管理 Helm"
+# 文章副标题
+subtitle: "Kubernetes 包管理 Helm"
+date: 2020-08-17
+lastmod: 2020-08-17
+author: "小炒肉"
+categories: 
+    - kubernetes
+description: Kubernetes 包管理 Helm
+keywords: kubernetes, docker
+draft: false
+tags:
+    - kubernetes
+    - docker
+# 主页预览的文章特色图片.
+featuredImagePreview: "/img/posts/helm/helm.png"
+---
 
 
 # Helm
@@ -3950,56 +3967,6 @@ toStrings: |
         [1 2 3]
 ```
 
----
-
-> toJson 函数
-
-* toJson 函数
-
-  * 将指定元素转换成 Json 
-
-
-```yaml
-toJson: {{ .Values.favorite | toJson }}
-```
-
-
-* 运行 template
-
-```shell
-root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toJson.yaml
----
-# Source: myapp/templates/toJson.yaml
-toJson: {"drink":"coffee","game":"LOL"}
-```
-
-
----
-
-> toPrettyJson 函数
-
-* toPrettyJson 函数
-
-  * 将指定元素转换成Json 并格式化输出.
-
-
-```yaml
-toPrettyJson: {{ .Values.favorite | toPrettyJson }}
-
-```
-
-* 运行 template
-
-```shell
-root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toPrettyJson.yaml
----
-# Source: myapp/templates/toPrettyJson.yaml
-toPrettyJson: {
-  "drink": "coffee",
-  "game": "LOL"
-}
-```
-
 
 ---
 
@@ -4158,71 +4125,6 @@ default: {{ defalut 99 "" }}
 
 
 ---
-
-
-> empty 函数
-
-* empty 函数
-
-  * 判断字符串是否为空.
-
-
-```yaml
-empty: |
-        {{- $name := "" }}
-        {{- if empty $name }}
-         name: "Null"
-        {{- else }}
-         name : {{ $name }}
-        {{- end }}
-```
-
-
-* 运行 template 
-
-```shell
-root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/empty.yaml
----
-# Source: myapp/templates/empty.yaml
-empty: |
-         name: "Null"
-
-```
-
-
-
----
-
-
-> compact 函数
-
-* compact 函数
-
-  * 去除 列表 中为空 的元素.
-
-
-```yaml
-compact: |
-        {{- $li := list "a" "" "c" "d" "f" }}
-        {{ compact $li }}
-
-```
-
-
-* 运行 template
-
-```shell
-root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/compact.yaml
----
-# Source: myapp/templates/compact.yaml
-compact: |
-        [a c d f]
-```
-
-
----
-
-
 
 
 
