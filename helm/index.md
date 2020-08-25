@@ -3068,6 +3068,40 @@ trimAll: jicki
   * 清除左边指定的 字符.
 
 
+---
+
+> nospace 函数
+
+* nospace 函数
+
+  * 清除字符串中的所有空格.
+
+
+
+---
+
+> initials 函数
+
+* initials 函数
+
+  * 截取字符串中每个单词的 第一个 字符.
+
+
+```yaml
+initials: {{ "Jicki hello world" |initials }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/initials.yaml
+---
+# Source: myapp/templates/initials.yaml
+initials: Jhw
+
+```
+
+
 
 ---
 
@@ -3140,6 +3174,33 @@ title: Jicki-Hello-World
 ```
 
 
+
+---
+
+> swapcase 函数
+
+* swapcase 函数
+
+  * 将字符串中 大小写 互转. 
+
+
+```yaml
+
+swapcase: {{ "abcDEFghiJKL" |swapcase }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/swapcase.yaml
+---
+# Source: myapp/templates/swapcase.yaml
+swapcase: ABCdefGHIjkl
+
+```
+
+
 ---
 
 > substr 函数
@@ -3187,10 +3248,685 @@ repeat: jickijickijickijickijicki
 
 ```
 
+---
+
+> randAlpha 函数
+
+* randAlpha 函数
+
+  * 输出指定位数随机 字母.
+
+
+```yaml
+randAlpha: {{ randAlpha 20 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/randAlpha.yaml
+---
+# Source: myapp/templates/randAlpha.yaml
+randAlpha: dmrHUNScimXhpUiGMapG
+
+```
+
+
+---
+
+> randNumeric 函数
+
+* randNumeric 函数
+
+  * 输出指定位数的随机 数字
+
+
+```yaml
+randNumeric: {{ randNumeric 20 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/randNumeric.yaml
+---
+# Source: myapp/templates/randNumeric.yaml
+randNumeric: 37465873746598120398
+
+```
+
+
+---
+
+
+> randAlphaNum 函数
+
+* randAlphaNum 函数
+
+  * 输出指定位数的随机 (数字 + 字母).
+
+
+```yaml
+
+randAlphaNum: {{ randAlphaNum 20 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/randAlphaNum.yaml
+---
+# Source: myapp/templates/randAlphaNum.yaml
+randAlphaNum: H2Bv00ToRKntFpy9PFYX
+
+```
+
+
+---
+
+> randAscii 函数
+
+* randAscii 函数
+
+  * 输出指定位数随机 Ascii 码
+
+
+---
+
+
+> shuffle 函数
+
+* shuffle 函数
+
+  * 将字符串的次序打乱.
+
+
+```yaml
+shuffle: {{ "jicki-hello-world" |shuffle }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/shuffle.yaml
+---
+# Source: myapp/templates/shuffle.yaml
+shuffle: -lk-rdolijohwecli
+
+```
+
+
+
+---
+
+> snakecase 函数
+
+* snakecase 函数
+
+  * 将字符串中的单词以 `_` 相连. 
+
+
+```yaml
+snakecase: {{ "jicki hello world"|snakecase }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/snakecase.yaml
+---
+# Source: myapp/templates/snakecase.yaml
+snakecase: jicki_hello_world
+
+```
+
+---
+
+
+> camelcase 函数
+
+* camelcase 函数
+
+  * 将字符串中的`_`相连的单词首字母大写并且去掉`_`.
+
+
+```yaml
+camelcase: {{ "jicki_hello_world_!" | camelcase }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/camelcase.yaml
+---
+# Source: myapp/templates/camelcase.yaml
+camelcase: JickiHelloWorld!
+```
 
 
 ---
 
 
 
+> kebabcase 函数
+
+* kebabcase 函数
+
+  * 将字符串中的单词以 `-` 相连.
+
+
+```yaml
+kebabcase: {{ "jicki hello_world" | kebabcase }}
+
+``` 
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/kebabcase.yaml
+---
+# Source: myapp/templates/kebabcase.yaml
+kebabcase: jicki-hello-world
+```
+
+
+
+---
+
+> wrapWith 函数
+
+* wrapWith 函数
+
+  * 在字符串中, 指定间隔插入指定字符串.
+
+
+```yaml
+wrapWith: |
+        {{ "jickiHelloWorld" | wrapWith 5 ":-->" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/wrapWith.yaml
+---
+# Source: myapp/templates/wrapWith.yaml
+wrapWith: |
+        jicki:-->Hello:-->World
+```
+
+
+
+---
+
+
+> contains 函数
+
+* contains 函数
+
+  * 字符串中是否包含某些字符
+
+
+```yaml
+contains: |
+  {{- $name := "jicki" }}
+  {{- if contains $name "jicki hello world" }}
+  name: "jicki"
+  {{- else }}
+  name: "Null"
+  {{- end }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/contains.yaml
+---
+# Source: myapp/templates/contains.yaml
+contains: |
+  name: "jicki"
+```
+
+
+---
+
+
+> hasPrefix 函数
+
+* hasPrefix 函数
+
+  * 字符串中是否包含指定的前缀.
+
+```yaml
+hasPrefix: |
+        {{- if hasPrefix "https" "http://www.baidu.com" }}
+        url: "https"
+        {{- else }}
+        url: "http"
+        {{- end }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/hasPrefix.yaml
+---
+# Source: myapp/templates/hasPrefix.yaml
+hasPrefix: |
+        url: "http"
+
+```
+
+
+---
+
+
+> hasSuffix 函数
+
+* hasSuffix 函数
+
+  * 字符串中是否包含指定的后缀.
+
+```yaml
+hasSuffix: |
+        {{- if hasSuffix "com" "https://baidu.com" }}
+        url: "url com"
+        {{- else }}
+        url: "not com"
+        {{- end }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/hasSuffix.yaml
+---
+# Source: myapp/templates/hasSuffix.yaml
+hasSuffix: |
+        url: "url com"
+```
+
+
+---
+
+
+> quote 函数
+
+* quote 函数
+
+  * 将指定字符串加上 `" "` 号输出.
+
+
+```yaml
+quote: {{ quote "jicki" }}
+Notquote: {{ "jicki" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/quote.yaml
+---
+# Source: myapp/templates/quote.yaml
+quote: "jicki"
+Notquote: jicki
+
+```
+
+
+
+---
+
+
+> squote 函数
+
+* squote 函数
+
+  *  将指定字符串加上 `' '` 号输出.
+
+
+```yaml
+squote: {{ squote "jicki" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/squote.yaml
+---
+# Source: myapp/templates/squote.yaml
+squote: 'jicki'
+
+```
+
+
+---
+
+> cat 函数
+
+* cat 函数
+
+  * 字符串拼接, 多个字符串拼接成一个字符串.
+
+
+```yaml
+cat: |
+        {{ cat "jicki" "hello" "world" "!" }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/cat.yaml
+---
+# Source: myapp/templates/cat.yaml
+cat: |
+        jicki hello world !
+
+```
+
+
+---
+
+> indent 函数
+
+* indent 函数
+
+  * 字符串前面缩进指定的行数.
+
+
+```yaml
+
+indent: {{ "jicki" | indent 3 |quote }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/indent.yaml
+---
+# Source: myapp/templates/indent.yaml
+indent: "   jicki"
+```
+
+
+---
+
+> nindent 函数
+
+* nindent 函数
+
+  * 字符串换行后缩进指定的行数.
+
+```yaml
+nindent: |
+  {{ "jicki" | nindent 3 |quote }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/nindent.yaml
+---
+# Source: myapp/templates/nindent.yaml
+nindent: |
+        "\n   jicki"
+```
+
+
+---
+
+> replace 函数
+
+* replace 函数
+
+  * 替换字符串中的 n 字符为 m 字符.
+
+
+```yaml
+replace: |
+        {{ "http://www.baidu.com" |replace "baidu" "qq" }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/replace.yaml
+---
+# Source: myapp/templates/replace.yaml
+replace: |
+        http://www.qq.com
+
+```
+
+
+
+---
+
+
+> sha1sum 函数
+
+* sha1sum 函数
+
+  * 使用 sha1sum 算法加密 字符串.
+
+
+```yaml
+sha1sum: {{ sha1sum "jicki" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/sha1sum.yaml
+---
+# Source: myapp/templates/sha1sum.yaml
+sha1sum: 7afef0c7f74b1aec91b159ac36946e0f865eb0e3
+```
+
+
+---
+
+
+> sha256sum 函数
+
+* sha256sum 函数
+
+  * 使用 sha256sum 算法加密 字符串.
+
+
+```yaml
+sha256sum: {{ sha256sum "jicki" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/sha256sum.yaml
+---
+# Source: myapp/templates/sha256sum.yaml
+sha256sum: 57a4bffd5916cd9fded9ad94a76de152e56eb0bf9e34c94f5ea48f8cbd4f866a
+```
+
+
+---
+
+
+> toString 函数
+
+* toString 函数
+
+  * 将 int 类型的函数转换成 string 类型.
+
+
+```yaml
+{{- $age := 22 }}
+toString: {{ $age |toString }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toString.yaml
+---
+# Source: myapp/templates/toString.yaml
+toString: 22
+```
+
+
+---
+
+> atoi 函数
+
+* atoi 函数
+
+  * 将 string 类型转换成 int 类型, 如果 string 为字符非数字, 转换后输出 0 .
+
+
+```yaml
+{{- $name := "2222" }}
+atoi: {{ $name | atoi }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/atoi.yaml
+---
+# Source: myapp/templates/atoi.yaml
+atoi: 2222
+```
+
+
+---
+
+> int64 函数
+
+* int64 函数
+
+  * 将 int 类型转换成 int64 位的整型.
+
+---
+
+
+> float64 函数
+
+* float64 函数
+
+  * 将 float32 类型转换为 float64 位的浮点型.
+
+
+---
+
+> toDecimal 函数
+
+* toDecimal 函数
+
+  * 将 八进制 转换为 十进制. 
+
+
+---
+
+> split 函数
+
+* split 函数
+
+  * 以指定符号 分割 字符串, 并存到 map 中.
+
+
+```yaml
+
+split: |
+        {{ split "," "jicki,hello,world!" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/split.yaml
+---
+# Source: myapp/templates/split.yaml
+split: |
+        map[_0:jicki _1:hello _2:world!]
+```
+
+ 
+
+---
+
+> splitList 函数
+
+* splitList 函数
+
+  * 以指定符号 分割 字符串, 并存到 列表中.
+
+```yaml
+
+splitList: |
+        {{ splitList "," "jicki,hello,world!" }}
+
+```
+
+
+* 运行 template
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/splitList.yaml
+---
+# Source: myapp/templates/splitList.yaml
+splitList: |
+        [jicki hello world!]
+
+```
+
+
+---
+
+> splitn 函数
+
+* splitn 函数
+
+  * 以指定符号 分割 N 个字符串, 并存到 map 中.
+
+
+```yaml
+
+splitn: |
+        {{ splitn ","  2  "jicki,hello,world!" }}
+
+```
+
+* 运行 template
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/splitn.yaml
+---
+# Source: myapp/templates/splitn.yaml
+splitn: |
+        map[_0:jicki _1:hello,world!]
+```
+
+
+---
 
