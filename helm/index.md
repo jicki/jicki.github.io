@@ -2144,6 +2144,8 @@ containerPort:
 
 ---
 
+> if / else 条件控制
+
 * `if` / `else`  条件控制
 
   * `templates/if.yaml` 文件, 模板语法使用 go语言 template 语法
@@ -2184,6 +2186,8 @@ data:
 
 
 ---
+
+> with 范围控制
 
 
 * `with` 范围控制, 加载范围主体为当前'.' , 后续通过 `.game | .drink` 直接调用
@@ -2229,6 +2233,9 @@ data:
 
 
 ---
+
+> range 循环控制
+
 
 * `range` 循环控制
 
@@ -2287,6 +2294,9 @@ data:
 > Helm 内置的函数
 
 
+---
+
+
 * 比较函数
 
 | 函数 |         含义              |
@@ -2320,6 +2330,7 @@ data:
 
 ---
 
+> and 函数
 
 * `and` 函数 
 
@@ -2349,6 +2360,8 @@ msg: true
 
 ---
 
+> or 函数
+
 * `or` 函数
 
   * `templates/or.yaml` 文件内容
@@ -2376,6 +2389,8 @@ msg: true
 
 
 ---
+
+> not 函数
 
 * `not` 函数
 
@@ -2406,6 +2421,8 @@ msg: true
 
 ---
 
+> len 函数
+
 * `len` 函数
 
   * `templates/len.yaml` 文件内容
@@ -2432,6 +2449,8 @@ len: 3
 
 
 ---
+
+> index 函数
 
 * `index` 函数
 
@@ -2476,6 +2495,8 @@ data:
 
 ---
 
+> html 函数
+
 * `html` 函数
 
   * `templates/html.yaml` 文件内容
@@ -2499,6 +2520,8 @@ html: |
 ```
 
 ---
+
+> js 函数
 
 * `js` 函数
 
@@ -2525,6 +2548,8 @@ js: \x3Cscript\x3Evar a \x3D 1; var b \x3D a + 1; \x3C/scrpit\x3E
 
 
 ---
+
+> slice 函数
 
 
 * `slice` 函数
@@ -2556,6 +2581,8 @@ slice: [5 7]
 
 
 ---
+
+> print / printf / println 函数
 
 
 * `print`、`printf`、`println`  函数
@@ -2602,6 +2629,7 @@ data:
 
 ---
 
+> urlquery 函数
 
 * `urlquery`  函数
 
@@ -2634,10 +2662,12 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 ---
 
 
-> Chart 函数
+> Chart 的函数
 
 
 ---
+
+> hello 函数
 
 * hello 函数
 
@@ -2658,6 +2688,33 @@ hello: Hello!
 
 
 ---
+
+> now 函数
+
+* now 函数
+
+  * 显示当前时间, 以 string 类型打印出来
+
+
+```yaml
+now: {{ now }}
+
+```
+
+
+* 运行 template
+
+```yaml
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/now.yaml
+---
+# Source: myapp/templates/now.yaml
+now: 2020-08-25 01:50:59.895593177 +0000 UTC m=+0.041493103
+```
+
+
+---
+
+> ago 函数
 
 * ago 函数
 
@@ -2680,9 +2737,11 @@ ago: 0s
 
 ---
 
+> date 函数
+
 * date 函数
 
-  * 格式化时间输出 Go 语言的时间格式化
+  * 格式化时间输出.  Go 语言的时间格式化
 
 ```yaml
 date: {{ date "2006-01-02 15:04:05" (now) }}
@@ -2700,6 +2759,8 @@ date: 2020-08-24 09:40:34
 
 
 ---
+
+> dateInZone 函数
 
 * dateInZone 函数
 
@@ -2724,6 +2785,7 @@ dateInZone: 2020-08-24 17:48:42
 
 ---
 
+> dateModify 函数
 
 * `date_modify` 函数
 
@@ -2751,6 +2813,8 @@ dateModify: 2020-08-24 07:52:41.016733093 +0000 UTC m=-7199.954508131
 
 ---
 
+> durationRound 函数
+
 * durationRound 函数
 
   * 将指定秒 粗略转换成分钟 (m)
@@ -2772,6 +2836,7 @@ durationRound: 8m
 
 ---
 
+> htmlDate 函数
 
 * htmlDate 函数
 
@@ -2795,6 +2860,7 @@ htmlDate: 2020-08-24
 
 ---
 
+> htmlDateInZone 函数
 
 * htmlDateInZone 函数
 
@@ -2819,6 +2885,8 @@ htmlDateInZone: 2020-08-24
 
 ---
 
+> mustDateModify 函数
+
 * mustDateModify 函数
 
   * mustDateModify 与 DateModify 函数一样, mustDateModify 会返回一个错误.
@@ -2842,6 +2910,287 @@ mustDateModify: 2020-08-24 10:14:20.483551062 +0000 UTC m=+500.048063982
 
 
 ---
+
+> toDate 函数
+
+* toDate 函数
+
+  * 将 string 类型的时间转换成 时间类型并按照自定义格式化输出
+
+
+```yaml
+ToDate: {{ toDate "2006-01-02 15:04:05" "2020-08-25 09:58:00" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toDate.yaml
+---
+# Source: myapp/templates/toDate.yaml
+ToDate: 2020-08-25 09:58:00 +0000 UTC
+
+```
+
+
+---
+
+> unixEpoch 函数
+
+* unixEpoch 函数
+
+  * 将指定时间转换成 时间戳格式 输出
+
+```yaml
+unixEpoch: {{ unixEpoch now }}
+``` 
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/unixEpoch.yaml
+---
+# Source: myapp/templates/unixEpoch.yaml
+unixEpoch: 1598321573
+```
+
+
+---
+
+> abbrev 函数
+
+* abbrev 函数
+
+  * 隐藏指定字符长度, 以 `...` 缩写. 
+
+
+```yaml
+abbrev: {{ "abcdefg" | abbrev 5 }}
+
+``` 
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/abbrev.yaml
+---
+# Source: myapp/templates/abbrev.yaml
+abbrev: ab...
+
+```
+
+
+---
+
+> trunc 函数
+
+* trunc 函数
+
+  * 截取 指定长度的字符.
+
+
+```yaml
+trunc: {{ "abcdefg" | trunc 2 }}
+```
+
+* 运行 template
+
+```shell
+
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/trunc.yaml
+---
+# Source: myapp/templates/trunc.yaml
+trunc: ab
+
+```
+
+
+---
+
+> trim 函数
+
+* trim 函数
+
+  * 清除前后的 空格
+
+```yaml
+trim: {{ "     a  b  c  " |trim }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/trim.yaml
+---
+# Source: myapp/templates/trim.yaml
+trim: a  b  c
+```
+
+---
+
+> trimAll 函数
+
+* trimAll 函数
+
+  * 清除前后指定的 字符.
+
+```yaml
+trimAll: {{ "++jicki++" | trimAll "+" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/trimAll.yaml
+---
+# Source: myapp/templates/trimAll.yaml
+trimAll: jicki
+
+```
+
+
+---
+
+> trimSuffix 函数
+
+* trimSuffix 函数
+
+  * 清除 右边指定的 字符
+
+
+---
+
+> trimPrefix 函数
+
+* trimPrefix 函数
+
+  * 清除左边指定的 字符.
+
+
+
+---
+
+> upper 函数
+
+* upper 函数
+
+  * 将字符串全部转换成大写
+
+```yaml
+upper: {{ "abcdefg" | upper }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/upper.yaml
+---
+# Source: myapp/templates/upper.yaml
+upper: ABCDEFG
+``` 
+
+
+---
+
+> lower 函数
+
+* lower 函数
+
+  * 将字符串全部转换成小写
+
+```yaml
+lower: {{ "ABCDEFG" | upper }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/lower.yaml
+---
+# Source: myapp/templates/lower.yaml
+lower: abcdefg
+```
+
+
+---
+
+> title 函数
+
+* title 函数
+
+  * 将单词的首写字母转换成大写
+
+
+```yaml
+title: {{ "jicki hello world" | title }}
+title: {{ "jicki-hello-world" | title }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/title.yaml
+---
+# Source: myapp/templates/title.yaml
+title: Jicki Hello World
+title: Jicki-Hello-World
+```
+
+
+---
+
+> substr 函数
+
+* substr 函数
+
+  * 截取字符串 N-M 长度 的内容 ( N 从0开始, M = M-1).
+
+```yaml
+substr: {{ "abcdefghi" |substr 1 5 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/substr.yaml
+---
+# Source: myapp/templates/substr.yaml
+substr: bcde
+```
+
+
+---
+
+> repeat 函数
+
+* repeat 函数
+
+  * 重复输出N次指定字符串.
+
+
+```yaml
+repeat: {{ "jicki" | repeat 5 }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/repeat.yaml
+---
+# Source: myapp/templates/repeat.yaml
+repeat: jickijickijickijickijicki
+
+```
+
+
+
+---
+
 
 
 
