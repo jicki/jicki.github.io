@@ -630,10 +630,7 @@ slice: {{ slice $li 2 4 }}
 root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/slice.yaml
 ---
 # Source: myapp/templates/slice.yaml
-# 定义一个 slice slice{1, 3, 5, 7, 9}
 
-# 取 $li 中的 第2 第4 个值 从0开始
-# 根据 go语言 slice 的取值 左包含右不包含 所以是5, 7
 slice: [5 7]
 ```
 
@@ -2705,9 +2702,8 @@ tuple: |
         kindOf: slice
 ```
 
-
-
 ---
+
 
 > dict 函数
 
@@ -2739,9 +2735,346 @@ dict: |
 
 ```
 
+---
+
+> append 函数
+
+* append 函数
+
+  * 追加 元素 到 list  中.
+
+
+```yaml
+append: |
+        {{- $li := list }}
+        {{ $li = append $li 123 }}
+        {{ $li = append $li 567 }}
+        list: {{ $li }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/append.yaml
+---
+# Source: myapp/templates/append.yaml
+append: |
+
+
+        list: [123 567]
+```
 
 ---
 
+> prepend 函数
+
+* prepend 函数
+
+  * 在 list 中的最前面 追加 元素.
+
+```yaml
+prepend: |
+        {{- $li := list }}
+        {{ $li = prepend $li 123 }}
+        {{ $li = prepend $li 567 }}
+        list: {{ $li }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/prepend.yaml
+---
+# Source: myapp/templates/prepend.yaml
+prepend: |
+
+
+        list: [567 123]
+
+```
+
+
+---
+
+> first 函数
+
+* first 函数
+
+  * 获取 list 中的第一个元素.
+
+
+```yaml
+first: |
+        {{- $li := list 1 2 3 4 5 }}
+        {{ first $li }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/first.yaml
+---
+# Source: myapp/templates/first.yaml
+first: |
+        1
+```
+
+---
+
+
+> rest 函数
+
+* rest 函数
+
+  * 获取 list 中 除第一个元素外的 其他所有 元素.
+
+
+```yaml
+rest: |
+        {{- $li := list 1 2 3 4 5 }}
+        {{ rest $li }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/rest.yaml
+---
+# Source: myapp/templates/rest.yaml
+rest: |
+        [2 3 4 5]
+
+```
+
+---
+
+
+> last 函数
+
+* last 函数
+
+  * 获取 list 中 最后一个元素.
+
+```yaml
+last: |
+        {{- $li := list 1 2 3 4 5 }}
+        {{ last $li }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/last.yaml
+---
+# Source: myapp/templates/last.yaml
+last: |
+        5
+
+```
+
+
+
+---
+
+> initial 函数
+
+* initial 函数
+
+  * 获取 list 中 除最后一个元素 外的所有元素.
+
+
+```yaml
+initial: |
+        {{- $li := list 1 2 3 4 5 }}
+        {{ initial $li }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/initial.yaml
+---
+# Source: myapp/templates/initial.yaml
+initial: |
+        [1 2 3 4]
+
+```
+
+---
+
+> reverse 函数
+
+* reverse 函数
+
+  * 对 list 进行 倒序 排序.
+
+
+```yaml
+reverse: |
+        {{- $li := list 1 2 3 4 5 }}
+        {{ reverse $li }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/reverse.yaml
+---
+# Source: myapp/templates/reverse.yaml
+reverse: |
+        [5 4 3 2 1]
+```
+
+---
+
+> uniq 函数
+
+* uniq 函数
+
+  * 去除重复的元素
+
+
+```yaml
+uniq: |
+        {{- $li := list 1 1 2 3 3 4 5 5 }}
+        {{ uniq $li }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/uniq.yaml
+---
+# Source: myapp/templates/uniq.yaml
+uniq: |
+        [1 2 3 4 5]
+
+```
+
+---
+
+> without 函数
+
+* without 函数
+
+  * 删除 list 中的一个元素
+
+
+```yaml
+without: |
+        {{- $li := list 1 2 3 4 5 }}
+        {{ without $li 3 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/without.yaml
+---
+# Source: myapp/templates/without.yaml
+without: |
+        [1 2 4 5]
+```
+
+---
+
+> has 函数
+
+* has 函数
+
+  * 判断指定 元素 是否在 list 中.
+
+
+```yaml
+has: |
+        {{- $li := list 1 2 3 4 5 }}
+        {{- if has 2 $li }}
+        has: true
+        {{- end }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/has.yaml
+---
+# Source: myapp/templates/has.yaml
+has: |
+        has: true
+
+```
+
+
+---
+
+> concat 函数
+
+* concat 函数
+
+  * 合并两个 list 
+
+
+```yaml
+concat: |
+        {{- $li1 := list 1 2 3 4 }}
+        {{- $li2 := list 5 6 7 8 }}
+        {{ concat $li1 $li2 }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/concat.yaml
+---
+# Source: myapp/templates/concat.yaml
+concat: |
+        [1 2 3 4 5 6 7 8]
+
+```
+
+
+---
+
+> genPrivateKey 函数
+
+* genPrivateKey 函数
+
+  * 获取 Private Key 私钥密文.
+
+
+```yaml
+{{ $key := genPrivateKey "rsa" }}
+key: {{ replace "\n" "" $key }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/genPrivateKey.yaml
+---
+# Source: myapp/templates/genPrivateKey.yaml
+key: -----BEGIN RSA PRIVATE KEY-----MIIJKQIBAAKCAgEAlUtM9IynuPTCfl9j10ENjFligj6sLV9TyU0dMcKWMyaUBx38XQkqEDDtkjtELxHZLcGaO4NXQ8Vim/eVW8XUURM68MEG3uobgm0xNSU4QNOEjXWMLBFftXA5pjN3cp7qDJxGLafLOz85ibVBVc+vB718SKeDCDj9zaHvyTw2NakgRDNaaDcs1uvY5r2ip7yBFVXFsDAV0vBkJ+NI7ldtTwtnGw9056mggVdYH5DKLs9WasrOEHiQltxlhT2QAVbd4goMMPGZGJIAD0/WAvx184KEt7zRhphwMBINFN3h0JkxcHxSYNBbbrb3zClyehNVpnD1/yxiRIat4LStvpN6NKv3GI9dee67iPLsGZRV9Bp8GrsHfO0LmCXzn68lzq/OlcgLJzAHsA6ka3hrqQpZPW35FSZ+DWVeQ8pQOAIaYaghSJWr+/C4J70F8Fa5N/JgrcFlTNqodfl10Z9AQ0SjU91RylVsGtw9/vkqCvSzOoL3nDFAiwbxIiptAJA1NTJr+K6+H2S/2PNXsCp7EMYTvlEyPiSp553I51E7n+zRloKFVc9CBxImF5wm2M/hOD8IOi9uxx4KFhEt9aywBjyi7tbP9i6RC5Om6iBNSTZ9rmeKI/WTfJgvK8CwtSExnleohe6f0nPNfmIR/skP4n233kqK4lhdQxLZU68XVMQ29RECAwEAAQKCAgEAgVrNQtbcPBVWr8hW6Zsj8gdAozlKVcXTAwgd04+WNJuohsIkdzgJih3aumk/mskMM+kbiZUzdzT/S8QpVWsDm3veBdw558tQKqIRkMq/AuxCXY8L9OLY2oxyZt8RD+9BO8vrwoMwRBVz9S1nfsKEFWDI3urFTcqTnihBa0sQbU4s9urH2qRz5YRUWxjUZiGedq3qq83+GtbO8QCtoFWAEI0AuSGbWV5QA8F6SV9az1Q2vDEceoj8PrqX++pra72oYsHx7jZnQDLAeoPiGpREXskn1Ut0//n0urHpQ7s8fVE+1QfjGJ9vmW5PJkaDOeKmw5/8hSwfuOA4qAnkwMtnhgjoWX7J9gU2t28MEidWzhLyvCvKRJVSwzbmX5M2RbugnBAEQztQqoTfSQMg9XxIbKTXhnn/eQKBpuExLV+/P+hDenVtweTGfP2gnnoN1DXFXNUUs2U2PxAEmeqbOeQ0X2CSnnglweWRwvFiM5QK5dkwjpNSZApAWUn6Ip9/DV3DA2XHoGF9C5KWrMatDBrIq+a9E6BSe9/hRuwpeVzjoB4uuuAcT3guadmf6snkyHdhtbMH3JSGXFws2P6FmCEX9gNJebiOMvrIIlN46U8eTsfJEskV9MW37mtYX9D5n3Zm2zAfzetUHUZGuB6trtOmSMANwt9K03cCBPaF09PGjUECggEBAMCLnMeLQ/IoOnw+p5xPzitV92z5w7YA64EzcGcS02w1x2W2rP/VwF0VA06Cie7LyRZGTzONLUMxuIfw27mj1YXszQ9cOY8VACuWi/x9Ui4RlM/Qtsq+LEsRvdSt63ad9lKpOzlL+0Pdc/SyDrHC0nJuFsbpQ85kWAbeQWMdiWBtDunA6s00Jc/KBHLge8xxwFiXwU5Nq7uo5nXG/qGWd6TOCHldGS08+fTSEOrG0cgM7HE17VsYPYyy2fAYG1yY4bNySMV7w1bis3mvqgdTfasYARAyp9kXcO7crHy2//A7uKUk5y9RfUE8Tm05gvh40G+wZNYiJk0sHypRT7V9dccCggEBAMZ+u3EaCJ5ialpitcIsI0sdae4D+94kBtafn58cwFKk484F6OoQcLbtC4i4dwzYyw8Kpv8/tA0inpP9oHHPfSsP5hjZSK5+SWFC1NTy6CGIpdguxLAByK3eliOh+b7z9xcqHTxHGiJZ3lEfdLIH4JSVddEyvueY0eH5KITe6qmZfStwvBa6T5jU3nBKylF4H/LK15emL/h/w+qaCsu2oDFAUF7ObPjmp3arZIYIpRfvxothGkPCz6I69XR3f/GjqZ20ruqGsgQXikXVrwRtf/uZVDmpjP5eQdZ8fHIo494zFp1ktfuxaooz+VU/RAglB8RkCOIIrdLHsjU7+5CW3mcCggEBAJ1W+OyOvx05BmHVCT5QcJc1DpU8nFMz+T6A/E8eMSpx39kcJ85/q0vlCeiz/2blnBLZrYrgyKXqEXL0vXi7ipZ/5SmyIU7syFDWGtpexjLjJwmS8mxGbweBHfCXlpw9hLYTmFO/5TmV01WX0y4rl7DuiSpOH5yentgt8py93C6xr8gQX08EWAmueWguTLvKEHXUvJ/yFG2rHXgM/rKotGg1/PK/wv0WoOMQbcaMZYzmEqiIesc/zbwVwsXRzTojq/vpXdISypNLeYHsrDKEZWLUoLnNyx85ao2mQkU/fXGgO8inmUsvef0+/I+Auae1gg5ixGO/UDEr5uO7wjj6pq0CggEAOeQ4cvIu1VLKxfXIIQuSd5PqkzqiONW1EN+ZRGS0SuZAcpQSrEGDPjbAiG2UezC3eHmY3xULRFF2gp8ULl1fmjGW4GRu6EV4zV8ah8kYnr8l73kkcFj02JD0pQvWtTSeOilUQYJTQvWG+437EPlvLKayqALu3skZXZi3kpkZQ8G6WfMVSGOqV16uSX3mqAArATrbyiT0FLvevguTXnqzGeoyBpSZ/7X13Yx7UwQucl7CP2BgsqacvCoJ8J/xtt4O2CocYdZLERp0f42k79un2g+MGw0yS/XdqdrAyOLYIrQvwlPfJ7tE4W3rKEu9Ycq7CzJJzPLPD4yikxgddLwrvQKCAQBPDvnNlO9qyeVCJdGJyvQ9/rvhttUuTDIQhpA/hYOPQjnJUtvQUy5Q1JMdwdv4Kos/sqk54N1H6YL+cLbsW1oEMveFWW5n16A/v07FYlOGGouAmJuZQfiGO7bbyxeNr302zkWicZiFkqc9ppCWmyYFG/BSJtk1HPPc2UoumCqIAYKvV7iUyHoig2e924Dt9wAWBhVb7Xt6/dTO9voC8WpwLgEuQhJR4+SyCLSMFJlBEpmQOStUbBR0lfGZf1bFFf0KyUxq1Xjol3qgpMWmZqt85JItWSdImyGBR9a9dn6R5aJqijm7bNMqf7daixblVkCFFGSRp4tJWU3Ul8CKwEjT-----END RSA PRIVATE KEY-----
+
+```
+
+
+
+---
+
+
+
+
+
+
+---
 
 > get 函数
 
@@ -2911,6 +3244,30 @@ keys: |
 
 ```
 
+---
+
+> values 函数
+
+* values 函数
+
+  * 获取 map 中的 value 值.
+
+```yaml
+values: |
+        {{- $mp := dict "name" "jicki" "age" 12 "email" "jicki@qq.com" }}
+        {{ values $mp }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/values.yaml
+---
+# Source: myapp/templates/values.yaml
+values: |
+        [jicki 12 jicki@qq.com]
+```
+
 
 ---
 
@@ -2943,6 +3300,71 @@ pick: |
 
 ---
 
+> omit 函数
+
+* omit 函数
+
+  * 删除 map 中指定的 key 值.
+
+```yaml
+omit: |
+        {{- $mp1 := dict "name" "jicki" "age" 12 "email" "jicki@qq.com" }}
+        {{ omit $mp1 "age" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/omit.yaml
+---
+# Source: myapp/templates/omit.yaml
+omit: |
+        map[email:jicki@qq.com name:jicki]
+
+```
+
+
+---
+
+> merge 函数
+
+* merge 函数
+
+  * 合并指定的两个 map 到指定的新 map 中 相同的 key 会取`前面`的覆盖`后面`的.
+
+```yaml
+merge: |
+        {{- $mp := dict }}
+        {{- $mp1 := dict "mp1" "mmm" "mp22" 12 "mp3" "jicki@qq.com" }}
+        {{- $mp2 := dict "mp1" "mmmm" "mp222" 20 "mp4" "tom@qq.com" }}
+        {{ merge $mp $mp1 $mp2 }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/merge.yaml
+---
+# Source: myapp/templates/merge.yaml
+merge: |
+        map[mp1:mmm mp22:12 mp222:20 mp3:jicki@qq.com mp4:tom@qq.com]
+
+```
+
+
+---
+
+> mergeOverwrite 函数
+
+* mergeOverwrite 函数
+
+  * 合并指定的两个 map 到指定的新 map 中 相同的 key 会取`后面`的覆盖`前面`的.
+
+
+---
 
 
 
