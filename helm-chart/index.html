@@ -1,8 +1,8 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Helm Chart & template 函数 - 小炒肉</title><meta name=Description content="Helm Chart & template 函数"><meta property="og:title" content="Helm Chart & template 函数"><meta property="og:description" content="Helm Chart & template 函数"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/helm-chart/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-16T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Helm Chart & template 函数"><meta name=twitter:description content="Helm Chart & template 函数"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/helm-chart/><link rel=prev href=https://jicki.cn/helm-v3/><link rel=next href=https://jicki.cn/helm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Helm Chart \u0026 template 函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/helm-chart\/"},"genre":"posts","keywords":"kubernetes, helm","wordcount":6013,"url":"https:\/\/jicki.cn\/helm-chart\/","datePublished":"2020-08-16T00:00:00+00:00","dateModified":"2020-08-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Helm Chart \u0026 template 函数"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Helm Chart & template 函数 - 小炒肉</title><meta name=Description content="Helm Chart & template 函数"><meta property="og:title" content="Helm Chart & template 函数"><meta property="og:description" content="Helm Chart & template 函数"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/helm-chart/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-16T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Helm Chart & template 函数"><meta name=twitter:description content="Helm Chart & template 函数"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/helm-chart/><link rel=prev href=https://jicki.cn/helm-v3/><link rel=next href=https://jicki.cn/helm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Helm Chart \u0026 template 函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/helm-chart\/"},"genre":"posts","keywords":"kubernetes, helm","wordcount":6900,"url":"https:\/\/jicki.cn\/helm-chart\/","datePublished":"2020-08-16T00:00:00+00:00","dateModified":"2020-08-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Helm Chart \u0026 template 函数"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Helm Chart & template 函数</h1><h2 class=single-subtitle>Helm Chart & template 函数</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/categories/helm/><i class="far fa-folder fa-fw"></i>helm</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-16>2020-08-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6013 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 13 分钟&nbsp;<span id=/helm-chart/ class=leancloud_visitors data-flag-title="Helm Chart & template 函数">
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Helm Chart & template 函数</h1><h2 class=single-subtitle>Helm Chart & template 函数</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/categories/helm/><i class="far fa-folder fa-fw"></i>helm</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-16>2020-08-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 6900 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 14 分钟&nbsp;<span id=/helm-chart/ class=leancloud_visitors data-flag-title="Helm Chart & template 函数">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
 <span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#chart-目录结构>Chart 目录结构</a><ul><li><a href=#chartyaml-文件>Chart.yaml 文件</a></li></ul></li><li><a href=#helm-内置变量>Helm 内置变量</a><ul><li><a href=#release-内置变量>Release 内置变量</a></li></ul></li><li><a href=#helm-模板函数>Helm 模板函数</a><ul><li><a href=#比较函数>比较函数</a></li><li><a href=#流程控制>流程控制</a></li><li><a href=#内置函数>内置函数</a></li><li><a href=#template-模板函数>template 模板函数</a></li></ul></li></ul></nav></div></div><div class=content id=content><h1 id=helm-chart>Helm Chart</h1><p><strong>Chart 是 helm 管理应用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.</strong></p><hr><h2 id=chart-目录结构>Chart 目录结构</h2><ul><li><p><code>Chart.yaml</code> : chart 的描述文件, 包含版本信息, 名称 等.</p></li><li><p><code>Chart.lock</code> : chart 依赖的版本信息. ( apiVersion: v2 )</p></li><li><p><code>values.yaml</code> : 用于配置 <code>templates/</code> 目录下的模板文件使用的变量.</p></li><li><p><code>values.schema.json</code> : 用于校检 <code>values.yaml</code> 的完整性.</p></li><li><p><code>charts</code> : 依赖包的存储目录.</p></li><li><p><code>README</code> : 说明文件.</p></li><li><p><code>LICENSE</code> : 版权信息文件.</p></li><li><p><code>crd</code> : 存放 CRD 资源的文件的目录.</p></li><li><p><code>templates</code> : 模板文件存放目录.</p><ul><li><p><code>NOTES.txt</code> : 模板须知/说明文件. <code>helm install</code> 成功后会显示此文件内容到屏幕.</p></li><li><p><code>deployment.yaml</code> : kubernetes 资源文件. ( 所有类型的 kubernetes 资源文件都存放于 templates 目录下 )</p></li><li><p><code>_helpers.tpl</code> : 以 <code>_</code> 开头的文件, 可以被其他模板引用.</p></li></ul></li></ul><hr><h3 id=chartyaml-文件>Chart.yaml 文件</h3><blockquote><p>Chart 的描述文件, 包含版本信息, Chart 名称,说明等.</p></blockquote><ul><li>这里仅说明 <code>apiVersion v2 版本</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
@@ -1243,7 +1243,7 @@ nindent: <span class=p>|</span>
 replace: <span class=p>|</span>
         http://www.qq.com
 
-</code></pre></td></tr></table></div></div><hr><blockquote><p>sha1sum 函数</p></blockquote><ul><li><p>sha1sum 函数</p><ul><li>使用 sha1sum 算法加密 字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><p>sha1sum 函数</p></blockquote><ul><li><p>sha1sum 函数</p><ul><li>生成 sha1sum 字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>sha1sum</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>sha1sum<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -1255,7 +1255,7 @@ replace: <span class=p>|</span>
 ---
 <span class=c1># Source: myapp/templates/sha1sum.yaml</span>
 sha1sum: 7afef0c7f74b1aec91b159ac36946e0f865eb0e3
-</code></pre></td></tr></table></div></div><hr><blockquote><p>sha256sum 函数</p></blockquote><ul><li><p>sha256sum 函数</p><ul><li>使用 sha256sum 算法加密 字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><p>sha256sum 函数</p></blockquote><ul><li><p>sha256sum 函数</p><ul><li>生成 sha256sum 字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>sha256sum</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>sha256sum<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -1265,6 +1265,40 @@ sha1sum: 7afef0c7f74b1aec91b159ac36946e0f865eb0e3
 ---
 <span class=c1># Source: myapp/templates/sha256sum.yaml</span>
 sha256sum: 57a4bffd5916cd9fded9ad94a76de152e56eb0bf9e34c94f5ea48f8cbd4f866a
+</code></pre></td></tr></table></div></div><hr><blockquote><p>b64enc 函数</p></blockquote><ul><li><p>b64enc 函数</p><ul><li>使用 b64enc 加密算法 对指定字符串加密.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>b64enc</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ b64enc &#34;jicki&#34; }}</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/b64enc.yaml
+---
+<span class=c1># Source: myapp/templates/b64enc.yaml</span>
+b64enc: <span class=p>|</span>
+        <span class=nv>amlja2k</span><span class=o>=</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>b64dec 函数</p></blockquote><ul><li><p>b64dec 函数</p><ul><li>对使用 b64enc 加密过的字符串进行解密.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>b64enc</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>b64enc<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>b64dec</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>b64enc<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>|<span class=w> </span>b64dec<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/b64dec.yaml
+---
+<span class=c1># Source: myapp/templates/b64dec.yaml</span>
+b64enc: <span class=nv>amlja2k</span><span class=o>=</span>
+b64dec: jicki
+
 </code></pre></td></tr></table></div></div><hr><blockquote><p>toString 函数</p></blockquote><ul><li><p>toString 函数</p><ul><li>将 int 类型的函数转换成 string 类型.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
@@ -1635,5 +1669,301 @@ kindOf: <span class=p>|</span>
 <span class=c1># Source: myapp/templates/kindIs.yaml</span>
 kindIs: <span class=p>|</span>
         kindIs: slice
+</code></pre></td></tr></table></div></div><hr><blockquote><p>getHostByName 函数</p></blockquote><ul><li><p>getHostByName 函数</p><ul><li>获取指定 名称 的 IPv4 地址.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>jicki.cn</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>getHostByName<span class=w> </span><span class=s2>&#34;www.jicki.cn&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>localhost</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>getHostByName<span class=w> </span><span class=s2>&#34;localhost&#34;</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/getHostByName.yaml
+---
+<span class=c1># Source: myapp/templates/getHostByName.yaml</span>
+jicki.cn: 163.181.36.174
+localhost: 127.0.0.1
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>base 函数</p></blockquote><ul><li><p>base 函数</p><ul><li>获取 URL 的文件名</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>base</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ base &#34;/usr/local/bin/helm&#34; }}</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/base.yaml
+---
+<span class=c1># Source: myapp/templates/base.yaml</span>
+base: <span class=p>|</span>
+        helm
+</code></pre></td></tr></table></div></div><hr><blockquote><p>dir 函数</p></blockquote><ul><li><p>dir 函数</p><ul><li>获取文件 URL 的路径</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>dir</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ dir &#34;/usr/local/bin/helm&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/dir.yaml
+---
+<span class=c1># Source: myapp/templates/dir.yaml</span>
+dir: <span class=p>|</span>
+        /usr/local/bin
+</code></pre></td></tr></table></div></div><hr><blockquote><p>clean 函数</p></blockquote><ul><li><p>clean 函数</p><ul><li>删除 URL 路径末尾的 <code>/</code> 号.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>clean</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ clean &#34;/usr/local/bin/&#34; }}</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/clean.yaml
+---
+<span class=c1># Source: myapp/templates/clean.yaml</span>
+clean: <span class=p>|</span>
+        /usr/local/bin
+</code></pre></td></tr></table></div></div><hr><blockquote><p>ext 函数</p></blockquote><ul><li><p>ext 函数</p><ul><li>获取 文件名的 后缀.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>root@kubernetes<span class=p>:</span>/opt/helm/myapp<span class=c># cat templates/ext.yaml</span><span class=w>
+</span><span class=w></span><span class=k>ext</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ ext &#34;/opt/helm/Chart.yaml&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/ext.yaml
+---
+<span class=c1># Source: myapp/templates/ext.yaml</span>
+ext: <span class=p>|</span>
+        .yaml
+</code></pre></td></tr></table></div></div><hr><blockquote><p>isAbs 函数</p></blockquote><ul><li><p>isAbs 函数</p><ul><li>判断 路径 是否为 绝对路径</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>isAbs</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- if isAbs &#34;/opt/helm&#34; }}</span><span class=w>
+</span><span class=w>        </span><span class=k>isAbs</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>        </span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span><span class=k>isAbs</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span><span class=w>        </span>{{- end<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/isAbs.yaml
+---
+<span class=c1># Source: myapp/templates/isAbs.yaml</span>
+isAbs: <span class=p>|</span>
+        isAbs: <span class=nb>true</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>tuple / list 函数</p></blockquote><ul><li><p>tuple / list 函数</p><ul><li>创建一个 列表/元祖.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>tuple</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $tp:= tuple &#34;1&#34; &#34;2&#34; &#34;3&#34; }}</span><span class=w>
+</span><span class=w>        </span><span class=k>tuple</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>$tp<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span><span class=k>typeOf</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>typeOf<span class=w> </span>$tp<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span><span class=k>kindOf</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>kindOf<span class=w> </span>$tp<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/tuple.yaml
+---
+<span class=c1># Source: myapp/templates/tuple.yaml</span>
+tuple: <span class=p>|</span>
+        tuple: <span class=o>[</span><span class=m>1</span> <span class=m>2</span> <span class=m>3</span> 4<span class=o>]</span>
+        typeOf: <span class=o>[]</span>interface <span class=o>{}</span>
+        kindOf: slice
+</code></pre></td></tr></table></div></div><hr><blockquote><p>dict 函数</p></blockquote><ul><li><p>dict 函数</p><ul><li>创建一个 map.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>dict</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $dt:= dict &#34;name&#34; &#34;jicki&#34;  &#34;age&#34; 22 }}</span><span class=w>
+</span><span class=w>        </span><span class=k>tuple</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>$dt<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span><span class=k>typeOf</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>typeOf<span class=w> </span>$dt<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span><span class=k>kindOf</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>kindOf<span class=w> </span>$dt<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/dict.yaml
+---
+<span class=c1># Source: myapp/templates/dict.yaml</span>
+dict: <span class=p>|</span>
+        tuple: map<span class=o>[</span>age:22 name:jicki<span class=o>]</span>
+        typeOf: map<span class=o>[</span>string<span class=o>]</span>interface <span class=o>{}</span>
+        kindOf: map
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>get 函数</p></blockquote><ul><li><p>get 函数</p><ul><li>获取 map 中指定 key 的 value 值.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>get</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $mp := dict &#34;name&#34; &#34;jicki&#34; &#34;age&#34; 12 }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>get<span class=w> </span>$mp<span class=w> </span><span class=s2>&#34;name&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/get.yaml
+---
+<span class=c1># Source: myapp/templates/get.yaml</span>
+get: <span class=p>|</span>
+        jicki
+</code></pre></td></tr></table></div></div><hr><blockquote><p>set 函数</p></blockquote><ul><li><p>set 函数</p><ul><li>给指定的 map 设置 key/value 键值对.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>set</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $mp := dict &#34;name&#34; &#34;jicki&#34; &#34;age&#34; 12 }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>set<span class=w> </span>$mp<span class=w> </span><span class=s2>&#34;email&#34;</span><span class=w> </span><span class=s2>&#34;jicki@qq.com&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/set.yaml
+---
+<span class=c1># Source: myapp/templates/set.yaml</span>
+set: <span class=p>|</span>
+        map<span class=o>[</span>age:12 email:jicki@qq.com name:jicki<span class=o>]</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>unset 函数</p></blockquote><ul><li><p>unset 函数</p><ul><li>删除 map 中指定的 key/value 值.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>unset</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $mp := dict &#34;name&#34; &#34;jicki&#34; &#34;age&#34; 12 }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>unset<span class=w> </span>$mp<span class=w> </span><span class=s2>&#34;age&#34;</span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/unset.yaml
+---
+<span class=c1># Source: myapp/templates/unset.yaml</span>
+unset: <span class=p>|</span>
+        map<span class=o>[</span>name:jicki<span class=o>]</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>hasKey 函数</p></blockquote><ul><li><p>hasKey 函数</p><ul><li>判断 map 中是否有指定的 key .</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>hasKey</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $mp := dict &#34;name&#34; &#34;jicki&#34; &#34;age&#34; 12 }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>hasKey<span class=w> </span>$mp<span class=w> </span><span class=s2>&#34;age&#34;</span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/haskey.yaml
+---
+<span class=c1># Source: myapp/templates/haskey.yaml</span>
+hasKey: <span class=p>|</span>
+        <span class=nb>true</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>pluck 函数</p></blockquote><ul><li><p>pluck 函数</p><ul><li>获取两个 map 中指定的 相同的 key 值, 组成一个新的 map.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>pluck</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $mp1 := dict &#34;name&#34; &#34;jicki&#34; &#34;age&#34; 12 }}</span><span class=w>
+</span><span class=w>        </span>{{- $mp2<span class=w> </span><span class=p>:</span>=<span class=w> </span>dict<span class=w> </span><span class=s2>&#34;name&#34;</span><span class=w> </span><span class=s2>&#34;tom&#34;</span><span class=w> </span><span class=s2>&#34;age&#34;</span><span class=w> </span><span class=m>20</span><span class=w> </span>}}<span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>pluck<span class=w> </span><span class=s2>&#34;name&#34;</span><span class=w> </span>$mp1<span class=w> </span>$mp2<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/pluck.yaml
+---
+<span class=c1># Source: myapp/templates/pluck.yaml</span>
+pluck: <span class=p>|</span>
+        <span class=o>[</span>jicki tom<span class=o>]</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>keys 函数</p></blockquote><ul><li><p>keys 函数</p><ul><li>获取一个或多个 map 中的所有 key.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>keys</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $mp1 := dict &#34;name&#34; &#34;jicki&#34; &#34;age&#34; 12 }}</span><span class=w>
+</span><span class=w>        </span>{{- $mp2<span class=w> </span><span class=p>:</span>=<span class=w> </span>dict<span class=w> </span><span class=s2>&#34;name&#34;</span><span class=w> </span><span class=s2>&#34;tom&#34;</span><span class=w> </span><span class=s2>&#34;age&#34;</span><span class=w> </span><span class=m>20</span><span class=w> </span>}}<span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>keys<span class=w> </span>$mp1<span class=w> </span>$mp2<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/keys.yaml
+---
+<span class=c1># Source: myapp/templates/keys.yaml</span>
+keys: <span class=p>|</span>
+        <span class=o>[</span>name age name age<span class=o>]</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>pick 函数</p></blockquote><ul><li><p>pick 函数</p><ul><li>提取 map 中的 key/value 值 组成一个新的 map.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>pick</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $mp1 := dict &#34;name&#34; &#34;jicki&#34; &#34;age&#34; 12 &#34;email&#34; &#34;jicki@qq.com&#34; }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>pick<span class=w> </span>$mp1<span class=w> </span><span class=s2>&#34;name&#34;</span><span class=w> </span><span class=s2>&#34;email&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/pick.yaml
+---
+<span class=c1># Source: myapp/templates/pick.yaml</span>
+pick: <span class=p>|</span>
+        map<span class=o>[</span>email:jicki@qq.com name:jicki<span class=o>]</span>
+
 </code></pre></td></tr></table></div></div><hr></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-08-16</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/helm-chart/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/helm-chart/ data-title="Helm Chart & template 函数" data-via=jicki234 data-hashtags=kubernetes,helm><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/helm-chart/ data-hashtag=kubernetes><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/helm-chart/ data-title="Helm Chart & template 函数" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/helm-chart/ data-title="Helm Chart & template 函数"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/helm-chart/ data-title="Helm Chart & template 函数"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/helm-chart/ data-title="Helm Chart & template 函数" data-description="Helm Chart & template 函数"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/helm-chart/ data-title="Helm Chart & template 函数" data-description="Helm Chart & template 函数"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/helm-chart/ data-title="Helm Chart & template 函数"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/kubernetes/>kubernetes</a>,&nbsp;<a href=/tags/helm/>helm</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/helm-v3/ class=prev rel=prev title="Helm - v3"><i class="fas fa-angle-left fa-fw"></i>Helm - v3</a>
 <a href=/helm/ class=next rel=next title="Kubernetes 包管理 Helm">Kubernetes 包管理 Helm<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://jicki.cn target=_blank>小炒肉</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a href=http://beian.miit.gov.cn target=_blank>粤ICP备20055633号</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/valine/Valine.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":200},"comment":{"valine":{"appId":"1LTTCvDe4Nt8XSdFzejtUsVF-gzGzoHsz","appKey":"cvpPM7sbgOw0pTXbh6YVKrjc","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

@@ -1832,7 +1832,7 @@ replace: |
 
 * sha1sum 函数
 
-  * 使用 sha1sum 算法加密 字符串.
+  * 生成 sha1sum 字符串.
 
 
 ```yaml
@@ -1857,7 +1857,7 @@ sha1sum: 7afef0c7f74b1aec91b159ac36946e0f865eb0e3
 
 * sha256sum 函数
 
-  * 使用 sha256sum 算法加密 字符串.
+  * 生成 sha256sum 字符串.
 
 
 ```yaml
@@ -1875,6 +1875,59 @@ sha256sum: 57a4bffd5916cd9fded9ad94a76de152e56eb0bf9e34c94f5ea48f8cbd4f866a
 
 
 ---
+
+> b64enc 函数
+
+* b64enc 函数
+
+  * 使用 b64enc 加密算法 对指定字符串加密.
+
+```yaml
+b64enc: |
+        {{ b64enc "jicki" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/b64enc.yaml
+---
+# Source: myapp/templates/b64enc.yaml
+b64enc: |
+        amlja2k=
+
+```
+
+
+---
+
+> b64dec 函数
+
+* b64dec 函数
+
+  * 对使用 b64enc 加密过的字符串进行解密.
+
+
+```yaml
+b64enc: {{ b64enc "jicki" }}
+b64dec: {{ b64enc "jicki" | b64dec }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/b64dec.yaml
+---
+# Source: myapp/templates/b64dec.yaml
+b64enc: amlja2k=
+b64dec: jicki
+
+```
+
+
+---
+
 
 
 > toString 函数
@@ -2452,6 +2505,439 @@ root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/kindIs.ya
 # Source: myapp/templates/kindIs.yaml
 kindIs: |
         kindIs: slice
+```
+
+
+---
+
+
+
+> getHostByName 函数
+
+* getHostByName 函数
+
+  * 获取指定 名称 的 IPv4 地址.
+
+
+```yaml
+jicki.cn: {{ getHostByName "www.jicki.cn" }}
+localhost: {{ getHostByName "localhost" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/getHostByName.yaml
+---
+# Source: myapp/templates/getHostByName.yaml
+jicki.cn: 163.181.36.174
+localhost: 127.0.0.1
+
+```
+
+
+---
+
+
+> base 函数
+
+* base 函数
+
+  * 获取 URL 的文件名
+
+
+```yaml
+base: |
+        {{ base "/usr/local/bin/helm" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/base.yaml
+---
+# Source: myapp/templates/base.yaml
+base: |
+        helm
+```
+
+
+
+---
+
+> dir 函数
+
+* dir 函数
+
+  * 获取文件 URL 的路径
+
+
+```yaml
+dir: |
+        {{ dir "/usr/local/bin/helm" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/dir.yaml
+---
+# Source: myapp/templates/dir.yaml
+dir: |
+        /usr/local/bin
+```
+
+
+
+---
+
+> clean 函数
+
+* clean 函数
+
+  * 删除 URL 路径末尾的 `/` 号.
+
+```yaml
+clean: |
+        {{ clean "/usr/local/bin/" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/clean.yaml
+---
+# Source: myapp/templates/clean.yaml
+clean: |
+        /usr/local/bin
+```
+
+
+
+---
+
+> ext 函数
+
+* ext 函数
+
+  * 获取 文件名的 后缀.
+
+
+```yaml
+root@kubernetes:/opt/helm/myapp# cat templates/ext.yaml
+ext: |
+        {{ ext "/opt/helm/Chart.yaml" }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/ext.yaml
+---
+# Source: myapp/templates/ext.yaml
+ext: |
+        .yaml
+```
+
+
+---
+
+
+> isAbs 函数
+
+* isAbs 函数
+
+  * 判断 路径 是否为 绝对路径
+
+```yaml
+isAbs: |
+        {{- if isAbs "/opt/helm" }}
+        isAbs: true
+        {{- else }}
+        isAbs: false
+        {{- end }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/isAbs.yaml
+---
+# Source: myapp/templates/isAbs.yaml
+isAbs: |
+        isAbs: true
+```
+
+
+
+---
+
+> tuple / list 函数
+
+* tuple / list 函数
+
+  * 创建一个 列表/元祖.
+
+
+```yaml
+tuple: |
+        {{- $tp:= tuple "1" "2" "3" }}
+        tuple: {{ $tp }}
+        typeOf: {{ typeOf $tp }}
+        kindOf: {{ kindOf $tp }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/tuple.yaml
+---
+# Source: myapp/templates/tuple.yaml
+tuple: |
+        tuple: [1 2 3 4]
+        typeOf: []interface {}
+        kindOf: slice
+```
+
+
+
+---
+
+> dict 函数
+
+* dict 函数
+
+  * 创建一个 map.
+
+
+```yaml
+dict: |
+        {{- $dt:= dict "name" "jicki"  "age" 22 }}
+        tuple: {{ $dt }}
+        typeOf: {{ typeOf $dt }}
+        kindOf: {{ kindOf $dt }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/dict.yaml
+---
+# Source: myapp/templates/dict.yaml
+dict: |
+        tuple: map[age:22 name:jicki]
+        typeOf: map[string]interface {}
+        kindOf: map
+
+```
+
+
+---
+
+
+> get 函数
+
+* get 函数
+
+  * 获取 map 中指定 key 的 value 值.
+
+
+```yaml
+get: |
+        {{- $mp := dict "name" "jicki" "age" 12 }}
+        {{ get $mp "name" }}
+
+``` 
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/get.yaml
+---
+# Source: myapp/templates/get.yaml
+get: |
+        jicki
+```
+
+
+---
+
+> set 函数
+
+* set 函数
+
+  * 给指定的 map 设置 key/value 键值对.
+
+
+```yaml
+
+set: |
+        {{- $mp := dict "name" "jicki" "age" 12 }}
+        {{ set $mp "email" "jicki@qq.com" }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/set.yaml
+---
+# Source: myapp/templates/set.yaml
+set: |
+        map[age:12 email:jicki@qq.com name:jicki]
+
+```
+
+
+
+---
+
+> unset 函数
+
+* unset 函数
+
+  * 删除 map 中指定的 key/value 值.
+
+
+```yaml
+unset: |
+        {{- $mp := dict "name" "jicki" "age" 12 }}
+        {{ unset $mp "age"}}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/unset.yaml
+---
+# Source: myapp/templates/unset.yaml
+unset: |
+        map[name:jicki]
+
+```
+
+
+
+---
+
+> hasKey 函数
+
+* hasKey 函数
+
+  * 判断 map 中是否有指定的 key .
+
+
+```yaml
+hasKey: |
+        {{- $mp := dict "name" "jicki" "age" 12 }}
+        {{ hasKey $mp "age"}}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/haskey.yaml
+---
+# Source: myapp/templates/haskey.yaml
+hasKey: |
+        true
+```
+
+
+---
+
+> pluck 函数
+
+* pluck 函数
+
+  * 获取两个 map 中指定的 相同的 key 值, 组成一个新的 map.
+
+```yaml
+pluck: |
+        {{- $mp1 := dict "name" "jicki" "age" 12 }}
+        {{- $mp2 := dict "name" "tom" "age" 20 }}
+        {{ pluck "name" $mp1 $mp2 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/pluck.yaml
+---
+# Source: myapp/templates/pluck.yaml
+pluck: |
+        [jicki tom]
+```
+
+
+---
+
+> keys 函数
+
+* keys 函数
+
+  * 获取一个或多个 map 中的所有 key.
+
+
+```yaml
+keys: |
+        {{- $mp1 := dict "name" "jicki" "age" 12 }}
+        {{- $mp2 := dict "name" "tom" "age" 20 }}
+        {{ keys $mp1 $mp2 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/keys.yaml
+---
+# Source: myapp/templates/keys.yaml
+keys: |
+        [name age name age]
+
+```
+
+
+---
+
+> pick 函数
+
+* pick 函数
+
+  * 提取 map 中的 key/value 值 组成一个新的 map.
+
+
+```yaml
+pick: |
+        {{- $mp1 := dict "name" "jicki" "age" 12 "email" "jicki@qq.com" }}
+        {{ pick $mp1 "name" "email" }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/pick.yaml
+---
+# Source: myapp/templates/pick.yaml
+pick: |
+        map[email:jicki@qq.com name:jicki]
+
 ```
 
 
