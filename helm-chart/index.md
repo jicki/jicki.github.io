@@ -165,15 +165,14 @@ annotations:
 
 ## Helm 模板函数
 
-* Helm 的模板语法使用Golang 语言的 template 模块 参考: https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95 
+* Helm 的模板语法使用Golang 语言的 template 模块. 
 
-
-
-### 内置的函数
+  * 参考: https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95 
 
 
 ---
 
+### 比较函数
 
 > 比较函数
 
