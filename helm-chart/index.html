@@ -1,0 +1,1497 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Kubernetes 包管理 Helm - 小炒肉</title><meta name=Description content="Kubernetes 包管理 Helm"><meta property="og:title" content="Kubernetes 包管理 Helm"><meta property="og:description" content="Kubernetes 包管理 Helm"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/helm-chart/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-17T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-17T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Kubernetes 包管理 Helm"><meta name=twitter:description content="Kubernetes 包管理 Helm"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/helm-chart/><link rel=prev href=https://jicki.cn/helm-v2/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes 包管理 Helm","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/helm-chart\/"},"genre":"posts","keywords":"kubernetes, helm","wordcount":5620,"url":"https:\/\/jicki.cn\/helm-chart\/","datePublished":"2020-08-17T00:00:00+00:00","dateModified":"2020-08-17T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Kubernetes 包管理 Helm"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Kubernetes 包管理 Helm</h1><h2 class=single-subtitle>Kubernetes 包管理 Helm</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/categories/helm/><i class="far fa-folder fa-fw"></i>helm</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-17>2020-08-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 5620 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 12 分钟&nbsp;<span id=/helm-chart/ class=leancloud_visitors data-flag-title="Kubernetes 包管理 Helm">
+<i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#chart-目录结构>Chart 目录结构</a><ul><li><a href=#chartyaml-文件>Chart.yaml 文件</a></li></ul></li><li><a href=#helm-内置变量>Helm 内置变量</a><ul><li><a href=#release-内置变量>Release 内置变量</a></li></ul></li><li><a href=#helm-模板函数>Helm 模板函数</a></li></ul></nav></div></div><div class=content id=content><h1 id=helm-chart>Helm Chart</h1><p><strong>Chart 是 helm 管理应用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.</strong></p><hr><h2 id=chart-目录结构>Chart 目录结构</h2><ul><li><p><code>Chart.yaml</code> : chart 的描述文件, 包含版本信息, 名称 等.</p></li><li><p><code>Chart.lock</code> : chart 依赖的版本信息. ( apiVersion: v2 )</p></li><li><p><code>values.yaml</code> : 用于配置 <code>templates/</code> 目录下的模板文件使用的变量.</p></li><li><p><code>values.schema.json</code> : 用于校检 <code>values.yaml</code> 的完整性.</p></li><li><p><code>charts</code> : 依赖包的存储目录.</p></li><li><p><code>README</code> : 说明文件.</p></li><li><p><code>LICENSE</code> : 版权信息文件.</p></li><li><p><code>crd</code> : 存放 CRD 资源的文件的目录.</p></li><li><p><code>templates</code> : 模板文件存放目录.</p><ul><li><p><code>NOTES.txt</code> : 模板须知/说明文件. <code>helm install</code> 成功后会显示此文件内容到屏幕.</p></li><li><p><code>deployment.yaml</code> : kubernetes 资源文件. ( 所有类型的 kubernetes 资源文件都存放于 templates 目录下 )</p></li><li><p><code>_helpers.tpl</code> : 以 <code>_</code> 开头的文件, 可以被其他模板引用.</p></li></ul></li></ul><hr><h3 id=chartyaml-文件>Chart.yaml 文件</h3><blockquote><p>chart 的描述文件, 包含版本信息, Chart 名称,说明等.</p></blockquote><ul><li>这里仅说明 <code>apiVersion v2 版本</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># Helm api 版本 (必填)</span><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v2<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># Chart 的名称 (必填)</span><span class=w>
+</span><span class=w></span><span class=k>name</span><span class=p>:</span><span class=w> </span>myapp<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># 此 Chart 的版本 (必填)</span><span class=w>
+</span><span class=w></span><span class=k>version</span><span class=p>:</span><span class=w> </span>v1<span class=m>.0</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># 约束此 Chart 支持的 kubernetes 版本, 如果不支持会失败 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>kubeVersion</span><span class=p>:</span><span class=w> </span>&gt;=<span class=w> </span><span class=m>1.18.0</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># 此 Chart 说明信息 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>description</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;My App&#34;</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># Chart 的应用类型, 分别为 application (默认)和 library. (可选)</span><span class=w>
+</span><span class=w></span><span class=k>type</span><span class=p>:</span><span class=w> </span>application<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># Chart 关键词, 用于搜索时使用 (可选)</span><span class=w>
+</span><span class=w></span>keywords<span class=w>
+</span><span class=w>  </span>- app<span class=w>
+</span><span class=w>  </span>- myapp<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># Chart 的 home 的地址 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>home</span><span class=p>:</span><span class=w> </span>https<span class=p>:</span>//jicki.cn<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># Chart 的源码地址 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>sources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- https<span class=p>:</span>//github.com/jicki<span class=w>
+</span><span class=w>  </span>- https<span class=p>:</span>//jicki.cn<span class=w>
+</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># Chart 的依赖信息, helm v2 是在 requirements.yaml 中. (可选)</span><span class=w>
+</span><span class=w></span><span class=k>dependencies</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 依赖的 chart 名称</span><span class=w>
+</span><span class=w>  </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>nginx<span class=w>
+</span><span class=w>  </span><span class=c># 依赖的版本</span><span class=w>
+</span><span class=w>    </span><span class=k>version</span><span class=p>:</span><span class=w> </span><span class=m>1.2.3</span><span class=w>
+</span><span class=w>  </span><span class=c># 依赖的 repo 地址</span><span class=w>
+</span><span class=w>    </span><span class=k>repository</span><span class=p>:</span><span class=w> </span>https<span class=p>:</span>//kubernetes-charts.storage.googleapis.com<span class=w>
+</span><span class=w>  </span><span class=c># 依赖的 条件 如 nginx 启动</span><span class=w>
+</span><span class=w>    </span><span class=k>condition</span><span class=p>:</span><span class=w> </span>nginx.enabled<span class=w>
+</span><span class=w>  </span><span class=c># 依赖的标签 tags</span><span class=w>
+</span><span class=w>    </span><span class=k>tags</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- myapp-web<span class=w>
+</span><span class=w>      </span>- nginx-slb<span class=w>
+</span><span class=w>    </span><span class=k>enabled</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>  </span><span class=c># 传递值到 Chart 中. </span><span class=w>
+</span><span class=w>    </span><span class=k>import-values</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=k>child</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=k>parent</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 依赖的 别名</span><span class=w>
+</span><span class=w>    </span><span class=k>alias</span><span class=p>:</span><span class=w> </span>nginx-slb<span class=w> 
+</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># Chart 维护人员信息 (可选) </span><span class=w>
+</span><span class=w></span><span class=k>maintainers</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>小炒肉<span class=w>
+</span><span class=w>    </span><span class=k>email</span><span class=p>:</span><span class=w> </span>jicki@qq.com<span class=w>
+</span><span class=w>    </span><span class=k>url</span><span class=p>:</span><span class=w> </span>https<span class=p>:</span>//jicki.cn<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># icon 地址 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>icon</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;https://jicki.cn/images/favicon.ico&#34;</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># App 的版本 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>appVersion</span><span class=p>:</span><span class=w> </span><span class=m>1.19.2</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># 标注是否为过期 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>deprecated</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># 注释 (可选)</span><span class=w>
+</span><span class=w></span><span class=k>annotations</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 注释的例子</span><span class=w>
+</span><span class=w>  </span><span class=k>example</span><span class=p>:</span><span class=w> 
+</span></code></pre></td></tr></table></div></div><hr><h2 id=helm-内置变量>Helm 内置变量</h2><ul><li><p>Helm 内置对象包含</p><ul><li><p><code>Release</code> 相关的内置属性.</p></li><li><p><code>Chart</code> 属性 - <code>Chart.yaml</code> 文件中定义的内容.</p></li><li><p><code>Values</code> 属性 - <code>Values.yaml</code> 文件中定义的内容.</p></li></ul></li></ul><hr><h3 id=release-内置变量>Release 内置变量</h3><ul><li><code>Release</code> 内置变量</li></ul><table><thead><tr><th>变量名称</th><th>变量说明</th></tr></thead><tbody><tr><td>Release.Name</td><td>release 名称</td></tr><tr><td>Release.Namespace</td><td>release 所在命名空间</td></tr><tr><td>Release.Service</td><td>release 发布的服务</td></tr><tr><td>Release.IsUpgrade</td><td>如果 release 操作状态为 更新 / 回滚 , 此变量值为 true</td></tr><tr><td>Release.IsInstall</td><td>如果 release 操作状态为 安装 , 此变量值为 true</td></tr><tr><td>Release.Revision</td><td>release 版本序号, 初始为 1 , 执行 更新/ 回滚 版本 +1</td></tr></tbody></table><hr><h2 id=helm-模板函数>Helm 模板函数</h2><ul><li>Helm 的模板语法使用Golang 语言的 template 模块 参考: <a href=https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95>https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95</a></li></ul><blockquote><p>模板函数 之 流程控制</p></blockquote><ul><li><code>values.yaml</code> 文件内容如下</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>favorite</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>game</span><span class=p>:</span><span class=w> </span>LOL<span class=w>
+</span><span class=w>  </span><span class=k>drink</span><span class=p>:</span><span class=w> </span>coffee<span class=w>
+</span><span class=w></span><span class=k>like</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- football<span class=w>
+</span><span class=w>  </span>- basketball<span class=w>
+</span><span class=w>  </span>- volleyball<span class=w>
+</span><span class=w>  </span>- doubleball<span class=w>
+</span><span class=w></span><span class=k>global</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>service</span><span class=p>:</span><span class=w> </span>web<span class=w>
+</span><span class=w></span><span class=k>image</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>repository</span><span class=p>:</span><span class=w> </span>jicki/myapp<span class=w>
+</span><span class=w>  </span><span class=k>tag</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;v2&#39;</span><span class=w>
+</span><span class=w></span><span class=k>hostsPort</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span><span class=w>  </span><span class=k>https</span><span class=p>:</span><span class=w> </span><span class=m>443</span><span class=w>
+</span><span class=w></span><span class=k>containerPort</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span><span class=w>  </span><span class=k>https</span><span class=p>:</span><span class=w> </span><span class=m>443</span><span class=w>
+</span></code></pre></td></tr></table></div></div><hr><blockquote><p>if / else 条件控制</p></blockquote><ul><li><p><code>if</code> / <code>else</code> 条件控制</p><ul><li><code>templates/if.yaml</code> 文件, 模板语法使用 go语言 template 语法</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ConfigMap<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Release.Name<span class=w> </span>}}-configmap<span class=w>
+</span><span class=w></span><span class=k>data</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>myvalue</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;hello world&#34;</span><span class=w>
+</span><span class=w>  </span>{{- if<span class=w> </span>eq<span class=w> </span>.Values.favorite.game<span class=w> </span><span class=s2>&#34;LOL&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>  </span><span class=k>msg</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Good Game&#34;</span><span class=w>
+</span><span class=w>  </span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w>  </span><span class=k>msg</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Null&#34;</span><span class=w>
+</span><span class=w>  </span>{{- end<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>查看 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/if.yaml
+
+---
+<span class=c1># Source: myapp/templates/if.yaml</span>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: <span class=s2>&#34;hello world&#34;</span>
+  msg: <span class=s2>&#34;Good Game&#34;</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>with 范围控制</p></blockquote><ul><li><p><code>with</code> 范围控制, 加载范围主体为当前&rsquo;.&rsquo; , 后续通过 <code>.game | .drink</code> 直接调用</p><ul><li><code>templates/with.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ConfigMap<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Release.Name<span class=w> </span>}}-configmap<span class=w>
+</span><span class=w></span><span class=k>data</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>myvalue</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;hello world&#34;</span><span class=w>
+</span><span class=w>  </span>{{- with<span class=w> </span>.Values.favorite<span class=w> </span>}}<span class=w>
+</span><span class=w>  </span><span class=c># default 设置默认值. quote 是加上引号</span><span class=w>
+</span><span class=w>  </span><span class=k>game</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.game<span class=w> </span>|<span class=w> </span>default<span class=w> </span><span class=s2>&#34;King&#34;</span><span class=w> </span>|<span class=w> </span>quote<span class=w> </span>}}<span class=w>
+</span><span class=w>  </span><span class=c># upper 将输出转换为 大写. quote 是加上引号 </span><span class=w>
+</span><span class=w>  </span><span class=k>drink</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.drink<span class=w> </span>|<span class=w> </span>upper<span class=w> </span>|<span class=w> </span>quote<span class=w> </span>}}<span class=w>
+</span><span class=w>  </span>{{- end<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>查看 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/with.yaml
+---
+<span class=c1># Source: myapp/templates/with.yaml</span>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: <span class=s2>&#34;hello world&#34;</span>
+  game: <span class=s2>&#34;LOL&#34;</span>
+  drink: <span class=s2>&#34;COFFEE&#34;</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>range 循环控制</p></blockquote><ul><li><p><code>range</code> 循环控制</p><ul><li><code>templates/range.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ConfigMap<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Release.Name<span class=w> </span>}}-configmap<span class=w>
+</span><span class=w></span><span class=k>data</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>myvalue</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;hello world&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>like</span><span class=p>:</span><span class=w> </span>|<span class=sd>-
+</span><span class=sd>    # 遍历 数组</span><span class=w>
+</span><span class=w>    </span>{{- range<span class=w> </span>.Values.like<span class=w> </span>}}<span class=w>
+</span><span class=w>    </span>- {{<span class=w> </span>.<span class=w> </span>}}<span class=w>
+</span><span class=w>    </span>{{- end<span class=w> </span>}}<span class=w>
+</span><span class=w>    </span><span class=c># 遍历 map</span><span class=w>
+</span><span class=w>    </span>{{- range<span class=w> </span>$key<span class=p>,</span><span class=w> </span>$val<span class=w> </span><span class=p>:</span>=<span class=w> </span>.Values.favorite<span class=w> </span>}}<span class=w>
+</span><span class=w>    </span>{{<span class=w> </span>$key<span class=w> </span>}}<span class=w> </span>=<span class=w> </span>{{<span class=w> </span>$val<span class=w> </span>|<span class=w> </span>quote<span class=w> </span>}}<span class=w>
+</span><span class=w>    </span>{{- end<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>查看 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/range.yaml
+---
+<span class=c1># Source: myapp/templates/range.yaml</span>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: <span class=s2>&#34;hello world&#34;</span>
+  like: <span class=p>|</span>-
+    <span class=c1># 遍历 数组</span>
+    - football
+    - basketball
+    - volleyball
+    - doubleball
+    <span class=c1># 遍历 map</span>
+    <span class=nv>drink</span> <span class=o>=</span> <span class=s2>&#34;coffee&#34;</span>
+    <span class=nv>game</span> <span class=o>=</span> <span class=s2>&#34;LOL&#34;</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>Helm 内置的函数</p></blockquote><hr><ul><li>比较函数</li></ul><table><thead><tr><th>函数</th><th>含义</th></tr></thead><tbody><tr><td>eq</td><td>如果 arg1 == arg2 返回 真</td></tr><tr><td>ne</td><td>如果 arg1 != arg2 返回 真</td></tr><tr><td>lt</td><td>如果 arg1 &lt; arg2 返回 真</td></tr><tr><td>le</td><td>如果 arg1 &lt;= arg2 返回 真</td></tr><tr><td>gt</td><td>如果 arg1 > arg2 返回 真</td></tr><tr><td>ge</td><td>如果 arg1 >= arg2 返回 真</td></tr></tbody></table><hr><ul><li>内置函数</li></ul><table><thead><tr><th>函数</th><th>含义</th></tr></thead><tbody><tr><td>and</td><td>函数返回它的第一个 empty 参数或者最后一个参数</td></tr><tr><td>or</td><td>函数返回它的第一个非 empty 参数或者最后一个参数</td></tr><tr><td>not</td><td>函数返回它的单个参数的布尔值是否定</td></tr><tr><td>len</td><td>函数返回它的参数的整数类型长度</td></tr><tr><td>index</td><td>函数执行结果为第一个参数以剩下的参数为索引/键指向的值</td></tr><tr><td>html</td><td>函数返回其参数文本表示的 html 逸码等价表示</td></tr><tr><td>js</td><td>函数返回其参数文本表示的 JavaScrpit 逸码等价表示</td></tr><tr><td>slice</td><td>函数返回值为 slice 中的选定项</td></tr><tr><td>print</td><td>既 Go 语言中 fmt.Sprint</td></tr><tr><td>printf</td><td>既 Go 语言中 fmt.Sprintf</td></tr><tr><td>println</td><td>既 Go 语言中 fmt.Sprintln</td></tr><tr><td>urlquery</td><td>函数返回其参数文本表示可嵌入URL查询的逸码等价表示</td></tr></tbody></table><hr><blockquote><p>and 函数</p></blockquote><ul><li><p><code>and</code> 函数</p><ul><li><code>templates/and.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 如果 5 大于 1  and 3 小于等于 10</span><span class=w>
+</span><span class=w></span>{{- if<span class=w> </span>and<span class=w> </span>(gt<span class=w> </span><span class=m>5</span><span class=w> </span><span class=m>1</span><span class=w> </span>)<span class=w> </span>(le<span class=w> </span><span class=m>3</span><span class=w> </span><span class=m>10</span>)<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>msg</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w></span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>msg</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span><span class=w></span>{{- end<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/and.yaml
+---
+<span class=c1># Source: myapp/templates/and.yaml</span>
+<span class=c1># 如果 5 大于 1  and 3 小于等于 10</span>
+msg: <span class=nb>true</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>or 函数</p></blockquote><ul><li><p><code>or</code> 函数</p><ul><li><code>templates/or.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 判断 1 大于 2  或  1 小于 2 返回为 true</span><span class=w>
+</span><span class=w></span>{{- if<span class=w> </span>or<span class=w> </span>(gt<span class=w> </span><span class=m>1</span><span class=w> </span><span class=m>2</span><span class=w> </span>)<span class=w> </span>(le<span class=w> </span><span class=m>1</span><span class=w> </span><span class=m>2</span>)<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>msg</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w></span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>msg</span><span class=p>:</span><span class=w> </span><span class=kc>false</span><span class=w>
+</span><span class=w></span>{{- end<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/or.yaml
+---
+<span class=c1># Source: myapp/templates/or.yaml</span>
+<span class=c1># 判断 1 大于 2  或  1 小于 2 返回为 true</span>
+msg: <span class=nb>true</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>not 函数</p></blockquote><ul><li><p><code>not</code> 函数</p><ul><li><code>templates/not.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 判断 如果 1 大于 2 返回 false 取非 为 true</span><span class=w>
+</span><span class=w></span>{{- if<span class=w> </span>not<span class=w> </span>(gt<span class=w> </span><span class=m>1</span><span class=w> </span><span class=m>2</span><span class=w> </span>)<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>msg</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w></span>{{- end}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/not.yaml
+---
+<span class=c1># Source: myapp/templates/not.yaml</span>
+<span class=c1># 判断 如果 1 大于 2 返回 false 取非 为 true</span>
+msg: <span class=nb>true</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>len 函数</p></blockquote><ul><li><p><code>len</code> 函数</p><ul><li><code>templates/len.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>service</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Values.global.service<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=k>len</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>len<span class=w> </span>.Values.global.service<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/len.yaml
+---
+<span class=c1># Source: myapp/templates/len.yaml</span>
+service: web
+
+len: <span class=m>3</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>index 函数</p></blockquote><ul><li><p><code>index</code> 函数</p><ul><li><code>templates/index.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 定义一个变量 hostsPort</span><span class=w>
+</span><span class=w></span>{{- $hostsPort<span class=w> </span><span class=p>:</span>=<span class=w> </span>.Values.hostsPort<span class=w> </span>-}}<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ConfigMap<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Release.Name<span class=w> </span>}}-configmap<span class=w>
+</span><span class=w></span><span class=k>data</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>myvalue</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;hello world&#34;</span><span class=w>
+</span><span class=w>  </span><span class=c># 遍历 containerPort 的 k,v 值</span><span class=w>
+</span><span class=w>  </span>{{- range<span class=w> </span>$name<span class=p>,</span><span class=w> </span>$val<span class=w> </span><span class=p>:</span>=<span class=w> </span>.Values.containerPort<span class=w> </span>}}<span class=w>
+</span><span class=w>  </span><span class=c># $name 变量取值为 $hostsPort 中 $name 变量的值</span><span class=w>
+</span><span class=w>  </span>{{<span class=w> </span><span class=k>$name }}</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>index<span class=w> </span>$hostsPort<span class=w> </span>$name<span class=w> </span>|<span class=w> </span>default<span class=w> </span>$val<span class=w> </span>}}<span class=w>
+</span><span class=w>  </span>{{- end<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/index.yaml
+---
+<span class=c1># Source: myapp/templates/index.yaml</span>
+<span class=c1># 定义一个变量 hostsPort</span>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: RELEASE-NAME-configmap
+data:
+  myvalue: <span class=s2>&#34;hello world&#34;</span>
+  http: <span class=m>80</span>
+  https: <span class=m>443</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>html 函数</p></blockquote><ul><li><p><code>html</code> 函数</p><ul><li><code>templates/html.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>html</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>  {{ html &#34;&lt;html&gt;&lt;head&gt;&lt;title&gt;Title&lt;/title&gt;&lt;/head&gt;&lt;/html&gt;&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/html.yaml
+---
+<span class=c1># Source: myapp/templates/html.yaml</span>
+html: <span class=p>|</span>
+  <span class=p>&amp;</span>lt<span class=p>;</span>html<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>head<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>title<span class=p>&amp;</span>gt<span class=p>;</span>Title<span class=p>&amp;</span>lt<span class=p>;</span>/title<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>/head<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>/html<span class=p>&amp;</span>gt<span class=p>;</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>js 函数</p></blockquote><ul><li><p><code>js</code> 函数</p><ul><li><code>templates/js.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>js</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>js<span class=w> </span><span class=s2>&#34;&lt;script&gt;var a = 1; var b = a + 1; &lt;/scrpit&gt;&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/js.yaml
+---
+<span class=c1># Source: myapp/templates/js.yaml</span>
+js: <span class=se>\x</span>3Cscript<span class=se>\x</span>3Evar a <span class=se>\x</span>3D 1<span class=p>;</span> var b <span class=se>\x</span>3D a + 1<span class=p>;</span> <span class=se>\x</span>3C/scrpit<span class=se>\x</span>3E
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>slice 函数</p></blockquote><ul><li><p><code>slice</code> 函数</p><ul><li><code>templates/slice.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 定义一个 slice slice{1, 3, 5, 7, 9}</span><span class=w>
+</span><span class=w></span>{{<span class=w> </span>$li<span class=w> </span><span class=p>:</span>=<span class=w> </span>list<span class=w> </span><span class=m>1</span><span class=w> </span><span class=m>3</span><span class=w> </span><span class=m>5</span><span class=w> </span><span class=m>7</span><span class=w> </span><span class=m>9</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># 取 $li 中的 第2 第4 个值 从0开始</span><span class=w>
+</span><span class=w></span><span class=k>slice</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>slice<span class=w> </span>$li<span class=w> </span><span class=m>2</span><span class=w> </span><span class=m>4</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/slice.yaml
+---
+<span class=c1># Source: myapp/templates/slice.yaml</span>
+<span class=c1># 定义一个 slice slice{1, 3, 5, 7, 9}</span>
+
+<span class=c1># 取 $li 中的 第2 第4 个值 从0开始</span>
+<span class=c1># 根据 go语言 slice 的取值 左包含右不包含 所以是5, 7</span>
+slice: <span class=o>[</span><span class=m>5</span> 7<span class=o>]</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>print / printf / println 函数</p></blockquote><ul><li><p><code>print</code>、<code>printf</code>、<code>println</code> 函数</p><ul><li><code>templates/print.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>Configmap<span class=w>
+</span><span class=w></span><span class=k>matadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Release.Name<span class=w> </span>}}-configmap<span class=w>
+</span><span class=w></span><span class=k>data</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>{{- $name<span class=w> </span><span class=p>:</span>=<span class=w> </span>.Release.Name<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=k>print</span><span class=p>:</span><span class=w> </span>{{- print<span class=w> </span>$name<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=k>printf</span><span class=p>:</span><span class=w> </span>{{- printf<span class=w> </span><span class=s2>&#34;game - %s drink - %s&#34;</span><span class=w> </span>.Values.favorite.game<span class=w> </span>.Values.favorite.drink<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span><span class=w>  </span><span class=k>println</span><span class=p>:</span><span class=w> </span>{{- println<span class=w> </span><span class=s2>&#34;The Game - &#34;</span><span class=w> </span>.Values.favorite.game<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/print.yaml
+---
+<span class=c1># Source: myapp/templates/print.yaml</span>
+apiVersion: v1
+kind: Configmap
+matadata:
+  name: RELEASE-NAME-configmap
+data:
+
+  print:RELEASE-NAME
+
+  printf:game - LOL drink - coffee
+
+  println:The Game -  LOL
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>urlquery 函数</p></blockquote><ul><li><p><code>urlquery</code> 函数</p><ul><li><code>templates/urlquery.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span>{{- $password<span class=w> </span><span class=p>:</span>=<span class=w> </span><span class=s2>&#34;https://jicki.cn/abc/&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=k>password</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>$password<span class=w> </span>|<span class=w> </span>urlquery<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/urlquery.yaml
+---
+<span class=c1># Source: myapp/templates/urlquery.yaml</span>
+password: https%3A%2F%2Fjicki.cn%2Fabc%2F
+
+</code></pre></td></tr></table></div></div><hr><hr><hr><blockquote><p>Chart 的函数</p></blockquote><hr><blockquote><p>hello 函数</p></blockquote><ul><li><p>hello 函数</p><ul><li>输出 Hello! .</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>hello</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>hello<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>root@kubernetes<span class=p>:</span>/opt/helm/myapp<span class=c># helm template . --show-only templates/hello.yaml</span><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=c># Source: myapp/templates/hello.yaml</span><span class=w>
+</span><span class=w></span><span class=k>hello</span><span class=p>:</span><span class=w> </span>Hello!<span class=w>
+</span></code></pre></td></tr></table></div></div><hr><blockquote><p>now 函数</p></blockquote><ul><li><p>now 函数</p><ul><li>显示当前时间, 以 string 类型打印出来</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>now</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>root@kubernetes<span class=p>:</span>/opt/helm/myapp<span class=c># helm template . --show-only templates/now.yaml</span><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=c># Source: myapp/templates/now.yaml</span><span class=w>
+</span><span class=w></span><span class=k>now</span><span class=p>:</span><span class=w> </span><span class=ld>2020-08-25 01:50:59.895593177 +0000</span><span class=w> </span>UTC<span class=w> </span>m=+<span class=m>0.041493103</span><span class=w>
+</span></code></pre></td></tr></table></div></div><hr><blockquote><p>ago 函数</p></blockquote><ul><li><p>ago 函数</p><ul><li>当前时间减去过去时间</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>ago<span class=w> </span>{{<span class=w> </span>ago<span class=w> </span>now<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/ago.yaml
+---
+<span class=c1># Source: myapp/templates/ago.yaml</span>
+ago: 0s
+</code></pre></td></tr></table></div></div><hr><blockquote><p>date 函数</p></blockquote><ul><li><p>date 函数</p><ul><li>格式化时间输出. Go 语言的时间格式化</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>date</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>date<span class=w> </span><span class=s2>&#34;2006-01-02 15:04:05&#34;</span><span class=w> </span>(now)<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/date.yaml
+---
+<span class=c1># Source: myapp/templates/date.yaml</span>
+date: 2020-08-24 09:40:34
+</code></pre></td></tr></table></div></div><hr><blockquote><p>dateInZone 函数</p></blockquote><ul><li><p>dateInZone 函数</p><ul><li>带时区的时间格式化</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>dateInZone</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>dateInZone<span class=w> </span><span class=s2>&#34;2006-01-02 15:04:05&#34;</span><span class=w> </span>(now)<span class=w> </span><span class=s2>&#34;Asia/Shanghai&#34;</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/dateInZone.yaml
+---
+<span class=c1># Source: myapp/templates/dateInZone.yaml</span>
+dateInZone: 2020-08-24 17:48:42
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>dateModify 函数</p></blockquote><ul><li><p><code>date_modify</code> 函数</p><ul><li>修改时间</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>dateNow</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>dateModify</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>|<span class=w> </span>date_modify<span class=w> </span><span class=s2>&#34;-2h&#34;</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/datemodify.yaml
+---
+<span class=c1># Source: myapp/templates/datemodify.yaml</span>
+dateNow: 2020-08-24 09:52:41.016693113 +0000 UTC <span class=nv>m</span><span class=o>=</span>+0.045451911
+dateModify: 2020-08-24 07:52:41.016733093 +0000 UTC <span class=nv>m</span><span class=o>=</span>-7199.954508131
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>durationRound 函数</p></blockquote><ul><li><p>durationRound 函数</p><ul><li>将指定秒 粗略转换成分钟 (m)</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>durationRound</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>durationRound<span class=w> </span><span class=s2>&#34;500s&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/durationRound.yaml
+---
+<span class=c1># Source: myapp/templates/durationRound.yaml</span>
+durationRound: 8m
+</code></pre></td></tr></table></div></div><hr><blockquote><p>htmlDate 函数</p></blockquote><ul><li><p>htmlDate 函数</p><ul><li>格式化时间为 年-月-日</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>htmlDate</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>|<span class=w> </span>htmlDate<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/htmlDate.yaml
+---
+<span class=c1># Source: myapp/templates/htmlDate.yaml</span>
+htmlDate: 2020-08-24
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>htmlDateInZone 函数</p></blockquote><ul><li><p>htmlDateInZone 函数</p><ul><li>带时区的格式化时间 年-月-日</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>htmlDateInZone</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>htmlDateInZone<span class=w> </span>now<span class=w> </span><span class=s2>&#34;Asia/Shanghai&#34;</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/htmlDateInZone.yaml
+---
+<span class=c1># Source: myapp/templates/htmlDateInZone.yaml</span>
+htmlDateInZone: 2020-08-24
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>mustDateModify 函数</p></blockquote><ul><li><p>mustDateModify 函数</p><ul><li>mustDateModify 与 DateModify 函数一样, mustDateModify 会返回一个错误.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>DateNow</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>mustDateModify</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>mustDateModify<span class=w> </span><span class=s2>&#34;500s&#34;</span><span class=w> </span>now}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/mustDateModify.yaml
+---
+<span class=c1># Source: myapp/templates/mustDateModify.yaml</span>
+DateNow: 2020-08-24 10:06:00.4835164 +0000 UTC <span class=nv>m</span><span class=o>=</span>+0.048029319
+mustDateModify: 2020-08-24 10:14:20.483551062 +0000 UTC <span class=nv>m</span><span class=o>=</span>+500.048063982
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>toDate 函数</p></blockquote><ul><li><p>toDate 函数</p><ul><li>将 string 类型的时间转换成 时间类型并按照自定义格式化输出</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>ToDate</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>toDate<span class=w> </span><span class=s2>&#34;2006-01-02 15:04:05&#34;</span><span class=w> </span><span class=s2>&#34;2020-08-25 09:58:00&#34;</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toDate.yaml
+---
+<span class=c1># Source: myapp/templates/toDate.yaml</span>
+ToDate: 2020-08-25 09:58:00 +0000 UTC
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>unixEpoch 函数</p></blockquote><ul><li><p>unixEpoch 函数</p><ul><li>将指定时间转换成 时间戳格式 输出</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>unixEpoch</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>unixEpoch<span class=w> </span>now<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/unixEpoch.yaml
+---
+<span class=c1># Source: myapp/templates/unixEpoch.yaml</span>
+unixEpoch: <span class=m>1598321573</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>abbrev 函数</p></blockquote><ul><li><p>abbrev 函数</p><ul><li>隐藏指定字符长度, 以 <code>...</code> 缩写.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>abbrev</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefg&#34;</span><span class=w> </span>|<span class=w> </span>abbrev<span class=w> </span><span class=m>5</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/abbrev.yaml
+---
+<span class=c1># Source: myapp/templates/abbrev.yaml</span>
+abbrev: ab...
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>trunc 函数</p></blockquote><ul><li><p>trunc 函数</p><ul><li>截取 指定长度的字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>trunc</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefg&#34;</span><span class=w> </span>|<span class=w> </span>trunc<span class=w> </span><span class=m>2</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/trunc.yaml
+---
+<span class=c1># Source: myapp/templates/trunc.yaml</span>
+trunc: ab
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>trim 函数</p></blockquote><ul><li><p>trim 函数</p><ul><li>清除前后的 空格</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>trim</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;     a  b  c  &#34;</span><span class=w> </span>|trim<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/trim.yaml
+---
+<span class=c1># Source: myapp/templates/trim.yaml</span>
+trim: a  b  c
+</code></pre></td></tr></table></div></div><hr><blockquote><p>trimAll 函数</p></blockquote><ul><li><p>trimAll 函数</p><ul><li>清除前后指定的 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>trimAll</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;++jicki++&#34;</span><span class=w> </span>|<span class=w> </span>trimAll<span class=w> </span><span class=s2>&#34;+&#34;</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/trimAll.yaml
+---
+<span class=c1># Source: myapp/templates/trimAll.yaml</span>
+trimAll: jicki
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>trimSuffix 函数</p></blockquote><ul><li><p>trimSuffix 函数</p><ul><li>清除 右边指定的 字符</li></ul></li></ul><hr><blockquote><p>trimPrefix 函数</p></blockquote><ul><li><p>trimPrefix 函数</p><ul><li>清除左边指定的 字符.</li></ul></li></ul><hr><blockquote><p>nospace 函数</p></blockquote><ul><li><p>nospace 函数</p><ul><li>清除字符串中的所有空格.</li></ul></li></ul><hr><blockquote><p>initials 函数</p></blockquote><ul><li><p>initials 函数</p><ul><li>截取字符串中每个单词的 第一个 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>initials</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;Jicki hello world&#34;</span><span class=w> </span>|initials<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/initials.yaml
+---
+<span class=c1># Source: myapp/templates/initials.yaml</span>
+initials: Jhw
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>upper 函数</p></blockquote><ul><li><p>upper 函数</p><ul><li>将字符串全部转换成大写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>upper</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefg&#34;</span><span class=w> </span>|<span class=w> </span>upper<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/upper.yaml
+---
+<span class=c1># Source: myapp/templates/upper.yaml</span>
+upper: ABCDEFG
+</code></pre></td></tr></table></div></div><hr><blockquote><p>lower 函数</p></blockquote><ul><li><p>lower 函数</p><ul><li>将字符串全部转换成小写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>lower</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;ABCDEFG&#34;</span><span class=w> </span>|<span class=w> </span>upper<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/lower.yaml
+---
+<span class=c1># Source: myapp/templates/lower.yaml</span>
+lower: abcdefg
+</code></pre></td></tr></table></div></div><hr><blockquote><p>title 函数</p></blockquote><ul><li><p>title 函数</p><ul><li>将单词的首写字母转换成大写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>title</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki hello world&#34;</span><span class=w> </span>|<span class=w> </span>title<span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>title</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki-hello-world&#34;</span><span class=w> </span>|<span class=w> </span>title<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/title.yaml
+---
+<span class=c1># Source: myapp/templates/title.yaml</span>
+title: Jicki Hello World
+title: Jicki-Hello-World
+</code></pre></td></tr></table></div></div><hr><blockquote><p>swapcase 函数</p></blockquote><ul><li><p>swapcase 函数</p><ul><li>将字符串中 大小写 互转.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>swapcase</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcDEFghiJKL&#34;</span><span class=w> </span>|swapcase<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/swapcase.yaml
+---
+<span class=c1># Source: myapp/templates/swapcase.yaml</span>
+swapcase: ABCdefGHIjkl
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>substr 函数</p></blockquote><ul><li><p>substr 函数</p><ul><li>截取字符串 N-M 长度 的内容 ( N 从0开始, M = M-1).</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>substr</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefghi&#34;</span><span class=w> </span>|substr<span class=w> </span><span class=m>1</span><span class=w> </span><span class=m>5</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/substr.yaml
+---
+<span class=c1># Source: myapp/templates/substr.yaml</span>
+substr: bcde
+</code></pre></td></tr></table></div></div><hr><blockquote><p>repeat 函数</p></blockquote><ul><li><p>repeat 函数</p><ul><li>重复输出N次指定字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>repeat</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>|<span class=w> </span>repeat<span class=w> </span><span class=m>5</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/repeat.yaml
+---
+<span class=c1># Source: myapp/templates/repeat.yaml</span>
+repeat: jickijickijickijickijicki
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>randAlpha 函数</p></blockquote><ul><li><p>randAlpha 函数</p><ul><li>输出指定位数随机 字母.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>randAlpha</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>randAlpha<span class=w> </span><span class=m>20</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/randAlpha.yaml
+---
+<span class=c1># Source: myapp/templates/randAlpha.yaml</span>
+randAlpha: dmrHUNScimXhpUiGMapG
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>randNumeric 函数</p></blockquote><ul><li><p>randNumeric 函数</p><ul><li>输出指定位数的随机 数字</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>randNumeric</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>randNumeric<span class=w> </span><span class=m>20</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/randNumeric.yaml
+---
+<span class=c1># Source: myapp/templates/randNumeric.yaml</span>
+randNumeric: <span class=m>37465873746598120398</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>randAlphaNum 函数</p></blockquote><ul><li><p>randAlphaNum 函数</p><ul><li>输出指定位数的随机 (数字 + 字母).</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>randAlphaNum</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>randAlphaNum<span class=w> </span><span class=m>20</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/randAlphaNum.yaml
+---
+<span class=c1># Source: myapp/templates/randAlphaNum.yaml</span>
+randAlphaNum: H2Bv00ToRKntFpy9PFYX
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>randAscii 函数</p></blockquote><ul><li><p>randAscii 函数</p><ul><li>输出指定位数随机 Ascii 码</li></ul></li></ul><hr><blockquote><p>until 函数</p></blockquote><ul><li><p>until 函数</p><ul><li>输出指定数的序列, 存到列表中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>until</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>  {{ until 10 }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/until.yaml
+---
+<span class=c1># Source: myapp/templates/until.yaml</span>
+<span class=k>until</span>: <span class=p>|</span>
+        <span class=o>[</span><span class=m>0</span> <span class=m>1</span> <span class=m>2</span> <span class=m>3</span> <span class=m>4</span> <span class=m>5</span> <span class=m>6</span> <span class=m>7</span> <span class=m>8</span> 9<span class=o>]</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>untilStep 函数</p></blockquote><ul><li><p>untilStep 函数</p><ul><li>输出指定 N-M 的序列, 并且可以设置 步长 , 存到列表中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>untilStep</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>	{{ untilStep 1 10 2 }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/untilStep.yaml
+---
+<span class=c1># Source: myapp/templates/untilStep.yaml</span>
+untilStep: <span class=p>|</span>
+        <span class=o>[</span><span class=m>1</span> <span class=m>3</span> <span class=m>5</span> <span class=m>7</span> 9<span class=o>]</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>shuffle 函数</p></blockquote><ul><li><p>shuffle 函数</p><ul><li>将字符串的次序打乱.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>shuffle</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki-hello-world&#34;</span><span class=w> </span>|shuffle<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/shuffle.yaml
+---
+<span class=c1># Source: myapp/templates/shuffle.yaml</span>
+shuffle: -lk-rdolijohwecli
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>snakecase 函数</p></blockquote><ul><li><p>snakecase 函数</p><ul><li>将字符串中的单词以 <code>_</code> 相连.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>snakecase</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki hello world&#34;</span>|snakecase<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/snakecase.yaml
+---
+<span class=c1># Source: myapp/templates/snakecase.yaml</span>
+snakecase: jicki_hello_world
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>camelcase 函数</p></blockquote><ul><li><p>camelcase 函数</p><ul><li>将字符串中的<code>_</code>相连的单词首字母大写并且去掉<code>_</code>.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>camelcase</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki_hello_world_!&#34;</span><span class=w> </span>|<span class=w> </span>camelcase<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/camelcase.yaml
+---
+<span class=c1># Source: myapp/templates/camelcase.yaml</span>
+camelcase: JickiHelloWorld!
+</code></pre></td></tr></table></div></div><hr><blockquote><p>kebabcase 函数</p></blockquote><ul><li><p>kebabcase 函数</p><ul><li>将字符串中的单词以 <code>-</code> 相连.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>kebabcase</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki hello_world&#34;</span><span class=w> </span>|<span class=w> </span>kebabcase<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/kebabcase.yaml
+---
+<span class=c1># Source: myapp/templates/kebabcase.yaml</span>
+kebabcase: jicki-hello-world
+</code></pre></td></tr></table></div></div><hr><blockquote><p>wrapWith 函数</p></blockquote><ul><li><p>wrapWith 函数</p><ul><li>在字符串中, 指定间隔插入指定字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>wrapWith</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ &#34;jickiHelloWorld&#34; | wrapWith 5 &#34;:--&gt;&#34; }}</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/wrapWith.yaml
+---
+<span class=c1># Source: myapp/templates/wrapWith.yaml</span>
+wrapWith: <span class=p>|</span>
+        jicki:--&gt;Hello:--&gt;World
+</code></pre></td></tr></table></div></div><hr><blockquote><p>contains 函数</p></blockquote><ul><li><p>contains 函数</p><ul><li>字符串中是否包含某些字符</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>contains</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>  {{- $name := &#34;jicki&#34; }}</span><span class=w>
+</span><span class=w>  </span>{{- if<span class=w> </span>contains<span class=w> </span>$name<span class=w> </span><span class=s2>&#34;jicki hello world&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w>
+</span><span class=w>  </span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Null&#34;</span><span class=w>
+</span><span class=w>  </span>{{- end<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/contains.yaml
+---
+<span class=c1># Source: myapp/templates/contains.yaml</span>
+contains: <span class=p>|</span>
+  name: <span class=s2>&#34;jicki&#34;</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>hasPrefix 函数</p></blockquote><ul><li><p>hasPrefix 函数</p><ul><li>字符串中是否包含指定的前缀.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>hasPrefix</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- if hasPrefix &#34;https&#34; &#34;http://www.baidu.com&#34; }}</span><span class=w>
+</span><span class=w>        </span><span class=k>url</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;https&#34;</span><span class=w>
+</span><span class=w>        </span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span><span class=k>url</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;http&#34;</span><span class=w>
+</span><span class=w>        </span>{{- end<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/hasPrefix.yaml
+---
+<span class=c1># Source: myapp/templates/hasPrefix.yaml</span>
+hasPrefix: <span class=p>|</span>
+        url: <span class=s2>&#34;http&#34;</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>hasSuffix 函数</p></blockquote><ul><li><p>hasSuffix 函数</p><ul><li>字符串中是否包含指定的后缀.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>hasSuffix</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- if hasSuffix &#34;com&#34; &#34;https://baidu.com&#34; }}</span><span class=w>
+</span><span class=w>        </span><span class=k>url</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;url com&#34;</span><span class=w>
+</span><span class=w>        </span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span><span class=k>url</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;not com&#34;</span><span class=w>
+</span><span class=w>        </span>{{- end<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/hasSuffix.yaml
+---
+<span class=c1># Source: myapp/templates/hasSuffix.yaml</span>
+hasSuffix: <span class=p>|</span>
+        url: <span class=s2>&#34;url com&#34;</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>quote 函数</p></blockquote><ul><li><p>quote 函数</p><ul><li>将指定字符串加上 <code>" "</code> 号输出.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>quote</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>quote<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>Notquote</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/quote.yaml
+---
+<span class=c1># Source: myapp/templates/quote.yaml</span>
+quote: <span class=s2>&#34;jicki&#34;</span>
+Notquote: jicki
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>squote 函数</p></blockquote><ul><li><p>squote 函数</p><ul><li>将指定字符串加上 <code>' '</code> 号输出.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>squote</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>squote<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/squote.yaml
+---
+<span class=c1># Source: myapp/templates/squote.yaml</span>
+squote: <span class=s1>&#39;jicki&#39;</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>cat 函数</p></blockquote><ul><li><p>cat 函数</p><ul><li>字符串拼接, 多个字符串拼接成一个字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>cat</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ cat &#34;jicki&#34; &#34;hello&#34; &#34;world&#34; &#34;!&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/cat.yaml
+---
+<span class=c1># Source: myapp/templates/cat.yaml</span>
+cat: <span class=p>|</span>
+        jicki hello world !
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>indent 函数</p></blockquote><ul><li><p>indent 函数</p><ul><li>字符串前面缩进指定的行数.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>indent</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>|<span class=w> </span>indent<span class=w> </span><span class=m>3</span><span class=w> </span>|quote<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/indent.yaml
+---
+<span class=c1># Source: myapp/templates/indent.yaml</span>
+indent: <span class=s2>&#34;   jicki&#34;</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>nindent 函数</p></blockquote><ul><li><p>nindent 函数</p><ul><li>字符串换行后缩进指定的行数.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>nindent</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>  {{ &#34;jicki&#34; | nindent 3 |quote }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/nindent.yaml
+---
+<span class=c1># Source: myapp/templates/nindent.yaml</span>
+nindent: <span class=p>|</span>
+        <span class=s2>&#34;\n   jicki&#34;</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>replace 函数</p></blockquote><ul><li><p>replace 函数</p><ul><li>替换字符串中的 n 字符为 m 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>replace</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ &#34;http://www.baidu.com&#34; |replace &#34;baidu&#34; &#34;qq&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/replace.yaml
+---
+<span class=c1># Source: myapp/templates/replace.yaml</span>
+replace: <span class=p>|</span>
+        http://www.qq.com
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>sha1sum 函数</p></blockquote><ul><li><p>sha1sum 函数</p><ul><li>使用 sha1sum 算法加密 字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>sha1sum</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>sha1sum<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/sha1sum.yaml
+---
+<span class=c1># Source: myapp/templates/sha1sum.yaml</span>
+sha1sum: 7afef0c7f74b1aec91b159ac36946e0f865eb0e3
+</code></pre></td></tr></table></div></div><hr><blockquote><p>sha256sum 函数</p></blockquote><ul><li><p>sha256sum 函数</p><ul><li>使用 sha256sum 算法加密 字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>sha256sum</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>sha256sum<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/sha256sum.yaml
+---
+<span class=c1># Source: myapp/templates/sha256sum.yaml</span>
+sha256sum: 57a4bffd5916cd9fded9ad94a76de152e56eb0bf9e34c94f5ea48f8cbd4f866a
+</code></pre></td></tr></table></div></div><hr><blockquote><p>toString 函数</p></blockquote><ul><li><p>toString 函数</p><ul><li>将 int 类型的函数转换成 string 类型.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>{{- $age<span class=w> </span><span class=p>:</span>=<span class=w> </span><span class=m>22</span><span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>toString</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>$age<span class=w> </span>|toString<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toString.yaml
+---
+<span class=c1># Source: myapp/templates/toString.yaml</span>
+toString: <span class=m>22</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>atoi 函数</p></blockquote><ul><li><p>atoi 函数</p><ul><li>将 string 类型转换成 int 类型, 如果 string 为字符非数字, 转换后输出 0 .</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>{{- $name<span class=w> </span><span class=p>:</span>=<span class=w> </span><span class=s2>&#34;2222&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w></span><span class=k>atoi</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>$name<span class=w> </span>|<span class=w> </span>atoi<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/atoi.yaml
+---
+<span class=c1># Source: myapp/templates/atoi.yaml</span>
+atoi: <span class=m>2222</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>int64 函数</p></blockquote><ul><li><p>int64 函数</p><ul><li>将 int 类型转换成 int64 位的整型.</li></ul></li></ul><hr><blockquote><p>float64 函数</p></blockquote><ul><li><p>float64 函数</p><ul><li>将 float32 类型转换为 float64 位的浮点型.</li></ul></li></ul><hr><blockquote><p>toDecimal 函数</p></blockquote><ul><li><p>toDecimal 函数</p><ul><li>将 八进制 转换为 十进制.</li></ul></li></ul><hr><blockquote><p>split 函数</p></blockquote><ul><li><p>split 函数</p><ul><li>以指定符号 分割 字符串, 并存到 map 中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>split</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ split &#34;,&#34; &#34;jicki,hello,world!&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/split.yaml
+---
+<span class=c1># Source: myapp/templates/split.yaml</span>
+split: <span class=p>|</span>
+        map<span class=o>[</span>_0:jicki _1:hello _2:world!<span class=o>]</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>toStrings 函数</p></blockquote><ul><li><p>toStrings 函数</p><ul><li>将 整型(int)的列表 转换成 字符串(string) 类型的列表</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>toStrings</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $li := list 1 2 3 }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>toStrings<span class=w> </span>$li<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toStrings.yaml
+---
+<span class=c1># Source: myapp/templates/toStrings.yaml</span>
+toStrings: <span class=p>|</span>
+        <span class=o>[</span><span class=m>1</span> <span class=m>2</span> 3<span class=o>]</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>toJson 函数</p></blockquote><ul><li><p>toJson 函数</p><ul><li>将指定元素转换成 Json</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>toJson</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Values.favorite<span class=w> </span>|<span class=w> </span>toJson<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toJson.yaml
+---
+<span class=c1># Source: myapp/templates/toJson.yaml</span>
+toJson: <span class=o>{</span><span class=s2>&#34;drink&#34;</span>:<span class=s2>&#34;coffee&#34;</span>,<span class=s2>&#34;game&#34;</span>:<span class=s2>&#34;LOL&#34;</span><span class=o>}</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>toPrettyJson 函数</p></blockquote><ul><li><p>toPrettyJson 函数</p><ul><li>将指定元素转换成Json 并格式化输出.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>toPrettyJson</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>.Values.favorite<span class=w> </span>|<span class=w> </span>toPrettyJson<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/toPrettyJson.yaml
+---
+<span class=c1># Source: myapp/templates/toPrettyJson.yaml</span>
+toPrettyJson: <span class=o>{</span>
+  <span class=s2>&#34;drink&#34;</span>: <span class=s2>&#34;coffee&#34;</span>,
+  <span class=s2>&#34;game&#34;</span>: <span class=s2>&#34;LOL&#34;</span>
+<span class=o>}</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>splitList 函数</p></blockquote><ul><li><p>splitList 函数</p><ul><li>以指定符号 分割 字符串, 并存到 列表中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>splitList</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ splitList &#34;,&#34; &#34;jicki,hello,world!&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/splitList.yaml
+---
+<span class=c1># Source: myapp/templates/splitList.yaml</span>
+splitList: <span class=p>|</span>
+        <span class=o>[</span>jicki hello world!<span class=o>]</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>splitn 函数</p></blockquote><ul><li><p>splitn 函数</p><ul><li>以指定符号 分割 N 个字符串, 并存到 map 中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>splitn</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{ splitn &#34;,&#34;  2  &#34;jicki,hello,world!&#34; }}</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/splitn.yaml
+---
+<span class=c1># Source: myapp/templates/splitn.yaml</span>
+splitn: <span class=p>|</span>
+        map<span class=o>[</span>_0:jicki _1:hello,world!<span class=o>]</span>
+</code></pre></td></tr></table></div></div><hr><blockquote><p>算数运算 函数</p></blockquote><table><thead><tr><th>运算符</th><th>说明</th></tr></thead><tbody><tr><td>add</td><td>加法运算 {{ add 10 20 }} = 30</td></tr><tr><td>sub</td><td>减法运算 {{ sub 20 10 }} = 10</td></tr><tr><td>div</td><td>除法运算 {{ div 10 2 }} = 5</td></tr><tr><td>mul</td><td>乘法运算 {{ mul 3 3 }} = 9</td></tr><tr><td>mod</td><td>取余 {{ mod 10 3 }} = 1</td></tr><tr><td>max</td><td>取最大值 {{ max 1 3 5 99 }} = 99</td></tr><tr><td>min</td><td>取最小值 {{ min 1 20 7 10 }} = 1</td></tr><tr><td>ceil</td><td>向上取整 {{ ceil 3.823 }} = 4</td></tr><tr><td>floor</td><td>向下取整 {{ floor 3.823 }} = 3</td></tr><tr><td>round</td><td>四舍五入 {{ round 3.823 }} = 4</td></tr></tbody></table><hr><blockquote><p>join 函数</p></blockquote><ul><li><p>join 函数</p><ul><li>通过指定 字符将 列表 中的元素合并为一个字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>join</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $li := list &#34;a&#34; &#34;b&#34; &#34;c&#34; &#34;d&#34; }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>join<span class=w> </span><span class=s2>&#34;_&#34;</span><span class=w> </span>$li<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/join.yaml
+---
+<span class=c1># Source: myapp/templates/join.yaml</span>
+join: <span class=p>|</span>
+        a_b_c_d
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>sortAlpha 函数</p></blockquote><ul><li><p>sortAlpha 函数</p><ul><li>将 列表 中的字符串按照 字符的顺序进行排序.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>sortAlpha</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $li := list &#34;bb&#34; &#34;cc&#34; &#34;def&#34; &#34;func&#34; &#34;abc&#34; }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>println<span class=w> </span><span class=s2>&#34;old--&gt;&#34;</span><span class=w> </span>$li<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>$li<span class=w> </span>=<span class=w> </span>sortAlpha<span class=w> </span>$li<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>println<span class=w> </span><span class=s2>&#34;new--&gt;&#34;</span><span class=w> </span>$li<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/sortAlpha.yaml
+---
+<span class=c1># Source: myapp/templates/sortAlpha.yaml</span>
+sortAlpha: <span class=p>|</span>
+        old--&gt; <span class=o>[</span>bb cc def func abc<span class=o>]</span>
+
+
+        new--&gt; <span class=o>[</span>abc bb cc def func<span class=o>]</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>default 函数</p></blockquote><ul><li><p>defalut 函数</p><ul><li>设置默认值.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>default</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>defalut<span class=w> </span><span class=m>99</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><hr><blockquote><p>empty 函数</p></blockquote><ul><li><p>empty 函数</p><ul><li>判断字符串是否为空.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>empty</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $name := &#34;&#34; }}</span><span class=w>
+</span><span class=w>        </span>{{- if<span class=w> </span>empty<span class=w> </span>$name<span class=w> </span>}}<span class=w>
+</span><span class=w>         </span><span class=k>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Null&#34;</span><span class=w>
+</span><span class=w>        </span>{{- else<span class=w> </span>}}<span class=w>
+</span><span class=w>         </span><span class=k>name </span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>$name<span class=w> </span>}}<span class=w>
+</span><span class=w>        </span>{{- end<span class=w> </span>}}<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/empty.yaml
+---
+<span class=c1># Source: myapp/templates/empty.yaml</span>
+empty: <span class=p>|</span>
+         name: <span class=s2>&#34;Null&#34;</span>
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>compact 函数</p></blockquote><ul><li><p>compact 函数</p><ul><li>去除 列表 中为空 的元素.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>compact</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>        {{- $li := list &#34;a&#34; &#34;&#34; &#34;c&#34; &#34;d&#34; &#34;f&#34; }}</span><span class=w>
+</span><span class=w>        </span>{{<span class=w> </span>compact<span class=w> </span>$li<span class=w> </span>}}<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/compact.yaml
+---
+<span class=c1># Source: myapp/templates/compact.yaml</span>
+compact: <span class=p>|</span>
+        <span class=o>[</span>a c d f<span class=o>]</span>
+</code></pre></td></tr></table></div></div><hr></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-08-17</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/helm-chart/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/helm-chart/ data-title="Kubernetes 包管理 Helm" data-via=jicki234 data-hashtags=kubernetes,helm><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/helm-chart/ data-hashtag=kubernetes><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/helm-chart/ data-title="Kubernetes 包管理 Helm" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/helm-chart/ data-title="Kubernetes 包管理 Helm"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/helm-chart/ data-title="Kubernetes 包管理 Helm"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/helm-chart/ data-title="Kubernetes 包管理 Helm" data-description="Kubernetes 包管理 Helm"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/helm-chart/ data-title="Kubernetes 包管理 Helm" data-description="Kubernetes 包管理 Helm"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/helm-chart/ data-title="Kubernetes 包管理 Helm"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/kubernetes/>kubernetes</a>,&nbsp;<a href=/tags/helm/>helm</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/helm-v2/ class=prev rel=prev title="Kubernetes 包管理 Helm"><i class="fas fa-angle-left fa-fw"></i>Kubernetes 包管理 Helm</a>
+<a href=/golang-study-web-notes/ class=next rel=next title="Go Web编程">Go Web编程<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://jicki.cn target=_blank>小炒肉</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a href=http://beian.miit.gov.cn target=_blank>粤ICP备20055633号</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/valine/Valine.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":200},"comment":{"valine":{"appId":"1LTTCvDe4Nt8XSdFzejtUsVF-gzGzoHsz","appKey":"cvpPM7sbgOw0pTXbh6YVKrjc","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
