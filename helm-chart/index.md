@@ -2277,6 +2277,186 @@ compact: |
 ---
 
 
+> deepCopy 函数
+
+* deepCopy 函数
+
+  * 深度拷贝. 生成一份新的.
+
+
+```yaml
+deepCopy: |
+        {{- $li := list 1 2 4 5 }}
+        {{ deepCopy $li }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/deepCopy.yaml
+---
+# Source: myapp/templates/deepCopy.yaml
+deepCopy: |
+        [1 2 4 5]
+```
+
+
+---
+
+> deepEqual 函数
+
+* deepEqual 函数
+
+  * 深度比较两个 元素 是否相等.
+
+```yaml
+deepEqual: |
+        {{- $li1 := list 12 23 34 }}
+        {{- $li2 := list 12 23 34 }}
+        {{ deepEqual $li1 $li2 }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/deepEqual.yaml
+---
+# Source: myapp/templates/deepEqual.yaml
+deepEqual: |
+        true
+```
+
+---
+
+> typeOf 函数
+
+* typeOf 函数
+
+  * 获取 元素 的类型 
+
+
+```yaml
+typeOf: |
+        {{- $li := list 12 23 34 }}
+        {{ typeOf $li }}
+        {{ typeOf "String" }}
+        {{ typeOf 123 }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/typeOf.yaml
+---
+# Source: myapp/templates/typeOf.yaml
+typeOf: |
+        []interface {}
+        string
+        int
+
+```
+
+
+---
+
+> typeIs 函数
+
+*  typeIs 函数
+
+  * 类型断言, 判断元素的类型是否为指定类型
+
+
+```yaml
+typeIs: |
+        {{- if typeIs "int" 123 }}
+        typeIs: true
+        {{- else }}
+        typeIs: false
+        {{- end }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/typeIs.yaml
+---
+# Source: myapp/templates/typeIs.yaml
+typeIs: |
+        typeIs: true
+
+```
+
+
+
+---
+
+> kindOf 函数
+
+* kindOf 函数
+
+  * 获取一个元素的类型, 深度获取. 可查看如下与 `typeOf` 的输出区别.
+
+
+```yaml
+kindOf: |
+        {{- $li := list 12 23 34 }}
+        {{ kindOf $li }}
+        {{ kindOf "String" }}
+        {{ kindOf 123 }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/kindOf.yaml
+---
+# Source: myapp/templates/kindOf.yaml
+kindOf: |
+        slice
+        string
+        int
+```
+
+
+---
+
+> kindIs 函数
+
+* kindIs 函数
+
+  * 类型断言, 判断元素的类型是否为指定类型, 可获取深度的类型. 如: interface .
+
+
+```yaml
+
+kindIs: |
+        {{- $li := list 12 34 56 }}
+        {{- if kindIs "slice" $li }}
+        kindIs: slice
+        {{- else }}
+        kindIs: interface
+        {{- end }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/kindIs.yaml
+---
+# Source: myapp/templates/kindIs.yaml
+kindIs: |
+        kindIs: slice
+```
+
+
+---
+
 
 
 
