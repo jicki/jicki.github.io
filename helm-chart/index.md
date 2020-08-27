@@ -177,7 +177,7 @@ annotations:
 
 ### 比较函数
 
-> <center>比较函数</center>
+> <center>**比较函数**</center>
 
 | 函数 |         含义              |
 | ---- | ------------------------- |
@@ -194,7 +194,7 @@ annotations:
 ### 流程控制
 
 
-> <center>模板函数 之 流程控制</center>
+> <center>**模板函数 之 流程控制**</center>
 
 
 * `values.yaml` 文件内容如下
@@ -223,7 +223,7 @@ containerPort:
 
 ---
 
-> if / else 条件控制
+> <center>**if / else 条件控制**</center>
 
 * `if` / `else`  条件控制
 
@@ -266,7 +266,7 @@ data:
 
 ---
 
-> with 范围控制
+> <center>**with 范围控制**</center>
 
 
 * `with` 范围控制, 加载范围主体为当前'.' , 后续通过 `.game | .drink` 直接调用
@@ -313,7 +313,7 @@ data:
 
 ---
 
-> range 循环控制
+> <center>**range 循环控制**</center>
 
 
 * `range` 循环控制
@@ -370,7 +370,7 @@ data:
 
 ### 内置函数
 
-> Go 语言函数
+> <center>**Go 语言函数**</center>
 
 
 | 函数    |          含义                                         |
@@ -391,7 +391,7 @@ data:
 
 ---
 
-> and 函数
+> <center>**and 函数**</center>
 
 * `and` 函数 
 
@@ -421,7 +421,7 @@ msg: true
 
 ---
 
-> or 函数
+> <center>**or 函数**</center>
 
 * `or` 函数
 
@@ -451,7 +451,7 @@ msg: true
 
 ---
 
-> not 函数
+> <center>**not 函数**</center>
 
 * `not` 函数
 
@@ -482,7 +482,7 @@ msg: true
 
 ---
 
-> len 函数
+> <center>**len 函数**</center>
 
 * `len` 函数
 
@@ -511,7 +511,7 @@ len: 3
 
 ---
 
-> index 函数
+> <center>**index 函数**</center>
 
 * `index` 函数
 
@@ -556,7 +556,7 @@ data:
 
 ---
 
-> html 函数
+> <center>**html 函数**</center>
 
 * `html` 函数
 
@@ -582,7 +582,7 @@ html: |
 
 ---
 
-> js 函数
+> <center>**js 函数**</center>
 
 * `js` 函数
 
@@ -610,7 +610,7 @@ js: \x3Cscript\x3Evar a \x3D 1; var b \x3D a + 1; \x3C/scrpit\x3E
 
 ---
 
-> slice 函数
+> <center>**slice 函数**</center>
 
 
 * `slice` 函数
@@ -640,7 +640,7 @@ slice: [5 7]
 
 ---
 
-> print / printf / println 函数
+> <center>**print / printf / println 函数**</center>
 
 
 * `print`、`printf`、`println`  函数
@@ -687,7 +687,7 @@ data:
 
 ---
 
-> urlquery 函数
+> <center>**urlquery 函数**</center>
 
 * `urlquery`  函数
 
@@ -721,7 +721,7 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 
 ---
 
-> hello 函数
+> <center>**hello 函数**</center>
 
 * hello 函数
 
@@ -743,7 +743,7 @@ hello: Hello!
 
 ---
 
-> now 函数
+> <center>**now 函数**</center>
 
 * now 函数
 
@@ -768,7 +768,7 @@ now: 2020-08-25 01:50:59.895593177 +0000 UTC m=+0.041493103
 
 ---
 
-> ago 函数
+> <center>**ago 函数**</center>
 
 * ago 函数
 
@@ -791,7 +791,7 @@ ago: 0s
 
 ---
 
-> date 函数
+> <center>**date 函数**</center>
 
 * date 函数
 
@@ -814,7 +814,7 @@ date: 2020-08-24 09:40:34
 
 ---
 
-> dateInZone 函数
+> <center>**dateInZone 函数**</center>
 
 * dateInZone 函数
 
@@ -839,7 +839,7 @@ dateInZone: 2020-08-24 17:48:42
 
 ---
 
-> dateModify 函数
+> <center>**dateModify 函数**</center>
 
 * `date_modify` 函数
 
@@ -867,7 +867,7 @@ dateModify: 2020-08-24 07:52:41.016733093 +0000 UTC m=-7199.954508131
 
 ---
 
-> durationRound 函数
+> <center>**durationRound 函数**</center>
 
 * durationRound 函数
 
@@ -890,7 +890,7 @@ durationRound: 8m
 
 ---
 
-> htmlDate 函数
+> <center>**htmlDate 函数**</center>
 
 * htmlDate 函数
 
@@ -914,7 +914,7 @@ htmlDate: 2020-08-24
 
 ---
 
-> htmlDateInZone 函数
+> <center>**htmlDateInZone 函数**</center>
 
 * htmlDateInZone 函数
 
@@ -939,7 +939,7 @@ htmlDateInZone: 2020-08-24
 
 ---
 
-> mustDateModify 函数
+> <center>**mustDateModify 函数**</center>
 
 * mustDateModify 函数
 
@@ -965,7 +965,7 @@ mustDateModify: 2020-08-24 10:14:20.483551062 +0000 UTC m=+500.048063982
 
 ---
 
-> toDate 函数
+> <center>**toDate 函数**</center>
 
 * toDate 函数
 
@@ -989,7 +989,7 @@ ToDate: 2020-08-25 09:58:00 +0000 UTC
 
 ---
 
-> unixEpoch 函数
+> <center>**unixEpoch 函数**</center>
 
 * unixEpoch 函数
 
@@ -1011,7 +1011,7 @@ unixEpoch: 1598321573
 
 ---
 
-> abbrev 函数
+> <center>**abbrev 函数**</center>
 
 * abbrev 函数
 
@@ -1036,7 +1036,7 @@ abbrev: ab...
 
 ---
 
-> trunc 函数
+> <center>**trunc 函数**</center>
 
 * trunc 函数
 
@@ -1061,7 +1061,7 @@ trunc: ab
 
 ---
 
-> trim 函数
+> <center>**trim 函数**</center>
 
 * trim 函数
 
@@ -1083,7 +1083,7 @@ trim: a  b  c
 
 ---
 
-> trimAll 函数
+> <center>**trimAll 函数**</center>
 
 * trimAll 函数
 
@@ -1106,7 +1106,7 @@ trimAll: jicki
 
 ---
 
-> trimSuffix 函数
+> <center>**trimSuffix 函数**</center>
 
 * trimSuffix 函数
 
@@ -1115,7 +1115,7 @@ trimAll: jicki
 
 ---
 
-> trimPrefix 函数
+> <center>**trimPrefix 函数**</center>
 
 * trimPrefix 函数
 
@@ -1124,7 +1124,7 @@ trimAll: jicki
 
 ---
 
-> nospace 函数
+> <center>**nospace 函数**</center>
 
 * nospace 函数
 
@@ -1134,7 +1134,7 @@ trimAll: jicki
 
 ---
 
-> initials 函数
+> <center>**initials 函数**</center>
 
 * initials 函数
 
@@ -1159,7 +1159,7 @@ initials: Jhw
 
 ---
 
-> upper 函数
+> <center>**upper 函数**</center>
 
 * upper 函数
 
@@ -1181,7 +1181,7 @@ upper: ABCDEFG
 
 ---
 
-> lower 函数
+> <center>**lower 函数**</center>
 
 * lower 函数
 
@@ -1204,7 +1204,7 @@ lower: abcdefg
 
 ---
 
-> title 函数
+> <center>**title 函数**</center>
 
 * title 函数
 
@@ -1231,7 +1231,7 @@ title: Jicki-Hello-World
 
 ---
 
-> swapcase 函数
+> <center>**swapcase 函数**</center>
 
 * swapcase 函数
 
@@ -1257,7 +1257,7 @@ swapcase: ABCdefGHIjkl
 
 ---
 
-> substr 函数
+> <center>**substr 函数**</center>
 
 * substr 函数
 
@@ -1280,7 +1280,7 @@ substr: bcde
 
 ---
 
-> repeat 函数
+> <center>**repeat 函数**</center>
 
 * repeat 函数
 
@@ -1304,7 +1304,7 @@ repeat: jickijickijickijickijicki
 
 ---
 
-> randAlpha 函数
+> <center>**randAlpha 函数**</center>
 
 * randAlpha 函数
 
@@ -1329,7 +1329,7 @@ randAlpha: dmrHUNScimXhpUiGMapG
 
 ---
 
-> randNumeric 函数
+> <center>**randNumeric 函数**</center>
 
 * randNumeric 函数
 
@@ -1355,7 +1355,7 @@ randNumeric: 37465873746598120398
 ---
 
 
-> randAlphaNum 函数
+> <center>**randAlphaNum 函数**</center>
 
 * randAlphaNum 函数
 
@@ -1381,7 +1381,7 @@ randAlphaNum: H2Bv00ToRKntFpy9PFYX
 
 ---
 
-> randAscii 函数
+> <center>**randAscii 函数**</center>
 
 * randAscii 函数
 
@@ -1390,7 +1390,7 @@ randAlphaNum: H2Bv00ToRKntFpy9PFYX
 
 ---
 
-> until 函数
+> <center>**until 函数**</center>
 
 * until 函数
 
@@ -1418,7 +1418,7 @@ until: |
 
 ---
 
-> untilStep 函数
+> <center>**untilStep 函数**</center>
 
 * untilStep 函数
 
@@ -1446,7 +1446,7 @@ untilStep: |
 ---
 
 
-> shuffle 函数
+> <center>**shuffle 函数**</center>
 
 * shuffle 函数
 
@@ -1471,7 +1471,7 @@ shuffle: -lk-rdolijohwecli
 
 ---
 
-> snakecase 函数
+> <center>**snakecase 函数**</center>
 
 * snakecase 函数
 
