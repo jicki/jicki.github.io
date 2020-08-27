@@ -177,7 +177,7 @@ annotations:
 
 ### 比较函数
 
-> 比较函数
+> <center>比较函数</center>
 
 | 函数 |         含义              |
 | ---- | ------------------------- |
@@ -194,7 +194,7 @@ annotations:
 ### 流程控制
 
 
-> 模板函数 之 流程控制
+> <center>模板函数 之 流程控制</center>
 
 
 * `values.yaml` 文件内容如下
@@ -3709,6 +3709,306 @@ regexReplaceAll: |
 
 
 ---
+
+> regexSplit 函数
+
+* regexSplit 函数
+
+  * 用 正则表达式 匹配所有字符串中的内容 并进行字符串分割 返回一个 list.
+
+
+
+```yaml
+regexSplit: {{ regexSplit "\\d+" "123abc432hhhs9982sahc3hc245" -1 }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/regexSplit.yaml
+---
+# Source: myapp/templates/regexSplit.yaml
+regexSplit: [ abc hhhs sahc hc ]
+
+```
+
+
+
+---
+
+> urlParse 函数
+
+* urlParse 函数
+
+  * url 解析, 返回 url 的信息, 写入到 map 中.
+
+
+```yaml
+urlParse: |
+        {{ urlParse "https://jicki.cn" }}
+
+``` 
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/urlParse.yaml
+---
+# Source: myapp/templates/urlParse.yaml
+urlParse: |
+        map[fragment: host:jicki.cn hostname:jicki.cn opaque: path: query: scheme:https userinfo:]
+
+```
+
+
+
+---
+
+> urlJoin 函数
+
+* urlJoin 函数
+
+  * 将 map 中的 信息 组合成一个 url .
+
+
+```yaml
+urlJoin: |
+        {{- $UrlMap := dict "scheme" "https" "host" "www.jicki.cn" }}
+        Url: {{ urlJoin $UrlMap }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/urlJoin.yaml
+---
+# Source: myapp/templates/urlJoin.yaml
+urlJoin: |
+        Url: https://www.jicki.cn
+```
+
+
+
+---
+
+> define 函数
+
+* define 函数
+
+  * 定义一个模板 template .
+
+
+```yaml
+
+{{- define "mytemplate.home" }}
+  home:
+    path: "/"
+    title: "My Home"
+    date: {{ now | htmlDate }}
+{{- end }}
+```
+
+
+```yaml
+define: |
+        {{- template "mytemplate.home" }}
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/define.yaml
+---
+# Source: myapp/templates/define.yaml
+define: |
+  home:
+    path: "/"
+    title: "My Home"
+    date: 2020-08-27
+
+```
+
+---
+
+> Files 函数
+
+* Files 函数
+
+  * 操作文件.
+
+
+```yaml
+
+Files: |
+        {{- $file := .Files }}
+        {{- range list "README" }}
+        {{ . }}: |-
+                {{ $file.Get . }}
+        {{- end }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/files.yaml
+---
+# Source: myapp/templates/files.yaml
+Files: |
+        README: |-
+                myapp by jicki
+
+```
+
+
+
+---
+
+> fromJson 函数
+
+* fromJson 函数
+
+  * 将 Json 格式的内容转换成一个 对象 进行操作.
+
+
+
+---
+
+> fromYaml 函数
+
+* fromYaml 函数
+
+  * 将 YAML 格式的内容转换成一个 对象 进行操作.
+
+
+
+---
+
+> toToml 函数
+
+* toToml 函数
+
+  * 将 其他格式内容 转换成一个 Toml 格式.
+
+
+---
+
+> toYaml 函数
+
+* toYaml 函数
+
+  * 将 其他格式内容 转换成一个 Yaml 格式.
+
+---
+
+
+> include 函数
+
+* include 函数
+
+  * 导入模板文件. 引入模板内容.
+
+
+```yaml
+{{- define "mytemplate.home" }}
+  home:
+    path: "/"
+    title: "My Home"
+    date: {{ now | htmlDate }}
+{{- end }}
+
+```
+
+
+```yaml
+include: |
+        {{- include "mytemplate.home" . }}
+
+```
+
+
+* 运行 template
+
+
+```shell
+
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/include.yaml
+---
+# Source: myapp/templates/include.yaml
+include: |
+  home:
+    path: "/"
+    title: "My Home"
+    date: 2020-08-27
+
+```
+
+
+
+---
+
+
+> tpl 函数
+
+* tpl 函数
+
+  * 将 模板中引用 模板变量的 内容输出.
+
+
+* `values.yaml`
+
+```yaml
+favorite:
+  game: LOL
+  drink: coffee
+like:
+  - football
+  - basketball
+  - volleyball
+  - doubleball
+global:
+  service: web
+image:
+  repository: jicki/myapp
+  tag: 'v2'
+hostsPort:
+  http: 80
+  https: 443
+containerPort:
+  http: 80
+  https: 443
+http: "{{ .Values.containerPort.http }}"
+https: "{{ .Values.containerPort.https }}"
+```
+
+```yaml
+notTpl: |
+        http: {{ .Values.http }}
+        https: {{ .Values.https }}
+tpl: |
+        http: {{ tpl .Values.http . }}
+        https: {{ tpl .Values.https . }}
+```
+
+* 运行 template
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/tpl.yaml
+---
+# Source: myapp/templates/tpl.yaml
+notTpl: |
+        http: {{ .Values.containerPort.http }}
+        https: {{ .Values.containerPort.https }}
+tpl: |
+        http: 80
+        https: 443
+
+```
+
 
 
 
