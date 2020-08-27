@@ -1,11 +1,11 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Helm Chart & template 函数 - 小炒肉</title><meta name=Description content="Helm Chart & template 函数"><meta property="og:title" content="Helm Chart & template 函数"><meta property="og:description" content="Helm Chart & template 函数"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/helm-chart/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-16T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Helm Chart & template 函数"><meta name=twitter:description content="Helm Chart & template 函数"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/helm-chart/><link rel=prev href=https://jicki.cn/helm-v3/><link rel=next href=https://jicki.cn/helm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Helm Chart \u0026 template 函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/helm-chart\/"},"genre":"posts","keywords":"kubernetes, helm","wordcount":9178,"url":"https:\/\/jicki.cn\/helm-chart\/","datePublished":"2020-08-16T00:00:00+00:00","dateModified":"2020-08-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Helm Chart \u0026 template 函数"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Helm Chart & template 函数 - 小炒肉</title><meta name=Description content="Helm Chart & template 函数"><meta property="og:title" content="Helm Chart & template 函数"><meta property="og:description" content="Helm Chart & template 函数"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/helm-chart/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-16T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Helm Chart & template 函数"><meta name=twitter:description content="Helm Chart & template 函数"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/helm-chart/><link rel=prev href=https://jicki.cn/helm-v3/><link rel=next href=https://jicki.cn/helm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Helm Chart \u0026 template 函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/helm-chart\/"},"genre":"posts","keywords":"kubernetes, helm","wordcount":9074,"url":"https:\/\/jicki.cn\/helm-chart\/","datePublished":"2020-08-16T00:00:00+00:00","dateModified":"2020-08-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Helm Chart \u0026 template 函数"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Helm Chart & template 函数</h1><h2 class=single-subtitle>Helm Chart & template 函数</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/categories/helm/><i class="far fa-folder fa-fw"></i>helm</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-16>2020-08-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 9178 字&nbsp;
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Helm Chart & template 函数</h1><h2 class=single-subtitle>Helm Chart & template 函数</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/categories/helm/><i class="far fa-folder fa-fw"></i>helm</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-16>2020-08-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 9074 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 19 分钟&nbsp;<span id=/helm-chart/ class=leancloud_visitors data-flag-title="Helm Chart & template 函数">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#chart-目录结构>Chart 目录结构</a><ul><li><a href=#chartyaml-文件>Chart.yaml 文件</a></li></ul></li><li><a href=#helm-内置变量>Helm 内置变量</a><ul><li><a href=#release-内置变量>Release 内置变量</a></li></ul></li><li><a href=#helm-模板函数>Helm 模板函数</a><ul><li><a href=#比较函数>比较函数</a></li><li><a href=#流程控制>流程控制</a></li><li><a href=#内置函数>内置函数</a></li><li><a href=#template-模板函数>template 模板函数</a></li></ul></li></ul></nav></div></div><div class=content id=content><h1 id=helm-chart>Helm Chart</h1><p><strong>Chart 是 helm 管理应用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.</strong></p><hr><h2 id=chart-目录结构>Chart 目录结构</h2><ul><li><p><code>Chart.yaml</code> : chart 的描述文件, 包含版本信息, 名称 等.</p></li><li><p><code>Chart.lock</code> : chart 依赖的版本信息. ( apiVersion: v2 )</p></li><li><p><code>values.yaml</code> : 用于配置 <code>templates/</code> 目录下的模板文件使用的变量.</p></li><li><p><code>values.schema.json</code> : 用于校检 <code>values.yaml</code> 的完整性.</p></li><li><p><code>charts</code> : 依赖包的存储目录.</p></li><li><p><code>README</code> : 说明文件.</p></li><li><p><code>LICENSE</code> : 版权信息文件.</p></li><li><p><code>crd</code> : 存放 CRD 资源的文件的目录.</p></li><li><p><code>templates</code> : 模板文件存放目录.</p><ul><li><p><code>NOTES.txt</code> : 模板须知/说明文件. <code>helm install</code> 成功后会显示此文件内容到屏幕.</p></li><li><p><code>deployment.yaml</code> : kubernetes 资源文件. ( 所有类型的 kubernetes 资源文件都存放于 templates 目录下 )</p></li><li><p><code>_helpers.tpl</code> : 以 <code>_</code> 开头的文件, 可以被其他模板引用.</p></li></ul></li></ul><hr><h3 id=chartyaml-文件>Chart.yaml 文件</h3><blockquote><p>Chart 的描述文件, 包含版本信息, Chart 名称,说明等.</p></blockquote><ul><li>这里仅说明 <code>apiVersion v2 版本</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#chart-目录结构>Chart 目录结构</a><ul><li><a href=#chartyaml-文件>Chart.yaml 文件</a></li></ul></li><li><a href=#helm-内置变量>Helm 内置变量</a><ul><li><a href=#release-内置变量>Release 内置变量</a></li></ul></li><li><a href=#helm-模板函数>Helm 模板函数</a><ul><li><a href=#比较函数>比较函数</a></li><li><a href=#流程控制>流程控制</a></li><li><a href=#内置函数>内置函数</a></li><li><a href=#template-模板函数>template 模板函数</a></li></ul></li></ul></nav></div></div><div class=content id=content><h1 id=helm-chart>Helm Chart</h1><p>Chart 是 helm 管理应用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.</p><hr><h2 id=chart-目录结构>Chart 目录结构</h2><ul><li><p><code>Chart.yaml</code> : chart 的描述文件, 包含版本信息, 名称 等.</p></li><li><p><code>Chart.lock</code> : chart 依赖的版本信息. ( apiVersion: v2 )</p></li><li><p><code>values.yaml</code> : 用于配置 <code>templates/</code> 目录下的模板文件使用的变量.</p></li><li><p><code>values.schema.json</code> : 用于校检 <code>values.yaml</code> 的完整性.</p></li><li><p><code>charts</code> : 依赖包的存储目录.</p></li><li><p><code>README</code> : 说明文件.</p></li><li><p><code>LICENSE</code> : 版权信息文件.</p></li><li><p><code>crd</code> : 存放 CRD 资源的文件的目录.</p></li><li><p><code>templates</code> : 模板文件存放目录.</p><ul><li><p><code>NOTES.txt</code> : 模板须知/说明文件. <code>helm install</code> 成功后会显示此文件内容到屏幕.</p></li><li><p><code>deployment.yaml</code> : kubernetes 资源文件. ( 所有类型的 kubernetes 资源文件都存放于 templates 目录下 )</p></li><li><p><code>_helpers.tpl</code> : 以 <code>_</code> 开头的文件, 可以被其他模板引用.</p></li></ul></li></ul><hr><h3 id=chartyaml-文件>Chart.yaml 文件</h3><blockquote><p>Chart 的描述文件, 包含版本信息, Chart 名称,说明等.</p></blockquote><ul><li>这里仅说明 <code>apiVersion v2 版本</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -153,7 +153,7 @@
 </span><span class=w></span><span class=k>annotations</span><span class=p>:</span><span class=w>
 </span><span class=w>  </span><span class=c># 注释的例子</span><span class=w>
 </span><span class=w>  </span><span class=k>example</span><span class=p>:</span><span class=w> 
-</span></code></pre></td></tr></table></div></div><hr><h2 id=helm-内置变量>Helm 内置变量</h2><ul><li><p>Helm 内置对象包含</p><ul><li><p><code>Release</code> 相关的内置属性.</p></li><li><p><code>Chart</code> 属性 - <code>Chart.yaml</code> 文件中定义的内容.</p></li><li><p><code>Values</code> 属性 - <code>Values.yaml</code> 文件中定义的内容.</p></li></ul></li></ul><hr><h3 id=release-内置变量>Release 内置变量</h3><ul><li><code>Release</code> 内置变量</li></ul><table><thead><tr><th>变量名称</th><th>变量说明</th></tr></thead><tbody><tr><td>Release.Name</td><td>release 名称</td></tr><tr><td>Release.Namespace</td><td>release 所在命名空间</td></tr><tr><td>Release.Service</td><td>release 发布的服务</td></tr><tr><td>Release.IsUpgrade</td><td>如果 release 操作状态为 更新 / 回滚 , 此变量值为 true</td></tr><tr><td>Release.IsInstall</td><td>如果 release 操作状态为 安装 , 此变量值为 true</td></tr><tr><td>Release.Revision</td><td>release 版本序号, 初始为 1 , 执行 更新/ 回滚 版本 +1</td></tr></tbody></table><hr><h2 id=helm-模板函数>Helm 模板函数</h2><ul><li><p>Helm 的模板语法使用Golang 语言的 template 模块.</p><ul><li>参考: <a href=https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95>https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95</a></li></ul></li></ul><hr><p><strong>注: 所有函数中 函数名称前面带: <code>must</code> 如: mustxxx 的函数,指定出错不会 panic , 而是会输出 错误.</strong></p><hr><h3 id=比较函数>比较函数</h3><blockquote><center>**比较函数**</center></blockquote><table><thead><tr><th>函数</th><th>含义</th></tr></thead><tbody><tr><td>eq</td><td>如果 arg1 == arg2 返回 真</td></tr><tr><td>ne</td><td>如果 arg1 != arg2 返回 真</td></tr><tr><td>lt</td><td>如果 arg1 &lt; arg2 返回 真</td></tr><tr><td>le</td><td>如果 arg1 &lt;= arg2 返回 真</td></tr><tr><td>gt</td><td>如果 arg1 > arg2 返回 真</td></tr><tr><td>ge</td><td>如果 arg1 >= arg2 返回 真</td></tr></tbody></table><hr><h3 id=流程控制>流程控制</h3><blockquote><center>**模板函数 之 流程控制**</center></blockquote><ul><li><code>values.yaml</code> 文件内容如下</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span></code></pre></td></tr></table></div></div><hr><h2 id=helm-内置变量>Helm 内置变量</h2><ul><li><p>Helm 内置对象包含</p><ul><li><p><code>Release</code> 相关的内置属性.</p></li><li><p><code>Chart</code> 属性 - <code>Chart.yaml</code> 文件中定义的内容.</p></li><li><p><code>Values</code> 属性 - <code>Values.yaml</code> 文件中定义的内容.</p></li></ul></li></ul><hr><h3 id=release-内置变量>Release 内置变量</h3><ul><li><code>Release</code> 内置变量</li></ul><table><thead><tr><th>变量名称</th><th>变量说明</th></tr></thead><tbody><tr><td>Release.Name</td><td>release 名称</td></tr><tr><td>Release.Namespace</td><td>release 所在命名空间</td></tr><tr><td>Release.Service</td><td>release 发布的服务</td></tr><tr><td>Release.IsUpgrade</td><td>如果 release 操作状态为 更新 / 回滚 , 此变量值为 true</td></tr><tr><td>Release.IsInstall</td><td>如果 release 操作状态为 安装 , 此变量值为 true</td></tr><tr><td>Release.Revision</td><td>release 版本序号, 初始为 1 , 执行 更新/ 回滚 版本 +1</td></tr></tbody></table><hr><h2 id=helm-模板函数>Helm 模板函数</h2><ul><li><p>Helm 的模板语法使用Golang 语言的 template 模块.</p><ul><li>参考: <a href=https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95>https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95</a></li></ul></li></ul><hr><p>注: 所有函数中 函数名称前面带: <code>must</code> 如: mustxxx 的函数,指定出错不会 panic , 而是会输出 错误.</p><hr><h3 id=比较函数>比较函数</h3><blockquote><center>比较函数</center></blockquote><table><thead><tr><th>函数</th><th>含义</th></tr></thead><tbody><tr><td>eq</td><td>如果 arg1 == arg2 返回 真</td></tr><tr><td>ne</td><td>如果 arg1 != arg2 返回 真</td></tr><tr><td>lt</td><td>如果 arg1 &lt; arg2 返回 真</td></tr><tr><td>le</td><td>如果 arg1 &lt;= arg2 返回 真</td></tr><tr><td>gt</td><td>如果 arg1 > arg2 返回 真</td></tr><tr><td>ge</td><td>如果 arg1 >= arg2 返回 真</td></tr></tbody></table><hr><h3 id=流程控制>流程控制</h3><blockquote><center>模板函数 之 流程控制</center></blockquote><ul><li><code>values.yaml</code> 文件内容如下</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -191,7 +191,7 @@
 </span><span class=w></span><span class=k>containerPort</span><span class=p>:</span><span class=w>
 </span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
 </span><span class=w>  </span><span class=k>https</span><span class=p>:</span><span class=w> </span><span class=m>443</span><span class=w>
-</span></code></pre></td></tr></table></div></div><hr><blockquote><center>**if / else 条件控制**</center></blockquote><ul><li><p><code>if</code> / <code>else</code> 条件控制</p><ul><li><code>templates/if.yaml</code> 文件, 模板语法使用 go语言 template 语法</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span></code></pre></td></tr></table></div></div><hr><blockquote><center>if / else 条件控制</center></blockquote><ul><li><p><code>if</code> / <code>else</code> 条件控制</p><ul><li><code>templates/if.yaml</code> 文件, 模板语法使用 go语言 template 语法</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -243,7 +243,7 @@ data:
   myvalue: <span class=s2>&#34;hello world&#34;</span>
   msg: <span class=s2>&#34;Good Game&#34;</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**with 范围控制**</center></blockquote><ul><li><p><code>with</code> 范围控制, 加载范围主体为当前&rsquo;.&rsquo; , 后续通过 <code>.game | .drink</code> 直接调用</p><ul><li><code>templates/with.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>with 范围控制</center></blockquote><ul><li><p><code>with</code> 范围控制, 加载范围主体为当前&rsquo;.&rsquo; , 后续通过 <code>.game | .drink</code> 直接调用</p><ul><li><code>templates/with.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -295,7 +295,7 @@ data:
   game: <span class=s2>&#34;LOL&#34;</span>
   drink: <span class=s2>&#34;COFFEE&#34;</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**range 循环控制**</center></blockquote><ul><li><p><code>range</code> 循环控制</p><ul><li><code>templates/range.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>range 循环控制</center></blockquote><ul><li><p><code>range</code> 循环控制</p><ul><li><code>templates/range.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -365,7 +365,7 @@ data:
     <span class=c1># 遍历 map</span>
     <span class=nv>drink</span> <span class=o>=</span> <span class=s2>&#34;coffee&#34;</span>
     <span class=nv>game</span> <span class=o>=</span> <span class=s2>&#34;LOL&#34;</span>
-</code></pre></td></tr></table></div></div><hr><h3 id=内置函数>内置函数</h3><blockquote><center>**Go 语言函数**</center></blockquote><table><thead><tr><th>函数</th><th>含义</th></tr></thead><tbody><tr><td>and</td><td>函数返回它的第一个 empty 参数或者最后一个参数</td></tr><tr><td>or</td><td>函数返回它的第一个非 empty 参数或者最后一个参数</td></tr><tr><td>not</td><td>函数返回它的单个参数的布尔值是否定</td></tr><tr><td>len</td><td>函数返回它的参数的整数类型长度</td></tr><tr><td>index</td><td>函数执行结果为第一个参数以剩下的参数为索引/键指向的值</td></tr><tr><td>html</td><td>函数返回其参数文本表示的 html 逸码等价表示</td></tr><tr><td>js</td><td>函数返回其参数文本表示的 JavaScrpit 逸码等价表示</td></tr><tr><td>slice</td><td>函数返回值为 slice 中的选定项</td></tr><tr><td>print</td><td>既 Go 语言中 fmt.Sprint</td></tr><tr><td>printf</td><td>既 Go 语言中 fmt.Sprintf</td></tr><tr><td>println</td><td>既 Go 语言中 fmt.Sprintln</td></tr><tr><td>urlquery</td><td>函数返回其参数文本表示可嵌入URL查询的逸码等价表示</td></tr></tbody></table><hr><blockquote><center>**and 函数**</center></blockquote><ul><li><p><code>and</code> 函数</p><ul><li><code>templates/and.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><h3 id=内置函数>内置函数</h3><blockquote><center>Go 语言函数</center></blockquote><table><thead><tr><th>函数</th><th>含义</th></tr></thead><tbody><tr><td>and</td><td>函数返回它的第一个 empty 参数或者最后一个参数</td></tr><tr><td>or</td><td>函数返回它的第一个非 empty 参数或者最后一个参数</td></tr><tr><td>not</td><td>函数返回它的单个参数的布尔值是否定</td></tr><tr><td>len</td><td>函数返回它的参数的整数类型长度</td></tr><tr><td>index</td><td>函数执行结果为第一个参数以剩下的参数为索引/键指向的值</td></tr><tr><td>html</td><td>函数返回其参数文本表示的 html 逸码等价表示</td></tr><tr><td>js</td><td>函数返回其参数文本表示的 JavaScrpit 逸码等价表示</td></tr><tr><td>slice</td><td>函数返回值为 slice 中的选定项</td></tr><tr><td>print</td><td>既 Go 语言中 fmt.Sprint</td></tr><tr><td>printf</td><td>既 Go 语言中 fmt.Sprintf</td></tr><tr><td>println</td><td>既 Go 语言中 fmt.Sprintln</td></tr><tr><td>urlquery</td><td>函数返回其参数文本表示可嵌入URL查询的逸码等价表示</td></tr></tbody></table><hr><blockquote><center>and 函数</center></blockquote><ul><li><p><code>and</code> 函数</p><ul><li><code>templates/and.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -389,7 +389,7 @@ data:
 <span class=c1># 如果 5 大于 1  and 3 小于等于 10</span>
 msg: <span class=nb>true</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**or 函数**</center></blockquote><ul><li><p><code>or</code> 函数</p><ul><li><code>templates/or.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>or 函数</center></blockquote><ul><li><p><code>or</code> 函数</p><ul><li><code>templates/or.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -413,7 +413,7 @@ msg: <span class=nb>true</span>
 <span class=c1># Source: myapp/templates/or.yaml</span>
 <span class=c1># 判断 1 大于 2  或  1 小于 2 返回为 true</span>
 msg: <span class=nb>true</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**not 函数**</center></blockquote><ul><li><p><code>not</code> 函数</p><ul><li><code>templates/not.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>not 函数</center></blockquote><ul><li><p><code>not</code> 函数</p><ul><li><code>templates/not.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -435,7 +435,7 @@ msg: <span class=nb>true</span>
 <span class=c1># 判断 如果 1 大于 2 返回 false 取非 为 true</span>
 msg: <span class=nb>true</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**len 函数**</center></blockquote><ul><li><p><code>len</code> 函数</p><ul><li><code>templates/len.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>len 函数</center></blockquote><ul><li><p><code>len</code> 函数</p><ul><li><code>templates/len.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -457,7 +457,7 @@ service: web
 
 len: <span class=m>3</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**index 函数**</center></blockquote><ul><li><p><code>index</code> 函数</p><ul><li><code>templates/index.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>index 函数</center></blockquote><ul><li><p><code>index</code> 函数</p><ul><li><code>templates/index.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -511,7 +511,7 @@ data:
   http: <span class=m>80</span>
   https: <span class=m>443</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**html 函数**</center></blockquote><ul><li><p><code>html</code> 函数</p><ul><li><code>templates/html.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>html 函数</center></blockquote><ul><li><p><code>html</code> 函数</p><ul><li><code>templates/html.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -531,7 +531,7 @@ data:
 html: <span class=p>|</span>
   <span class=p>&amp;</span>lt<span class=p>;</span>html<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>head<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>title<span class=p>&amp;</span>gt<span class=p>;</span>Title<span class=p>&amp;</span>lt<span class=p>;</span>/title<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>/head<span class=p>&amp;</span>gt<span class=p>;&amp;</span>lt<span class=p>;</span>/html<span class=p>&amp;</span>gt<span class=p>;</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**js 函数**</center></blockquote><ul><li><p><code>js</code> 函数</p><ul><li><code>templates/js.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>js 函数</center></blockquote><ul><li><p><code>js</code> 函数</p><ul><li><code>templates/js.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>js</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>js<span class=w> </span><span class=s2>&#34;&lt;script&gt;var a = 1; var b = a + 1; &lt;/scrpit&gt;&#34;</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -545,7 +545,7 @@ html: <span class=p>|</span>
 <span class=c1># Source: myapp/templates/js.yaml</span>
 js: <span class=se>\x</span>3Cscript<span class=se>\x</span>3Evar a <span class=se>\x</span>3D 1<span class=p>;</span> var b <span class=se>\x</span>3D a + 1<span class=p>;</span> <span class=se>\x</span>3C/scrpit<span class=se>\x</span>3E
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**slice 函数**</center></blockquote><ul><li><p><code>slice</code> 函数</p><ul><li><code>templates/slice.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>slice 函数</center></blockquote><ul><li><p><code>slice</code> 函数</p><ul><li><code>templates/slice.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -567,7 +567,7 @@ js: <span class=se>\x</span>3Cscript<span class=se>\x</span>3Evar a <span class=
 <span class=c1># Source: myapp/templates/slice.yaml</span>
 
 slice: <span class=o>[</span><span class=m>5</span> 7<span class=o>]</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**print / printf / println 函数**</center></blockquote><ul><li><p><code>print</code>、<code>printf</code>、<code>println</code> 函数</p><ul><li><code>templates/print.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>print / printf / println 函数</center></blockquote><ul><li><p><code>print</code>、<code>printf</code>、<code>println</code> 函数</p><ul><li><code>templates/print.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -623,7 +623,7 @@ data:
 
   println:The Game -  LOL
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**urlquery 函数**</center></blockquote><ul><li><p><code>urlquery</code> 函数</p><ul><li><code>templates/urlquery.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>urlquery 函数</center></blockquote><ul><li><p><code>urlquery</code> 函数</p><ul><li><code>templates/urlquery.yaml</code> 文件内容</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -643,7 +643,7 @@ data:
 <span class=c1># Source: myapp/templates/urlquery.yaml</span>
 password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 
-</code></pre></td></tr></table></div></div><hr><h3 id=template-模板函数>template 模板函数</h3><hr><blockquote><center>**hello 函数**</center></blockquote><ul><li><p>hello 函数</p><ul><li>输出 Hello! .</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><h3 id=template-模板函数>template 模板函数</h3><hr><blockquote><center>hello 函数</center></blockquote><ul><li><p>hello 函数</p><ul><li>输出 Hello! .</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>hello</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>hello<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -653,7 +653,7 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 </span><span class=w></span>---<span class=w>
 </span><span class=w></span><span class=c># Source: myapp/templates/hello.yaml</span><span class=w>
 </span><span class=w></span><span class=k>hello</span><span class=p>:</span><span class=w> </span>Hello!<span class=w>
-</span></code></pre></td></tr></table></div></div><hr><blockquote><center>**now 函数**</center></blockquote><ul><li><p>now 函数</p><ul><li>显示当前时间, 以 string 类型打印出来</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td></tr></table></div></div><hr><blockquote><center>now 函数</center></blockquote><ul><li><p>now 函数</p><ul><li>显示当前时间, 以 string 类型打印出来</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>now</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -665,7 +665,7 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 </span><span class=w></span>---<span class=w>
 </span><span class=w></span><span class=c># Source: myapp/templates/now.yaml</span><span class=w>
 </span><span class=w></span><span class=k>now</span><span class=p>:</span><span class=w> </span><span class=ld>2020-08-25 01:50:59.895593177 +0000</span><span class=w> </span>UTC<span class=w> </span>m=+<span class=m>0.041493103</span><span class=w>
-</span></code></pre></td></tr></table></div></div><hr><blockquote><center>**ago 函数**</center></blockquote><ul><li><p>ago 函数</p><ul><li>当前时间减去过去时间</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td></tr></table></div></div><hr><blockquote><center>ago 函数</center></blockquote><ul><li><p>ago 函数</p><ul><li>当前时间减去过去时间</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>ago<span class=w> </span>{{<span class=w> </span>ago<span class=w> </span>now<span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -677,7 +677,7 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 ---
 <span class=c1># Source: myapp/templates/ago.yaml</span>
 ago: 0s
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**date 函数**</center></blockquote><ul><li><p>date 函数</p><ul><li>格式化时间输出. Go 语言的时间格式化</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>date 函数</center></blockquote><ul><li><p>date 函数</p><ul><li>格式化时间输出. Go 语言的时间格式化</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>date</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>date<span class=w> </span><span class=s2>&#34;2006-01-02 15:04:05&#34;</span><span class=w> </span>(now)<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -687,7 +687,7 @@ ago: 0s
 ---
 <span class=c1># Source: myapp/templates/date.yaml</span>
 date: 2020-08-24 09:40:34
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**dateInZone 函数**</center></blockquote><ul><li><p>dateInZone 函数</p><ul><li>带时区的时间格式化</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>dateInZone 函数</center></blockquote><ul><li><p>dateInZone 函数</p><ul><li>带时区的时间格式化</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>dateInZone</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>dateInZone<span class=w> </span><span class=s2>&#34;2006-01-02 15:04:05&#34;</span><span class=w> </span>(now)<span class=w> </span><span class=s2>&#34;Asia/Shanghai&#34;</span><span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -699,7 +699,7 @@ date: 2020-08-24 09:40:34
 <span class=c1># Source: myapp/templates/dateInZone.yaml</span>
 dateInZone: 2020-08-24 17:48:42
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**dateModify 函数**</center></blockquote><ul><li><p><code>date_modify</code> 函数</p><ul><li>修改时间</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>dateModify 函数</center></blockquote><ul><li><p><code>date_modify</code> 函数</p><ul><li>修改时间</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>dateNow</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>}}<span class=w>
 </span><span class=w></span><span class=k>dateModify</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>|<span class=w> </span>date_modify<span class=w> </span><span class=s2>&#34;-2h&#34;</span><span class=w> </span>}}<span class=w>
@@ -715,7 +715,7 @@ dateInZone: 2020-08-24 17:48:42
 dateNow: 2020-08-24 09:52:41.016693113 +0000 UTC <span class=nv>m</span><span class=o>=</span>+0.045451911
 dateModify: 2020-08-24 07:52:41.016733093 +0000 UTC <span class=nv>m</span><span class=o>=</span>-7199.954508131
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**durationRound 函数**</center></blockquote><ul><li><p>durationRound 函数</p><ul><li>将指定秒 粗略转换成分钟 (m)</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>durationRound 函数</center></blockquote><ul><li><p>durationRound 函数</p><ul><li>将指定秒 粗略转换成分钟 (m)</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>durationRound</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>durationRound<span class=w> </span><span class=s2>&#34;500s&#34;</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -727,7 +727,7 @@ dateModify: 2020-08-24 07:52:41.016733093 +0000 UTC <span class=nv>m</span><span
 ---
 <span class=c1># Source: myapp/templates/durationRound.yaml</span>
 durationRound: 8m
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**htmlDate 函数**</center></blockquote><ul><li><p>htmlDate 函数</p><ul><li>格式化时间为 年-月-日</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>htmlDate 函数</center></blockquote><ul><li><p>htmlDate 函数</p><ul><li>格式化时间为 年-月-日</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>htmlDate</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>|<span class=w> </span>htmlDate<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -739,7 +739,7 @@ durationRound: 8m
 <span class=c1># Source: myapp/templates/htmlDate.yaml</span>
 htmlDate: 2020-08-24
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**htmlDateInZone 函数**</center></blockquote><ul><li><p>htmlDateInZone 函数</p><ul><li>带时区的格式化时间 年-月-日</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>htmlDateInZone 函数</center></blockquote><ul><li><p>htmlDateInZone 函数</p><ul><li>带时区的格式化时间 年-月-日</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>htmlDateInZone</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>htmlDateInZone<span class=w> </span>now<span class=w> </span><span class=s2>&#34;Asia/Shanghai&#34;</span><span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -751,7 +751,7 @@ htmlDate: 2020-08-24
 <span class=c1># Source: myapp/templates/htmlDateInZone.yaml</span>
 htmlDateInZone: 2020-08-24
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**mustDateModify 函数**</center></blockquote><ul><li><p>mustDateModify 函数</p><ul><li>mustDateModify 与 DateModify 函数一样, mustDateModify 会返回一个错误.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>mustDateModify 函数</center></blockquote><ul><li><p>mustDateModify 函数</p><ul><li>mustDateModify 与 DateModify 函数一样, mustDateModify 会返回一个错误.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>DateNow</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>now<span class=w> </span>}}<span class=w>
@@ -769,7 +769,7 @@ htmlDateInZone: 2020-08-24
 DateNow: 2020-08-24 10:06:00.4835164 +0000 UTC <span class=nv>m</span><span class=o>=</span>+0.048029319
 mustDateModify: 2020-08-24 10:14:20.483551062 +0000 UTC <span class=nv>m</span><span class=o>=</span>+500.048063982
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**toDate 函数**</center></blockquote><ul><li><p>toDate 函数</p><ul><li>将 string 类型的时间转换成 时间类型并按照自定义格式化输出</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>toDate 函数</center></blockquote><ul><li><p>toDate 函数</p><ul><li>将 string 类型的时间转换成 时间类型并按照自定义格式化输出</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>ToDate</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>toDate<span class=w> </span><span class=s2>&#34;2006-01-02 15:04:05&#34;</span><span class=w> </span><span class=s2>&#34;2020-08-25 09:58:00&#34;</span><span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -781,7 +781,7 @@ mustDateModify: 2020-08-24 10:14:20.483551062 +0000 UTC <span class=nv>m</span><
 <span class=c1># Source: myapp/templates/toDate.yaml</span>
 ToDate: 2020-08-25 09:58:00 +0000 UTC
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**unixEpoch 函数**</center></blockquote><ul><li><p>unixEpoch 函数</p><ul><li>将指定时间转换成 时间戳格式 输出</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>unixEpoch 函数</center></blockquote><ul><li><p>unixEpoch 函数</p><ul><li>将指定时间转换成 时间戳格式 输出</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>unixEpoch</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>unixEpoch<span class=w> </span>now<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -791,7 +791,7 @@ ToDate: 2020-08-25 09:58:00 +0000 UTC
 ---
 <span class=c1># Source: myapp/templates/unixEpoch.yaml</span>
 unixEpoch: <span class=m>1598321573</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**abbrev 函数**</center></blockquote><ul><li><p>abbrev 函数</p><ul><li>隐藏指定字符长度, 以 <code>...</code> 缩写.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>abbrev 函数</center></blockquote><ul><li><p>abbrev 函数</p><ul><li>隐藏指定字符长度, 以 <code>...</code> 缩写.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>abbrev</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefg&#34;</span><span class=w> </span>|<span class=w> </span>abbrev<span class=w> </span><span class=m>5</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -805,7 +805,7 @@ unixEpoch: <span class=m>1598321573</span>
 <span class=c1># Source: myapp/templates/abbrev.yaml</span>
 abbrev: ab...
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**trunc 函数**</center></blockquote><ul><li><p>trunc 函数</p><ul><li>截取 指定长度的字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>trunc 函数</center></blockquote><ul><li><p>trunc 函数</p><ul><li>截取 指定长度的字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>trunc</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefg&#34;</span><span class=w> </span>|<span class=w> </span>trunc<span class=w> </span><span class=m>2</span><span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -819,7 +819,7 @@ root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/trunc.yam
 <span class=c1># Source: myapp/templates/trunc.yaml</span>
 trunc: ab
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**trim 函数**</center></blockquote><ul><li><p>trim 函数</p><ul><li>清除前后的 空格</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>trim 函数</center></blockquote><ul><li><p>trim 函数</p><ul><li>清除前后的 空格</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>trim</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;     a  b  c  &#34;</span><span class=w> </span>|trim<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -829,7 +829,7 @@ trunc: ab
 ---
 <span class=c1># Source: myapp/templates/trim.yaml</span>
 trim: a  b  c
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**trimAll 函数**</center></blockquote><ul><li><p>trimAll 函数</p><ul><li>清除前后指定的 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>trimAll 函数</center></blockquote><ul><li><p>trimAll 函数</p><ul><li>清除前后指定的 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>trimAll</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;++jicki++&#34;</span><span class=w> </span>|<span class=w> </span>trimAll<span class=w> </span><span class=s2>&#34;+&#34;</span><span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -841,7 +841,7 @@ trim: a  b  c
 <span class=c1># Source: myapp/templates/trimAll.yaml</span>
 trimAll: jicki
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**trimSuffix 函数**</center></blockquote><ul><li><p>trimSuffix 函数</p><ul><li>清除 右边指定的 字符</li></ul></li></ul><hr><blockquote><center>**trimPrefix 函数**</center></blockquote><ul><li><p>trimPrefix 函数</p><ul><li>清除左边指定的 字符.</li></ul></li></ul><hr><blockquote><center>**nospace 函数**</center></blockquote><ul><li><p>nospace 函数</p><ul><li>清除字符串中的所有空格.</li></ul></li></ul><hr><blockquote><center>**initials 函数**</center></blockquote><ul><li><p>initials 函数</p><ul><li>截取字符串中每个单词的 第一个 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>trimSuffix 函数</center></blockquote><ul><li><p>trimSuffix 函数</p><ul><li>清除 右边指定的 字符</li></ul></li></ul><hr><blockquote><center>trimPrefix 函数</center></blockquote><ul><li><p>trimPrefix 函数</p><ul><li>清除左边指定的 字符.</li></ul></li></ul><hr><blockquote><center>nospace 函数</center></blockquote><ul><li><p>nospace 函数</p><ul><li>清除字符串中的所有空格.</li></ul></li></ul><hr><blockquote><center>initials 函数</center></blockquote><ul><li><p>initials 函数</p><ul><li>截取字符串中每个单词的 第一个 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>initials</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;Jicki hello world&#34;</span><span class=w> </span>|initials<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -853,7 +853,7 @@ trimAll: jicki
 <span class=c1># Source: myapp/templates/initials.yaml</span>
 initials: Jhw
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**upper 函数**</center></blockquote><ul><li><p>upper 函数</p><ul><li>将字符串全部转换成大写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>upper 函数</center></blockquote><ul><li><p>upper 函数</p><ul><li>将字符串全部转换成大写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>upper</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefg&#34;</span><span class=w> </span>|<span class=w> </span>upper<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -863,7 +863,7 @@ initials: Jhw
 ---
 <span class=c1># Source: myapp/templates/upper.yaml</span>
 upper: ABCDEFG
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**lower 函数**</center></blockquote><ul><li><p>lower 函数</p><ul><li>将字符串全部转换成小写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>lower 函数</center></blockquote><ul><li><p>lower 函数</p><ul><li>将字符串全部转换成小写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>lower</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;ABCDEFG&#34;</span><span class=w> </span>|<span class=w> </span>upper<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -873,7 +873,7 @@ upper: ABCDEFG
 ---
 <span class=c1># Source: myapp/templates/lower.yaml</span>
 lower: abcdefg
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**title 函数**</center></blockquote><ul><li><p>title 函数</p><ul><li>将单词的首写字母转换成大写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>title 函数</center></blockquote><ul><li><p>title 函数</p><ul><li>将单词的首写字母转换成大写</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>title</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki hello world&#34;</span><span class=w> </span>|<span class=w> </span>title<span class=w> </span>}}<span class=w>
@@ -889,7 +889,7 @@ lower: abcdefg
 <span class=c1># Source: myapp/templates/title.yaml</span>
 title: Jicki Hello World
 title: Jicki-Hello-World
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**swapcase 函数**</center></blockquote><ul><li><p>swapcase 函数</p><ul><li>将字符串中 大小写 互转.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>swapcase 函数</center></blockquote><ul><li><p>swapcase 函数</p><ul><li>将字符串中 大小写 互转.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
@@ -905,7 +905,7 @@ title: Jicki-Hello-World
 <span class=c1># Source: myapp/templates/swapcase.yaml</span>
 swapcase: ABCdefGHIjkl
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**substr 函数**</center></blockquote><ul><li><p>substr 函数</p><ul><li>截取字符串 N-M 长度 的内容 ( N 从0开始, M = M-1).</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>substr 函数</center></blockquote><ul><li><p>substr 函数</p><ul><li>截取字符串 N-M 长度 的内容 ( N 从0开始, M = M-1).</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>substr</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;abcdefghi&#34;</span><span class=w> </span>|substr<span class=w> </span><span class=m>1</span><span class=w> </span><span class=m>5</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -917,7 +917,7 @@ swapcase: ABCdefGHIjkl
 ---
 <span class=c1># Source: myapp/templates/substr.yaml</span>
 substr: bcde
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**repeat 函数**</center></blockquote><ul><li><p>repeat 函数</p><ul><li>重复输出N次指定字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>repeat 函数</center></blockquote><ul><li><p>repeat 函数</p><ul><li>重复输出N次指定字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>repeat</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>|<span class=w> </span>repeat<span class=w> </span><span class=m>5</span><span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -929,7 +929,7 @@ substr: bcde
 <span class=c1># Source: myapp/templates/repeat.yaml</span>
 repeat: jickijickijickijickijicki
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**randAlpha 函数**</center></blockquote><ul><li><p>randAlpha 函数</p><ul><li>输出指定位数随机 字母.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>randAlpha 函数</center></blockquote><ul><li><p>randAlpha 函数</p><ul><li>输出指定位数随机 字母.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>randAlpha</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>randAlpha<span class=w> </span><span class=m>20</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -943,7 +943,7 @@ repeat: jickijickijickijickijicki
 <span class=c1># Source: myapp/templates/randAlpha.yaml</span>
 randAlpha: dmrHUNScimXhpUiGMapG
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**randNumeric 函数**</center></blockquote><ul><li><p>randNumeric 函数</p><ul><li>输出指定位数的随机 数字</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>randNumeric 函数</center></blockquote><ul><li><p>randNumeric 函数</p><ul><li>输出指定位数的随机 数字</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>randNumeric</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>randNumeric<span class=w> </span><span class=m>20</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -957,7 +957,7 @@ randAlpha: dmrHUNScimXhpUiGMapG
 <span class=c1># Source: myapp/templates/randNumeric.yaml</span>
 randNumeric: <span class=m>37465873746598120398</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**randAlphaNum 函数**</center></blockquote><ul><li><p>randAlphaNum 函数</p><ul><li>输出指定位数的随机 (数字 + 字母).</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>randAlphaNum 函数</center></blockquote><ul><li><p>randAlphaNum 函数</p><ul><li>输出指定位数的随机 (数字 + 字母).</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
@@ -973,7 +973,7 @@ randNumeric: <span class=m>37465873746598120398</span>
 <span class=c1># Source: myapp/templates/randAlphaNum.yaml</span>
 randAlphaNum: H2Bv00ToRKntFpy9PFYX
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**randAscii 函数**</center></blockquote><ul><li><p>randAscii 函数</p><ul><li>输出指定位数随机 Ascii 码</li></ul></li></ul><hr><blockquote><center>**until 函数**</center></blockquote><ul><li><p>until 函数</p><ul><li>输出指定数的序列, 存到列表中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>randAscii 函数</center></blockquote><ul><li><p>randAscii 函数</p><ul><li>输出指定位数随机 Ascii 码</li></ul></li></ul><hr><blockquote><center>until 函数</center></blockquote><ul><li><p>until 函数</p><ul><li>输出指定数的序列, 存到列表中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>until</span><span class=p>:</span><span class=w> </span><span class=sd>|
@@ -991,7 +991,7 @@ randAlphaNum: H2Bv00ToRKntFpy9PFYX
 <span class=k>until</span>: <span class=p>|</span>
         <span class=o>[</span><span class=m>0</span> <span class=m>1</span> <span class=m>2</span> <span class=m>3</span> <span class=m>4</span> <span class=m>5</span> <span class=m>6</span> <span class=m>7</span> <span class=m>8</span> 9<span class=o>]</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**untilStep 函数**</center></blockquote><ul><li><p>untilStep 函数</p><ul><li>输出指定 N-M 的序列, 并且可以设置 步长 , 存到列表中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>untilStep 函数</center></blockquote><ul><li><p>untilStep 函数</p><ul><li>输出指定 N-M 的序列, 并且可以设置 步长 , 存到列表中.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>untilStep</span><span class=p>:</span><span class=w> </span><span class=sd>|
@@ -1007,7 +1007,7 @@ randAlphaNum: H2Bv00ToRKntFpy9PFYX
 <span class=c1># Source: myapp/templates/untilStep.yaml</span>
 untilStep: <span class=p>|</span>
         <span class=o>[</span><span class=m>1</span> <span class=m>3</span> <span class=m>5</span> <span class=m>7</span> 9<span class=o>]</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**shuffle 函数**</center></blockquote><ul><li><p>shuffle 函数</p><ul><li>将字符串的次序打乱.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>shuffle 函数</center></blockquote><ul><li><p>shuffle 函数</p><ul><li>将字符串的次序打乱.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>shuffle</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki-hello-world&#34;</span><span class=w> </span>|shuffle<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -1019,7 +1019,7 @@ untilStep: <span class=p>|</span>
 <span class=c1># Source: myapp/templates/shuffle.yaml</span>
 shuffle: -lk-rdolijohwecli
 
-</code></pre></td></tr></table></div></div><hr><blockquote><center>**snakecase 函数**</center></blockquote><ul><li><p>snakecase 函数</p><ul><li>将字符串中的单词以 <code>_</code> 相连.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>snakecase 函数</center></blockquote><ul><li><p>snakecase 函数</p><ul><li>将字符串中的单词以 <code>_</code> 相连.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>snakecase</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki hello world&#34;</span>|snakecase<span class=w> </span>}}<span class=w>
 </span><span class=w>

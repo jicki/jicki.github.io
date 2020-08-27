@@ -5,7 +5,7 @@
 # Helm Chart
 
 
-**Chart 是 helm 管理应用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.**
+Chart 是 helm 管理应用的包, 一个Chart对应一个或一套应用. Chart 内部由YAML描述文件组成.
 
 ---
 
@@ -171,13 +171,13 @@ annotations:
 
 ---
 
-**注: 所有函数中 函数名称前面带: `must` 如: mustxxx 的函数,指定出错不会 panic , 而是会输出 错误.**
+注: 所有函数中 函数名称前面带: `must` 如: mustxxx 的函数,指定出错不会 panic , 而是会输出 错误.
 
 ---
 
 ### 比较函数
 
-> <center>**比较函数**</center>
+> <center>比较函数</center>
 
 | 函数 |         含义              |
 | ---- | ------------------------- |
@@ -194,7 +194,7 @@ annotations:
 ### 流程控制
 
 
-> <center>**模板函数 之 流程控制**</center>
+> <center>模板函数 之 流程控制</center>
 
 
 * `values.yaml` 文件内容如下
@@ -223,7 +223,7 @@ containerPort:
 
 ---
 
-> <center>**if / else 条件控制**</center>
+> <center>if / else 条件控制</center>
 
 * `if` / `else`  条件控制
 
@@ -266,7 +266,7 @@ data:
 
 ---
 
-> <center>**with 范围控制**</center>
+> <center>with 范围控制</center>
 
 
 * `with` 范围控制, 加载范围主体为当前'.' , 后续通过 `.game | .drink` 直接调用
@@ -313,7 +313,7 @@ data:
 
 ---
 
-> <center>**range 循环控制**</center>
+> <center>range 循环控制</center>
 
 
 * `range` 循环控制
@@ -370,7 +370,7 @@ data:
 
 ### 内置函数
 
-> <center>**Go 语言函数**</center>
+> <center>Go 语言函数</center>
 
 
 | 函数    |          含义                                         |
@@ -391,7 +391,7 @@ data:
 
 ---
 
-> <center>**and 函数**</center>
+> <center>and 函数</center>
 
 * `and` 函数 
 
@@ -421,7 +421,7 @@ msg: true
 
 ---
 
-> <center>**or 函数**</center>
+> <center>or 函数</center>
 
 * `or` 函数
 
@@ -451,7 +451,7 @@ msg: true
 
 ---
 
-> <center>**not 函数**</center>
+> <center>not 函数</center>
 
 * `not` 函数
 
@@ -482,7 +482,7 @@ msg: true
 
 ---
 
-> <center>**len 函数**</center>
+> <center>len 函数</center>
 
 * `len` 函数
 
@@ -511,7 +511,7 @@ len: 3
 
 ---
 
-> <center>**index 函数**</center>
+> <center>index 函数</center>
 
 * `index` 函数
 
@@ -556,7 +556,7 @@ data:
 
 ---
 
-> <center>**html 函数**</center>
+> <center>html 函数</center>
 
 * `html` 函数
 
@@ -582,7 +582,7 @@ html: |
 
 ---
 
-> <center>**js 函数**</center>
+> <center>js 函数</center>
 
 * `js` 函数
 
@@ -610,7 +610,7 @@ js: \x3Cscript\x3Evar a \x3D 1; var b \x3D a + 1; \x3C/scrpit\x3E
 
 ---
 
-> <center>**slice 函数**</center>
+> <center>slice 函数</center>
 
 
 * `slice` 函数
@@ -640,7 +640,7 @@ slice: [5 7]
 
 ---
 
-> <center>**print / printf / println 函数**</center>
+> <center>print / printf / println 函数</center>
 
 
 * `print`、`printf`、`println`  函数
@@ -687,7 +687,7 @@ data:
 
 ---
 
-> <center>**urlquery 函数**</center>
+> <center>urlquery 函数</center>
 
 * `urlquery`  函数
 
@@ -721,7 +721,7 @@ password: https%3A%2F%2Fjicki.cn%2Fabc%2F
 
 ---
 
-> <center>**hello 函数**</center>
+> <center>hello 函数</center>
 
 * hello 函数
 
@@ -743,7 +743,7 @@ hello: Hello!
 
 ---
 
-> <center>**now 函数**</center>
+> <center>now 函数</center>
 
 * now 函数
 
@@ -768,7 +768,7 @@ now: 2020-08-25 01:50:59.895593177 +0000 UTC m=+0.041493103
 
 ---
 
-> <center>**ago 函数**</center>
+> <center>ago 函数</center>
 
 * ago 函数
 
@@ -791,7 +791,7 @@ ago: 0s
 
 ---
 
-> <center>**date 函数**</center>
+> <center>date 函数</center>
 
 * date 函数
 
@@ -814,7 +814,7 @@ date: 2020-08-24 09:40:34
 
 ---
 
-> <center>**dateInZone 函数**</center>
+> <center>dateInZone 函数</center>
 
 * dateInZone 函数
 
@@ -839,7 +839,7 @@ dateInZone: 2020-08-24 17:48:42
 
 ---
 
-> <center>**dateModify 函数**</center>
+> <center>dateModify 函数</center>
 
 * `date_modify` 函数
 
@@ -867,7 +867,7 @@ dateModify: 2020-08-24 07:52:41.016733093 +0000 UTC m=-7199.954508131
 
 ---
 
-> <center>**durationRound 函数**</center>
+> <center>durationRound 函数</center>
 
 * durationRound 函数
 
@@ -890,7 +890,7 @@ durationRound: 8m
 
 ---
 
-> <center>**htmlDate 函数**</center>
+> <center>htmlDate 函数</center>
 
 * htmlDate 函数
 
@@ -914,7 +914,7 @@ htmlDate: 2020-08-24
 
 ---
 
-> <center>**htmlDateInZone 函数**</center>
+> <center>htmlDateInZone 函数</center>
 
 * htmlDateInZone 函数
 
@@ -939,7 +939,7 @@ htmlDateInZone: 2020-08-24
 
 ---
 
-> <center>**mustDateModify 函数**</center>
+> <center>mustDateModify 函数</center>
 
 * mustDateModify 函数
 
@@ -965,7 +965,7 @@ mustDateModify: 2020-08-24 10:14:20.483551062 +0000 UTC m=+500.048063982
 
 ---
 
-> <center>**toDate 函数**</center>
+> <center>toDate 函数</center>
 
 * toDate 函数
 
@@ -989,7 +989,7 @@ ToDate: 2020-08-25 09:58:00 +0000 UTC
 
 ---
 
-> <center>**unixEpoch 函数**</center>
+> <center>unixEpoch 函数</center>
 
 * unixEpoch 函数
 
@@ -1011,7 +1011,7 @@ unixEpoch: 1598321573
 
 ---
 
-> <center>**abbrev 函数**</center>
+> <center>abbrev 函数</center>
 
 * abbrev 函数
 
@@ -1036,7 +1036,7 @@ abbrev: ab...
 
 ---
 
-> <center>**trunc 函数**</center>
+> <center>trunc 函数</center>
 
 * trunc 函数
 
@@ -1061,7 +1061,7 @@ trunc: ab
 
 ---
 
-> <center>**trim 函数**</center>
+> <center>trim 函数</center>
 
 * trim 函数
 
@@ -1083,7 +1083,7 @@ trim: a  b  c
 
 ---
 
-> <center>**trimAll 函数**</center>
+> <center>trimAll 函数</center>
 
 * trimAll 函数
 
@@ -1106,7 +1106,7 @@ trimAll: jicki
 
 ---
 
-> <center>**trimSuffix 函数**</center>
+> <center>trimSuffix 函数</center>
 
 * trimSuffix 函数
 
@@ -1115,7 +1115,7 @@ trimAll: jicki
 
 ---
 
-> <center>**trimPrefix 函数**</center>
+> <center>trimPrefix 函数</center>
 
 * trimPrefix 函数
 
@@ -1124,7 +1124,7 @@ trimAll: jicki
 
 ---
 
-> <center>**nospace 函数**</center>
+> <center>nospace 函数</center>
 
 * nospace 函数
 
@@ -1134,7 +1134,7 @@ trimAll: jicki
 
 ---
 
-> <center>**initials 函数**</center>
+> <center>initials 函数</center>
 
 * initials 函数
 
@@ -1159,7 +1159,7 @@ initials: Jhw
 
 ---
 
-> <center>**upper 函数**</center>
+> <center>upper 函数</center>
 
 * upper 函数
 
@@ -1181,7 +1181,7 @@ upper: ABCDEFG
 
 ---
 
-> <center>**lower 函数**</center>
+> <center>lower 函数</center>
 
 * lower 函数
 
@@ -1204,7 +1204,7 @@ lower: abcdefg
 
 ---
 
-> <center>**title 函数**</center>
+> <center>title 函数</center>
 
 * title 函数
 
@@ -1231,7 +1231,7 @@ title: Jicki-Hello-World
 
 ---
 
-> <center>**swapcase 函数**</center>
+> <center>swapcase 函数</center>
 
 * swapcase 函数
 
@@ -1257,7 +1257,7 @@ swapcase: ABCdefGHIjkl
 
 ---
 
-> <center>**substr 函数**</center>
+> <center>substr 函数</center>
 
 * substr 函数
 
@@ -1280,7 +1280,7 @@ substr: bcde
 
 ---
 
-> <center>**repeat 函数**</center>
+> <center>repeat 函数</center>
 
 * repeat 函数
 
@@ -1304,7 +1304,7 @@ repeat: jickijickijickijickijicki
 
 ---
 
-> <center>**randAlpha 函数**</center>
+> <center>randAlpha 函数</center>
 
 * randAlpha 函数
 
@@ -1329,7 +1329,7 @@ randAlpha: dmrHUNScimXhpUiGMapG
 
 ---
 
-> <center>**randNumeric 函数**</center>
+> <center>randNumeric 函数</center>
 
 * randNumeric 函数
 
@@ -1355,7 +1355,7 @@ randNumeric: 37465873746598120398
 ---
 
 
-> <center>**randAlphaNum 函数**</center>
+> <center>randAlphaNum 函数</center>
 
 * randAlphaNum 函数
 
@@ -1381,7 +1381,7 @@ randAlphaNum: H2Bv00ToRKntFpy9PFYX
 
 ---
 
-> <center>**randAscii 函数**</center>
+> <center>randAscii 函数</center>
 
 * randAscii 函数
 
@@ -1390,7 +1390,7 @@ randAlphaNum: H2Bv00ToRKntFpy9PFYX
 
 ---
 
-> <center>**until 函数**</center>
+> <center>until 函数</center>
 
 * until 函数
 
@@ -1418,7 +1418,7 @@ until: |
 
 ---
 
-> <center>**untilStep 函数**</center>
+> <center>untilStep 函数</center>
 
 * untilStep 函数
 
@@ -1446,7 +1446,7 @@ untilStep: |
 ---
 
 
-> <center>**shuffle 函数**</center>
+> <center>shuffle 函数</center>
 
 * shuffle 函数
 
@@ -1471,7 +1471,7 @@ shuffle: -lk-rdolijohwecli
 
 ---
 
-> <center>**snakecase 函数**</center>
+> <center>snakecase 函数</center>
 
 * snakecase 函数
 
