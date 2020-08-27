@@ -191,6 +191,103 @@ annotations:
 ---
 
 
+
+### 特殊字符
+
+
+> <center> `-` 区别 </center>
+
+---
+
+* `{{ }}` 左右两边都没有 `-` 的情况
+
+  * 如果上下两边都有 元素, 会空一行. 效果如下:
+
+
+```yaml
+split: {{ "=============" }}
+{{ if true }}
+name: {{ "hello world" }}
+{{ end }}
+split: {{ "=============" }}
+```
+
+* 运行 template 
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/name.yaml
+---
+# Source: myapp/templates/name.yaml
+split: =============
+
+name: hello world
+
+split: =============
+
+```
+
+---
+
+* `{{ }}` 左边包含 `-` 的情况
+
+  * 如果上下两边都有 元素, 直接输出不会有空行. 效果如下:
+
+
+```yaml
+split: {{ "=============" }}
+{{- if true }}
+name: {{ "hello world" }}
+{{- end }}
+split: {{ "=============" }}
+```
+
+* 运行 template
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/name.yaml
+---
+# Source: myapp/templates/name.yaml
+split: =============
+name: hello world
+split: =============
+
+```
+
+---
+
+
+* `{{ }}` 左右两边都包含 `-` 的情况
+
+  * 如果上下两边都有 元素, 会输出到上面一行后面. 效果如下:
+
+  * 注: 这种情况会有 `mapping values are not allowed in this context` 格式的错误, 特别注意 左右都包含 `-` 的情况.
+
+```yaml
+split: {{ "=============" }}
+{{- if true -}}
+name
+{{- end -}}
+
+```
+
+* 运行 template
+
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/name.yaml
+---
+# Source: myapp/templates/name.yaml
+split: =============name
+
+```
+
+
+
+---
+
+
 ### 流程控制
 
 
