@@ -283,6 +283,101 @@ split: =============name
 
 ```
 
+---
+
+> <center> `|` 、 `|-` 、 `|+` 、 `>` 区别 </center>
+
+
+* `|` 
+
+  * 每一列转换到 json 后 无论多少个空行有且仅有一个 `\n` 符. 
+
+
+```yaml
+A: |
+  aa
+  bb
+  cc
+```
+
+* 转换成 Json
+
+```json
+{
+  "A": "aa\nbb\ncc\n"
+}
+```
+
+
+
+---
+
+* `|-`
+
+  * 每一列转换到 json 后 除最后一行外 每个空行都有一个 `\n` 符.
+
+```yaml
+A: |-
+  aa
+
+  bb
+  cc
+
+
+```
+
+* 转换成 Json
+
+```json
+{
+  "A": "aa\n\nbb\ncc"
+}
+```
+
+
+---
+
+* `|+`
+
+  * 每一列转换到 json 后 每一个空行都有一个 `\n` 符.
+
+```yaml
+A: |+
+  aa
+  bb
+
+  cc
+
+```
+
+* 转换成 Json
+
+```json
+{
+  "A": "aa\nbb\n\ncc\n\n"
+}
+```
+
+---
+
+* `>`
+
+  * 每一列转换到 json 后 没有 `\n` 符.
+
+```yaml
+A: >
+  aa
+  bb
+  cc
+```
+
+* 转换成 Json
+
+```json
+{
+  "A": "aa bb cc"
+}
+```
 
 
 ---
@@ -1593,7 +1688,7 @@ snakecase: jicki_hello_world
 ---
 
 
-> camelcase 函数
+> <center>camelcase 函数</center>
 
 * camelcase 函数
 
@@ -1618,7 +1713,7 @@ camelcase: JickiHelloWorld!
 
 
 
-> kebabcase 函数
+> <center>kebabcase 函数</center>
 
 * kebabcase 函数
 
@@ -1643,7 +1738,7 @@ kebabcase: jicki-hello-world
 
 ---
 
-> wrapWith 函数
+> <center>wrapWith 函数</center>
 
 * wrapWith 函数
 
@@ -1670,7 +1765,7 @@ wrapWith: |
 ---
 
 
-> contains 函数
+> <center>contains 函数</center>
 
 * contains 函数
 
@@ -1701,7 +1796,7 @@ contains: |
 ---
 
 
-> hasPrefix 函数
+> <center>hasPrefix 函数</center>
 
 * hasPrefix 函数
 
@@ -1732,7 +1827,7 @@ hasPrefix: |
 ---
 
 
-> hasSuffix 函数
+> <center>hasSuffix 函数</center>
 
 * hasSuffix 函数
 
@@ -1761,7 +1856,7 @@ hasSuffix: |
 ---
 
 
-> quote 函数
+> <center>quote 函数</center>
 
 * quote 函数
 
@@ -1790,7 +1885,7 @@ Notquote: jicki
 ---
 
 
-> squote 函数
+> <center>squote 函数</center>
 
 * squote 函数
 
@@ -1815,7 +1910,7 @@ squote: 'jicki'
 
 ---
 
-> cat 函数
+> <center>cat 函数</center>
 
 * cat 函数
 
@@ -1843,7 +1938,7 @@ cat: |
 
 ---
 
-> indent 函数
+> <center>indent 函数</center>
 
 * indent 函数
 
@@ -1869,7 +1964,7 @@ indent: "   jicki"
 
 ---
 
-> nindent 函数
+> <center>nindent 函数</center>
 
 * nindent 函数
 
@@ -1895,7 +1990,7 @@ nindent: |
 
 ---
 
-> replace 函数
+> <center>replace 函数</center>
 
 * replace 函数
 

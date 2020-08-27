@@ -1,7 +1,7 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Helm Chart & template 函数 - 小炒肉</title><meta name=Description content="Helm Chart & template 函数"><meta property="og:title" content="Helm Chart & template 函数"><meta property="og:description" content="Helm Chart & template 函数"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/helm-chart/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-16T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Helm Chart & template 函数"><meta name=twitter:description content="Helm Chart & template 函数"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/helm-chart/><link rel=prev href=https://jicki.cn/helm-v3/><link rel=next href=https://jicki.cn/helm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Helm Chart \u0026 template 函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/helm-chart\/"},"genre":"posts","keywords":"kubernetes, helm","wordcount":9327,"url":"https:\/\/jicki.cn\/helm-chart\/","datePublished":"2020-08-16T00:00:00+00:00","dateModified":"2020-08-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Helm Chart \u0026 template 函数"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Helm Chart & template 函数 - 小炒肉</title><meta name=Description content="Helm Chart & template 函数"><meta property="og:title" content="Helm Chart & template 函数"><meta property="og:description" content="Helm Chart & template 函数"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/helm-chart/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-08-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-08-16T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Helm Chart & template 函数"><meta name=twitter:description content="Helm Chart & template 函数"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/helm-chart/><link rel=prev href=https://jicki.cn/helm-v3/><link rel=next href=https://jicki.cn/helm/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Helm Chart \u0026 template 函数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/helm-chart\/"},"genre":"posts","keywords":"kubernetes, helm","wordcount":9497,"url":"https:\/\/jicki.cn\/helm-chart\/","datePublished":"2020-08-16T00:00:00+00:00","dateModified":"2020-08-16T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Helm Chart \u0026 template 函数"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Helm Chart & template 函数</h1><h2 class=single-subtitle>Helm Chart & template 函数</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/categories/helm/><i class="far fa-folder fa-fw"></i>helm</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-16>2020-08-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 9327 字&nbsp;
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Helm Chart & template 函数</h1><h2 class=single-subtitle>Helm Chart & template 函数</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/categories/helm/><i class="far fa-folder fa-fw"></i>helm</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-08-16>2020-08-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 9497 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 19 分钟&nbsp;<span id=/helm-chart/ class=leancloud_visitors data-flag-title="Helm Chart & template 函数">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
@@ -225,6 +225,72 @@ split: <span class=o>=============</span>
 <span class=c1># Source: myapp/templates/name.yaml</span>
 split: <span class=o>=============</span>name
 
+</code></pre></td></tr></table></div></div><hr><blockquote><center>`|` 、 `|-` 、 `|+` 、 `>` 区别</center></blockquote><ul><li><p><code>|</code></p><ul><li>每一列转换到 json 后 无论多少个空行有且仅有一个 <code>\n</code> 符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>A</span><span class=p>:</span><span class=w> </span><span class=sd>|
+</span><span class=sd>  aa</span><span class=w>
+</span><span class=w>  </span>bb<span class=w>
+</span><span class=w>  </span>cc<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>转换成 Json</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+  <span class=nt>&#34;A&#34;</span><span class=p>:</span> <span class=s2>&#34;aa\nbb\ncc\n&#34;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><hr><ul><li><p><code>|-</code></p><ul><li>每一列转换到 json 后 除最后一行外 每个空行都有一个 <code>\n</code> 符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>A</span><span class=p>:</span><span class=w> </span>|<span class=sd>-
+</span><span class=sd>  aa</span><span class=w>
+</span><span class=w>
+</span><span class=w>  </span>bb<span class=w>
+</span><span class=w>  </span>cc<span class=w>
+</span><span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>转换成 Json</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+  <span class=nt>&#34;A&#34;</span><span class=p>:</span> <span class=s2>&#34;aa\n\nbb\ncc&#34;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><hr><ul><li><p><code>|+</code></p><ul><li>每一列转换到 json 后 每一个空行都有一个 <code>\n</code> 符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>A</span><span class=p>:</span><span class=w> </span>|<span class=sd>+
+</span><span class=sd>  aa</span><span class=w>
+</span><span class=w>  </span>bb<span class=w>
+</span><span class=w>
+</span><span class=w>  </span>cc<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>转换成 Json</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+  <span class=nt>&#34;A&#34;</span><span class=p>:</span> <span class=s2>&#34;aa\nbb\n\ncc\n\n&#34;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><hr><ul><li><p><code>></code></p><ul><li>每一列转换到 json 后 没有 <code>\n</code> 符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>A</span><span class=p>:</span><span class=w> </span><span class=sd>&gt;
+</span><span class=sd>  aa</span><span class=w>
+</span><span class=w>  </span>bb<span class=w>
+</span><span class=w>  </span>cc<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>转换成 Json</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+  <span class=nt>&#34;A&#34;</span><span class=p>:</span> <span class=s2>&#34;aa bb cc&#34;</span>
+<span class=p>}</span>
 </code></pre></td></tr></table></div></div><hr><h3 id=流程控制>流程控制</h3><blockquote><center>模板函数 之 流程控制</center></blockquote><ul><li><code>values.yaml</code> 文件内容如下</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -1105,7 +1171,7 @@ shuffle: -lk-rdolijohwecli
 <span class=c1># Source: myapp/templates/snakecase.yaml</span>
 snakecase: jicki_hello_world
 
-</code></pre></td></tr></table></div></div><hr><blockquote><p>camelcase 函数</p></blockquote><ul><li><p>camelcase 函数</p><ul><li>将字符串中的<code>_</code>相连的单词首字母大写并且去掉<code>_</code>.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>camelcase 函数</center></blockquote><ul><li><p>camelcase 函数</p><ul><li>将字符串中的<code>_</code>相连的单词首字母大写并且去掉<code>_</code>.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>camelcase</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki_hello_world_!&#34;</span><span class=w> </span>|<span class=w> </span>camelcase<span class=w> </span>}}<span class=w>
 </span></code></pre></td></tr></table></div></div><ul><li>运行 template</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
@@ -1115,7 +1181,7 @@ snakecase: jicki_hello_world
 ---
 <span class=c1># Source: myapp/templates/camelcase.yaml</span>
 camelcase: JickiHelloWorld!
-</code></pre></td></tr></table></div></div><hr><blockquote><p>kebabcase 函数</p></blockquote><ul><li><p>kebabcase 函数</p><ul><li>将字符串中的单词以 <code>-</code> 相连.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>kebabcase 函数</center></blockquote><ul><li><p>kebabcase 函数</p><ul><li>将字符串中的单词以 <code>-</code> 相连.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>kebabcase</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=s2>&#34;jicki hello_world&#34;</span><span class=w> </span>|<span class=w> </span>kebabcase<span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -1127,7 +1193,7 @@ camelcase: JickiHelloWorld!
 ---
 <span class=c1># Source: myapp/templates/kebabcase.yaml</span>
 kebabcase: jicki-hello-world
-</code></pre></td></tr></table></div></div><hr><blockquote><p>wrapWith 函数</p></blockquote><ul><li><p>wrapWith 函数</p><ul><li>在字符串中, 指定间隔插入指定字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>wrapWith 函数</center></blockquote><ul><li><p>wrapWith 函数</p><ul><li>在字符串中, 指定间隔插入指定字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>wrapWith</span><span class=p>:</span><span class=w> </span><span class=sd>|
 </span><span class=sd>        {{ &#34;jickiHelloWorld&#34; | wrapWith 5 &#34;:--&gt;&#34; }}</span><span class=w>
@@ -1141,7 +1207,7 @@ kebabcase: jicki-hello-world
 <span class=c1># Source: myapp/templates/wrapWith.yaml</span>
 wrapWith: <span class=p>|</span>
         jicki:--&gt;Hello:--&gt;World
-</code></pre></td></tr></table></div></div><hr><blockquote><p>contains 函数</p></blockquote><ul><li><p>contains 函数</p><ul><li>字符串中是否包含某些字符</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>contains 函数</center></blockquote><ul><li><p>contains 函数</p><ul><li>字符串中是否包含某些字符</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -1165,7 +1231,7 @@ wrapWith: <span class=p>|</span>
 <span class=c1># Source: myapp/templates/contains.yaml</span>
 contains: <span class=p>|</span>
   name: <span class=s2>&#34;jicki&#34;</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><p>hasPrefix 函数</p></blockquote><ul><li><p>hasPrefix 函数</p><ul><li>字符串中是否包含指定的前缀.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>hasPrefix 函数</center></blockquote><ul><li><p>hasPrefix 函数</p><ul><li>字符串中是否包含指定的前缀.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -1189,7 +1255,7 @@ contains: <span class=p>|</span>
 hasPrefix: <span class=p>|</span>
         url: <span class=s2>&#34;http&#34;</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><p>hasSuffix 函数</p></blockquote><ul><li><p>hasSuffix 函数</p><ul><li>字符串中是否包含指定的后缀.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>hasSuffix 函数</center></blockquote><ul><li><p>hasSuffix 函数</p><ul><li>字符串中是否包含指定的后缀.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -1211,7 +1277,7 @@ hasPrefix: <span class=p>|</span>
 <span class=c1># Source: myapp/templates/hasSuffix.yaml</span>
 hasSuffix: <span class=p>|</span>
         url: <span class=s2>&#34;url com&#34;</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><p>quote 函数</p></blockquote><ul><li><p>quote 函数</p><ul><li>将指定字符串加上 <code>" "</code> 号输出.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>quote 函数</center></blockquote><ul><li><p>quote 函数</p><ul><li>将指定字符串加上 <code>" "</code> 号输出.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>quote</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>quote<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
@@ -1229,7 +1295,7 @@ hasSuffix: <span class=p>|</span>
 quote: <span class=s2>&#34;jicki&#34;</span>
 Notquote: jicki
 
-</code></pre></td></tr></table></div></div><hr><blockquote><p>squote 函数</p></blockquote><ul><li><p>squote 函数</p><ul><li>将指定字符串加上 <code>' '</code> 号输出.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>squote 函数</center></blockquote><ul><li><p>squote 函数</p><ul><li>将指定字符串加上 <code>' '</code> 号输出.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>squote</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span>squote<span class=w> </span><span class=s2>&#34;jicki&#34;</span><span class=w> </span>}}<span class=w>
 </span><span class=w>
@@ -1243,7 +1309,7 @@ Notquote: jicki
 <span class=c1># Source: myapp/templates/squote.yaml</span>
 squote: <span class=s1>&#39;jicki&#39;</span>
 
-</code></pre></td></tr></table></div></div><hr><blockquote><p>cat 函数</p></blockquote><ul><li><p>cat 函数</p><ul><li>字符串拼接, 多个字符串拼接成一个字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>cat 函数</center></blockquote><ul><li><p>cat 函数</p><ul><li>字符串拼接, 多个字符串拼接成一个字符串.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>cat</span><span class=p>:</span><span class=w> </span><span class=sd>|
@@ -1261,7 +1327,7 @@ squote: <span class=s1>&#39;jicki&#39;</span>
 cat: <span class=p>|</span>
         jicki hello world !
 
-</code></pre></td></tr></table></div></div><hr><blockquote><p>indent 函数</p></blockquote><ul><li><p>indent 函数</p><ul><li>字符串前面缩进指定的行数.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>indent 函数</center></blockquote><ul><li><p>indent 函数</p><ul><li>字符串前面缩进指定的行数.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
@@ -1275,7 +1341,7 @@ cat: <span class=p>|</span>
 ---
 <span class=c1># Source: myapp/templates/indent.yaml</span>
 indent: <span class=s2>&#34;   jicki&#34;</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><p>nindent 函数</p></blockquote><ul><li><p>nindent 函数</p><ul><li>字符串换行后缩进指定的行数.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>nindent 函数</center></blockquote><ul><li><p>nindent 函数</p><ul><li>字符串换行后缩进指定的行数.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>nindent</span><span class=p>:</span><span class=w> </span><span class=sd>|
@@ -1291,7 +1357,7 @@ indent: <span class=s2>&#34;   jicki&#34;</span>
 <span class=c1># Source: myapp/templates/nindent.yaml</span>
 nindent: <span class=p>|</span>
         <span class=s2>&#34;\n   jicki&#34;</span>
-</code></pre></td></tr></table></div></div><hr><blockquote><p>replace 函数</p></blockquote><ul><li><p>replace 函数</p><ul><li>替换字符串中的 n 字符为 m 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><hr><blockquote><center>replace 函数</center></blockquote><ul><li><p>replace 函数</p><ul><li>替换字符串中的 n 字符为 m 字符.</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>replace</span><span class=p>:</span><span class=w> </span><span class=sd>|
