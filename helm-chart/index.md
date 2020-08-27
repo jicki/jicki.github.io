@@ -169,6 +169,9 @@ annotations:
 
   * 参考: https://jicki.cn/golang-study-note-8/#template-%E8%AF%AD%E6%B3%95 
 
+---
+
+**注: 所有函数中 函数名称前面带: `must` 如: mustxxx 的函数,指定出错不会 panic , 而是会输出 错误.**
 
 ---
 
@@ -1928,7 +1931,7 @@ b64dec: jicki
 
 * encryptAES 函数
 
-  * 使用 AES 加密算法加密 字符串.
+  * 使用 AES 加密算法加密 字符串. (需指定一个 偏引量如: "98765")
 
 
 ```yaml
@@ -1949,7 +1952,31 @@ encryptAES: Lj9RyzT4kG6Q7K+hRil1/4l8EL4rXPqGD3/CF1KSS70=
 
 ---
 
+> decryptAES 函数
 
+* decryptAES 函数
+
+  * 解密 AES 加密过的字符串.
+
+
+```yaml
+decryptAES: |
+        encryptAES: {{ encryptAES "98765" "jicki" }}
+        decryptAES: {{ encryptAES "98765" "jicki" | decryptAES "98765" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/decryptAES.yaml
+---
+# Source: myapp/templates/decryptAES.yaml
+decryptAES: |
+        encryptAES: H/UMBNfOx69KFHskREB4PeUEbdzv+ZLkCFUlN4vzRgw=
+        decryptAES: jicki
+
+```
 
 
 
@@ -3470,6 +3497,215 @@ root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/derivePas
 derivePassword: Foy3$Xox
 
 ```
+
+
+---
+
+
+> uuidv4 函数
+
+* uuidv4 函数
+
+  * 生成一个 uuid .
+
+
+```yaml
+uuidv4: {{ uuidv4 }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/uuidv4.yaml
+---
+# Source: myapp/templates/uuidv4.yaml
+uuidv4: 894a3cce-1f72-4535-a4cf-67a563a9e130
+
+```
+
+---
+
+> semver 函数
+
+* semver 函数
+
+  * 构造一个基于 semver 的版本号. 
+
+  * semver 是 语义化版本 规范 的一个实现 . 
+
+    * 版本号格式:  主版本号[MAJOR].次版本号[MINOR].修订号[PATCH]. 
+
+      * 主版本号:  当做了不兼容的 API 修改.
+      * 次版本号:  当做了向下兼容的功能性新增.
+      * 修订号:    当做了向下兼容的问题修正.
+
+```yaml
+semver: {{ semver "1.2.0" }}
+
+```
+
+* 运行 template
+
+```shell
+
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/semver.yaml
+---
+# Source: myapp/templates/semver.yaml
+semver: 1.2.0
+
+```
+
+---
+
+> semverCompare 函数
+
+* semverCompare 函数
+
+  * semver 版本的对比 比较. 
+
+
+```yaml
+{{- $semversion := "1.2.0" }}
+{{- if semverCompare ">=1.9.0" $semversion }}
+api: "v2"
+{{- else }}
+api: "v1"
+{{- end }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/semverCompare.yaml
+---
+# Source: myapp/templates/semverCompare.yaml
+api: "v1"
+
+```
+
+
+---
+
+> fail 函数
+
+* fail 函数
+
+  * 抛出异常, 输出自定义的错误. 类似于 go 语言的 panic .
+
+
+```yaml
+{{ " my error to failed " | fail }}
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/fail.yaml
+Error: template: myapp/templates/fail.yaml:1:28: executing "myapp/templates/fail.yaml" at <fail>: error calling fail:  my error to failed
+
+```
+
+
+---
+
+
+> regexMatch 函数
+
+* regexMatch 函数
+
+  * 正则表达式
+
+
+```yaml
+regexMatch: |
+        {{- $IP := "127.0.0.1" }}
+        {{- if (regexMatch `^[0-9]{1,3}(\.[0-9]{1,3}){3}$` $IP) }}
+        IP: {{ $IP }}
+        {{- end }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/regexMatch.yaml
+---
+# Source: myapp/templates/regexMatch.yaml
+regexMatch: |
+        IP: 127.0.0.1
+```
+
+
+---
+
+
+> regexFind 函数
+
+* regexFind 函数
+
+  * 使用 正则表达式 匹配字符串中的内容.
+
+
+
+---
+
+
+> regexFindAll 函数
+
+* regexFindAll 函数
+
+  * 使用 正则表达式 匹配所有字符串中的内容 输出 N 条数 (-1) 为匹配所有 .
+
+
+
+```yaml
+regexFindAll: {{ regexFindAll "\\d+" "123abc432hhhs9982sahc3hc245" -1 }}
+
+```
+
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/regexFindAll.yaml
+---
+# Source: myapp/templates/regexFindAll.yaml
+regexFindAll: [123 432 9982 3 245]
+
+```
+
+
+
+---
+
+> regexReplaceAll 函数
+
+* regexReplaceAll 函数
+
+  * 用 正则表达式 匹配所有字符串中的内容 并替换成 指定的 字符串.
+
+
+```yaml
+regexReplaceAll: |
+        {{ regexReplaceAll "\\d+" "123abc432hhhs9982sahc3hc245" "==" }}
+
+```
+
+* 运行 template
+
+```shell
+root@kubernetes:/opt/helm/myapp# helm template . --show-only templates/regexReplaceAll.yaml
+---
+# Source: myapp/templates/regexReplaceAll.yaml
+regexReplaceAll: |
+        ==abc==hhhs==sahc==hc==
+
+```
+
 
 
 ---
