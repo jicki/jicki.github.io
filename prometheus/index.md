@@ -154,5 +154,25 @@
 > <center>Prometheus exporter</center> 
 
 
+* 为 Prometheus 提供监控数据源的应用都被统称为 exporter. 如:
+
+  * `blackbox_exporter` -- 黑盒数据采集插件, 采集一些最基本的数据, 如: 机器连通性、服务是否running、端口是否打开 等.
+
+  * `node_exporter` -- Linux 系统相关的数据采集插件. 
+
+
+* Prometheus Server 提供PromQL查询语言能力、负责数据的采集和存储等主要功能.
+
+* 数据的采集主要通过周期性的从 exporter 所暴露出来的HTTP服务地址 ( /metrics ) 来获取监控数据。
+
+* exporter 在实际运行的时候根据其支持的方式也会分为:
+
+  * 独立运行的 exporter 应用, 通过HTTP服务地址提供相应的监控数据. 如: `node_exporter`
+
+  * 内置在监控目标中, 通过HTTP服务地址提供相应的监控数据. 如: `kubernetes`
+
+
+
+---
 
 
