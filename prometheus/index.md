@@ -89,7 +89,7 @@
 
 
 
-> Prometheus metrics 
+> <center>Prometheus metrics</center>
 
 
 * Prometheus 对于采集的数据统称为 `metrics` 数据.
@@ -101,21 +101,57 @@
 
 > metrics 数据类型
 
-
 ---
 
 > Gauges 
 
 
+* Gauges 最简单的度量指标, 只有一个最简单的返回值, 或者瞬时状态. 
+
+  * 比如: 磁盘的容量、内存的使用量, 就使用 Gauges 的 metrics 格式来度量.  因为 磁盘容量、内存使用量 都是随时会发生变化, 而且这种变化是无规律的变化. 这种类型的数据就是Gauges类型的代表.
+
+
+---
+
+
+> Counters
+
+
+* Counter 就是计数器, 从数据 0 开始累加计算, 正常状况下永远是累加或者不变 不会减少. 
+
+  * 比如: 用户访问量, 就是一直不断的累加.
+
+---
+
+
+> Histograms
+
+* Histogram 统计数据的分布情况. 最大值、最小值、平均值、中位数、的百分比数值 . 
+
+  * 比如: 用户响应时间, 每个用户到达服务端的网络请求时间都有差异. 这个时候就可以使用 Histogram 类型分别统计出 影响时间中 快慢的占比. 如 小于 0.5s 占 80% , 大于 1s 占 10%  大于 5s 占 7% 大于10s 的占 3%.  
 
 
 
 
+---
 
 
 
+> <center>Prometheus K/V 数据形式</center>
+
+* Prometheus 中采集的 metrics 数据都是以 key/value 格式形式存储的.
+
+  * 比如: 使用 curl http://localhost:9100/metrics  可以查看到数据采集都是 key/value 格式. 
+
+    * `process_max_fds 65535` 前面是 key 空格后是 value .
 
 
+
+---
+
+
+
+> <center>Prometheus exporter</center> 
 
 
 
