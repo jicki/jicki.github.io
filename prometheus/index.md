@@ -85,7 +85,35 @@
 
 
 
-## Prometheus 组件
+### Prometheus 概念理论 
+
+
+
+> Prometheus metrics 
+
+
+* Prometheus 对于采集的数据统称为 `metrics` 数据.
+
+  * `metrics` 是一种对采集数据的总称, 它不代表某一种具体的数据格式, 是一种对于度量计算单位的抽象.
+
+
+---
+
+> metrics 数据类型
+
+
+---
+
+> Gauges 
+
+
+
+
+
+
+
+
+
 
 
 
