@@ -172,7 +172,18 @@
   * 内置在监控目标中, 通过HTTP服务地址提供相应的监控数据. 如: `kubernetes`
 
 
+---
+
+> <center>Prometheus pushgateway</center>
+
+
+* pushgateway 本身是一个 HTTP 服务器. 用户通过将采集的数据推送到 pushgateway 中, 然后再由 Prometheus Pull 下来.
+
 
 ---
+
+
+
+
 
 
