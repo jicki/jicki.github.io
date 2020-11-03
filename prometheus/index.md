@@ -553,3 +553,16 @@ route:
       team: frontend
 ```
 
+---
+
+* `AlertManager` 主要处理流程
+
+  * 接收到 `Alert`，根据 labels 判断属于哪些 Route（可存在多个Route，一个Route有多个Group，一个Group有多个Alert）。
+
+  * 将 `Alert` 分配到 Group中, 没有则新建 Group 。
+
+  * 新的 Group 等待 `group_wait` 指定的时间（等待时可能收到同一Group的 Alert）, 根据 `resolve_timeout` 判断 `Alert` 是否解决, 然后发送通知。
+
+  * 已有的 Group 等待 `group_interval` 指定的时间, 判断 `Alert` 是否解决, 当上次发送通知到现在的间隔大于 `repeat_interval` 或者 Group 有更新时会发送通知。
+
+
