@@ -503,3 +503,53 @@ sum(rate(node_cpu_seconds_total{mode!="idle"}[1m])) by (instance)
   * 静默 - AlertManager 提供了一个简单的机制可以快速根据标签对告警进行静默处理。如果接收到的告警符合静默的配置, `Alertmanager` 则不会发送告警通知。
 
   * 静默 设置需要在 `Alertmanager` 的 `Web` 页面上进行设置。
+
+
+### AlertManager 配置文件
+
+
+* `AlertManager` Route 路由配置 -- `AlertManager` 配置文件中比较重要的点是 `Route` 的配置, 可以使我们的告警根据不同的标签告警到不同的渠道。
+
+
+```bash
+global:                       #配置邮箱、url、微信等
+route：                       #配置路由树
+  - receiver:                 #从接受组（与route同级别）中选择接受
+  - group_by:[]               #填写标签的key，通过相同的key不同的value来判断 , PrometheusRules 中的标签值.
+  - continue: false           #告警是否去继续路由子节点
+  - match: [labelname1:labelvalue1,labelname2,labelvalue2] #通过标签去匹配这次告警是否符合这个路由节点, 必须全部匹配才可以告警。
+  - match_re: [labelname:regex]                            #通过正则表达是匹配标签, 意义同上。
+  - group_wait: 30s  #组内等待时间, 同一分组内收到第一个告警等待多久开始发送, 目标是为了同组消息同时发送, 不占用告警信息, 默认30s。
+  - group_interval: 5m #当组内已经发送过一个告警, 组内若有新增告警需要等待的时间，默认为5m,这条要确定组内信息是影响同一业务才能设置, 若分组不合理，可能导致告警延迟，造成影响
+  - repeat_inteval: 4h #告警已经发送, 且无新增告警, 若重复告警需要间隔多久 默认4h 属于重复告警, 时间间隔应根据告警的严重程度来设置
+  routes:
+     - route:                  #路由子节点 配置信息跟主节点的路由信息一致
+
+receivers:
+- name: 'dingtalk'
+  webhook_configs:
+  - send_resolved: true
+    url: 'http://dingtalk.com/dingtalk/ops_dingding/send'
+```
+
+
+* 例子:
+
+```bash
+route:
+  receiver: 'dingtalk'
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  group_by: [cluster, alertname]
+  routes:
+  - receiver: 'database-pager'
+    group_wait: 10s
+    match_re:
+      service: mysql|cassandra
+  - receiver: 'frontend-pager'
+    group_by: [product, environment]
+    match:
+      team: frontend
+```
+
