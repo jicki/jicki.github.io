@@ -1,4 +1,4 @@
-# kubernetes 的挂载传播 mountPropagation
+# kubernetes 的挂载传播 
 
 
 # kubernetes 的挂载传播 mountPropagation
@@ -82,6 +82,7 @@ ls /home/none
 
 ```
 
+---
 
 
 2. mountPropagation: HostToContainer
@@ -135,6 +136,8 @@ ls /home/hostto
 backups  cache	lib  local  lock  log  mail  opt  run  spool  tmp
 
 ```
+
+---
 
 
 3. mountPropagation: Bidirectional
@@ -237,7 +240,7 @@ backups  cache	lib  local  lock  log  mail  opt  run  spool  tmp
 
 
 
-# linux mount 的几种类型
+##  linux mount 的几种类型
 
 
 * 上面介绍了 kubernetes 的挂载传播机制, 在 linux mount 中, 也有类似的概念。
@@ -251,7 +254,6 @@ backups  cache	lib  local  lock  log  mail  opt  run  spool  tmp
   * `private mount:` - 很明显, private 就是相当于 None，挂载不会向任何一方传播。
 
   * `unbindable mount:` - 其实就是 unbindable private mount, 也就是不允许使用 --bind 的挂载。
-
 
 
 
