@@ -1,8 +1,12 @@
 # kubernetes 的挂载传播 
 
 
+# {{< figure src="/img/pexels/scrabble-blog.jpeg" >}}
+
+
 # kubernetes 的挂载传播 mountPropagation
 
+---
 
 
 * 说明
