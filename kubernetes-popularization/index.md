@@ -1038,8 +1038,141 @@ type: kubernetes.io/service-account-token
 
 
 
+## Kubernetes 存储
+
+* 在 Kubernetes 中后端存储是有状态服务最重要的系统, kubernetes 中的存储涉及到不同的组件, 多各控制器的协作。
+
+![图7][7]
 
 
+
+### 原理分析
+
+---
+
+* `volume` 的生命周期, 从 `Pods` 创建开始 `volume` 会经历如下几个阶段.
+
+  * `volume` 创建 --> 使用
+
+    * `provision` 阶段,  `volume` 创建/分配 成功.
+
+    * `attach` 阶段,  `volume` 被挂载到 `pod` 所在的 `node` 节点中.
+
+      * 先挂载到 `node` 节点中的全局路径中, 如:  `/var/lib/kubelet/plugins/kubernetes.io/csi/....` 
+
+      * 然后映射到 `Pod` 对应路径， 如: `/var/lib/kubelet/pods/49a5fede-b811-11e8-844f-fa7378845e00/volumes/kubernetes.io~csi/...`
+
+    * `mount` 阶段,  `volume` 被挂载为容器文件系统 并且 映射到对应的 `pod` 里. 相当于 `docker run -v`
+
+
+---
+
+
+  * `volume` 卸载 --> 回收
+
+    * `umount` 阶段, `volume` 和对应的 `pod` 解除映射, 并且从文件系统中 `umount`. 既 `/var/lib/kubelet/pods/49a5fede-b811-11e8-844f-fa7378845e00/volumes/kubernetes.io~csi/...` 此类目录.
+
+    * `detach` 阶段, `volume` 从对应的 `node` 中卸载.
+
+    * `recycle` 阶段, `volume` 被后端文件系统回收.
+
+
+---
+
+* `volume` 生命周期管理, 需要不同的控制器处理.
+
+
+  * `PV Controller` -  负责创建和回收 `volume`.
+
+  * `attach detach Controller` - 负责 挂载和卸载 `volume`.
+
+  * `volume Manager` - 负责 mount 和 umount  `volume`.
+
+
+---
+
+
+> Pod 创建过程
+
+
+* `Pod` 绑定 `volume` 的过程.
+
+
+  * pvc 绑定 pv 由 `PV Controller` 负责完成. 顺利完成可以查看到 pvc 状态为 `Bound`.
+
+![图8][8]
+
+
+
+
+  * 将 `volume` 挂载到对应的 Pod 中, 是由 `attach detach Controller` 负责完成.
+
+    * 如果 pod 分配到 `Node`节点，并且对应 `volume` 已经创建, 则将 `volume` 挂载到对应 `node`节点中，并且给 `node` 节点资源增加 `volume` 已经挂载的状态信息.
+
+    * 通过查看 `kubectl get nodes k8s-node-1 -o yaml` 中的  volumesAttached 与 volumesInUse 字段, 可以查看节点中 `volume` 的已挂载的状态信息.
+
+
+
+  * 将 `volume` 从 `Node` 映射到对应的容器文件系统中, 是由 `volume manager` 负责完成的.
+
+    *  pod 分配到 `Node` 节点后, 获取 Pod 需要的 `volume`，通过对比 `Node`节点状态中的 `volumesAttached`，确认 `volume` 是否已经 attach 到 `Node`节点, 如果 attach 到 `Node`节点中, 则将自身`actualStateOfWorld`中的 `volume` 状态设置成 `attached`. 
+
+      * `attached` 状态 -- 先将 `volume` 挂载到 `Node` 节点的全局路径中, 然后映射到 `Pod` 对应的路径中. 最后将 `actualStateOfWorld` 的状态设置为 成功. 
+
+      * `Pod Controller` 确认卷已经映射成功, 启动 Pod.
+
+---
+
+> Pod 删除过程
+
+* `Pod Controller` watch 到 `Pod` 处于被删除状态, 执行 `killPod` 操作, 删除 Pod.
+
+
+* `volume Manager` 获取到 Pod 被删除的信息, 会执行如下几步: 
+
+  * 将 Pod 从 `desiredStateOfWorld` 的缓存信息中清除. 
+  
+    * 首先查找到 `Node` 节点中移除掉的 `Pod`. 
+    
+    * 将 `Pod` 从关联的 `volume`列表中清除. 
+    
+    * 如果发现 `volume` 未关联 `Pod`, 则将 `volume` 从 `desiredStateOfWorld` 清除.
+
+
+  * `actualStateOfWorld` 中已经挂载的 `volume` 和 `desiredStateOfWorld` 发现 Pod 不应该挂载, 执行 `UmountVolume` 操作, 将 Pod 和 `volume` 映射关系解除, 并将 Pod 从 `actualStateOfWorld` 的 `volume` 信息中剔除.
+  
+    * 首先找到实际挂载但是期望不挂载的 `volume`.
+
+      * 将 `volume` 从 Pod 映射中 `umount`掉, **注:** 此时 全局路径 不会被 `umount`.
+
+      * 设置 `actualStateOfWorld` 缓存信息 `volume` 已从 Pod 中 `umount`.
+
+      * 将 Pod 从 `volume` 关联的 Pod 集合中剔除.
+
+
+    * 此时如果实际状态中 `volume` 没有关联任何 Pod, 则说明 `volume` 可以完全与节点分离. 
+    
+      * 则先执行 `UnmountDevice` 将 `volume` 的全局路径 `umount`, 等到下次 `reconcile` 时执行 `MarkVolumeAsDetached` 将 `volume` 完全从实际状态中删除掉.
+
+    
+
+  * `attach detach Controller` 发现挂载到 `Node`节点的 `volume` 没有被 Pod 使用, 执行 `detach` 操作, 将卷从 `Node` 节点 `detach`, 此时 `volume` 完全处于集群中未被使用的状态.
+
+
+---
+
+
+### Kubernetes 存储特点总结
+
+* 不同组件通过资源状态协作. 
+
+  * `attach detach Controller` -  需要 PVC 绑定 PV 的状态信息. 
+  
+  * `volume Manager` 需要 `Node` 节点 status 中 volume attached 状态信息.
+
+---
+
+* 组件通过 `reconcile` 方式达到期望状态, 并且状态可能需要多次 `reconcile` 中完成, 如 Pod 清除掉后, `volume` 最终和 `Node` 节点分离.
 
 
 
@@ -1058,4 +1191,8 @@ type: kubernetes.io/service-account-token
   [5]: https://jicki.cn/img/posts/kubernetes/node-node-pod.gif
 
   [6]: https://jicki.cn/img/posts/kubernetes/rbac.png
+
+  [7]: https://jicki.cn/img/posts/kubernetes/mount.png
+
+  [8]: https://jicki.cn/img/posts/kubernetes/pvc-pv.png
 
