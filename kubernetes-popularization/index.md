@@ -1040,7 +1040,12 @@ type: kubernetes.io/service-account-token
 
 ## Kubernetes 存储
 
-* 在 Kubernetes 中后端存储是有状态服务最重要的系统, kubernetes 中的存储涉及到不同的组件, 多各控制器的协作。
+
+* 在 Kubernetes 中后端存储是有状态服务最重要的系统, kubernetes 中的存储涉及到不同的组件, 多个控制器的协作。
+
+
+---
+
 
 ![图7][7]
 
