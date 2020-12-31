@@ -84,7 +84,7 @@ But!
 
 > Kubernetes Operator 工作流程
 
-*  如下我们开发一个名为 `PodBuggerTool` 的 Kubernetes Operator . 如下为  Operator PodBuggerTool 工作流程
+*  如下是一个名为 `PodBuggerTool` 的 Kubernetes Operator . 如下为  Operator PodBuggerTool 工作流程
 
 
 {{< figure src="/img/posts/kubernetes/operator-workflow.gif" >}}
