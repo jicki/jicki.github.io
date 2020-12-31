@@ -46,8 +46,7 @@ But!
 ## 如何开发 Operator
 
 
-![图2][2]
-
+{{< figure src="/img/posts/kubernetes/kubernetes-go.png" >}}
 
 
 `定制控制器` 支持多种语言开发, 如: Golang、Python 等, 我们只需要实现 Controller 与 Kubernetes API 通信既可。
@@ -88,10 +87,12 @@ But!
 *  如下我们开发一个名为 `PodBuggerTool` 的 Kubernetes Operator . 如下为  Operator PodBuggerTool 工作流程
 
 
-![图3][3]
+{{< figure src="/img/posts/kubernetes/operator-workflow.gif" >}}
 
 
 ---
+
+{{< figure src="/img/posts/kubernetes/kubernetes-logs.png" >}}
 
 1. 不断 Watching  Pods 的 事件(events).
 
@@ -105,26 +106,3 @@ But!
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  [1]: https://jicki.cn/img/posts/kubernetes/kubernetes-logs.png
-  [2]: https://jicki.cn/img/posts/kubernetes/kubernetes-go.png
-  [3]: https://jicki.cn/img/posts/kubernetes/operator-workflow.gif
