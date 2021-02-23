@@ -5,7 +5,7 @@
 {{< image src="/img/jicki-logo.png" caption="小炒肉 (`技术博客`)" >}}
 
 
-{{< music auto="https://music.163.com/#/playlist?id=5088826407" >}}
+{{< music auto="https://music.163.com/#/playlist?id=6630198673" >}}
 
 
 
