@@ -1,7 +1,7 @@
 # InfluxDB 高可用解决方案
 
 
-# {{< figure src="/img/influxdb/influxdb-logo.png" >}}
+# {{< figure src="/img/posts/influxdb/influxdb-logo.png" >}}
 
 
 # InfluxDB
