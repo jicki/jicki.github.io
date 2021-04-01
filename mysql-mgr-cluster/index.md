@@ -78,13 +78,24 @@
 
 ---
 
-# MGR 事务生命周期
+## MGR 事务原理详解
 
 > MGR 事务中 各模块的原理, 以及 事务的生命周期
 
+
+### MGR 事务生命周期
+
+
+* 当 Master1 上有事务要执行时, 对 Master1 是来说本地事务, 对于 Master2 、Master3 来说是远端事务; 
+
+* Master1 上在事务在被执行后, 会把执行事务信息广播给集群各个节点(Master1、Master2 、Master3), 包括 Master1 本身, 通过 `Paxos` 模块广播给 `MGR` 集群各个节点, `半数`以上的节点同意并且达成共识, 之后共识信息进入各个节点的冲突检测 `certify` 模块, 各个节点各自进行冲突检测验证, 最终保证事务在集群中最终一致性。
+
+* 在冲突检测通过之后, 本地事务在 Master1 直接提交即可, 否则直接回滚。远端事务在 Master2 和 Master3 分别先更新到 `relay log`, 然后应用到 `binlog`, 完成数据的同步, 否则直接放弃该事务。
+
+
 ---
 
-## MGR 各模块原理
+### MGR 各模块原理
 
 ---
 
@@ -98,7 +109,9 @@
 
     * `transaction message` 广播信息: 既 保存着事务要更新行的的相关信息, 有 `transaction_context_log_event` (事务上下文信息) 和 `gtid_log_event` 及 `log_event_group` 三部分组成。 其中 `transaction_context_log_event` 又由 `write set` 以及 `gtid_executed` 组成。
 
-        * `write set` 叫写入集合, 是事务更新行相关信息的 `Hash` 值。 `write set=Hash` (库名+表名+主键(唯一键)字段信息)
+        * `write set` 叫写入集合, 是事务更新行相关信息的 `Hash` 值。 `write set=Hash` (库名+表名+主键(唯一键)字段信息) 。
+
+            * 随着 write set 不断写入 certification info 中，内存消耗会相应增大，MGR 有配套的 write set 清理线程，每隔一段时间去清理已经在节点应用或者回放的事务的 write set 信息。
 
         * `gtid_executed` 为已经执行过的事务 `gtid` 集合, 也即事务快照版本。
 
@@ -124,28 +137,17 @@
 
     * 多事务 冲突检测 原理分析 ( 多个事务 并行写入某个 MySQL 节点, 通过了 Paxos 协议模块达成一致性共识, 进行冲突检测时需遵循三个原则  `1.` 多个事务修改同一个 id 对应的数值, 需要按照先后顺序进行冲突检测。 `2.` 多个事务同时对不同的 id 进行修改, 各自进行修改即可。 `3.` 不同的事务对同一个 id 修改, 需要按照先后顺序进行冲突检测即。)
 
-        * 例如事务 T4 和事务 T5 同时更新 id=1 的行, 
+        * 例如事务 T4 和事务 T5 同时更新 id=1 的行, 事务 T6 更新 id=3 的行, 按照先来后到顺序进行冲突检测, T4 先到先进行冲突检测。
+
+            * 事务 T4, 更新 id=1 的行, 事务 T4 的 UUID_MGR 为 1-102 , 节点中冲突检测模块中的 certification info 中 id=1 的 UUID_MGR 为 1-101，很明显 T2:UUID_MGR:1-102>UUID_MGR:1-101，则 T4 冲突检测通过, 更新为 certification info 中 UUID_MGR 为 1-103。
+
+            * 事务 T5, 更新 id=1 的行, 事务 T5 的 UUID_MGR 为 1-100, 节点中冲突检测模块中的 certification info 中 id=1 的 UUID_MGR 为 1-102，其中 T5:UUID_MGR:1-100>UUID_MGR:1-102, 则 T5 冲突检测不通过。
+
+            * 事务 T6, 更新 id=3 的行, 事务 T6 的 UUID_MGR 为 1-100, 节点中冲突检测模块中的 certification info 中 id=3 的 UUID_MGR 为空, 其中 T6:UUID_MGR:1-100>UUID_MGR，则 T6 冲突检测通过, 更新为 certification info 中 UUID_MGR 为 1-101。
+
+            * 结果 -- 事务 T4 和事务 T5 并行修改 id=1，T4 写入成功，T5 丢弃，T6 写入 id=3 事务，写入成功。
 
 
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-* 当 Master1 上有事务要执行时, 对 Master1 是来说本地事务, 对于 Master2 、Master3 来说是远端事务; 
-
-* Master1 上在事务在被执行后, 会把执行事务信息广播给集群各个节点(Master1、Master2 、Master3), 包括 Master1 本身, 通过 `Paxos` 模块广播给 `MGR` 集群各个节点, `半数`以上的节点同意并且达成共识, 之后共识信息进入各个节点的冲突检测 `certify` 模块, 各个节点各自进行冲突检测验证, 最终保证事务在集群中最终一致性。
-
-* 在冲突检测通过之后, 本地事务在 Master1 直接提交即可, 否则直接回滚。远端事务在 Master2 和 Master3 分别先更新到 `relay log`, 然后应用到 `binlog`, 完成数据的同步, 否则直接放弃该事务。
 
 
