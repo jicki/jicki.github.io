@@ -43,6 +43,19 @@ But!
 
 
 
+---
+
+> 一级资源和二级资源
+
+* 正如前面所说, `Operator` 是 `CRD` 相关的控制器, 它观察并根据配置变化或集群状态变化来采取行动。但实际上控制器需要监测两种资源, 一级资源和二级资源。
+
+  * 对于 `ReplicaSet`, 一级资源是 `ReplicaSet` 本身, 指定运行的Docker镜像以及Pod的副本数。二级资源则是 `Pod`。 当 `ReplicaSet` 的定义发生改变（例如镜像版本或Pod数量）或者其中的Pod发生改变时（例如某个Pod被删除）, 控制器则会通过推出新版本来协调集群状态, 或是对Pod数量扩缩容。
+
+  * 对于 `DaemonSet`, 一级资源是 `DaemonSet` 本身, 而二级资源是 `Pod` 和 `Node`。不同之处在于, 控制器也会监测集群 `Node` 变化, 以便在群集增大或缩小时添加或删除 `Pod`。
+
+
+
+
 ## 如何开发 Operator
 
 
@@ -103,6 +116,226 @@ But!
 4. 如果我们意识到 `Pod` 包含我们感兴趣的任何 Labels，既可进行一些操作.
 
 5. 使用同样由我们的 `PodBuggerTool` 指定的 image，在此 `Pod` 中添加一个新容器（作为临时容器）（在那里，我们可以在其定义中找到 Label 与 image 的相关性）.
+
+
+
+## 开发一个 Operator
+
+* 利用 `Operator SDK` 创建一个 Pods 相关的 Operator, 它的作用是 启动一个容器 busybox 执行 Sleep 3600s , 并管理 Pods 数量的扩容和缩容。
+
+
+
+> Operator SDK
+
+
+* 安装 Operator SDK 
+
+```bash
+$ mkdir -p $GOPATH/src/github.com/operator-framework
+$ cd $GOPATH/src/github.com/operator-framework
+operator-framework$  git clone https://github.com/operator-framework/operator-sdk
+operator-framework$  cd operator-sdk
+operator-sdk [master]$ make install
+```
+
+
+
+---
+
+* 初始化 Operator 项目
+
+
+```bash
+$ mkdir -p jicki/golang/pods-operator
+$ cd jicki/golang/pods-operator
+pods-operator$ operator-sdk init --domain jicki.cn --skip-go-version-check
+
+
+Writing scaffold for you to edit...
+Writing scaffold for you to edit...
+Get controller runtime:
+$ go get sigs.k8s.io/controller-runtime@v0.7.2
+go: downloading sigs.k8s.io/controller-runtime v0.7.2
+go: downloading k8s.io/utils v0.0.0-20200912215256-4140de9c8800
+go: downloading k8s.io/component-base v0.19.2
+go: downloading k8s.io/apiextensions-apiserver v0.19.2
+go: downloading github.com/golang/groupcache v0.0.0-20191227052852-215e87163ea7
+go: downloading k8s.io/kube-openapi v0.0.0-20200805222855-6aeccd4b50c6
+go: downloading github.com/evanphx/json-patch v0.5.2
+go: downloading k8s.io/client-go v1.5.2
+Update dependencies:
+$ go mod tidy
+go: downloading github.com/onsi/ginkgo v1.14.1
+go: downloading github.com/onsi/gomega v1.10.2
+go: downloading github.com/Azure/go-autorest/autorest v0.9.6
+go: downloading golang.org/x/lint v0.0.0-20191125180803-fdd1cda4f05f
+go: downloading github.com/Azure/go-autorest/autorest/adal v0.8.2
+go: downloading cloud.google.com/go v0.51.0
+go: downloading golang.org/x/tools v0.0.0-20200616133436-c1934b75d054
+go: downloading github.com/Azure/go-autorest/autorest/mocks v0.3.0
+go: downloading github.com/Azure/go-autorest/autorest/date v0.2.0
+go: downloading github.com/nxadm/tail v1.4.4
+Next: define a resource with:
+$ operator-sdk create api
+```
+
+
+```bash
+pods-operator$  tree
+
+.
+├── config
+│   ├── default
+│   │   ├── kustomization.yaml
+│   │   ├── manager_auth_proxy_patch.yaml
+│   │   └── manager_config_patch.yaml
+│   ├── manager
+│   │   ├── controller_manager_config.yaml
+│   │   ├── kustomization.yaml
+│   │   └── manager.yaml
+│   ├── manifests
+│   │   └── kustomization.yaml
+│   ├── prometheus
+│   │   ├── kustomization.yaml
+│   │   └── monitor.yaml
+│   ├── rbac
+│   │   ├── auth_proxy_client_clusterrole.yaml
+│   │   ├── auth_proxy_role_binding.yaml
+│   │   ├── auth_proxy_role.yaml
+│   │   ├── auth_proxy_service.yaml
+│   │   ├── kustomization.yaml
+│   │   ├── leader_election_role_binding.yaml
+│   │   ├── leader_election_role.yaml
+│   │   ├── role_binding.yaml
+│   │   └── service_account.yaml
+│   └── scorecard
+│       ├── bases
+│       │   └── config.yaml
+│       ├── kustomization.yaml
+│       └── patches
+│           ├── basic.config.yaml
+│           └── olm.config.yaml
+├── Dockerfile
+├── go.mod
+├── go.sum
+├── hack
+│   └── boilerplate.go.txt
+├── main.go
+├── Makefile
+└── PROJECT
+
+10 directories, 29 files
+```
+
+
+
+---
+
+* 添加 `CRD` 和 `controller_manager` (控制器)
+
+
+```bash
+
+pods-operator$ operator-sdk create api --group apps --version v1alpha1 --kind PodSet --resource --controller
+
+
+Writing scaffold for you to edit...
+api/v1alpha1/podset_types.go
+controllers/podset_controller.go
+Update dependencies:
+$ go mod tidy
+Running make:
+$ make generate
+go: creating new go.mod: module tmp
+Downloading sigs.k8s.io/controller-tools/cmd/controller-gen@v0.4.1
+go: downloading sigs.k8s.io/controller-tools v0.4.1
+go: downloading github.com/spf13/cobra v1.0.0
+go: downloading k8s.io/api v0.18.2
+go: downloading k8s.io/apimachinery v0.18.2
+go: downloading gopkg.in/yaml.v3 v3.0.0-20190905181640-827449938966
+go: downloading k8s.io/apiextensions-apiserver v0.18.2
+go: downloading golang.org/x/tools v0.0.0-20200616195046-dc31b401abb5
+go: downloading github.com/gobuffalo/flect v0.2.0
+go: downloading github.com/mattn/go-isatty v0.0.8
+go: downloading github.com/mattn/go-colorable v0.1.2
+go: downloading k8s.io/utils v0.0.0-20200324210504-a9aa75ae1b89
+go: downloading sigs.k8s.io/structured-merge-diff/v3 v3.0.0
+go: downloading golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
+go: downloading golang.org/x/sys v0.0.0-20191022100944-742c48ecaeb7
+go get: added sigs.k8s.io/controller-tools v0.4.1
+/jicki/golang/pods-operator/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+
+
+```
+
+
+```bash
+pods-operator$  tree 
+.
+├── api
+│   └── v1alpha1
+│       ├── groupversion_info.go
+│       ├── podset_types.go
+│       └── zz_generated.deepcopy.go
+├── bin
+│   └── controller-gen
+├── config
+│   ├── crd
+│   │   ├── kustomization.yaml
+│   │   ├── kustomizeconfig.yaml
+│   │   └── patches
+│   │       ├── cainjection_in_podsets.yaml
+│   │       └── webhook_in_podsets.yaml
+│   ├── default
+│   │   ├── kustomization.yaml
+│   │   ├── manager_auth_proxy_patch.yaml
+│   │   └── manager_config_patch.yaml
+│   ├── manager
+│   │   ├── controller_manager_config.yaml
+│   │   ├── kustomization.yaml
+│   │   └── manager.yaml
+│   ├── manifests
+│   │   └── kustomization.yaml
+│   ├── prometheus
+│   │   ├── kustomization.yaml
+│   │   └── monitor.yaml
+│   ├── rbac
+│   │   ├── auth_proxy_client_clusterrole.yaml
+│   │   ├── auth_proxy_role_binding.yaml
+│   │   ├── auth_proxy_role.yaml
+│   │   ├── auth_proxy_service.yaml
+│   │   ├── kustomization.yaml
+│   │   ├── leader_election_role_binding.yaml
+│   │   ├── leader_election_role.yaml
+│   │   ├── podset_editor_role.yaml
+│   │   ├── podset_viewer_role.yaml
+│   │   ├── role_binding.yaml
+│   │   └── service_account.yaml
+│   ├── samples
+│   │   ├── apps_v1alpha1_podset.yaml
+│   │   └── kustomization.yaml
+│   └── scorecard
+│       ├── bases
+│       │   └── config.yaml
+│       ├── kustomization.yaml
+│       └── patches
+│           ├── basic.config.yaml
+│           └── olm.config.yaml
+├── controllers
+│   ├── podset_controller.go
+│   └── suite_test.go
+├── Dockerfile
+├── go.mod
+├── go.sum
+├── hack
+│   └── boilerplate.go.txt
+├── main.go
+├── Makefile
+└── PROJECT
+
+17 directories, 43 files
+
+```
 
 
 
