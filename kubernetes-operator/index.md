@@ -479,15 +479,557 @@ status:
 
   * `For(&appsv1alpha1.PodSet{})` 用于将 `PodSet{}` 类型指定为要监视的主要资源, 在对 `PodSet{}` 类型的资源进行 `Add/Update/Delete` 操作时, 循环发送 Request 
 
+---
+
+* `podset_controller.go` ---
+
 ```go
+/*
+Copyright 2021.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package controllers
+
+import (
+	"context"
+	"reflect"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/prometheus/common/log"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/types"
+
+	"k8s.io/apimachinery/pkg/api/errors"
+
+	"github.com/go-logr/logr"
+	"k8s.io/apimachinery/pkg/runtime"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	appsv1alpha1 "golang/api/v1alpha1"
+)
+
+// PodSetReconciler reconciles a PodSet object
+type PodSetReconciler struct {
+	client.Client
+	Log    logr.Logger
+	Scheme *runtime.Scheme
+}
+
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets/finalizers,verbs=update
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=deployments,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;
+
+// Reconcile is part of the main kubernetes reconciliation loop which aims to
+// move the current state of the cluster closer to the desired state.
+// TODO(user): Modify the Reconcile function to compare the state specified by
+// the PodSet object against the actual cluster state, and then
+// perform operations to make the cluster state reflect the state specified by
+// the user.
+//
+// For more details, check Reconcile and its Result here:
+// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.7.2/pkg/reconcile
+func (r *PodSetReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	_ = r.Log.WithValues("podset", req.NamespacedName)
+
+	// your logic here
+	podSet := &appsv1alpha1.PodSet{}
+	err := r.Get(ctx, req.NamespacedName, podSet)
+	if err != nil {
+		if errors.IsNotFound(err) {
+			// Request object not found, could have been deleted after reconcile request.
+			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
+			// Return and don't requeue
+			log.Info("PodSet resource not found. Ignoring since object must be deleted")
+			return ctrl.Result{}, nil
+		}
+		// Error reading the object - requeue the request.
+		log.Error(err, "Failed to get PodSet")
+		return ctrl.Result{}, err
+	}
+	// Check if the deployment already exists, if not create a new one
+	found := &appsv1.Deployment{}
+	err = r.Get(ctx, types.NamespacedName{Name: podSet.Name, Namespace: podSet.Namespace}, found)
+	if err != nil && errors.IsNotFound(err) {
+		// Define a new deployment
+		dep := r.deploymentForPodSet(podSet)
+		log.Info("Creating a new Deployment", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
+		err = r.Create(ctx, dep)
+		if err != nil {
+			log.Error(err, "Failed to create new Deployment", "Deployment.Namespace", dep.Namespace, "Deployment.Name", dep.Name)
+			return ctrl.Result{}, err
+		}
+		// Deployment created successfully - return and requeue
+		return ctrl.Result{Requeue: true}, nil
+	} else if err != nil {
+		log.Error(err, "Failed to get Deployment")
+		return ctrl.Result{}, err
+	}
+
+	// Ensure the deployment size is the same as the spec
+	size := podSet.Spec.Size
+	if *found.Spec.Replicas != size {
+		found.Spec.Replicas = &size
+		err = r.Update(ctx, found)
+		if err != nil {
+			log.Error(err, "Failed to update Deployment", "Deployment.Namespace", found.Namespace, "Deployment.Name", found.Name)
+			return ctrl.Result{}, err
+		}
+		// Spec updated - return and requeue
+		return ctrl.Result{Requeue: true}, nil
+	}
+
+	// Update the podSet status with the pod names
+	// List the pods for this podSet's deployment
+	podList := &corev1.PodList{}
+	listOpts := []client.ListOption{
+		client.InNamespace(podSet.Namespace),
+		client.MatchingLabels(labelsForPodSet(podSet.Name)),
+	}
+	if err = r.List(ctx, podList, listOpts...); err != nil {
+		log.Error(err, "Failed to list pods", "PodSet.Namespace", podSet.Namespace, "PodSet.Name", podSet.Name)
+		return ctrl.Result{}, err
+	}
+	podNames := getPodNames(podList.Items)
+
+	// Update status.Nodes if needed
+	if !reflect.DeepEqual(podNames, podSet.Status.Nodes) {
+		podSet.Status.Nodes = podNames
+		err := r.Status().Update(ctx, podSet)
+		if err != nil {
+			log.Error(err, "Failed to update PodSet status")
+			return ctrl.Result{}, err
+		}
+	}
+
+	return ctrl.Result{}, nil
+}
+
+// deploymentForPodSet returns Deployment object
+func (r *PodSetReconciler) deploymentForPodSet(m *appsv1alpha1.PodSet) *appsv1.Deployment {
+	ls := labelsForPodSet(m.Name)
+	replicas := m.Spec.Size
+
+	dep := &appsv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      m.Name,
+			Namespace: m.Namespace,
+		},
+		Spec: appsv1.DeploymentSpec{
+			Replicas: &replicas,
+			Selector: &metav1.LabelSelector{
+				MatchLabels: ls,
+			},
+			Template: corev1.PodTemplateSpec{
+				ObjectMeta: metav1.ObjectMeta{
+					Labels: ls,
+				},
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{{
+						Image:   "busybox",
+						Name:    "podset",
+						Command: []string{"sleep", "3600"},
+						Ports: []corev1.ContainerPort{{
+							ContainerPort: 1234,
+							Name:          "podset",
+						}},
+					}},
+				},
+			},
+		},
+	}
+	// Set PodSet instance as the owner and controller
+	_ = ctrl.SetControllerReference(m, dep, r.Scheme)
+	return dep
+}
+
+// labelsForPodSet returns the labels for selecting the resources
+// belonging to the given podSet CR name.
+func labelsForPodSet(name string) map[string]string {
+	return map[string]string{"app": "podSet", "podSet_cr": name}
+}
+
+// getPodNames returns the pod names of the array of pods passed in
+func getPodNames(pods []corev1.Pod) []string {
+	var podNames []string
+	for _, pod := range pods {
+		podNames = append(podNames, pod.Name)
+	}
+	return podNames
+}
+
 // SetupWithManager sets up the controller with the Manager.
 func (r *PodSetReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&appsv1alpha1.PodSet{}).
+		// 配置 Deployment
+    Owns(&appsv1.Deployment{}).
+		// 添加额外的配置, 如: 最大并发携程数
+		WithOptions(controller.Options{MaxConcurrentReconciles: 2}).
 		Complete(r)
 }
+
+```
+
+
+---
+
+* 生成授权的 `rbac` 清单 
+
+  * 配置权限如下权限清单到 `podset_controller.go` 文件中
+
+```yaml
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets/finalizers,verbs=update
+//+kubebuilder:rbac:groups=apps.jicki.cn,resources=deployments,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;
+```
+
+
+* 生成 ---
+
+
+```bash
+pods-operator$ make manifests
+
+
+/jicki/golang/pods-operator/bin/controller-gen "crd:trivialVersions=true,preserveUnknownFields=false" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+
+```
+
+
+* `config/rbac/role.yaml` 文件
+
+
+```yaml
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - podsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - podsets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - podsets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
 ```
 
 
 
+---
 
+> 运行 Operator
+
+
+* 首先修改一下 Dockerfile 的镜像地址 `gcr.io/distroless/static:nonroot` 改为 `alpine:3.11`
+
+
+```
+# Build the manager binary
+FROM golang:1.15 as builder
+
+ENV GOPROXY https://goproxy.cn
+ENV GOSUMDB sum.golang.google.cn
+
+WORKDIR /workspace
+# Copy the Go Modules manifests
+COPY go.mod go.mod
+COPY go.sum go.sum
+# cache deps before building and copying source so that we don't need to re-download as much
+# and so that source changes don't invalidate our downloaded layer
+RUN go mod download
+
+# Copy the go source
+COPY main.go main.go
+COPY api/ api/
+COPY controllers/ controllers/
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o manager main.go
+
+# Use distroless as minimal base image to package the manager binary
+# Refer to https://github.com/GoogleContainerTools/distroless for more details
+FROM alpine:3.11 AS final
+WORKDIR /
+COPY --from=builder /workspace/manager .
+USER 65532:65532
+
+ENTRYPOINT ["/manager"]
+```
+
+
+
+---
+* build images
+
+
+```bash
+pods-operator$ docker build -t="jicki/podset-operator:v1" .  
+
+```
+
+
+* 创建一个 deployment.yaml
+
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: podset-operator
+  namespace: jicki-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: podset-operator
+    spec:
+      serviceAccount: controller-manager
+      containers:
+      - name: podset-operator
+        image: jicki/podset-operator:v1
+        ports:
+        - containerPort: 8080
+```
+
+
+* 运行 CRD 资源
+
+
+```yaml
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: podsets.apps.jicki.cn
+  namespace: jicki-system
+spec:
+  group: apps.jicki.cn
+  names:
+    kind: PodSet
+    listKind: PodSetList
+    plural: podsets
+    singular: podset
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: PodSet is the Schema for the podsets API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PodSetSpec defines the desired state of PodSet
+            properties:
+              size:
+                description: Size is the size of the PodSet deployment
+                format: int32
+                type: integer
+            required:
+            - size
+            type: object
+          status:
+            description: PodSetStatus defines the observed state of PodSet
+            properties:
+              nodes:
+                description: Nodes are the names of the PodSet pods
+                items:
+                  type: string
+                type: array
+            required:
+            - nodes
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+```
+
+
+---
+
+* 运行 rbac 资源
+
+
+```yaml
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+  namespace: jicki-system
+rules:
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - podsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - podsets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - apps.jicki.cn
+  resources:
+  - podsets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: manager-role
+subjects:
+- kind: ServiceAccount
+  name: controller-manager
+  namespace: jicki-system
+
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: controller-manager
+  namespace: jicki-system
+
+```

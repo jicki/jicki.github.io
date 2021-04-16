@@ -1,8 +1,8 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Kubernetes Operator 模式 - 小炒肉</title><meta name=Description content="Kubernetes Operator"><meta property="og:title" content="Kubernetes Operator 模式"><meta property="og:description" content="Kubernetes Operator"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/kubernetes-operator/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-09-24T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-24T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Kubernetes Operator 模式"><meta name=twitter:description content="Kubernetes Operator"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/kubernetes-operator/><link rel=prev href=https://jicki.cn/prometheus/><link rel=next href=https://jicki.cn/kubernetes-mount-propagation/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes Operator 模式","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/kubernetes-operator\/"},"genre":"posts","keywords":"kubernetes","wordcount":3064,"url":"https:\/\/jicki.cn\/kubernetes-operator\/","datePublished":"2020-09-24T00:00:00+00:00","dateModified":"2020-09-24T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Kubernetes Operator"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Kubernetes Operator 模式 - 小炒肉</title><meta name=Description content="Kubernetes Operator"><meta property="og:title" content="Kubernetes Operator 模式"><meta property="og:description" content="Kubernetes Operator"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/kubernetes-operator/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-09-24T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-24T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Kubernetes Operator 模式"><meta name=twitter:description content="Kubernetes Operator"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/kubernetes-operator/><link rel=prev href=https://jicki.cn/prometheus/><link rel=next href=https://jicki.cn/kubernetes-mount-propagation/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Kubernetes Operator 模式","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/kubernetes-operator\/"},"genre":"posts","keywords":"kubernetes","wordcount":4610,"url":"https:\/\/jicki.cn\/kubernetes-operator\/","datePublished":"2020-09-24T00:00:00+00:00","dateModified":"2020-09-24T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Kubernetes Operator"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Kubernetes Operator 模式</h1><h2 class=single-subtitle>Kubernetes Operator 模式</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-09-24>2020-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3064 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;<span id=/kubernetes-operator/ class=leancloud_visitors data-flag-title="Kubernetes Operator 模式">
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Kubernetes Operator 模式</h1><h2 class=single-subtitle>Kubernetes Operator 模式</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-09-24>2020-09-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4610 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;<span id=/kubernetes-operator/ class=leancloud_visitors data-flag-title="Kubernetes Operator 模式">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
 <span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#如何开发-operator>如何开发 Operator</a><ul><li><a href=#docker--kubernetes>Docker / Kubernetes</a></li></ul></li><li><a href=#开发一个-operator>开发一个 Operator</a></li></ul></nav></div></div><div class=content id=content><figure><img src=/img/posts/kubernetes/operator.jpeg></figure><h1 id=kubernetes-operator>Kubernetes Operator</h1><p><strong>Operator 是 Kubernetes 的扩展软件，它利用 自定义资源(Custom Resource)管理应用及其组件。 Operator 遵循 Kubernetes 的理念，特别是在控制回路方面。其目的应该是帮助我们更轻松地解决应用程序 Pod 中的某些问题。</strong></p><hr><blockquote><p>为什么需要 Operator</p></blockquote><p>在 Kubernetes 中已经提供了很多控制器(Controller), 如: Deployments、Statefulsets、ReplicaSet、DaemonSet 等, 它们负责 管理/维护 Pods 对象的状态。</p><p>But!</p><p>如果我们需要对一些专业的服务如: Mysql、Prometheus 等. 进行更好的控制与管理, 我们可能需要更精细, 更具体的领域知识进行操作, 以正确管理我们的应用程序和组件的状态, 但是实际上我们希望服务的 开发人员/用户/管理者 可以更容易, 更透明的进行一些重复的操作与控制。 这时我们就需要使用 Kubernetes Operator. Operator 可以让 开发人员/用户/管理者 在使用这些专业的服务时, 像使用 Kubernetes 一样 只需要编写约定的内置资源就可以简单的 创建/管理 这些服务.</p><hr><blockquote><p>Custom Resource</p></blockquote><ul><li><p><code>定制资源（Custom Resource）</code> - 是对 Kubernetes API 的扩展。</p><ul><li><p><code>定制资源</code> - 所代表的是对特定 Kubernetes 安装的一种定制。 不过，很多 Kubernetes 核心功能现在都用定制资源来实现，这使得 Kubernetes 更加模块化。</p></li><li><p><code>定制资源</code> - 可以通过动态注册的方式在运行中的集群内或出现或消失，集群管理员可以独立于集群 更新定制资源。一旦某定制资源被安装，用户可以使用 kubectl 来创建和访问其中的对象，就像他们为 pods 这种内置资源所做的一样。</p></li><li><p><code>资源（Resource）</code> - 是 Kubernetes API 中的一个端点， 其中存储的是某个类别的 API 对象 的一个集合。 例如内置的 Pods 资源包含一组 Pod 对象。</p></li></ul></li></ul><hr><blockquote><p>Custom Controller</p></blockquote><ul><li><p><code>定制资源 (Custom Resource)</code> - 本身而言，它只能用来存取结构化的数据。</p></li><li><p><code>控制器</code> - 负责将结构化的数据解释为用户所期望状态的记录，并持续地维护该状态。</p></li><li><p>所以当 <code>定制资源</code> 与 <code>定制控制器</code> 相结合时，定制资源就能够提供真正的声明式 API（Declarative API）。使用声明式 API, 你可以 声明 或者设定你的资源的期望状态，并尝试让 Kubernetes 对象的当前状态 同步到其期望状态。</p></li></ul><hr><blockquote><p>一级资源和二级资源</p></blockquote><ul><li><p>正如前面所说, <code>Operator</code> 是 <code>CRD</code> 相关的控制器, 它观察并根据配置变化或集群状态变化来采取行动。但实际上控制器需要监测两种资源, 一级资源和二级资源。</p><ul><li><p>对于 <code>ReplicaSet</code>, 一级资源是 <code>ReplicaSet</code> 本身, 指定运行的Docker镜像以及Pod的副本数。二级资源则是 <code>Pod</code>。 当 <code>ReplicaSet</code> 的定义发生改变（例如镜像版本或Pod数量）或者其中的Pod发生改变时（例如某个Pod被删除）, 控制器则会通过推出新版本来协调集群状态, 或是对Pod数量扩缩容。</p></li><li><p>对于 <code>DaemonSet</code>, 一级资源是 <code>DaemonSet</code> 本身, 而二级资源是 <code>Pod</code> 和 <code>Node</code>。不同之处在于, 控制器也会监测集群 <code>Node</code> 变化, 以便在群集增大或缩小时添加或删除 <code>Pod</code>。</p></li></ul></li></ul><h2 id=如何开发-operator>如何开发 Operator</h2><figure><img src=/img/posts/kubernetes/kubernetes-go.png></figure><p><code>定制控制器</code> 支持多种语言开发, 如: Golang、Python 等, 我们只需要实现 Controller 与 Kubernetes API 通信既可。</p><ul><li><p>在开发 Kubernetes Operator 时需要遵循 Kubernetes 规则, 其实社区中已经有大量的开源可用的框架. 如:</p><ul><li><p><code>Kubebuilder</code> - <a href=https://github.com/kubernetes-sigs/kubebuilder>https://github.com/kubernetes-sigs/kubebuilder</a></p><ul><li>该框架来自 kubernetes-SIG（特殊兴趣小组），成立于2018年7月。它有望提高速度并减少开发人员管理的复杂性。</li></ul></li><li><p><code>Operator SDK</code> - <a href=https://sdk.operatorframework.io/>https://sdk.operatorframework.io/</a></p><ul><li><p>这是 <code>Red Hat</code> 的产品, 不仅具有使用 Go语言 构建 <code>Operator</code> 的能力, 而且还具有 <code>Ansible</code>和 <code>Helm Charts</code>的 构建能力。</p></li><li><p>它与 <code>CNCF Landscape Operator Framework</code> 相关联。</p><ul><li><code>CNCF Landscape Operator Framework</code> - <a href="https://landscape.cncf.io/selected=operator-framework">https://landscape.cncf.io/selected=operator-framework</a></li></ul></li></ul></li><li><p><code>KUDO</code> - <a href=https://kudo.dev/>https://kudo.dev/</a></p><ul><li>KUDO 号称是使用 声明式方式 构建生产级别的 Kubernetes Operator 服务.</li></ul></li></ul></li></ul><h3 id=docker--kubernetes>Docker / Kubernetes</h3><ul><li><p>在开发 Operator 之前, 我们需要一个 Kubernetes, 如果您没有 Kubernetes，我建议您使用 <code>Kind</code>。</p><ul><li><code>Kind</code> - <a href=https://kind.sigs.k8s.io/>https://kind.sigs.k8s.io/</a> &ndash; 它是一种使用 Docker 容器做为 <code>Node</code> 运行 Kubernetes 本地集群的工具。</li></ul></li></ul><hr><blockquote><p>Kubernetes Operator 工作流程</p></blockquote><ul><li>如下是一个名为 <code>PodBuggerTool</code> 的 Kubernetes Operator . 如下为 Operator PodBuggerTool 工作流程</li></ul><figure><img src=/img/posts/kubernetes/operator-workflow.gif></figure><hr><figure><img src=/img/posts/kubernetes/kubernetes-logs.png></figure><ol><li><p>不断 Watching Pods 的 事件(events).</p></li><li><p>当在事件 events 普抓到 创建/更新 的事件时, 对该事件进行处理.</p></li><li><p>将 <code>Pod</code> 的 Labels 与我们使用 <code>PodBuggerTool</code> 插入的 Labels 进行比较（基于其CRD）.</p></li><li><p>如果我们意识到 <code>Pod</code> 包含我们感兴趣的任何 Labels，既可进行一些操作.</p></li><li><p>使用同样由我们的 <code>PodBuggerTool</code> 指定的 image，在此 <code>Pod</code> 中添加一个新容器（作为临时容器）（在那里，我们可以在其定义中找到 Label 与 image 的相关性）.</p></li></ol><h2 id=开发一个-operator>开发一个 Operator</h2><ul><li>利用 <code>Operator SDK</code> 创建一个 Pods 相关的 Operator, 它的作用是 启动一个容器 busybox 执行 Sleep 3600s , 并管理 Pods 数量的扩容和缩容。</li></ul><blockquote><p>Operator SDK</p></blockquote><ul><li>安装 Operator SDK Version 1.5.0</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
@@ -543,17 +543,963 @@ go get: added sigs.k8s.io/controller-tools v0.4.1
 </span><span class=w>    </span><span class=k>plural</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
 </span><span class=w>  </span><span class=k>conditions</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
 </span><span class=w>  </span><span class=k>storedVersions</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
-</span></code></pre></td></tr></table></div></div><hr><ul><li><p><code>controllers</code> 控制器</p><ul><li><p><code>controllers/podset_controller.go</code> 文件中</p></li><li><p><code>NewControllerManagedBy</code> 用于各种控制器的配置</p></li><li><p><code>For(&appsv1alpha1.PodSet{})</code> 用于将 <code>PodSet{}</code> 类型指定为要监视的主要资源, 在对 <code>PodSet{}</code> 类型的资源进行 <code>Add/Update/Delete</code> 操作时, 循环发送 Request</p></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td></tr></table></div></div><hr><ul><li><p><code>controllers</code> 控制器</p><ul><li><p><code>controllers/podset_controller.go</code> 文件中</p></li><li><p><code>NewControllerManagedBy</code> 用于各种控制器的配置</p></li><li><p><code>For(&appsv1alpha1.PodSet{})</code> 用于将 <code>PodSet{}</code> 类型指定为要监视的主要资源, 在对 <code>PodSet{}</code> 类型的资源进行 <code>Add/Update/Delete</code> 操作时, 循环发送 Request</p></li></ul></li></ul><hr><ul><li><code>podset_controller.go</code> &mdash;</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=cm>/*
+</span><span class=cm>Copyright 2021.
+</span><span class=cm>
+</span><span class=cm>Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+</span><span class=cm>you may not use this file except in compliance with the License.
+</span><span class=cm>You may obtain a copy of the License at
+</span><span class=cm>
+</span><span class=cm>    http://www.apache.org/licenses/LICENSE-2.0
+</span><span class=cm>
+</span><span class=cm>Unless required by applicable law or agreed to in writing, software
+</span><span class=cm>distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+</span><span class=cm>WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</span><span class=cm>See the License for the specific language governing permissions and
+</span><span class=cm>limitations under the License.
+</span><span class=cm>*/</span>
+
+<span class=kn>package</span> <span class=nx>controllers</span>
+
+<span class=kn>import</span> <span class=p>(</span>
+	<span class=s>&#34;context&#34;</span>
+	<span class=s>&#34;reflect&#34;</span>
+
+	<span class=nx>metav1</span> <span class=s>&#34;k8s.io/apimachinery/pkg/apis/meta/v1&#34;</span>
+
+	<span class=s>&#34;github.com/prometheus/common/log&#34;</span>
+	<span class=nx>appsv1</span> <span class=s>&#34;k8s.io/api/apps/v1&#34;</span>
+	<span class=nx>corev1</span> <span class=s>&#34;k8s.io/api/core/v1&#34;</span>
+	<span class=s>&#34;k8s.io/apimachinery/pkg/types&#34;</span>
+
+	<span class=s>&#34;k8s.io/apimachinery/pkg/api/errors&#34;</span>
+
+	<span class=s>&#34;github.com/go-logr/logr&#34;</span>
+	<span class=s>&#34;k8s.io/apimachinery/pkg/runtime&#34;</span>
+	<span class=nx>ctrl</span> <span class=s>&#34;sigs.k8s.io/controller-runtime&#34;</span>
+	<span class=s>&#34;sigs.k8s.io/controller-runtime/pkg/client&#34;</span>
+
+	<span class=nx>appsv1alpha1</span> <span class=s>&#34;golang/api/v1alpha1&#34;</span>
+<span class=p>)</span>
+
+<span class=c1>// PodSetReconciler reconciles a PodSet object
+</span><span class=c1></span><span class=kd>type</span> <span class=nx>PodSetReconciler</span> <span class=kd>struct</span> <span class=p>{</span>
+	<span class=nx>client</span><span class=p>.</span><span class=nx>Client</span>
+	<span class=nx>Log</span>    <span class=nx>logr</span><span class=p>.</span><span class=nx>Logger</span>
+	<span class=nx>Scheme</span> <span class=o>*</span><span class=nx>runtime</span><span class=p>.</span><span class=nx>Scheme</span>
+<span class=p>}</span>
+
+<span class=c1>//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets,verbs=get;list;watch;create;update;patch;delete
+</span><span class=c1>//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets/status,verbs=get;update;patch
+</span><span class=c1>//+kubebuilder:rbac:groups=apps.jicki.cn,resources=podsets/finalizers,verbs=update
+</span><span class=c1>//+kubebuilder:rbac:groups=apps.jicki.cn,resources=deployments,verbs=get;list;watch;create;update;patch;delete
+</span><span class=c1>//+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;
+</span><span class=c1></span>
+<span class=c1>// Reconcile is part of the main kubernetes reconciliation loop which aims to
+</span><span class=c1>// move the current state of the cluster closer to the desired state.
+</span><span class=c1>// TODO(user): Modify the Reconcile function to compare the state specified by
+</span><span class=c1>// the PodSet object against the actual cluster state, and then
+</span><span class=c1>// perform operations to make the cluster state reflect the state specified by
+</span><span class=c1>// the user.
+</span><span class=c1>//
+</span><span class=c1>// For more details, check Reconcile and its Result here:
+</span><span class=c1>// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.7.2/pkg/reconcile
+</span><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>r</span> <span class=o>*</span><span class=nx>PodSetReconciler</span><span class=p>)</span> <span class=nf>Reconcile</span><span class=p>(</span><span class=nx>ctx</span> <span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span> <span class=nx>req</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Request</span><span class=p>)</span> <span class=p>(</span><span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>,</span> <span class=kt>error</span><span class=p>)</span> <span class=p>{</span>
+	<span class=nx>_</span> <span class=p>=</span> <span class=nx>r</span><span class=p>.</span><span class=nx>Log</span><span class=p>.</span><span class=nf>WithValues</span><span class=p>(</span><span class=s>&#34;podset&#34;</span><span class=p>,</span> <span class=nx>req</span><span class=p>.</span><span class=nx>NamespacedName</span><span class=p>)</span>
+
+	<span class=c1>// your logic here
+</span><span class=c1></span>	<span class=nx>podSet</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>appsv1alpha1</span><span class=p>.</span><span class=nx>PodSet</span><span class=p>{}</span>
+	<span class=nx>err</span> <span class=o>:=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>req</span><span class=p>.</span><span class=nx>NamespacedName</span><span class=p>,</span> <span class=nx>podSet</span><span class=p>)</span>
+	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+		<span class=k>if</span> <span class=nx>errors</span><span class=p>.</span><span class=nf>IsNotFound</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span> <span class=p>{</span>
+			<span class=c1>// Request object not found, could have been deleted after reconcile request.
+</span><span class=c1></span>			<span class=c1>// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
+</span><span class=c1></span>			<span class=c1>// Return and don&#39;t requeue
+</span><span class=c1></span>			<span class=nx>log</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;PodSet resource not found. Ignoring since object must be deleted&#34;</span><span class=p>)</span>
+			<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=kc>nil</span>
+		<span class=p>}</span>
+		<span class=c1>// Error reading the object - requeue the request.
+</span><span class=c1></span>		<span class=nx>log</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Failed to get PodSet&#34;</span><span class=p>)</span>
+		<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=nx>err</span>
+	<span class=p>}</span>
+	<span class=c1>// Check if the deployment already exists, if not create a new one
+</span><span class=c1></span>	<span class=nx>found</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>appsv1</span><span class=p>.</span><span class=nx>Deployment</span><span class=p>{}</span>
+	<span class=nx>err</span> <span class=p>=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>Get</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>types</span><span class=p>.</span><span class=nx>NamespacedName</span><span class=p>{</span><span class=nx>Name</span><span class=p>:</span> <span class=nx>podSet</span><span class=p>.</span><span class=nx>Name</span><span class=p>,</span> <span class=nx>Namespace</span><span class=p>:</span> <span class=nx>podSet</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>},</span> <span class=nx>found</span><span class=p>)</span>
+	<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=o>&amp;&amp;</span> <span class=nx>errors</span><span class=p>.</span><span class=nf>IsNotFound</span><span class=p>(</span><span class=nx>err</span><span class=p>)</span> <span class=p>{</span>
+		<span class=c1>// Define a new deployment
+</span><span class=c1></span>		<span class=nx>dep</span> <span class=o>:=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>deploymentForPodSet</span><span class=p>(</span><span class=nx>podSet</span><span class=p>)</span>
+		<span class=nx>log</span><span class=p>.</span><span class=nf>Info</span><span class=p>(</span><span class=s>&#34;Creating a new Deployment&#34;</span><span class=p>,</span> <span class=s>&#34;Deployment.Namespace&#34;</span><span class=p>,</span> <span class=nx>dep</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>,</span> <span class=s>&#34;Deployment.Name&#34;</span><span class=p>,</span> <span class=nx>dep</span><span class=p>.</span><span class=nx>Name</span><span class=p>)</span>
+		<span class=nx>err</span> <span class=p>=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>Create</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>dep</span><span class=p>)</span>
+		<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+			<span class=nx>log</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Failed to create new Deployment&#34;</span><span class=p>,</span> <span class=s>&#34;Deployment.Namespace&#34;</span><span class=p>,</span> <span class=nx>dep</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>,</span> <span class=s>&#34;Deployment.Name&#34;</span><span class=p>,</span> <span class=nx>dep</span><span class=p>.</span><span class=nx>Name</span><span class=p>)</span>
+			<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=nx>err</span>
+		<span class=p>}</span>
+		<span class=c1>// Deployment created successfully - return and requeue
+</span><span class=c1></span>		<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{</span><span class=nx>Requeue</span><span class=p>:</span> <span class=kc>true</span><span class=p>},</span> <span class=kc>nil</span>
+	<span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+		<span class=nx>log</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Failed to get Deployment&#34;</span><span class=p>)</span>
+		<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=nx>err</span>
+	<span class=p>}</span>
+
+	<span class=c1>// Ensure the deployment size is the same as the spec
+</span><span class=c1></span>	<span class=nx>size</span> <span class=o>:=</span> <span class=nx>podSet</span><span class=p>.</span><span class=nx>Spec</span><span class=p>.</span><span class=nx>Size</span>
+	<span class=k>if</span> <span class=o>*</span><span class=nx>found</span><span class=p>.</span><span class=nx>Spec</span><span class=p>.</span><span class=nx>Replicas</span> <span class=o>!=</span> <span class=nx>size</span> <span class=p>{</span>
+		<span class=nx>found</span><span class=p>.</span><span class=nx>Spec</span><span class=p>.</span><span class=nx>Replicas</span> <span class=p>=</span> <span class=o>&amp;</span><span class=nx>size</span>
+		<span class=nx>err</span> <span class=p>=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>Update</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>found</span><span class=p>)</span>
+		<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+			<span class=nx>log</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Failed to update Deployment&#34;</span><span class=p>,</span> <span class=s>&#34;Deployment.Namespace&#34;</span><span class=p>,</span> <span class=nx>found</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>,</span> <span class=s>&#34;Deployment.Name&#34;</span><span class=p>,</span> <span class=nx>found</span><span class=p>.</span><span class=nx>Name</span><span class=p>)</span>
+			<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=nx>err</span>
+		<span class=p>}</span>
+		<span class=c1>// Spec updated - return and requeue
+</span><span class=c1></span>		<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{</span><span class=nx>Requeue</span><span class=p>:</span> <span class=kc>true</span><span class=p>},</span> <span class=kc>nil</span>
+	<span class=p>}</span>
+
+	<span class=c1>// Update the podSet status with the pod names
+</span><span class=c1></span>	<span class=c1>// List the pods for this podSet&#39;s deployment
+</span><span class=c1></span>	<span class=nx>podList</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>corev1</span><span class=p>.</span><span class=nx>PodList</span><span class=p>{}</span>
+	<span class=nx>listOpts</span> <span class=o>:=</span> <span class=p>[]</span><span class=nx>client</span><span class=p>.</span><span class=nx>ListOption</span><span class=p>{</span>
+		<span class=nx>client</span><span class=p>.</span><span class=nf>InNamespace</span><span class=p>(</span><span class=nx>podSet</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>),</span>
+		<span class=nx>client</span><span class=p>.</span><span class=nf>MatchingLabels</span><span class=p>(</span><span class=nf>labelsForPodSet</span><span class=p>(</span><span class=nx>podSet</span><span class=p>.</span><span class=nx>Name</span><span class=p>)),</span>
+	<span class=p>}</span>
+	<span class=k>if</span> <span class=nx>err</span> <span class=p>=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>List</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>podList</span><span class=p>,</span> <span class=nx>listOpts</span><span class=o>...</span><span class=p>);</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+		<span class=nx>log</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Failed to list pods&#34;</span><span class=p>,</span> <span class=s>&#34;PodSet.Namespace&#34;</span><span class=p>,</span> <span class=nx>podSet</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>,</span> <span class=s>&#34;PodSet.Name&#34;</span><span class=p>,</span> <span class=nx>podSet</span><span class=p>.</span><span class=nx>Name</span><span class=p>)</span>
+		<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=nx>err</span>
+	<span class=p>}</span>
+	<span class=nx>podNames</span> <span class=o>:=</span> <span class=nf>getPodNames</span><span class=p>(</span><span class=nx>podList</span><span class=p>.</span><span class=nx>Items</span><span class=p>)</span>
+
+	<span class=c1>// Update status.Nodes if needed
+</span><span class=c1></span>	<span class=k>if</span> <span class=p>!</span><span class=nx>reflect</span><span class=p>.</span><span class=nf>DeepEqual</span><span class=p>(</span><span class=nx>podNames</span><span class=p>,</span> <span class=nx>podSet</span><span class=p>.</span><span class=nx>Status</span><span class=p>.</span><span class=nx>Nodes</span><span class=p>)</span> <span class=p>{</span>
+		<span class=nx>podSet</span><span class=p>.</span><span class=nx>Status</span><span class=p>.</span><span class=nx>Nodes</span> <span class=p>=</span> <span class=nx>podNames</span>
+		<span class=nx>err</span> <span class=o>:=</span> <span class=nx>r</span><span class=p>.</span><span class=nf>Status</span><span class=p>().</span><span class=nf>Update</span><span class=p>(</span><span class=nx>ctx</span><span class=p>,</span> <span class=nx>podSet</span><span class=p>)</span>
+		<span class=k>if</span> <span class=nx>err</span> <span class=o>!=</span> <span class=kc>nil</span> <span class=p>{</span>
+			<span class=nx>log</span><span class=p>.</span><span class=nf>Error</span><span class=p>(</span><span class=nx>err</span><span class=p>,</span> <span class=s>&#34;Failed to update PodSet status&#34;</span><span class=p>)</span>
+			<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=nx>err</span>
+		<span class=p>}</span>
+	<span class=p>}</span>
+
+	<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Result</span><span class=p>{},</span> <span class=kc>nil</span>
+<span class=p>}</span>
+
+<span class=c1>// deploymentForPodSet returns Deployment object
+</span><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>r</span> <span class=o>*</span><span class=nx>PodSetReconciler</span><span class=p>)</span> <span class=nf>deploymentForPodSet</span><span class=p>(</span><span class=nx>m</span> <span class=o>*</span><span class=nx>appsv1alpha1</span><span class=p>.</span><span class=nx>PodSet</span><span class=p>)</span> <span class=o>*</span><span class=nx>appsv1</span><span class=p>.</span><span class=nx>Deployment</span> <span class=p>{</span>
+	<span class=nx>ls</span> <span class=o>:=</span> <span class=nf>labelsForPodSet</span><span class=p>(</span><span class=nx>m</span><span class=p>.</span><span class=nx>Name</span><span class=p>)</span>
+	<span class=nx>replicas</span> <span class=o>:=</span> <span class=nx>m</span><span class=p>.</span><span class=nx>Spec</span><span class=p>.</span><span class=nx>Size</span>
+
+	<span class=nx>dep</span> <span class=o>:=</span> <span class=o>&amp;</span><span class=nx>appsv1</span><span class=p>.</span><span class=nx>Deployment</span><span class=p>{</span>
+		<span class=nx>ObjectMeta</span><span class=p>:</span> <span class=nx>metav1</span><span class=p>.</span><span class=nx>ObjectMeta</span><span class=p>{</span>
+			<span class=nx>Name</span><span class=p>:</span>      <span class=nx>m</span><span class=p>.</span><span class=nx>Name</span><span class=p>,</span>
+			<span class=nx>Namespace</span><span class=p>:</span> <span class=nx>m</span><span class=p>.</span><span class=nx>Namespace</span><span class=p>,</span>
+		<span class=p>},</span>
+		<span class=nx>Spec</span><span class=p>:</span> <span class=nx>appsv1</span><span class=p>.</span><span class=nx>DeploymentSpec</span><span class=p>{</span>
+			<span class=nx>Replicas</span><span class=p>:</span> <span class=o>&amp;</span><span class=nx>replicas</span><span class=p>,</span>
+			<span class=nx>Selector</span><span class=p>:</span> <span class=o>&amp;</span><span class=nx>metav1</span><span class=p>.</span><span class=nx>LabelSelector</span><span class=p>{</span>
+				<span class=nx>MatchLabels</span><span class=p>:</span> <span class=nx>ls</span><span class=p>,</span>
+			<span class=p>},</span>
+			<span class=nx>Template</span><span class=p>:</span> <span class=nx>corev1</span><span class=p>.</span><span class=nx>PodTemplateSpec</span><span class=p>{</span>
+				<span class=nx>ObjectMeta</span><span class=p>:</span> <span class=nx>metav1</span><span class=p>.</span><span class=nx>ObjectMeta</span><span class=p>{</span>
+					<span class=nx>Labels</span><span class=p>:</span> <span class=nx>ls</span><span class=p>,</span>
+				<span class=p>},</span>
+				<span class=nx>Spec</span><span class=p>:</span> <span class=nx>corev1</span><span class=p>.</span><span class=nx>PodSpec</span><span class=p>{</span>
+					<span class=nx>Containers</span><span class=p>:</span> <span class=p>[]</span><span class=nx>corev1</span><span class=p>.</span><span class=nx>Container</span><span class=p>{{</span>
+						<span class=nx>Image</span><span class=p>:</span>   <span class=s>&#34;busybox&#34;</span><span class=p>,</span>
+						<span class=nx>Name</span><span class=p>:</span>    <span class=s>&#34;podset&#34;</span><span class=p>,</span>
+						<span class=nx>Command</span><span class=p>:</span> <span class=p>[]</span><span class=kt>string</span><span class=p>{</span><span class=s>&#34;sleep&#34;</span><span class=p>,</span> <span class=s>&#34;3600&#34;</span><span class=p>},</span>
+						<span class=nx>Ports</span><span class=p>:</span> <span class=p>[]</span><span class=nx>corev1</span><span class=p>.</span><span class=nx>ContainerPort</span><span class=p>{{</span>
+							<span class=nx>ContainerPort</span><span class=p>:</span> <span class=mi>1234</span><span class=p>,</span>
+							<span class=nx>Name</span><span class=p>:</span>          <span class=s>&#34;podset&#34;</span><span class=p>,</span>
+						<span class=p>}},</span>
+					<span class=p>}},</span>
+				<span class=p>},</span>
+			<span class=p>},</span>
+		<span class=p>},</span>
+	<span class=p>}</span>
+	<span class=c1>// Set PodSet instance as the owner and controller
+</span><span class=c1></span>	<span class=nx>_</span> <span class=p>=</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nf>SetControllerReference</span><span class=p>(</span><span class=nx>m</span><span class=p>,</span> <span class=nx>dep</span><span class=p>,</span> <span class=nx>r</span><span class=p>.</span><span class=nx>Scheme</span><span class=p>)</span>
+	<span class=k>return</span> <span class=nx>dep</span>
+<span class=p>}</span>
+
+<span class=c1>// labelsForPodSet returns the labels for selecting the resources
+</span><span class=c1>// belonging to the given podSet CR name.
+</span><span class=c1></span><span class=kd>func</span> <span class=nf>labelsForPodSet</span><span class=p>(</span><span class=nx>name</span> <span class=kt>string</span><span class=p>)</span> <span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span> <span class=p>{</span>
+	<span class=k>return</span> <span class=kd>map</span><span class=p>[</span><span class=kt>string</span><span class=p>]</span><span class=kt>string</span><span class=p>{</span><span class=s>&#34;app&#34;</span><span class=p>:</span> <span class=s>&#34;podSet&#34;</span><span class=p>,</span> <span class=s>&#34;podSet_cr&#34;</span><span class=p>:</span> <span class=nx>name</span><span class=p>}</span>
+<span class=p>}</span>
+
+<span class=c1>// getPodNames returns the pod names of the array of pods passed in
+</span><span class=c1></span><span class=kd>func</span> <span class=nf>getPodNames</span><span class=p>(</span><span class=nx>pods</span> <span class=p>[]</span><span class=nx>corev1</span><span class=p>.</span><span class=nx>Pod</span><span class=p>)</span> <span class=p>[]</span><span class=kt>string</span> <span class=p>{</span>
+	<span class=kd>var</span> <span class=nx>podNames</span> <span class=p>[]</span><span class=kt>string</span>
+	<span class=k>for</span> <span class=nx>_</span><span class=p>,</span> <span class=nx>pod</span> <span class=o>:=</span> <span class=k>range</span> <span class=nx>pods</span> <span class=p>{</span>
+		<span class=nx>podNames</span> <span class=p>=</span> <span class=nb>append</span><span class=p>(</span><span class=nx>podNames</span><span class=p>,</span> <span class=nx>pod</span><span class=p>.</span><span class=nx>Name</span><span class=p>)</span>
+	<span class=p>}</span>
+	<span class=k>return</span> <span class=nx>podNames</span>
+<span class=p>}</span>
+
+<span class=c1>// SetupWithManager sets up the controller with the Manager.
+</span><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>r</span> <span class=o>*</span><span class=nx>PodSetReconciler</span><span class=p>)</span> <span class=nf>SetupWithManager</span><span class=p>(</span><span class=nx>mgr</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Manager</span><span class=p>)</span> <span class=kt>error</span> <span class=p>{</span>
+	<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nf>NewControllerManagedBy</span><span class=p>(</span><span class=nx>mgr</span><span class=p>).</span>
+		<span class=nf>For</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>appsv1alpha1</span><span class=p>.</span><span class=nx>PodSet</span><span class=p>{}).</span>
+		<span class=c1>// 配置 Deployment
+</span><span class=c1></span>    <span class=nf>Owns</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>appsv1</span><span class=p>.</span><span class=nx>Deployment</span><span class=p>{}).</span>
+		<span class=c1>// 添加额外的配置, 如: 最大并发携程数
+</span><span class=c1></span>		<span class=nf>WithOptions</span><span class=p>(</span><span class=nx>controller</span><span class=p>.</span><span class=nx>Options</span><span class=p>{</span><span class=nx>MaxConcurrentReconciles</span><span class=p>:</span> <span class=mi>2</span><span class=p>}).</span>
+		<span class=nf>Complete</span><span class=p>(</span><span class=nx>r</span><span class=p>)</span>
+<span class=p>}</span>
+
+</code></pre></td></tr></table></div></div><hr><ul><li><p>生成授权的 <code>rbac</code> 清单</p><ul><li>配置权限如下权限清单到 <code>podset_controller.go</code> 文件中</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
-</span><span class=lnt>6
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=c1>// SetupWithManager sets up the controller with the Manager.
-</span><span class=c1></span><span class=kd>func</span> <span class=p>(</span><span class=nx>r</span> <span class=o>*</span><span class=nx>PodSetReconciler</span><span class=p>)</span> <span class=nf>SetupWithManager</span><span class=p>(</span><span class=nx>mgr</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nx>Manager</span><span class=p>)</span> <span class=kt>error</span> <span class=p>{</span>
-	<span class=k>return</span> <span class=nx>ctrl</span><span class=p>.</span><span class=nf>NewControllerManagedBy</span><span class=p>(</span><span class=nx>mgr</span><span class=p>).</span>
-		<span class=nf>For</span><span class=p>(</span><span class=o>&amp;</span><span class=nx>appsv1alpha1</span><span class=p>.</span><span class=nx>PodSet</span><span class=p>{}).</span>
-		<span class=nf>Complete</span><span class=p>(</span><span class=nx>r</span><span class=p>)</span>
-<span class=p>}</span>
-</code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-09-24</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/kubernetes-operator/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-via=jicki234 data-hashtags=kubernetes><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/kubernetes-operator/ data-hashtag=kubernetes><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-description="Kubernetes Operator"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-description="Kubernetes Operator"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/kubernetes/>kubernetes</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/prometheus/ class=prev rel=prev title="Prometheus 理论与实践"><i class="fas fa-angle-left fa-fw"></i>Prometheus 理论与实践</a>
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml>//+kubebuilder<span class=p>:</span>rbac<span class=p>:</span>groups=apps.jicki.cn<span class=p>,</span>resources=podsets<span class=p>,</span>verbs=get;list;watch;create;update;patch;delete<span class=w>
+</span><span class=w></span>//+kubebuilder<span class=p>:</span>rbac<span class=p>:</span>groups=apps.jicki.cn<span class=p>,</span>resources=podsets/status<span class=p>,</span>verbs=get;update;patch<span class=w>
+</span><span class=w></span>//+kubebuilder<span class=p>:</span>rbac<span class=p>:</span>groups=apps.jicki.cn<span class=p>,</span>resources=podsets/finalizers<span class=p>,</span>verbs=update<span class=w>
+</span><span class=w></span>//+kubebuilder<span class=p>:</span>rbac<span class=p>:</span>groups=apps.jicki.cn<span class=p>,</span>resources=deployments<span class=p>,</span>verbs=get;list;watch;create;update;patch;delete<span class=w>
+</span><span class=w></span>//+kubebuilder<span class=p>:</span>rbac<span class=p>:</span>groups=core<span class=p>,</span>resources=pods<span class=p>,</span>verbs=get;list;<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>生成 &mdash;</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>pods-operator$ make manifests
+
+
+/jicki/golang/pods-operator/bin/controller-gen <span class=s2>&#34;crd:trivialVersions=true,preserveUnknownFields=false&#34;</span> rbac:roleName<span class=o>=</span>manager-role webhook <span class=nv>paths</span><span class=o>=</span><span class=s2>&#34;./...&#34;</span> output:crd:artifacts:config<span class=o>=</span>config/crd/bases
+
+</code></pre></td></tr></table></div></div><ul><li><code>config/rbac/role.yaml</code> 文件</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>rbac.authorization.k8s.io/v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ClusterRole<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>creationTimestamp</span><span class=p>:</span><span class=w> </span><span class=kc>null</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>manager-role<span class=w>
+</span><span class=w></span><span class=k>rules</span><span class=p>:</span><span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- deployments<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- create<span class=w>
+</span><span class=w>  </span>- delete<span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span><span class=w>  </span>- patch<span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w>  </span>- watch<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=s2>&#34;&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- pods<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- deployments<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- create<span class=w>
+</span><span class=w>  </span>- delete<span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span><span class=w>  </span>- patch<span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w>  </span>- watch<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- podsets<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- create<span class=w>
+</span><span class=w>  </span>- delete<span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span><span class=w>  </span>- patch<span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w>  </span>- watch<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- podsets/finalizers<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- podsets/status<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- patch<span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=s2>&#34;&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- pods<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span></code></pre></td></tr></table></div></div><hr><blockquote><p>运行 Operator</p></blockquote><ul><li>首先修改一下 Dockerfile 的镜像地址 <code>gcr.io/distroless/static:nonroot</code> 改为 <code>alpine:3.11</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=err>#</span> <span class=nx>Build</span> <span class=nx>the</span> <span class=nx>manager</span> <span class=nx>binary</span>
+<span class=nx>FROM</span> <span class=nx>golang</span><span class=p>:</span><span class=mf>1.15</span> <span class=nx>as</span> <span class=nx>builder</span>
+
+<span class=nx>ENV</span> <span class=nx>GOPROXY</span> <span class=nx>https</span><span class=p>:</span><span class=c1>//goproxy.cn
+</span><span class=c1></span><span class=nx>ENV</span> <span class=nx>GOSUMDB</span> <span class=nx>sum</span><span class=p>.</span><span class=nx>golang</span><span class=p>.</span><span class=nx>google</span><span class=p>.</span><span class=nx>cn</span>
+
+<span class=nx>WORKDIR</span> <span class=o>/</span><span class=nx>workspace</span>
+<span class=err>#</span> <span class=nx>Copy</span> <span class=nx>the</span> <span class=nx>Go</span> <span class=nx>Modules</span> <span class=nx>manifests</span>
+<span class=nx>COPY</span> <span class=k>go</span><span class=p>.</span><span class=nx>mod</span> <span class=k>go</span><span class=p>.</span><span class=nx>mod</span>
+<span class=nx>COPY</span> <span class=k>go</span><span class=p>.</span><span class=nx>sum</span> <span class=k>go</span><span class=p>.</span><span class=nx>sum</span>
+<span class=err>#</span> <span class=nx>cache</span> <span class=nx>deps</span> <span class=nx>before</span> <span class=nx>building</span> <span class=nx>and</span> <span class=nx>copying</span> <span class=nx>source</span> <span class=nx>so</span> <span class=nx>that</span> <span class=nx>we</span> <span class=nx>don</span><span class=err>&#39;</span><span class=nx>t</span> <span class=nx>need</span> <span class=nx>to</span> <span class=nx>re</span><span class=o>-</span><span class=nx>download</span> <span class=nx>as</span> <span class=nx>much</span>
+<span class=err>#</span> <span class=nx>and</span> <span class=nx>so</span> <span class=nx>that</span> <span class=nx>source</span> <span class=nx>changes</span> <span class=nx>don</span><span class=err>&#39;</span><span class=nx>t</span> <span class=nx>invalidate</span> <span class=nx>our</span> <span class=nx>downloaded</span> <span class=nx>layer</span>
+<span class=nx>RUN</span> <span class=k>go</span> <span class=nx>mod</span> <span class=nx>download</span>
+
+<span class=err>#</span> <span class=nx>Copy</span> <span class=nx>the</span> <span class=k>go</span> <span class=nx>source</span>
+<span class=nx>COPY</span> <span class=nx>main</span><span class=p>.</span><span class=k>go</span> <span class=nx>main</span><span class=p>.</span><span class=k>go</span>
+<span class=nx>COPY</span> <span class=nx>api</span><span class=o>/</span> <span class=nx>api</span><span class=o>/</span>
+<span class=nx>COPY</span> <span class=nx>controllers</span><span class=o>/</span> <span class=nx>controllers</span><span class=o>/</span>
+
+<span class=err>#</span> <span class=nx>Build</span>
+<span class=nx>RUN</span> <span class=nx>CGO_ENABLED</span><span class=p>=</span><span class=mi>0</span> <span class=nx>GOOS</span><span class=p>=</span><span class=nx>linux</span> <span class=nx>GOARCH</span><span class=p>=</span><span class=nx>amd64</span> <span class=nx>GO111MODULE</span><span class=p>=</span><span class=nx>on</span> <span class=k>go</span> <span class=nx>build</span> <span class=o>-</span><span class=nx>a</span> <span class=o>-</span><span class=nx>o</span> <span class=nx>manager</span> <span class=nx>main</span><span class=p>.</span><span class=k>go</span>
+
+<span class=err>#</span> <span class=nx>Use</span> <span class=nx>distroless</span> <span class=nx>as</span> <span class=nx>minimal</span> <span class=nx>base</span> <span class=nx>image</span> <span class=nx>to</span> <span class=kn>package</span> <span class=nx>the</span> <span class=nx>manager</span> <span class=nx>binary</span>
+<span class=err>#</span> <span class=nx>Refer</span> <span class=nx>to</span> <span class=nx>https</span><span class=p>:</span><span class=c1>//github.com/GoogleContainerTools/distroless for more details
+</span><span class=c1></span><span class=nx>FROM</span> <span class=nx>alpine</span><span class=p>:</span><span class=mf>3.11</span> <span class=nx>AS</span> <span class=nx>final</span>
+<span class=nx>WORKDIR</span> <span class=o>/</span>
+<span class=nx>COPY</span> <span class=o>--</span><span class=nx>from</span><span class=p>=</span><span class=nx>builder</span> <span class=o>/</span><span class=nx>workspace</span><span class=o>/</span><span class=nx>manager</span> <span class=p>.</span>
+<span class=nx>USER</span> <span class=mi>65532</span><span class=p>:</span><span class=mi>65532</span>
+
+<span class=nx>ENTRYPOINT</span> <span class=p>[</span><span class=s>&#34;/manager&#34;</span><span class=p>]</span>
+</code></pre></td></tr></table></div></div><hr><ul><li>build images</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>pods-operator$ docker build -t<span class=o>=</span><span class=s2>&#34;jicki/podset-operator:v1&#34;</span> .  
+
+</code></pre></td></tr></table></div></div><ul><li>创建一个 deployment.yaml</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>apps/v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>Deployment<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>podset-operator<span class=w>
+</span><span class=w>  </span><span class=k>namespace</span><span class=p>:</span><span class=w> </span>jicki-system<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>replicas</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span><span class=w>  </span><span class=k>template</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>app</span><span class=p>:</span><span class=w> </span>podset-operator<span class=w>
+</span><span class=w>    </span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>serviceAccount</span><span class=p>:</span><span class=w> </span>controller-manager<span class=w>
+</span><span class=w>      </span><span class=k>containers</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>podset-operator<span class=w>
+</span><span class=w>        </span><span class=k>image</span><span class=p>:</span><span class=w> </span>jicki/podset-operator<span class=p>:</span>v1<span class=w>
+</span><span class=w>        </span><span class=k>ports</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span>- <span class=k>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>8080</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>运行 CRD 资源</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>apiextensions.k8s.io/v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>CustomResourceDefinition<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>annotations</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>controller-gen.kubebuilder.io/version</span><span class=p>:</span><span class=w> </span>v0<span class=m>.4.1</span><span class=w>
+</span><span class=w>  </span><span class=k>creationTimestamp</span><span class=p>:</span><span class=w> </span><span class=kc>null</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>podsets.apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>namespace</span><span class=p>:</span><span class=w> </span>jicki-system<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>group</span><span class=p>:</span><span class=w> </span>apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>names</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>kind</span><span class=p>:</span><span class=w> </span>PodSet<span class=w>
+</span><span class=w>    </span><span class=k>listKind</span><span class=p>:</span><span class=w> </span>PodSetList<span class=w>
+</span><span class=w>    </span><span class=k>plural</span><span class=p>:</span><span class=w> </span>podsets<span class=w>
+</span><span class=w>    </span><span class=k>singular</span><span class=p>:</span><span class=w> </span>podset<span class=w>
+</span><span class=w>  </span><span class=k>scope</span><span class=p>:</span><span class=w> </span>Namespaced<span class=w>
+</span><span class=w>  </span><span class=k>versions</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>v1alpha1<span class=w>
+</span><span class=w>    </span><span class=k>schema</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>openAPIV3Schema</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>description</span><span class=p>:</span><span class=w> </span>PodSet<span class=w> </span>is<span class=w> </span>the<span class=w> </span>Schema<span class=w> </span>for<span class=w> </span>the<span class=w> </span>podsets<span class=w> </span>API<span class=w>
+</span><span class=w>        </span><span class=k>properties</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=k>apiVersion</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span><span class=k>description</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;APIVersion defines the versioned schema of this representation
+</span><span class=s1>              of an object. Servers should convert recognized schemas to the latest
+</span><span class=s1>              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources&#39;</span><span class=w>
+</span><span class=w>            </span><span class=k>type</span><span class=p>:</span><span class=w> </span>string<span class=w>
+</span><span class=w>          </span><span class=k>kind</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span><span class=k>description</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;Kind is a string value representing the REST resource this
+</span><span class=s1>              object represents. Servers may infer this from the endpoint the client
+</span><span class=s1>              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds&#39;</span><span class=w>
+</span><span class=w>            </span><span class=k>type</span><span class=p>:</span><span class=w> </span>string<span class=w>
+</span><span class=w>          </span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span><span class=k>type</span><span class=p>:</span><span class=w> </span>object<span class=w>
+</span><span class=w>          </span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span><span class=k>description</span><span class=p>:</span><span class=w> </span>PodSetSpec<span class=w> </span>defines<span class=w> </span>the<span class=w> </span>desired<span class=w> </span>state<span class=w> </span>of<span class=w> </span>PodSet<span class=w>
+</span><span class=w>            </span><span class=k>properties</span><span class=p>:</span><span class=w>
+</span><span class=w>              </span><span class=k>size</span><span class=p>:</span><span class=w>
+</span><span class=w>                </span><span class=k>description</span><span class=p>:</span><span class=w> </span>Size<span class=w> </span>is<span class=w> </span>the<span class=w> </span>size<span class=w> </span>of<span class=w> </span>the<span class=w> </span>PodSet<span class=w> </span>deployment<span class=w>
+</span><span class=w>                </span><span class=k>format</span><span class=p>:</span><span class=w> </span>int32<span class=w>
+</span><span class=w>                </span><span class=k>type</span><span class=p>:</span><span class=w> </span>integer<span class=w>
+</span><span class=w>            </span><span class=k>required</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span>- size<span class=w>
+</span><span class=w>            </span><span class=k>type</span><span class=p>:</span><span class=w> </span>object<span class=w>
+</span><span class=w>          </span><span class=k>status</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span><span class=k>description</span><span class=p>:</span><span class=w> </span>PodSetStatus<span class=w> </span>defines<span class=w> </span>the<span class=w> </span>observed<span class=w> </span>state<span class=w> </span>of<span class=w> </span>PodSet<span class=w>
+</span><span class=w>            </span><span class=k>properties</span><span class=p>:</span><span class=w>
+</span><span class=w>              </span><span class=k>nodes</span><span class=p>:</span><span class=w>
+</span><span class=w>                </span><span class=k>description</span><span class=p>:</span><span class=w> </span>Nodes<span class=w> </span>are<span class=w> </span>the<span class=w> </span>names<span class=w> </span>of<span class=w> </span>the<span class=w> </span>PodSet<span class=w> </span>pods<span class=w>
+</span><span class=w>                </span><span class=k>items</span><span class=p>:</span><span class=w>
+</span><span class=w>                  </span><span class=k>type</span><span class=p>:</span><span class=w> </span>string<span class=w>
+</span><span class=w>                </span><span class=k>type</span><span class=p>:</span><span class=w> </span>array<span class=w>
+</span><span class=w>            </span><span class=k>required</span><span class=p>:</span><span class=w>
+</span><span class=w>            </span>- nodes<span class=w>
+</span><span class=w>            </span><span class=k>type</span><span class=p>:</span><span class=w> </span>object<span class=w>
+</span><span class=w>        </span><span class=k>type</span><span class=p>:</span><span class=w> </span>object<span class=w>
+</span><span class=w>    </span><span class=k>served</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>    </span><span class=k>storage</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>    </span><span class=k>subresources</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>status</span><span class=p>:</span><span class=w> </span>{}<span class=w>
+</span><span class=w></span><span class=k>status</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>acceptedNames</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>kind</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
+</span><span class=w>    </span><span class=k>plural</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>conditions</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span><span class=w>  </span><span class=k>storedVersions</span><span class=p>:</span><span class=w> </span><span class=p>[]</span><span class=w>
+</span></code></pre></td></tr></table></div></div><hr><ul><li>运行 rbac 资源</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>rbac.authorization.k8s.io/v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ClusterRole<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>creationTimestamp</span><span class=p>:</span><span class=w> </span><span class=kc>null</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>manager-role<span class=w>
+</span><span class=w>  </span><span class=k>namespace</span><span class=p>:</span><span class=w> </span>jicki-system<span class=w>
+</span><span class=w></span><span class=k>rules</span><span class=p>:</span><span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- deployments<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- create<span class=w>
+</span><span class=w>  </span>- delete<span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span><span class=w>  </span>- patch<span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w>  </span>- watch<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- podsets<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- create<span class=w>
+</span><span class=w>  </span>- delete<span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span><span class=w>  </span>- patch<span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w>  </span>- watch<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- podsets/finalizers<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- apps.jicki.cn<span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- podsets/status<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- patch<span class=w>
+</span><span class=w>  </span>- update<span class=w>
+</span><span class=w></span>- <span class=k>apiGroups</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=s2>&#34;&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>resources</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- pods<span class=w>
+</span><span class=w>  </span><span class=k>verbs</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- get<span class=w>
+</span><span class=w>  </span>- list<span class=w>
+</span><span class=w>
+</span><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>rbac.authorization.k8s.io/v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ClusterRoleBinding<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>manager-rolebinding<span class=w>
+</span><span class=w></span><span class=k>roleRef</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>apiGroup</span><span class=p>:</span><span class=w> </span>rbac.authorization.k8s.io<span class=w>
+</span><span class=w>  </span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ClusterRole<span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>manager-role<span class=w>
+</span><span class=w></span><span class=k>subjects</span><span class=p>:</span><span class=w>
+</span><span class=w></span>- <span class=k>kind</span><span class=p>:</span><span class=w> </span>ServiceAccount<span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>controller-manager<span class=w>
+</span><span class=w>  </span><span class=k>namespace</span><span class=p>:</span><span class=w> </span>jicki-system<span class=w>
+</span><span class=w>
+</span><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>ServiceAccount<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>controller-manager<span class=w>
+</span><span class=w>  </span><span class=k>namespace</span><span class=p>:</span><span class=w> </span>jicki-system<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-09-24</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/kubernetes-operator/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-via=jicki234 data-hashtags=kubernetes><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/kubernetes-operator/ data-hashtag=kubernetes><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-description="Kubernetes Operator"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式" data-description="Kubernetes Operator"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/kubernetes-operator/ data-title="Kubernetes Operator 模式"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/kubernetes/>kubernetes</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/prometheus/ class=prev rel=prev title="Prometheus 理论与实践"><i class="fas fa-angle-left fa-fw"></i>Prometheus 理论与实践</a>
 <a href=/kubernetes-mount-propagation/ class=next rel=next title="kubernetes 的挂载传播">kubernetes 的挂载传播 <i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020 - 2021</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://jicki.cn target=_blank>小炒肉</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a href=http://beian.miit.gov.cn target=_blank>粤ICP备20055633号</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/valine/Valine.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":200},"comment":{"valine":{"appId":"1LTTCvDe4Nt8XSdFzejtUsVF-gzGzoHsz","appKey":"cvpPM7sbgOw0pTXbh6YVKrjc","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
