@@ -128,7 +128,7 @@ But!
 > Operator SDK
 
 
-* 安装 Operator SDK 
+* 安装 Operator SDK  Version 1.5.0
 
 ```bash
 $ mkdir -p $GOPATH/src/github.com/operator-framework
@@ -336,6 +336,158 @@ pods-operator$  tree
 17 directories, 43 files
 
 ```
+
+
+---
+
+> Operator 代码结构
+
+
+* `api/v1alpha1/podset_type.go` 定义了 PodSet 预期状态的结构体. 
+
+
+```go
+// PodSetSpec defines the desired state of PodSet
+type PodSetSpec struct {
+	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+	// Important: Run "make" to regenerate code after modifying this file
+
+	// Size is the size of the PodSet deployment
+	Size int32 `json:"size"`
+}
+
+// PodSetStatus defines the observed state of PodSet
+type PodSetStatus struct {
+	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
+  // Important: Run "make" to regenerate code after modifying this file
+  
+  // Nodes are the names of the PodSet pods
+	Nodes []string `json:"nodes"`
+}
+
+```
+
+---
+
+
+* 修改了 `type` 资源, 执行 `make generate` 更新资源修改后的代码生成.
+
+  * 上面的 `make generate` 目的调用 `controller-gen` 程序来更新 `api/v1alpha1/zz_generated.deepcopy.go` 文件, 以确保我们API的Go类型定义实现了 `runtime.Object` 所有 Kind 类型必须实现的接口。
+
+
+```bash
+pods-operator$  make generate
+
+
+/jicki/golang/pods-operator/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+```
+
+---
+
+
+* 生成 `CRD` 资源清单 , 执行 `make manifests`
+
+  * 生成的 `CRD` 存于 `config/crd/bases/apps.jicki.cn_podsets.yaml` 
+
+```bash
+pods-operator$ make manifests
+
+
+/jicki/golang/pods-operator/bin/controller-gen "crd:trivialVersions=true,preserveUnknownFields=false" rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+
+```
+
+
+```yaml
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: podsets.apps.jicki.cn
+spec:
+  group: apps.jicki.cn
+  names:
+    kind: PodSet
+    listKind: PodSetList
+    plural: podsets
+    singular: podset
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: PodSet is the Schema for the podsets API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PodSetSpec defines the desired state of PodSet
+            properties:
+              size:
+                description: Size is the size of the PodSet deployment
+                format: int32
+                type: integer
+            required:
+            - size
+            type: object
+          status:
+            description: PodSetStatus defines the observed state of PodSet
+            properties:
+              nodes:
+                description: Nodes are the names of the PodSet pods
+                items:
+                  type: string
+                type: array
+            required:
+            - nodes
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+```
+
+
+
+---
+
+* `controllers` 控制器
+
+  * `controllers/podset_controller.go` 文件中
+
+  * `NewControllerManagedBy` 用于各种控制器的配置
+
+  * `For(&appsv1alpha1.PodSet{})` 用于将 `PodSet{}` 类型指定为要监视的主要资源, 在对 `PodSet{}` 类型的资源进行 `Add/Update/Delete` 操作时, 循环发送 Request 
+
+```go
+// SetupWithManager sets up the controller with the Manager.
+func (r *PodSetReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&appsv1alpha1.PodSet{}).
+		Complete(r)
+}
+```
+
 
 
 
