@@ -1,7 +1,7 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Minio Cluster 详解 - 小炒肉</title><meta name=Description content="Minio 分布式集群 详解"><meta property="og:title" content="Minio Cluster 详解"><meta property="og:description" content="Minio 分布式集群 详解"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/minio-cluster/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2021-06-07T00:00:00+00:00"><meta property="article:modified_time" content="2021-06-07T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Minio Cluster 详解"><meta name=twitter:description content="Minio 分布式集群 详解"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/minio-cluster/><link rel=prev href=https://jicki.cn/mysql-mgr-cluster/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Minio Cluster 详解","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/minio-cluster\/"},"genre":"posts","keywords":"minio","wordcount":8038,"url":"https:\/\/jicki.cn\/minio-cluster\/","datePublished":"2021-06-07T00:00:00+00:00","dateModified":"2021-06-07T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Minio 分布式集群 详解"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Minio Cluster 详解 - 小炒肉</title><meta name=Description content="Minio 分布式集群 详解"><meta property="og:title" content="Minio Cluster 详解"><meta property="og:description" content="Minio 分布式集群 详解"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/minio-cluster/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2021-06-07T00:00:00+00:00"><meta property="article:modified_time" content="2021-06-07T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Minio Cluster 详解"><meta name=twitter:description content="Minio 分布式集群 详解"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/minio-cluster/><link rel=prev href=https://jicki.cn/mysql-mgr-cluster/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Minio Cluster 详解","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/minio-cluster\/"},"genre":"posts","keywords":"minio","wordcount":8304,"url":"https:\/\/jicki.cn\/minio-cluster\/","datePublished":"2021-06-07T00:00:00+00:00","dateModified":"2021-06-07T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Minio 分布式集群 详解"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Minio Cluster 详解</h1><h2 class=single-subtitle>Minio Cluster 详解</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/minio/><i class="far fa-folder fa-fw"></i>minio</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-06-07>2021-06-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8038 字&nbsp;
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Minio Cluster 详解</h1><h2 class=single-subtitle>Minio Cluster 详解</h2><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/minio/><i class="far fa-folder fa-fw"></i>minio</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-06-07>2021-06-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8304 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 17 分钟&nbsp;<span id=/minio-cluster/ class=leancloud_visitors data-flag-title="Minio Cluster 详解">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
@@ -308,6 +308,15 @@ chmod +x  minio
 </span><span class=lnt>20
 </span><span class=lnt>21
 </span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> /opt/minio/env
 
 
@@ -330,6 +339,25 @@ vi minio.env
 <span class=nv>MINIO_STORAGE_CLASS_STANDARD</span><span class=o>=</span><span class=s2>&#34;EC:4&#34;</span>
 <span class=c1># 低冗余存储类 DataDrives 与 ParityDrives.</span> 
 <span class=nv>MINIO_STORAGE_CLASS_RRS</span><span class=o>=</span><span class=s2>&#34;EC:2&#34;</span>
+
+<span class=c1>## Ldap 开启 ladp 只能使用 ladp 登录 并且 ladp 不支持 webui 登录</span>
+<span class=c1>#MINIO_IDENTITY_LDAP_SERVER_ADDR=&#34;ldap.jicki.cn:389&#34;</span>
+<span class=c1>#MINIO_IDENTITY_LDAP_SERVER_INSECURE=&#34;on&#34;</span>
+<span class=c1>## ladp lookup-Bind #####</span>
+<span class=c1>#MINIO_IDENTITY_LDAP_LOOKUP_BIND_DN=&#34;devops@jicki.cn&#34;</span>
+<span class=c1>#MINIO_IDENTITY_LDAP_LOOKUP_BIND_PASSWORD=&#34;password@123&#34;</span>
+<span class=c1>#MINIO_IDENTITY_LDAP_USER_DN_SEARCH_BASE_DN=&#34;dc=jicki,dc=cn&#34;</span>
+<span class=c1>#MINIO_IDENTITY_LDAP_USER_DN_SEARCH_FILTER=&#34;(sAMAccountName=%s)&#34;</span>
+</code></pre></td></tr></table></div></div><blockquote><p>使用 tls 加密 ( 可选 )</p></blockquote><ul><li><code>https://docs.min.io/docs/generate-let-s-encypt-certificate-using-concert-for-minio.html</code></li></ul><hr><ul><li><p>minio 启用 tls 证书</p><ul><li>需要修改 <code>MINIO_VOLUMES</code> 变量中 http 为 https</li><li>服务端之间通讯需要 证书 互相 认证.</li></ul></li><li><p>证书目录</p><ul><li><p><code>/home/minio/.minio/certs</code> - 目录用于存放当前服务端 <code>public.crt</code> 与 <code>private.key</code> 证书</p></li><li><p><code>/home/minio/.minio/certs/CAs</code> - 目录用于存放 集群其他节点 的 <code>public.crt</code> 认证证书, 多个节点 使用 <code>public1.crt</code> , <code>public2.crt</code> , <code>public3.crt</code> 存放多个.</p></li></ul></li><li><p>使用 <code>let's encypt 生成的证书</code></p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp /etc/letsencrypt/live/myminio.com/fullchain.pem /home/minio/.minio/certs/public.crt
+cp /etc/letsencrypt/live/myminio.com/privkey.pem /home/minio/.minio/certs/private.key
+</code></pre></td></tr></table></div></div><ul><li>购买的证书</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp  fullchain.cer  /home/minio/.minio/certs/public.crt
+ 
+cp  jicki.cn.key  /home/minio/.minio/certs/private.key
 </code></pre></td></tr></table></div></div><blockquote><p>创建 systemctl 文件</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -556,16 +584,32 @@ chown minio:minio minio-console
 </span><span class=lnt> 8
 </span><span class=lnt> 9
 </span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>
 vi /opt/minio/env/minio-console.env
 
-
+<span class=c1># Console Port</span>
+<span class=nv>CONSOLE_PORT</span><span class=o>=</span><span class=s2>&#34;9090&#34;</span>
+<span class=nv>CONSOLE_TLS_PORT</span><span class=o>=</span><span class=s2>&#34;9443&#34;</span>
 <span class=c1># Salt to encrypt JWT payload</span>
 <span class=nv>CONSOLE_PBKDF_PASSPHRASE</span><span class=o>=</span><span class=s2>&#34;SECRET&#34;</span>
 <span class=c1># Required to encrypt JWT payload</span>
 <span class=nv>CONSOLE_PBKDF_SALT</span><span class=o>=</span><span class=s2>&#34;SECRET&#34;</span>
 <span class=c1># MinIO Endpoint</span>
 <span class=nv>CONSOLE_MINIO_SERVER</span><span class=o>=</span><span class=s2>&#34;http://s3.jicki.cn&#34;</span>
+</code></pre></td></tr></table></div></div><blockquote><p>配置 tls 证书 ( 可选 )</p></blockquote><ul><li><p>console 启用 tls 证书</p><ul><li>需要修改 <code>CONSOLE_MINIO_SERVER</code> 变量中 http 为 https</li><li>需要使用 服务端的 <code>public.crt</code> 证书认证</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp  fullchain.cer  /home/minio/.console/certs/public.crt
+ 
+cp  jicki.cn.key  /home/minio/.console/certs/private.key
+
+<span class=c1># 需要将服务端的 public.crt 证书存放于 CAs 目录中, 多个服务端认证使用 public1.crt 、 public2.crt .</span>
+cp minio<span class=o>{</span>1...4<span class=o>}</span>/public.crt /home/minio/.console/certs/CAs/
 </code></pre></td></tr></table></div></div><blockquote><p>创建 systemctl 文件</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3

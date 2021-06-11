@@ -465,7 +465,56 @@ MINIO_PROMETHEUS_AUTH_TYPE="public"
 MINIO_STORAGE_CLASS_STANDARD="EC:4"
 # 低冗余存储类 DataDrives 与 ParityDrives. 
 MINIO_STORAGE_CLASS_RRS="EC:2"
+
+## Ldap 开启 ladp 只能使用 ladp 登录 并且 ladp 不支持 webui 登录
+#MINIO_IDENTITY_LDAP_SERVER_ADDR="ldap.jicki.cn:389"
+#MINIO_IDENTITY_LDAP_SERVER_INSECURE="on"
+## ladp lookup-Bind #####
+#MINIO_IDENTITY_LDAP_LOOKUP_BIND_DN="devops@jicki.cn"
+#MINIO_IDENTITY_LDAP_LOOKUP_BIND_PASSWORD="password@123"
+#MINIO_IDENTITY_LDAP_USER_DN_SEARCH_BASE_DN="dc=jicki,dc=cn"
+#MINIO_IDENTITY_LDAP_USER_DN_SEARCH_FILTER="(sAMAccountName=%s)"
 ```
+
+
+> 使用 tls 加密  ( 可选 )
+
+
+*  `https://docs.min.io/docs/generate-let-s-encypt-certificate-using-concert-for-minio.html`
+
+---
+ 
+
+* minio 启用 tls 证书
+  
+  * 需要修改 `MINIO_VOLUMES` 变量中 http 为 https 
+  * 服务端之间通讯需要 证书 互相 认证.
+
+
+* 证书目录
+
+  * `/home/minio/.minio/certs` -  目录用于存放当前服务端  `public.crt` 与 `private.key` 证书
+
+  * `/home/minio/.minio/certs/CAs`  - 目录用于存放 集群其他节点 的 `public.crt` 认证证书,  多个节点 使用 `public1.crt` , `public2.crt` , `public3.crt`  存放多个. 
+
+
+
+* 使用 `let's encypt 生成的证书` 
+
+```bash
+cp /etc/letsencrypt/live/myminio.com/fullchain.pem /home/minio/.minio/certs/public.crt
+cp /etc/letsencrypt/live/myminio.com/privkey.pem /home/minio/.minio/certs/private.key
+```
+
+
+* 购买的证书 
+
+```bash
+cp  fullchain.cer  /home/minio/.minio/certs/public.crt
+ 
+cp  jicki.cn.key  /home/minio/.minio/certs/private.key
+```
+
 
 
 
@@ -641,13 +690,35 @@ chown minio:minio minio-console
 
 vi /opt/minio/env/minio-console.env
 
-
+# Console Port
+CONSOLE_PORT="9090"
+CONSOLE_TLS_PORT="9443"
 # Salt to encrypt JWT payload
 CONSOLE_PBKDF_PASSPHRASE="SECRET"
 # Required to encrypt JWT payload
 CONSOLE_PBKDF_SALT="SECRET"
 # MinIO Endpoint
 CONSOLE_MINIO_SERVER="http://s3.jicki.cn"
+```
+
+
+
+> 配置 tls 证书   ( 可选 )
+
+* console 启用 tls 证书
+  
+  * 需要修改 `CONSOLE_MINIO_SERVER` 变量中 http 为 https
+  * 需要使用  服务端的 `public.crt` 证书认证
+
+
+
+```bash
+cp  fullchain.cer  /home/minio/.console/certs/public.crt
+ 
+cp  jicki.cn.key  /home/minio/.console/certs/private.key
+
+# 需要将服务端的 public.crt 证书存放于 CAs 目录中, 多个服务端认证使用 public1.crt 、 public2.crt .
+cp minio{1...4}/public.crt /home/minio/.console/certs/CAs/
 ```
 
 
@@ -814,8 +885,6 @@ scrape_configs:
     - '10.3.2.106:9000'
     - '10.3.2.107:9000'
 ```
-
-
 
 
 
