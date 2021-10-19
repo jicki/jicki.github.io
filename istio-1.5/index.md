@@ -1,4 +1,4 @@
-# Istio 1.5.x 持续更新...
+# Istio 持续更新...
 
 
 # Istio 
@@ -906,6 +906,33 @@ spec:
               name: http
           command: ["/bin/sh", "-c", "echo 'hello nginx-2' > /usr/share/nginx/html/index.html; nginx  -g  'daemon off;'"]
 ---
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: nginx-3
+  labels:
+    web: nginx-3
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      web: nginx-3
+  template: 
+    metadata: 
+      labels: 
+        app: nginx
+        web: nginx-3
+        version: v1.0.2
+    spec: 
+      containers: 
+        - name: nginx 
+          image: nginx:alpine 
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+          command: ["/bin/sh", "-c", "echo 'hello jicki' > /usr/share/nginx/html/index.html; nginx  -g  'daemon off;'"]
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -936,6 +963,21 @@ spec:
   selector:
     web: nginx-2
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc-3
+  labels:
+    web: nginx-3
+spec:
+  ports:
+    - port: 80
+      name: http
+      targetPort: 80
+      protocol: TCP
+  selector:
+    web: nginx-3
+---
 apiVersion: v1 
 kind: Service
 metadata: 
@@ -957,11 +999,12 @@ spec:
 
 ```
 [root@k8s-node-1 istio]# kubectl get ep
-NAME          ENDPOINTS                           AGE
-kubernetes    172.18.186.159:6443                 16d
-nginx-svc     10.254.64.163:80,10.254.64.164:80   6m23s
-nginx-svc-1   10.254.64.163:80                    26s
-nginx-svc-2   10.254.64.164:80                    26s
+NAME          ENDPOINTS                                            AGE
+kubernetes    172.18.186.159:6443                                  16d
+nginx-svc     10.254.64.163:80,10.254.64.164:80,10.254.64.165:80   6m23s
+nginx-svc-1   10.254.64.163:80                                     26s
+nginx-svc-2   10.254.64.164:80                                     26s
+nginx-svc-3   10.254.64.165:80                                     26s
 ```
 
 
@@ -975,9 +1018,9 @@ kind: VirtualService
 metadata:
   name: nginx-svc-vs
 spec:
-  # 客户端访问服务的地址
+  # 客户端访问服务的地址, ( svc名称 + namespace 用于跨 namespace 调用 )
   hosts: 
-  - nginx-svc.default.svc.cluster.local
+  - nginx-svc.default
   # http协议
   http:
   # 如下为匹配条件
@@ -990,16 +1033,16 @@ spec:
           exact: jicki
     route:
     - destination:
-        host: nginx-svc-3.default.svc.cluster.local
+        host: nginx-svc-3.default
   # 如下为匹配路由规则
   - route:
     - destination:
         # 匹配的服务版本或子集为 nginx-1
-        host: nginx-svc-1.default.svc.cluster.local
+        host: nginx-svc-1.default
       weight: 80
     - destination:
         # 匹配的服务版本或子集为 nginx-2
-        host: nginx-svc-2.default.svc.cluster.local
+        host: nginx-svc-2.default
       weight: 20
 
 ```
@@ -1013,18 +1056,6 @@ spec:
 NAME           GATEWAYS   HOSTS                                   AGE
 nginx-svc-vs              [nginx-svc.default.svc.cluster.local]   3m1s
 
-```
-
-* 注入所有的服务, 所有服务都必须通过 `istio` 注入
-
-```
-# 注入
-[root@k8s-node-1 istio]# kubectl apply -f <(istioctl kube-inject -f nginx-test.yaml)
-deployment.apps/nginx-1 configured
-deployment.apps/nginx-2 configured
-service/nginx-svc-1 unchanged
-service/nginx-svc-2 unchanged
-service/nginx-svc unchanged
 ```
 
 
@@ -1052,7 +1083,7 @@ spec:
     spec:
       containers:
         - name: busybox
-          image: busybox
+          image: jicki/busybox-curl
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c", "sleep 3600s"]
 ```
@@ -1066,11 +1097,26 @@ kubectl apply -f <(istioctl kube-inject -f busybox.yaml)
 ```
 
 
+
 ```
 # 访问一下 nginx-svc
 [root@k8s-node-1 istio]# kubectl exec -it busybox-7f6578cb8b-qfptk -c busybox -- sh
+```
 
 
+
+```
+# 带 headers 的访问
+
+curl --header "vs-user: jicki" http://nginx-svc
+
+
+hello jicki
+
+```
+
+
+```
 # 模拟流量
 
 while true;
@@ -1080,9 +1126,51 @@ done
 
 ```
 
+
+
 * 查看 kiali
 
 ![virutalservice][9]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
