@@ -1171,9 +1171,6 @@ done
 
 
 
-
-
-
 ## Istio Upgrade
 
 
