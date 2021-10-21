@@ -2,12 +2,17 @@
 
 
 
-# Linux Network Namespace
+# Linux
+
+* Linux 相关基础知识..
+
+
+## Linux Network Namespace
+
 
 * Network Namespace 是 `Linux` 内核的具有的功能. 它能创建多个隔离的网络空间, 它们有独自的网络栈信息。
 
 * 使用 `ip` 命令创建、管理 网络空间.
-
 
 ```bash
 # 查看 帮助
@@ -38,7 +43,7 @@ mount --make-shared /run/netns failed: Operation not permitted
 
 ```
 
-出现此错误是由于用户权限的问题. 需要使用 `sudo` 权限
+* 出现此错误是由于用户权限的问题. 需要使用 `sudo` 权限
 
 
 ```bash
@@ -47,7 +52,7 @@ sudo ip netns add jicki
 ```
 
 
-`ip` 命令创建的 network namespace 会出现在 `/var/run/netns/` 目录下, 如果需要管理其他不是 `ip netns` 创建的 network namespace, 只要在这个目录下创建一个指向对应 network namespace 文件的链接就行。
+* `ip` 命令创建的 network namespace 会出现在 `/var/run/netns/` 目录下, 如果需要管理其他不是 `ip netns` 创建的 network namespace, 只要在这个目录下创建一个指向对应 network namespace 文件的链接就行。
 
 
 ```bash
@@ -85,7 +90,7 @@ jicki> ip link
 ```
 
 
-新创建的 网络空间 默认 lo 环回口 网络状态为 DOWN ( state DOWN mode )
+* 新创建的 网络空间 默认 lo 环回口 网络状态为 DOWN ( state DOWN mode )
 
 
 ```bash
@@ -125,7 +130,7 @@ sudo ip netns delete jicki
 
 
 
-> 网络空间 之间的通讯
+> 双 网络空间 之间的通讯
 
 
 * 默认情况下 网络空间 之间是不能互相通讯的
@@ -296,4 +301,255 @@ sudo ip netns exec a2 route -n
 ```
 
 
+
+> 多 网络空间 之间的通讯
+
+
+* 创建一个 叫 `wq` 的网桥
+
+```bash
+sudo ip link add wq type bridge
+
+```
+
+```bash
+sudo ip link
+
+
+120: wq: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 06:1e:3e:b0:17:3a brd ff:ff:ff:ff:ff:ff
+```
+
+
+* 创建 a1 到 `wq` 网桥之间通许的 虚拟网卡
+
+
+```bash
+sudo ip link add wq2a1 type veth peer name a12wq
+
+```
+
+```bash
+sudo ip link
+
+
+121: a12wq@wq2a1: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether b6:b4:85:d8:b0:f9 brd ff:ff:ff:ff:ff:ff
+122: wq2a1@a12wq: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 1a:2e:f1:e5:5c:44 brd ff:ff:ff:ff:ff:ff
+```
+
+
+* 创建 a2 到 `wq` 网桥之间通许的 虚拟网卡
+
+```bash
+sudo ip link add wq2a2 type veth peer name a22wq
+
+```
+
+
+```bash
+sudo ip link
+
+
+123: a22wq@wq2a2: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 16:83:79:6d:79:45 brd ff:ff:ff:ff:ff:ff
+124: wq2a2@a22wq: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 46:4a:1b:cc:67:7c brd ff:ff:ff:ff:ff:ff
+```
+
+
+* 分别 关联 创建的虚拟网卡
+
+
+```bash
+sudo ip link set a12wq netns a1
+
+```
+
+
+```bash
+sudo ip netns exec a1 ip addr
+
+
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+121: a12wq@if122: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether b6:b4:85:d8:b0:f9 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+```
+
+
+
+```bash
+sudo ip link set a22wq netns a2
+
+```
+
+
+```bash
+sudo ip netns exec a2 ip addr
+
+
+
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+123: a22wq@if124: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 16:83:79:6d:79:45 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+```
+
+
+* 关联 网桥
+
+
+```bash
+sudo ip link set wq2a1 master wq
+
+sudo ip link set wq2a2 master wq
+
+```
+
+
+```bash
+sudo bridge link
+
+
+122: wq2a1@if121: <BROADCAST,MULTICAST> mtu 1500 master wq state disabled priority 32 cost 2 
+124: wq2a2@if123: <BROADCAST,MULTICAST> mtu 1500 master wq state disabled priority 32 cost 2
+```
+
+
+
+
+* 配置 虚拟网卡 的IP
+
+
+```bash
+sudo ip netns exec a1 ip addr add dev a12wq 192.168.1.100/24
+
+sudo ip netns exec a2 ip addr add dev a22wq 192.168.1.101/24
+```
+
+
+```bash
+sudo ip netns exec a1 ip addr
+
+
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+121: a12wq@if122: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether b6:b4:85:d8:b0:f9 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.1.100/24 scope global a12wq
+       valid_lft forever preferred_lft forever
+```
+
+
+```bash
+sudo ip netns exec a2 ip addr
+
+
+1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+123: a22wq@if124: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 16:83:79:6d:79:45 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.1.101/24 scope global a22wq
+       valid_lft forever preferred_lft forever
+```
+
+
+* 启动 网桥 与 虚拟网卡
+
+
+```bash
+sudo ip link set wq up
+
+```
+
+
+```bash
+sudo ip link set wq2a1 up
+
+sudo ip link set wq2a2 up
+
+```
+
+
+
+```bash
+sudo ip netns exec a1 ip link set a12wq up
+
+sudo ip netns exec a2 ip link set a22wq up
+```
+
+
+```bash
+sudo bridge link
+
+122: wq2a1@if121: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master wq state forwarding priority 32 cost 2 
+124: wq2a2@if123: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master wq state forwarding priority 32 cost 2
+```
+
+
+
+```bash
+sudo ip link
+
+
+120: wq: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 1a:2e:f1:e5:5c:44 brd ff:ff:ff:ff:ff:ff
+122: wq2a1@if121: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master wq state UP mode DEFAULT group default qlen 1000
+    link/ether 1a:2e:f1:e5:5c:44 brd ff:ff:ff:ff:ff:ff link-netns a1
+124: wq2a2@if123: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master wq state UP mode DEFAULT group default qlen 1000
+    link/ether 46:4a:1b:cc:67:7c brd ff:ff:ff:ff:ff:ff link-netns a2
+```
+
+
+* 测试 通讯
+
+```bash
+sudo ip netns exec a1 ping -c 3 192.168.1.101
+
+
+PING 192.168.1.101 (192.168.1.101) 56(84) bytes of data.
+64 比特，来自 192.168.1.101: icmp_seq=1 ttl=64 时间=0.084 毫秒
+64 比特，来自 192.168.1.101: icmp_seq=2 ttl=64 时间=0.092 毫秒
+64 比特，来自 192.168.1.101: icmp_seq=3 ttl=64 时间=0.097 毫秒
+
+--- 192.168.1.101 ping 统计 ---
+已发送 3 个包， 已接收 3 个包, 0% 包丢失, 耗时 2049 毫秒
+rtt min/avg/max/mdev = 0.084/0.091/0.097/0.005 ms
+```
+
+```bash
+sudo ip netns exec a2 ping -c 3 192.168.1.100
+
+
+
+PING 192.168.1.100 (192.168.1.100) 56(84) bytes of data.
+64 比特，来自 192.168.1.100: icmp_seq=1 ttl=64 时间=0.078 毫秒
+64 比特，来自 192.168.1.100: icmp_seq=2 ttl=64 时间=0.091 毫秒
+64 比特，来自 192.168.1.100: icmp_seq=3 ttl=64 时间=0.036 毫秒
+
+--- 192.168.1.100 ping 统计 ---
+已发送 3 个包， 已接收 3 个包, 0% 包丢失, 耗时 2057 毫秒
+rtt min/avg/max/mdev = 0.036/0.068/0.091/0.023 ms
+
+```
+
+```bash
+sudo ip netns exec a1 route -n
+
+
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 a12wq
+```
+
+```bash
+sudo ip netns exec a2 route -n
+
+
+内核 IP 路由表
+目标            网关            子网掩码        标志  跃点   引用  使用 接口
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 a22wq
+```
 
