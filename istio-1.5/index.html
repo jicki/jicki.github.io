@@ -1,11 +1,11 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Istio 持续更新... - 小炒肉</title><meta name=Description content="Istio 持续更新..."><meta property="og:title" content="Istio 持续更新..."><meta property="og:description" content="Istio 持续更新..."><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/istio-1.5/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-04-13T00:00:00+00:00"><meta property="article:modified_time" content="2021-10-19T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Istio 持续更新..."><meta name=twitter:description content="Istio 持续更新..."><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/istio-1.5/><link rel=prev href=https://jicki.cn/leetcode-100/><link rel=next href=https://jicki.cn/horizontal-pod-autoscale/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Istio 持续更新...","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/istio-1.5\/"},"genre":"posts","keywords":"istio","wordcount":7375,"url":"https:\/\/jicki.cn\/istio-1.5\/","datePublished":"2020-04-13T00:00:00+00:00","dateModified":"2021-10-19T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Istio 持续更新..."}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Istio 持续更新... - 小炒肉</title><meta name=Description content="Istio 持续更新..."><meta property="og:title" content="Istio 持续更新..."><meta property="og:description" content="Istio 持续更新..."><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/istio-1.5/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2020-04-13T00:00:00+00:00"><meta property="article:modified_time" content="2021-10-19T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="Istio 持续更新..."><meta name=twitter:description content="Istio 持续更新..."><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/istio-1.5/><link rel=prev href=https://jicki.cn/leetcode-100/><link rel=next href=https://jicki.cn/horizontal-pod-autoscale/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Istio 持续更新...","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/istio-1.5\/"},"genre":"posts","keywords":"istio","wordcount":9180,"url":"https:\/\/jicki.cn\/istio-1.5\/","datePublished":"2020-04-13T00:00:00+00:00","dateModified":"2021-10-19T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"Istio 持续更新..."}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Istio 持续更新...</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/istio/><i class="far fa-folder fa-fw"></i>istio</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-04-13>2020-04-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7375 字&nbsp;
-<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 15 分钟&nbsp;<span id=/istio-1.5/ class=leancloud_visitors data-flag-title="Istio 持续更新...">
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Istio 持续更新...</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/istio/><i class="far fa-folder fa-fw"></i>istio</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-04-13>2020-04-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 9180 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 19 分钟&nbsp;<span id=/istio-1.5/ class=leancloud_visitors data-flag-title="Istio 持续更新...">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#istio-是什么衣撕朵>Istio 是什么？(衣撕朵)</a></li><li><a href=#服务网格-又是什么>服务网格 又是什么？</a></li><li><a href=#istio-架构>Istio 架构</a></li><li><a href=#istio-组件>Istio 组件</a><ul><li><a href=#envoy>Envoy</a></li><li><a href=#mixer>Mixer</a></li><li><a href=#pilot>Pilot</a></li><li><a href=#citadel>Citadel</a></li><li><a href=#galley>Galley</a></li></ul></li><li><a href=#istio-install>Istio Install</a><ul><li><a href=#搭建-kubernetes>搭建 Kubernetes</a></li><li><a href=#下载-istio-项目包>下载 Istio 项目包</a></li><li><a href=#安装-istio>安装 istio</a></li><li><a href=#验证-istio>验证 istio</a></li><li><a href=#kiali-组件>Kiali 组件</a></li><li><a href=#istio-profile>Istio Profile</a></li><li><a href=#istio-injection>istio injection</a></li></ul></li><li><a href=#istio-流量管理>Istio 流量管理</a><ul><li><a href=#istio-流量模型>Istio 流量模型</a></li><li><a href=#virtual-service>Virtual Service</a></li></ul></li><li><a href=#istio-upgrade>Istio Upgrade</a><ul><li><a href=#注意事项>注意事项</a></li><li><a href=#升级步骤>升级步骤</a></li></ul></li><li><a href=#istio-uninstall>Istio UnInstall</a></li></ul></nav></div></div><div class=content id=content><h1 id=istio>Istio</h1><blockquote><p>官方文档 <a href=https://istio.io/zh/docs>https://istio.io/zh/docs</a></p></blockquote><h2 id=istio-是什么衣撕朵>Istio 是什么？(衣撕朵)</h2><ul><li><p>云平台令使用它们的公司受益匪浅。但不可否认的是，上云会给 DevOps 团队带来压力。为了可移植性，开发人员必须使用微服务来构建应用，同时运维人员也正在管理着极端庞大的混合云和多云的部署环境。 Istio 允许您连接、保护、控制和观察服务。</p></li><li><p>从较高的层面来说，Istio 有助于降低这些部署的复杂性，并减轻开发团队的压力。它是一个完全开源的服务网格，作为透明的一层接入到现有的分布式应用程序里。它也是一个平台，拥有可以集成任何日志、遥测和策略系统的 API 接口。Istio 多样化的特性使您能够成功且高效地运行分布式微服务架构，并提供保护、连接和监控微服务的统一方法。</p></li></ul><h2 id=服务网格-又是什么>服务网格 又是什么？</h2><ul><li><code>服务网格</code> - 用来描述组成这些应用程序的微服务网络以及它们之间的交互。随着服务网格的规模和复杂性不断的增长，它将会变得越来越难以理解和管理。它的需求包括服务发现、负载均衡、故障恢复、度量和监控等。服务网格通常还有更复杂的运维需求，比如 A/B 测试、金丝雀发布、速率限制、访问控制和端到端认证。</li></ul><h2 id=istio-架构>Istio 架构</h2><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/istio/istio.svg data-srcset="https://jicki.cn/img/posts/istio/istio.svg, https://jicki.cn/img/posts/istio/istio.svg 1.5x, https://jicki.cn/img/posts/istio/istio.svg 2x" data-sizes=auto alt=https://jicki.cn/img/posts/istio/istio.svg title=istio架构></p><ul><li><p>Istio 服务网格从逻辑上分为数据平面和控制平面。</p><ul><li><p><code>数据平面</code>  由一组智能代理（Envoy）组成，被部署为 sidecar。这些代理通过一个通用的策略和遥测中心（Mixer）传递和控制微服务之间的所有网络通信。</p></li><li><p><code>控制平面</code>  管理并配置代理来进行流量路由。此外，控制平面配置 Mixer 来执行策略和收集遥测数据。</p></li></ul></li></ul><h2 id=istio-组件>Istio 组件</h2><h3 id=envoy>Envoy</h3><ul><li><p><code>Istio</code> 使用 <code>Envoy</code> 代理的扩展版本。</p></li><li><p><code>Envoy</code>   是用 <code>C++</code> 开发的高性能代理，用于协调服务网格中所有服务的入站和出站流量。</p></li><li><p><code>Envoy</code> 代理是唯一与数据平面流量交互的 <code>Istio</code> 组件。</p></li><li><p><code>Envoy</code> 代理被部署为服务的 <code>sidecar</code>，在逻辑上为服务增加了 <code>Envoy</code> 的许多内置特性:</p><ol><li>动态服务发现</li><li>负载均衡</li><li>TLS 终端</li><li>HTTP/2 与 gRPC 代理</li><li>熔断器</li><li>健康检查</li><li>基于百分比流量分割的分阶段发布</li><li>故障注入</li><li>丰富的指标</li></ol></li><li><p><code>sidecar</code> 代理模型</p><ul><li><p><code>sidecar</code>   允许 <code>Istio</code> 提取大量关于流量行为的信号作为属性。反之，<code>Istio</code> 可以在 <code>Mixer</code> 中使用这些属性来执行决策，并将它们发送到监控系统，以提供整个网格的行为信息。</p></li><li><p><code>sidecar</code>   还允许您向现有的部署添加 <code>Istio</code> 功能，而不需要重新设计架构或重写代码。</p></li></ul></li><li><p><code>Envoy</code> 代理在 <code>istio</code> 中可以实现</p><ol><li>流量控制功能：  通过丰富的 HTTP、gRPC、WebSocket 和 TCP 流量路由规则来执行细粒度的流量控制。</li><li>网络弹性特性：  重试设置、故障转移、熔断器和故障注入。</li><li>安全性和身份验证特性：  执行安全性策略以及通过配置 API 定义的访问控制和速率限制。</li></ol></li></ul><h3 id=mixer>Mixer</h3><ul><li><p><code>Mixer</code>   是一个平台无关的组件。<code>Mixer</code> 在整个服务网格中执行访问控制和策略使用，并从 <code>Envoy</code> 代理和其他服务收集遥测数据。代理提取请求级别属性，并将其发送到 <code>Mixer</code> 进行评估。您可以在我们的 <code>Mixer</code> 配置文档中找到更多关于属性提取和策略评估的信息。</p></li><li><p><code>Mixer</code>   包括一个灵活的插件模型。该模型使 <code>Istio</code> 能够与各种主机环境和后端基础设施进行交互。因此，<code>Istio</code> 从这些细节中抽象出 <code>Envoy</code> 代理和 <code>Istio</code> 管理的服务。</p></li></ul><h3 id=pilot>Pilot</h3><ul><li><p><code>Pilot</code>   主要是为 <code>Envoy sidecar</code> 提供服务发现、用于智能路由的流量管理功能（例如，A/B 测试、金丝雀发布等）以及弹性功能（超时、重试、熔断器等）。</p></li><li><p><code>Pilot</code>   将控制流量行为的高级路由规则转换为特定于环境的配置，并在运行时将它们传播到 <code>sidecar</code>。</p></li><li><p><code>Pilot</code>   将特定于平台的服务发现机制抽象出来，并将它们合成为任何符合 <code>Envoy API</code> 的 <code>sidecar</code> 都可以使用的标准格式。</p></li><li><p><code>平台适配器</code> 与 <code>Envoy</code> 交互图 (<code>平台</code>   支持 kubernetes、Consul、gcp、Nomad等)</p><ol><li>平台启动一个服务的新实例，该实例通知其平台适配器。</li><li>平台适配器使用 <code>Pilot</code> 抽象模型注册实例。</li><li><code>Pilot</code> 将流量规则和配置派发给 <code>Envoy</code> 代理，来传达此次更改。</li><li>可以使用 <code>Istio</code> 的<code>流量管理 API</code> 通过 <code>Pilot</code> 优化 <code>Envoy</code> 配置，以便对服务网格中的流量进行更细粒度地控制。</li></ol></li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/istio/discovery.svg data-srcset="https://jicki.cn/img/posts/istio/discovery.svg, https://jicki.cn/img/posts/istio/discovery.svg 1.5x, https://jicki.cn/img/posts/istio/discovery.svg 2x" data-sizes=auto alt=https://jicki.cn/img/posts/istio/discovery.svg title=discovery></p><h3 id=citadel>Citadel</h3><ul><li><p><code>Citadel</code>   通过内置的身份和证书管理，可以支持强大的服务到服务以及最终用户的身份验证。</p></li><li><p><code>Citadel</code>   可以用来升级服务网格中的未加密流量。</p></li><li><p><code>Citadel</code>、<code>operator</code>   结合使用可以执行基于服务身份的策略，而不是相对不稳定的 3 层或 4 层网络标识。</p></li><li><p><code>Citadel</code>   使用 <code>Istio</code> 的授权特性来控制谁可以访问您的服务。</p></li></ul><h3 id=galley>Galley</h3><ul><li><code>Galley</code>   是 <code>Istio</code> 的配置验证、提取、处理和分发组件。它负责将其余的 <code>Istio</code> 组件与从底层平台（例如 Kubernetes）获取用户配置的细节隔离开来。</li></ul><h2 id=istio-install>Istio Install</h2><blockquote><p>我这里 Kubernetes 版本为1.18 因为我目前只有这么一个集群</p></blockquote><ul><li><p>安装 <code>Istio</code> 环境准备</p><ol><li><p>搭建 <code>Kubernetes</code> 集群, ( 请按照官方提供的兼容测试版本安装 目前支持 1.14, 1.15, 1.16 )</p></li><li><p>下载 <code>Istio</code> 项目包. 项目包内包括(安装文件、示例和 istioctl 命令行工具。)</p></li><li><p>安装 <code>Istio</code>. 通过 <code>istioctl</code> 客户端工具直接安装<code>istio</code> 到 <code>Kubernetes 中</code>.</p></li></ol></li></ul><h3 id=搭建-kubernetes>搭建 Kubernetes</h3><blockquote><p>这一部分这里就省略了, 如需这一部分 文档, 请参考其他的博文。</p></blockquote><h3 id=下载-istio-项目包>下载 Istio 项目包</h3><ul><li>在 <code>macOS</code> 或 <code>Linux</code> 系统中, 也可以通过以下命令下载最新版本的 Istio</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#istio-是什么衣撕朵>Istio 是什么？(衣撕朵)</a></li><li><a href=#服务网格-又是什么>服务网格 又是什么？</a></li><li><a href=#istio-架构>Istio 架构</a></li><li><a href=#istio-组件>Istio 组件</a><ul><li><a href=#envoy>Envoy</a></li><li><a href=#mixer>Mixer</a></li><li><a href=#pilot>Pilot</a></li><li><a href=#citadel>Citadel</a></li><li><a href=#galley>Galley</a></li></ul></li><li><a href=#istio-install>Istio Install</a><ul><li><a href=#搭建-kubernetes>搭建 Kubernetes</a></li><li><a href=#下载-istio-项目包>下载 Istio 项目包</a></li><li><a href=#安装-istio>安装 istio</a></li><li><a href=#验证-istio>验证 istio</a></li><li><a href=#kiali-组件>Kiali 组件</a></li><li><a href=#istio-profile>Istio Profile</a></li><li><a href=#istio-injection>istio injection</a></li></ul></li><li><a href=#istio-流量管理>Istio 流量管理</a><ul><li><a href=#istio-流量模型>Istio 流量模型</a></li><li><a href=#virtual-service>Virtual Service</a></li><li><a href=#istio-gateway>Istio Gateway</a></li><li><a href=#fault-injection>Fault Injection</a></li><li><a href=#traffic-shifting>Traffic Shifting</a></li><li><a href=#request-timeouts>Request Timeouts</a></li><li><a href=#circuit-breaking>Circuit Breaking</a></li></ul></li><li><a href=#istio-upgrade>Istio Upgrade</a><ul><li><a href=#注意事项>注意事项</a></li><li><a href=#升级步骤>升级步骤</a></li></ul></li><li><a href=#istio-uninstall>Istio UnInstall</a></li></ul></nav></div></div><div class=content id=content><h1 id=istio>Istio</h1><blockquote><p>官方文档 <a href=https://istio.io/zh/docs>https://istio.io/zh/docs</a></p></blockquote><h2 id=istio-是什么衣撕朵>Istio 是什么？(衣撕朵)</h2><ul><li><p>云平台令使用它们的公司受益匪浅。但不可否认的是，上云会给 DevOps 团队带来压力。为了可移植性，开发人员必须使用微服务来构建应用，同时运维人员也正在管理着极端庞大的混合云和多云的部署环境。 Istio 允许您连接、保护、控制和观察服务。</p></li><li><p>从较高的层面来说，Istio 有助于降低这些部署的复杂性，并减轻开发团队的压力。它是一个完全开源的服务网格，作为透明的一层接入到现有的分布式应用程序里。它也是一个平台，拥有可以集成任何日志、遥测和策略系统的 API 接口。Istio 多样化的特性使您能够成功且高效地运行分布式微服务架构，并提供保护、连接和监控微服务的统一方法。</p></li></ul><h2 id=服务网格-又是什么>服务网格 又是什么？</h2><ul><li><code>服务网格</code> - 用来描述组成这些应用程序的微服务网络以及它们之间的交互。随着服务网格的规模和复杂性不断的增长，它将会变得越来越难以理解和管理。它的需求包括服务发现、负载均衡、故障恢复、度量和监控等。服务网格通常还有更复杂的运维需求，比如 A/B 测试、金丝雀发布、速率限制、访问控制和端到端认证。</li></ul><h2 id=istio-架构>Istio 架构</h2><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/istio/istio.svg data-srcset="https://jicki.cn/img/posts/istio/istio.svg, https://jicki.cn/img/posts/istio/istio.svg 1.5x, https://jicki.cn/img/posts/istio/istio.svg 2x" data-sizes=auto alt=https://jicki.cn/img/posts/istio/istio.svg title=istio架构></p><ul><li><p>Istio 服务网格从逻辑上分为数据平面和控制平面。</p><ul><li><p><code>数据平面</code>  由一组智能代理（Envoy）组成，被部署为 sidecar。这些代理通过一个通用的策略和遥测中心（Mixer）传递和控制微服务之间的所有网络通信。</p></li><li><p><code>控制平面</code>  管理并配置代理来进行流量路由。此外，控制平面配置 Mixer 来执行策略和收集遥测数据。</p></li></ul></li></ul><h2 id=istio-组件>Istio 组件</h2><h3 id=envoy>Envoy</h3><ul><li><p><code>Istio</code> 使用 <code>Envoy</code> 代理的扩展版本。</p></li><li><p><code>Envoy</code>   是用 <code>C++</code> 开发的高性能代理，用于协调服务网格中所有服务的入站和出站流量。</p></li><li><p><code>Envoy</code> 代理是唯一与数据平面流量交互的 <code>Istio</code> 组件。</p></li><li><p><code>Envoy</code> 代理被部署为服务的 <code>sidecar</code>，在逻辑上为服务增加了 <code>Envoy</code> 的许多内置特性:</p><ol><li>动态服务发现</li><li>负载均衡</li><li>TLS 终端</li><li>HTTP/2 与 gRPC 代理</li><li>熔断器</li><li>健康检查</li><li>基于百分比流量分割的分阶段发布</li><li>故障注入</li><li>丰富的指标</li></ol></li><li><p><code>sidecar</code> 代理模型</p><ul><li><p><code>sidecar</code>   允许 <code>Istio</code> 提取大量关于流量行为的信号作为属性。反之，<code>Istio</code> 可以在 <code>Mixer</code> 中使用这些属性来执行决策，并将它们发送到监控系统，以提供整个网格的行为信息。</p></li><li><p><code>sidecar</code>   还允许您向现有的部署添加 <code>Istio</code> 功能，而不需要重新设计架构或重写代码。</p></li></ul></li><li><p><code>Envoy</code> 代理在 <code>istio</code> 中可以实现</p><ol><li>流量控制功能：  通过丰富的 HTTP、gRPC、WebSocket 和 TCP 流量路由规则来执行细粒度的流量控制。</li><li>网络弹性特性：  重试设置、故障转移、熔断器和故障注入。</li><li>安全性和身份验证特性：  执行安全性策略以及通过配置 API 定义的访问控制和速率限制。</li></ol></li></ul><h3 id=mixer>Mixer</h3><ul><li><p><code>Mixer</code>   是一个平台无关的组件。<code>Mixer</code> 在整个服务网格中执行访问控制和策略使用，并从 <code>Envoy</code> 代理和其他服务收集遥测数据。代理提取请求级别属性，并将其发送到 <code>Mixer</code> 进行评估。您可以在我们的 <code>Mixer</code> 配置文档中找到更多关于属性提取和策略评估的信息。</p></li><li><p><code>Mixer</code>   包括一个灵活的插件模型。该模型使 <code>Istio</code> 能够与各种主机环境和后端基础设施进行交互。因此，<code>Istio</code> 从这些细节中抽象出 <code>Envoy</code> 代理和 <code>Istio</code> 管理的服务。</p></li></ul><h3 id=pilot>Pilot</h3><ul><li><p><code>Pilot</code>   主要是为 <code>Envoy sidecar</code> 提供服务发现、用于智能路由的流量管理功能（例如，A/B 测试、金丝雀发布等）以及弹性功能（超时、重试、熔断器等）。</p></li><li><p><code>Pilot</code>   将控制流量行为的高级路由规则转换为特定于环境的配置，并在运行时将它们传播到 <code>sidecar</code>。</p></li><li><p><code>Pilot</code>   将特定于平台的服务发现机制抽象出来，并将它们合成为任何符合 <code>Envoy API</code> 的 <code>sidecar</code> 都可以使用的标准格式。</p></li><li><p><code>平台适配器</code> 与 <code>Envoy</code> 交互图 (<code>平台</code>   支持 kubernetes、Consul、gcp、Nomad等)</p><ol><li>平台启动一个服务的新实例，该实例通知其平台适配器。</li><li>平台适配器使用 <code>Pilot</code> 抽象模型注册实例。</li><li><code>Pilot</code> 将流量规则和配置派发给 <code>Envoy</code> 代理，来传达此次更改。</li><li>可以使用 <code>Istio</code> 的<code>流量管理 API</code> 通过 <code>Pilot</code> 优化 <code>Envoy</code> 配置，以便对服务网格中的流量进行更细粒度地控制。</li></ol></li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/istio/discovery.svg data-srcset="https://jicki.cn/img/posts/istio/discovery.svg, https://jicki.cn/img/posts/istio/discovery.svg 1.5x, https://jicki.cn/img/posts/istio/discovery.svg 2x" data-sizes=auto alt=https://jicki.cn/img/posts/istio/discovery.svg title=discovery></p><h3 id=citadel>Citadel</h3><ul><li><p><code>Citadel</code>   通过内置的身份和证书管理，可以支持强大的服务到服务以及最终用户的身份验证。</p></li><li><p><code>Citadel</code>   可以用来升级服务网格中的未加密流量。</p></li><li><p><code>Citadel</code>、<code>operator</code>   结合使用可以执行基于服务身份的策略，而不是相对不稳定的 3 层或 4 层网络标识。</p></li><li><p><code>Citadel</code>   使用 <code>Istio</code> 的授权特性来控制谁可以访问您的服务。</p></li></ul><h3 id=galley>Galley</h3><ul><li><code>Galley</code>   是 <code>Istio</code> 的配置验证、提取、处理和分发组件。它负责将其余的 <code>Istio</code> 组件与从底层平台（例如 Kubernetes）获取用户配置的细节隔离开来。</li></ul><h2 id=istio-install>Istio Install</h2><blockquote><p>我这里 Kubernetes 版本为1.18 因为我目前只有这么一个集群</p></blockquote><ul><li><p>安装 <code>Istio</code> 环境准备</p><ol><li><p>搭建 <code>Kubernetes</code> 集群, ( 请按照官方提供的兼容测试版本安装 目前支持 1.14, 1.15, 1.16 )</p></li><li><p>下载 <code>Istio</code> 项目包. 项目包内包括(安装文件、示例和 istioctl 命令行工具。)</p></li><li><p>安装 <code>Istio</code>. 通过 <code>istioctl</code> 客户端工具直接安装<code>istio</code> 到 <code>Kubernetes 中</code>.</p></li></ol></li></ul><h3 id=搭建-kubernetes>搭建 Kubernetes</h3><blockquote><p>这一部分这里就省略了, 如需这一部分 文档, 请参考其他的博文。</p></blockquote><h3 id=下载-istio-项目包>下载 Istio 项目包</h3><ul><li>在 <code>macOS</code> 或 <code>Linux</code> 系统中, 也可以通过以下命令下载最新版本的 Istio</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -661,7 +661,7 @@ NAME              STATUS   AGE     LABELS
 default           Active   9d      &lt;none&gt;
 jicki             Active   4m46s   istio-injection=enabled
 
-</code></pre></td></tr></table></div></div><h2 id=istio-流量管理>Istio 流量管理</h2><blockquote><p>Istio 的流量管理 就是配置 HTTP/TCP 路由功能。</p></blockquote><ul><li><p><code>Istio</code> 流量</p><ol><li><p><code>data plane 数据面流量</code>   是指 网格内服务之间业务互相调用所产生的流量。</p></li><li><p><code>control plane 控制面流量</code>   是指 <code>Istio</code> 各组件之间配置和控制网格行为所产生的流量。</p></li></ol></li><li><p><code>Istio</code> 流量管理分为六个部分</p><ol><li><p><code>Destination Rule</code></p></li><li><p><code>Envoy Filter</code></p></li><li><p><code>Gateway</code></p></li><li><p><code>Service Entry</code></p></li><li><p><code>Sidecar</code></p></li><li><p><code>Virtual Service</code></p></li></ol></li></ul><h3 id=istio-流量模型>Istio 流量模型</h3><ul><li><p><code>Istio</code> 依赖与服务注入(inject)时所部署的 <code>Envoy</code> 代理。</p></li><li><p>网格内发送与接收的所有的流量, 都通过 <code>Envoy</code> 进行代理。</p></li><li><p><code>Envoy</code>代理 可以轻松的引导和控制网格的流量, 而不需要对服务进行任何修改。</p></li></ul><h3 id=virtual-service>Virtual Service</h3><ul><li><p>在<code>Istio</code>所提供的基本连接和发现基础上, 通过虚拟服务(vitrual service), 能够将请求路由到<code>Istio</code>网格中的特定服务。每个虚拟服务(vitrual service)由一组路由规则组成, 这些路由规则使<code>Istio</code>能够将虚拟服务(vitrual service)的每个给定请求匹配到网格内特定的目标地址。</p></li><li><p><code>虚拟服务(Virtual Service)</code>  定义了一组寻址主机时要使用的流量路由规则，每个路由规则为特定协议的流量定义匹配了条件。如果流量匹配，则将其发送到注册表中定义的命名目标服务（或其子集/版本）。同时流量来源也可以在路由规则中匹配，从而能够允许针对特定的客户端上下文自定义路由。</p><ul><li><p><code>服务（Service）</code>:   应用绑定到服务注册表中的唯一名称。服务包含多个网络端点，这些端点由在Pod、容器和VM等上运行的工作负载实例进行实现。</p></li><li><p><code>服务版本（Service versions）</code>或<code>子集</code>:  在持续部署的场景中，对于给定的服务，可能存在不同的应用程序实例。它们可能是对同一服务的迭代更改，这些版本部署在不同的环境（产品，阶段和开发等）中。场景包括<code>A / B测试</code> 和 <code>金丝雀发布</code> 等。可以根据各种标准（标头，网址等）和/或通过分配给每个版本的权重来确定特定版本的选择。每个服务都有一个包含其所有实例的默认版本。</p></li><li><p><code>来源（Source）</code>:  调用服务的下游客户端。</p></li><li><p><code>主机（Host）</code>:  下游客户端连接服务时所使用的地址。</p></li><li><p><code>访问模式（Access model）</code>:  应用程序仅需要处理目标服务（主机），而无需了解各个服务版本（子集）。版本的实际选择由代理/sidecar决定，从而使应用程序代码能够与所依赖服务的脱钩。</p></li></ul></li><li><p>一个例子</p><ul><li><code>注</code>:  所有服务(deployment)、(service)、包括 client 都必须被 <code>istio</code> 注入(injection)。</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>  1
+</code></pre></td></tr></table></div></div><h2 id=istio-流量管理>Istio 流量管理</h2><blockquote><p>Istio 的流量管理 就是配置 HTTP/TCP 路由功能。</p></blockquote><blockquote><p>Update Istio Version 1.9.9</p></blockquote><ul><li><p><code>Istio</code> 流量</p><ol><li><p><code>data plane 数据面流量</code>   是指 网格内服务之间业务互相调用所产生的流量。</p></li><li><p><code>control plane 控制面流量</code>   是指 <code>Istio</code> 各组件之间配置和控制网格行为所产生的流量。</p></li></ol></li><li><p><code>Istio</code> 流量管理分为六个部分</p><ol><li><p><code>Destination Rule</code></p></li><li><p><code>Envoy Filter</code></p></li><li><p><code>Gateway</code></p></li><li><p><code>Service Entry</code></p></li><li><p><code>Sidecar</code></p></li><li><p><code>Virtual Service</code></p></li></ol></li></ul><h3 id=istio-流量模型>Istio 流量模型</h3><ul><li><p><code>Istio</code> 依赖与服务注入(inject)时所部署的 <code>Envoy</code> 代理。</p></li><li><p>网格内发送与接收的所有的流量, 都通过 <code>Envoy</code> 进行代理。</p></li><li><p><code>Envoy</code>代理 可以轻松的引导和控制网格的流量, 而不需要对服务进行任何修改。</p></li></ul><h3 id=virtual-service>Virtual Service</h3><ul><li><p>在<code>Istio</code>所提供的基本连接和发现基础上, 通过虚拟服务(vitrual service), 能够将请求路由到<code>Istio</code>网格中的特定服务。每个虚拟服务(vitrual service)由一组路由规则组成, 这些路由规则使<code>Istio</code>能够将虚拟服务(vitrual service)的每个给定请求匹配到网格内特定的目标地址。</p></li><li><p><code>虚拟服务(Virtual Service)</code>  定义了一组寻址主机时要使用的流量路由规则，每个路由规则为特定协议的流量定义匹配了条件。如果流量匹配，则将其发送到注册表中定义的命名目标服务（或其子集/版本）。同时流量来源也可以在路由规则中匹配，从而能够允许针对特定的客户端上下文自定义路由。</p><ul><li><p><code>服务（Service）</code>:   应用绑定到服务注册表中的唯一名称。服务包含多个网络端点，这些端点由在Pod、容器和VM等上运行的工作负载实例进行实现。</p></li><li><p><code>服务版本（Service versions）</code>或<code>子集</code>:  在持续部署的场景中，对于给定的服务，可能存在不同的应用程序实例。它们可能是对同一服务的迭代更改，这些版本部署在不同的环境（产品，阶段和开发等）中。场景包括<code>A / B测试</code> 和 <code>金丝雀发布</code> 等。可以根据各种标准（标头，网址等）和/或通过分配给每个版本的权重来确定特定版本的选择。每个服务都有一个包含其所有实例的默认版本。</p></li><li><p><code>来源（Source）</code>:  调用服务的下游客户端。</p></li><li><p><code>主机（Host）</code>:  下游客户端连接服务时所使用的地址。</p></li><li><p><code>访问模式（Access model）</code>:  应用程序仅需要处理目标服务（主机），而无需了解各个服务版本（子集）。版本的实际选择由代理/sidecar决定，从而使应用程序代码能够与所依赖服务的脱钩。</p></li></ul></li><li><p>一个例子</p><ul><li><code>注</code>:  所有服务(deployment)、(service)、包括 client 都必须被 <code>istio</code> 注入(injection)。</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>  1
 </span><span class=lnt>  2
 </span><span class=lnt>  3
 </span><span class=lnt>  4
@@ -992,42 +992,38 @@ nginx-svc-3   10.254.64.165:80                                     26s
 </span><span class=lnt>29
 </span><span class=lnt>30
 </span><span class=lnt>31
-</span><span class=lnt>32
-</span><span class=lnt>33
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@k8s-node-1 istio]# cat nginx-test-vs.yaml 
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: nginx-svc-vs
-spec:
-  # 客户端访问服务的地址, ( svc名称 + namespace 用于跨 namespace 调用 )
-  hosts: 
-  - nginx-svc.default
-  # http协议
-  http:
-  # 如下为匹配条件
-  - match:
-    # http 头 包含如下信息
-    - headers:
-        # key = vs-user
-        vs-user:
-          # exact 完全匹配 value = jicki
-          exact: jicki
-    route:
-    - destination:
-        host: nginx-svc-3.default
-  # 如下为匹配路由规则
-  - route:
-    - destination:
-        # 匹配的服务版本或子集为 nginx-1
-        host: nginx-svc-1.default
-      weight: 80
-    - destination:
-        # 匹配的服务版本或子集为 nginx-2
-        host: nginx-svc-2.default
-      weight: 20
-
-</code></pre></td></tr></table></div></div><ul><li><p><code>VirtualService</code> 服务并非是 <code>kubernetes</code> 中实际的 <code>service</code> 服务。</p><ul><li><code>kubectl get virtualservices</code> 使用这个命令查看 <code>Virtual Service</code></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=p>[</span>root@k8s-node<span class=m>-1</span><span class=w> </span>istio<span class=p>]</span><span class=c># cat nginx-test-vs.yaml </span><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>VirtualService<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-svc-vs<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 客户端访问服务的地址, ( svc名称 + namespace 用于跨 namespace 调用 )</span><span class=w>
+</span><span class=w>  </span><span class=k>hosts</span><span class=p>:</span><span class=w> 
+</span><span class=w>  </span>- nginx-svc.default<span class=w>
+</span><span class=w>  </span><span class=c># http协议</span><span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 如下为匹配条件</span><span class=w>
+</span><span class=w>  </span>- <span class=k>match</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=c># http 头 包含如下信息</span><span class=w>
+</span><span class=w>    </span>- <span class=k>headers</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># key = vs-user</span><span class=w>
+</span><span class=w>        </span><span class=k>vs-user</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=c># exact 完全匹配 value = jicki</span><span class=w>
+</span><span class=w>          </span><span class=k>exact</span><span class=p>:</span><span class=w> </span>jicki<span class=w>
+</span><span class=w>    </span><span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-3.</span>default<span class=w>
+</span><span class=w>  </span><span class=c># 如下为匹配路由规则</span><span class=w>
+</span><span class=w>  </span>- <span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 匹配的服务版本或子集为 nginx-1</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-1.</span>default<span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 匹配的服务版本或子集为 nginx-2</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-2.</span>default<span class=w>
+</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li><p><code>VirtualService</code> 服务并非是 <code>kubernetes</code> 中实际的 <code>service</code> 服务。</p><ul><li><code>kubectl get virtualservices</code> 使用这个命令查看 <code>Virtual Service</code></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
@@ -1058,30 +1054,30 @@ nginx-svc-vs              [nginx-svc.default.svc.cluster.local]   3m1s
 </span><span class=lnt>21
 </span><span class=lnt>22
 </span><span class=lnt>23
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 创建一个 busybox 的 deployment 作为客户端
-[root@k8s-node-1 istio]# cat busybox.yaml 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: busybox
-  labels:
-    app: busybox
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: busybox
-  template:
-    metadata:
-      labels:
-        app: busybox
-    spec:
-      containers:
-        - name: busybox
-          image: jicki/busybox-curl
-          imagePullPolicy: IfNotPresent
-          command: [&#34;/bin/sh&#34;, &#34;-c&#34;, &#34;sleep 3600s&#34;]
-</code></pre></td></tr></table></div></div><ul><li>客户端 <code>istio</code> 注入</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 创建一个 busybox 的 deployment 作为客户端</span><span class=w>
+</span><span class=w></span><span class=p>[</span>root@k8s-node<span class=m>-1</span><span class=w> </span>istio<span class=p>]</span><span class=c># cat busybox.yaml </span><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>apps/v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>Deployment<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>busybox<span class=w>
+</span><span class=w>  </span><span class=k>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>app</span><span class=p>:</span><span class=w> </span>busybox<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>replicas</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span><span class=w>  </span><span class=k>selector</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>matchLabels</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>app</span><span class=p>:</span><span class=w> </span>busybox<span class=w>
+</span><span class=w>  </span><span class=k>template</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>app</span><span class=p>:</span><span class=w> </span>busybox<span class=w>
+</span><span class=w>    </span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>containers</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>busybox<span class=w>
+</span><span class=w>          </span><span class=k>image</span><span class=p>:</span><span class=w> </span>jicki/busybox-curl<span class=w>
+</span><span class=w>          </span><span class=k>imagePullPolicy</span><span class=p>:</span><span class=w> </span>IfNotPresent<span class=w>
+</span><span class=w>          </span><span class=k>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;/bin/sh&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;-c&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;sleep 3600s&#34;</span><span class=p>]</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>客户端 <code>istio</code> 注入</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>kubectl apply -f &lt;(istioctl kube-inject -f busybox.yaml)
 
@@ -1117,7 +1113,599 @@ do
 wget -q -O - http://nginx-svc;
 done
 
-</code></pre></td></tr></table></div></div><ul><li>查看 kiali</li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/istio/virtualservice.png data-srcset="https://jicki.cn/img/posts/istio/virtualservice.png, https://jicki.cn/img/posts/istio/virtualservice.png 1.5x, https://jicki.cn/img/posts/istio/virtualservice.png 2x" data-sizes=auto alt=https://jicki.cn/img/posts/istio/virtualservice.png title=virutalservice></p><h2 id=istio-upgrade>Istio Upgrade</h2><h3 id=注意事项>注意事项</h3><ul><li><p>升级 Istio 之前, 请确认是否支持升级 <code>istioctl manifest versions</code> 查看支持版本。</p></li><li><p>升级过程中可能发生流量中断。为了缩短流量中断时间, 请确保每个组件（Citadel 除外）至少运行有两个副本。同时, 确保 <code>PodDistruptionBudgets</code> 配置最小可用性为 1。</p></li><li><p>确保 istio <code>profile</code> 与 需要升级的版本所配置的 <code>profile</code> 一致。</p></li></ul><h3 id=升级步骤>升级步骤</h3><ul><li><p>1. 下载需要升级的 istio 版本 <code>curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.5.1 sh -</code></p></li><li><p>2. 替换 <code>istioctl</code> 二进制文件, 或者 更改 <code>istio</code> 的环境变量PATH路径到新版本的目录中。</p></li><li><p>3. 如果配置了 <code>istioctl</code> 自动补全,还需要替换为 新的 自动补全脚本。</p></li><li><p>4. 使用新的 <code>istioctl</code> 导出新版本的 profile 文件 <code>istioctl profile dump demo > demo.yaml</code></p></li><li><p>5. 修改 <code>demo.yaml</code> 文件, 将其中 <code>jwtPolicy</code> 身份验证机构修改为 <code>first-party-jwt</code>。Istio 将默认使用第三方令牌。</p><ul><li><p>5.1  验证是否支持 第三方令牌。<code>kubectl get --raw /api/v1 | jq '.resources[] | select(.name | index("serviceaccounts/token"))'</code></p><ul><li><p>5.1.1 jwtPolicy = <code>third-party-jwt</code> 使用第三方令牌 更安全 Istio 默认使用这个选项。</p></li><li><p>5.1.2  jwtPolicy = <code>first-party-jwt</code> 使用第一方令牌 属性比较不安全。</p></li></ul></li></ul></li><li><p>6. <code>istioctl upgrade -f demo.yaml</code> 命令进行升级。</p></li><li><p>7. 观察 <code>kubernets</code> 中 <code>istio-system</code> 的服务更新完成。</p></li><li><p>8. 重新注入环境中部署的服务, 用以更新注入数据。</p><ul><li><p>8.1 对于自动注入的情况可使用如下命令:</p><ul><li><p>8.1.1 <code>kubectl rollout restart deployment</code></p></li><li><p>8.1.2 <code>kubectl rollout restart statefulset</code></p></li><li><p>8.1.3 <code>kubectl rollout restart daemonset</code></p></li></ul></li><li><p>8.2 对于手动注入的情况( 需要重新 apply 一下服务) :</p><ul><li>8.2.1 <code>kubectl apply -f &lt;(istioctl kube-inject -f nginx-test.yaml)</code></li></ul></li></ul></li><li><p>9. 检查升级, 执行 <code>istioctl version</code> 检查</p><ul><li><p>9.1 <code>client version</code> 版本是否为新版本。</p></li><li><p>9.2 <code>control plane version</code> 版本是否为新版本。</p></li><li><p>9.3 <code>data plane version</code> 中是否全部 <code>proxies</code> 都为新版本。</p></li></ul></li></ul><h2 id=istio-uninstall>Istio UnInstall</h2><ul><li>卸载 Istio 的话其实就是讲 <code>kubernetes</code> 所安装到的组件 <code>delete</code> 掉就可以了</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</code></pre></td></tr></table></div></div><ul><li>查看 kiali</li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=https://jicki.cn/img/posts/istio/virtualservice.png data-srcset="https://jicki.cn/img/posts/istio/virtualservice.png, https://jicki.cn/img/posts/istio/virtualservice.png 1.5x, https://jicki.cn/img/posts/istio/virtualservice.png 2x" data-sizes=auto alt=https://jicki.cn/img/posts/istio/virtualservice.png title=virutalservice></p><h3 id=istio-gateway>Istio Gateway</h3><ul><li>创建 一个基于 Nginx Web 服务的 <code>Istio Gateway</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>Gateway<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-gateway<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>selector</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>istio</span><span class=p>:</span><span class=w> </span>ingressgateway<span class=w> </span><span class=c># use istio default controller</span><span class=w>
+</span><span class=w>  </span><span class=k>servers</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=k>port</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>number</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span><span class=w>      </span><span class=k>name</span><span class=p>:</span><span class=w> </span>http<span class=w>
+</span><span class=w>      </span><span class=k>protocol</span><span class=p>:</span><span class=w> </span>HTTP<span class=w>
+</span><span class=w>    </span><span class=k>hosts</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=s2>&#34;*&#34;</span><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>VirtualService<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-gw-vs<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>hosts</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=s2>&#34;*&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>gateways</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- nginx-gateway<span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=k>number</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li><p>配置 <code>DestinationRule</code></p><ul><li><p>目标规则: <code>https://istio.io/latest/zh/docs/reference/config/networking/destination-rule/</code></p></li><li><p>通过 <code>svc labels</code> 选择访问</p></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>DestinationRule<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-destinationrule<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=w>
+</span><span class=w>  </span><span class=k>subsets</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-1</span><span class=w>
+</span><span class=w>    </span><span class=k>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>web</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-1</span><span class=w>
+</span><span class=w>  </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-2</span><span class=w>
+</span><span class=w>    </span><span class=k>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>web</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-2</span><span class=w>
+</span><span class=w>  </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-3</span><span class=w>
+</span><span class=w>    </span><span class=k>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>web</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-3</span><span class=w>
+</span><span class=w></span>---<span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>VirtualService<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-gw-vs<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>hosts</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=s2>&#34;*&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>gateways</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- nginx-gateway<span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=k>number</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span><span class=w>        </span><span class=k>subset</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-3</span><span class=w>
+</span></code></pre></td></tr></table></div></div><h3 id=fault-injection>Fault Injection</h3><blockquote><p>故障注入</p></blockquote><ul><li><p>Istio 的故障注入规则可以帮助您识别微服务中有硬编码超时, 导致 服务失败等。此类异常, 而不会影响最终用户。</p></li><li><p>故障注入 - 延迟调用, 在使用条件匹配访问 vs-user 用户等于 jicki 的时候 延迟7s 后调用, 延迟比例为 100%</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 在 内部网格中实现 故障注入</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=p>[</span>root@k8s-node<span class=m>-1</span><span class=w> </span>istio<span class=p>]</span><span class=c># cat nginx-vs.yaml</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>VirtualService<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-svc-vs<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 客户端访问服务的地址</span><span class=w>
+</span><span class=w>  </span><span class=k>hosts</span><span class=p>:</span><span class=w> 
+</span><span class=w>  </span>- nginx-svc<span class=w>
+</span><span class=w>  </span><span class=c># http协议</span><span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 如下为 故障注入</span><span class=w>
+</span><span class=w>  </span>- <span class=k>fault</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>delay</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 延迟 7秒</span><span class=w>
+</span><span class=w>        </span><span class=k>fixedDelay</span><span class=p>:</span><span class=w> </span>7s<span class=w>
+</span><span class=w>        </span><span class=c># 延迟比例 100%</span><span class=w>
+</span><span class=w>        </span><span class=k>percentage</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=k>value</span><span class=p>:</span><span class=w> </span><span class=m>100</span><span class=w>
+</span><span class=w>  </span><span class=c># 如下为匹配条件</span><span class=w>
+</span><span class=w>    </span><span class=k>match</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=c># http 头 包含如下信息</span><span class=w>
+</span><span class=w>    </span>- <span class=k>headers</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># key = vs-user</span><span class=w>
+</span><span class=w>        </span><span class=k>vs-user</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=c># exact 完全匹配 value = jicki</span><span class=w>
+</span><span class=w>          </span><span class=k>exact</span><span class=p>:</span><span class=w> </span>jicki<span class=w>
+</span><span class=w>    </span><span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-3</span><span class=w>
+</span><span class=w>  </span><span class=c># 如下为匹配路由规则</span><span class=w>
+</span><span class=w>  </span>- <span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 匹配的服务版本或子集为 nginx-1</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-1</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 匹配的服务版本或子集为 nginx-2</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-2</span><span class=w>
+</span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>time</span> curl --header <span class=s2>&#34;vs-user: jicki&#34;</span> http://nginx-svc
+
+
+hello jicki
+real	0m 7.02s
+user	0m 0.00s
+sys	0m 0.00s
+</code></pre></td></tr></table></div></div><ul><li>在 外部调用 中实现 故障注入</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=w>
+</span><span class=w></span><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>VirtualService<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-gw-vs<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>hosts</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=s2>&#34;*&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>gateways</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- nginx-gateway<span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 如下为 故障注入</span><span class=w>
+</span><span class=w>  </span>- <span class=k>fault</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>delay</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 延迟 7秒</span><span class=w>
+</span><span class=w>        </span><span class=k>fixedDelay</span><span class=p>:</span><span class=w> </span>7s<span class=w>
+</span><span class=w>        </span><span class=c># 延迟比例 100%</span><span class=w>
+</span><span class=w>        </span><span class=k>percentage</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=k>value</span><span class=p>:</span><span class=w> </span><span class=m>100</span><span class=w>
+</span><span class=w>    </span><span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=k>number</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span><span class=w>        </span><span class=k>subset</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-3</span><span class=w>
+</span></code></pre></td></tr></table></div></div><h3 id=traffic-shifting>Traffic Shifting</h3><blockquote><p>流量转移</p></blockquote><ul><li><p>在项目服务中, 通常会有一些新旧版本的逐步迁移, 如流量从微服务的一个版本的逐渐迁移到另一个版本。流量转移适用于web服务以及TCP服务。</p><ul><li>通过配置 <code>destination.weight</code> 来定义流量的百分比 (只用于网格内的服务)</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>VirtualService<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-svc-vs<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 客户端访问服务的地址, ( svc名称 + namespace 用于跨 namespace 调用 )</span><span class=w>
+</span><span class=w>  </span><span class=k>hosts</span><span class=p>:</span><span class=w> 
+</span><span class=w>  </span>- nginx-svc.default<span class=w>
+</span><span class=w>  </span><span class=c># http协议</span><span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=c># 如下为匹配条件</span><span class=w>
+</span><span class=w>  </span>- <span class=k>match</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=c># http 头 包含如下信息</span><span class=w>
+</span><span class=w>    </span>- <span class=k>headers</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># key = vs-user</span><span class=w>
+</span><span class=w>        </span><span class=k>vs-user</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=c># exact 完全匹配 value = jicki</span><span class=w>
+</span><span class=w>          </span><span class=k>exact</span><span class=p>:</span><span class=w> </span>jicki<span class=w>
+</span><span class=w>    </span><span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-3.</span>default<span class=w>
+</span><span class=w>  </span><span class=c># 如下为匹配路由规则</span><span class=w>
+</span><span class=w>  </span>- <span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 匹配的服务版本或子集为 nginx-1</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-1.</span>default<span class=w>
+</span><span class=w>      </span><span class=c># 流量比例</span><span class=w>
+</span><span class=w>      </span><span class=k>weight</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=c># 匹配的服务版本或子集为 nginx-2</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=m>-2.</span>default<span class=w>
+</span><span class=w>      </span><span class=c># 流量比例</span><span class=w>
+</span><span class=w>      </span><span class=k>weight</span><span class=p>:</span><span class=w> </span><span class=m>20</span><span class=w>
+</span></code></pre></td></tr></table></div></div><h3 id=request-timeouts>Request Timeouts</h3><blockquote><p>请求超时</p></blockquote><ul><li>通过设置 请求超时 来测试服务的一些特性.</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>VirtualService<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-gw-vs<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>hosts</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=s2>&#34;*&#34;</span><span class=w>
+</span><span class=w>  </span><span class=k>gateways</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- nginx-gateway<span class=w>
+</span><span class=w>  </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=k>route</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>destination</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=w>
+</span><span class=w>        </span><span class=k>port</span><span class=p>:</span><span class=w>
+</span><span class=w>          </span><span class=k>number</span><span class=p>:</span><span class=w> </span><span class=m>80</span><span class=w>
+</span><span class=w>        </span><span class=k>subset</span><span class=p>:</span><span class=w> </span>nginx<span class=m>-3</span><span class=w>
+</span><span class=w>    </span><span class=k>timeout</span><span class=p>:</span><span class=w> </span><span class=m>0.</span>01s<span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>Nginx 服务会直接返回 <code>upstream request timeout</code> , 这里不需要修改 Nginx 的配置文件设置超时, 通过 vs 配既可实现。</li></ul><h3 id=circuit-breaking>Circuit Breaking</h3><blockquote><p>熔断</p></blockquote><ul><li><p>熔断, 是创建弹性微服务应用程序的重要模式。熔断能够使您的应用程序具备应对来自故障、潜在峰值和其他未知网络因素影响的能力。</p></li><li><p>通过配置 <code>DestinationRule</code> 中的 <code>trafficPolicy</code> 配置熔断策略</p><ul><li>可以配置<code>tcp</code>与<code>http</code>协议的条件, 如下为最大连接数为<code>1</code>, 超过<code>1</code>的时候就会触发 熔断机制</li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>networking.istio.io/v1beta1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>DestinationRule<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>nginx-destinationrule<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>host</span><span class=p>:</span><span class=w> </span>nginx-svc<span class=w>
+</span><span class=w>  </span><span class=k>trafficPolicy</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>connectionPool</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>tcp</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>maxConnections</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span><span class=w>      </span><span class=k>http</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=k>http1MaxPendingRequests</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span><span class=w>        </span><span class=k>maxRequestsPerConnection</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span><span class=w>    </span><span class=k>outlierDetection</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=k>consecutiveErrors</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
+</span><span class=w>      </span><span class=k>interval</span><span class=p>:</span><span class=w> </span>1s<span class=w>
+</span><span class=w>      </span><span class=k>baseEjectionTime</span><span class=p>:</span><span class=w> </span>3m<span class=w>
+</span><span class=w>      </span><span class=k>maxEjectionPercent</span><span class=p>:</span><span class=w> </span><span class=m>100</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>部署一个 <code>fortio</code> 客户端 <a href=https://github.com/fortio/fortio>https://github.com/fortio/fortio</a></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=k>apiVersion</span><span class=p>:</span><span class=w> </span>v1<span class=w>
+</span><span class=w></span><span class=k>kind</span><span class=p>:</span><span class=w> </span>Pod<span class=w>
+</span><span class=w></span><span class=k>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>name</span><span class=p>:</span><span class=w> </span>fortio<span class=w>
+</span><span class=w>  </span><span class=k>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=k>app</span><span class=p>:</span><span class=w> </span>fortio<span class=w>
+</span><span class=w></span><span class=k>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=k>containers</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=k>name</span><span class=p>:</span><span class=w> </span>fortio<span class=w>
+</span><span class=w>      </span><span class=k>image</span><span class=p>:</span><span class=w> </span>fortio/fortio<span class=w>
+</span><span class=w>      </span><span class=k>imagePullPolicy</span><span class=p>:</span><span class=w> </span>IfNotPresent<span class=w>
+</span><span class=w>      </span><span class=k>args</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;server&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;&amp;&#34;</span><span class=p>]</span><span class=w>
+</span></code></pre></td></tr></table></div></div><ul><li>触发一下熔断</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>kubectl -n jicki <span class=nb>exec</span> fortio -c fortio -- /usr/bin/fortio load -c <span class=m>2</span> -qps <span class=m>0</span> -n <span class=m>20</span> -loglevel Warning http://nginx-svc/
+
+
+
+09:18:17 I logger.go:127&gt; Log level is now <span class=m>3</span> Warning <span class=o>(</span>was <span class=m>2</span> Info<span class=o>)</span>
+Fortio 1.17.0 running at <span class=m>0</span> queries per second, 24-&gt;24 procs, <span class=k>for</span> <span class=m>20</span> calls: http://nginx-svc/
+Starting at max qps with <span class=m>2</span> thread<span class=o>(</span>s<span class=o>)</span> <span class=o>[</span>gomax 24<span class=o>]</span> <span class=k>for</span> exactly <span class=m>20</span> calls <span class=o>(</span><span class=m>10</span> per thread + 0<span class=o>)</span>
+09:18:17 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:18:17 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:18:17 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:18:17 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+Ended after 92.685514ms : <span class=m>20</span> calls. <span class=nv>qps</span><span class=o>=</span>215.78
+Aggregated Function Time : count <span class=m>20</span> avg 0.0089015828 +/- 0.004691 min 0.001575415 max 0.02210334 sum 0.178031656
+<span class=c1># range, mid point, percentile, count</span>
+&gt;<span class=o>=</span> 0.00157541 &lt;<span class=o>=</span> 0.002 , 0.00178771 , 5.00, <span class=m>1</span>
+&gt; 0.002 &lt;<span class=o>=</span> 0.003 , 0.0025 , 15.00, <span class=m>2</span>
+&gt; 0.006 &lt;<span class=o>=</span> 0.007 , 0.0065 , 25.00, <span class=m>2</span>
+&gt; 0.007 &lt;<span class=o>=</span> 0.008 , 0.0075 , 45.00, <span class=m>4</span>
+&gt; 0.008 &lt;<span class=o>=</span> 0.009 , 0.0085 , 55.00, <span class=m>2</span>
+&gt; 0.009 &lt;<span class=o>=</span> 0.01 , 0.0095 , 80.00, <span class=m>5</span>
+&gt; 0.011 &lt;<span class=o>=</span> 0.012 , 0.0115 , 85.00, <span class=m>1</span>
+&gt; 0.012 &lt;<span class=o>=</span> 0.014 , 0.013 , 90.00, <span class=m>1</span>
+&gt; 0.018 &lt;<span class=o>=</span> 0.02 , 0.019 , 95.00, <span class=m>1</span>
+&gt; 0.02 &lt;<span class=o>=</span> 0.0221033 , 0.0210517 , 100.00, <span class=m>1</span>
+<span class=c1># target 50% 0.0085</span>
+<span class=c1># target 75% 0.0098</span>
+<span class=c1># target 90% 0.014</span>
+<span class=c1># target 99% 0.0216827</span>
+<span class=c1># target 99.9% 0.0220613</span>
+Sockets used: <span class=m>6</span> <span class=o>(</span><span class=k>for</span> perfect keepalive, would be 2<span class=o>)</span>
+Jitter: <span class=nb>false</span>
+Code <span class=m>200</span> : <span class=m>16</span> <span class=o>(</span>80.0 %<span class=o>)</span>
+Code <span class=m>503</span> : <span class=m>4</span> <span class=o>(</span>20.0 %<span class=o>)</span>
+Response Header Sizes : count <span class=m>20</span> avg 190.55 +/- 95.28 min <span class=m>0</span> max <span class=m>239</span> sum <span class=m>3811</span>
+Response Body/Total Sizes : count <span class=m>20</span> avg 255.2 +/- 10.03 min <span class=m>250</span> max <span class=m>276</span> sum <span class=m>5104</span>
+All <span class=k>done</span> <span class=m>20</span> calls <span class=o>(</span>plus <span class=m>0</span> warmup<span class=o>)</span> 8.902 ms avg, 215.8 qps
+</code></pre></td></tr></table></div></div><ul><li>当使用 2个 连接的时候 只会触发 <code>Code 503 : 4 (20.0 %)</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>kubectl -n jicki <span class=nb>exec</span> fortio -c fortio -- /usr/bin/fortio load -c <span class=m>5</span> -qps <span class=m>0</span> -n <span class=m>20</span> -loglevel Warning http://nginx-svc/
+
+
+
+09:21:22 I logger.go:127&gt; Log level is now <span class=m>3</span> Warning <span class=o>(</span>was <span class=m>2</span> Info<span class=o>)</span>
+Fortio 1.17.0 running at <span class=m>0</span> queries per second, 24-&gt;24 procs, <span class=k>for</span> <span class=m>20</span> calls: http://nginx-svc/
+Starting at max qps with <span class=m>5</span> thread<span class=o>(</span>s<span class=o>)</span> <span class=o>[</span>gomax 24<span class=o>]</span> <span class=k>for</span> exactly <span class=m>20</span> calls <span class=o>(</span><span class=m>4</span> per thread + 0<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+09:21:23 W http_client.go:793&gt; Parsed non ok code <span class=m>503</span> <span class=o>(</span>HTTP/1.1 503<span class=o>)</span>
+Ended after 64.311585ms : <span class=m>20</span> calls. <span class=nv>qps</span><span class=o>=</span>310.99
+Aggregated Function Time : count <span class=m>20</span> avg 0.01221322 +/- 0.007708 min 0.003108022 max 0.026839277 sum 0.244264407
+<span class=c1># range, mid point, percentile, count</span>
+&gt;<span class=o>=</span> 0.00310802 &lt;<span class=o>=</span> 0.004 , 0.00355401 , 10.00, <span class=m>2</span>
+&gt; 0.004 &lt;<span class=o>=</span> 0.005 , 0.0045 , 25.00, <span class=m>3</span>
+&gt; 0.005 &lt;<span class=o>=</span> 0.006 , 0.0055 , 35.00, <span class=m>2</span>
+&gt; 0.009 &lt;<span class=o>=</span> 0.01 , 0.0095 , 40.00, <span class=m>1</span>
+&gt; 0.01 &lt;<span class=o>=</span> 0.011 , 0.0105 , 55.00, <span class=m>3</span>
+&gt; 0.011 &lt;<span class=o>=</span> 0.012 , 0.0115 , 60.00, <span class=m>1</span>
+&gt; 0.012 &lt;<span class=o>=</span> 0.014 , 0.013 , 70.00, <span class=m>2</span>
+&gt; 0.016 &lt;<span class=o>=</span> 0.018 , 0.017 , 80.00, <span class=m>2</span>
+&gt; 0.02 &lt;<span class=o>=</span> 0.025 , 0.0225 , 85.00, <span class=m>1</span>
+&gt; 0.025 &lt;<span class=o>=</span> 0.0268393 , 0.0259196 , 100.00, <span class=m>3</span>
+<span class=c1># target 50% 0.0106667</span>
+<span class=c1># target 75% 0.017</span>
+<span class=c1># target 90% 0.0256131</span>
+<span class=c1># target 99% 0.0267167</span>
+<span class=c1># target 99.9% 0.026827</span>
+Sockets used: <span class=m>14</span> <span class=o>(</span><span class=k>for</span> perfect keepalive, would be 5<span class=o>)</span>
+Jitter: <span class=nb>false</span>
+Code <span class=m>200</span> : <span class=m>9</span> <span class=o>(</span>45.0 %<span class=o>)</span>
+Code <span class=m>503</span> : <span class=m>11</span> <span class=o>(</span>55.0 %<span class=o>)</span>
+Response Header Sizes : count <span class=m>20</span> avg 107.35 +/- 118.7 min <span class=m>0</span> max <span class=m>239</span> sum <span class=m>2147</span>
+Response Body/Total Sizes : count <span class=m>20</span> avg 264.15 +/- 12.31 min <span class=m>250</span> max <span class=m>276</span> sum <span class=m>5283</span>
+All <span class=k>done</span> <span class=m>20</span> calls <span class=o>(</span>plus <span class=m>0</span> warmup<span class=o>)</span> 12.213 ms avg, 311.0 qps
+
+</code></pre></td></tr></table></div></div><ul><li>配置 5个 连接的时候 <code>Code 503 : 11 (55.0 %)</code></li></ul><h2 id=istio-upgrade>Istio Upgrade</h2><h3 id=注意事项>注意事项</h3><ul><li><p>升级 Istio 之前, 请确认是否支持升级 <code>istioctl manifest versions</code> 查看支持版本。</p></li><li><p>升级过程中可能发生流量中断。为了缩短流量中断时间, 请确保每个组件（Citadel 除外）至少运行有两个副本。同时, 确保 <code>PodDistruptionBudgets</code> 配置最小可用性为 1。</p></li><li><p>确保 istio <code>profile</code> 与 需要升级的版本所配置的 <code>profile</code> 一致。</p></li></ul><h3 id=升级步骤>升级步骤</h3><ul><li><p>1. 下载需要升级的 istio 版本 <code>curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.5.1 sh -</code></p></li><li><p>2. 替换 <code>istioctl</code> 二进制文件, 或者 更改 <code>istio</code> 的环境变量PATH路径到新版本的目录中。</p></li><li><p>3. 如果配置了 <code>istioctl</code> 自动补全,还需要替换为 新的 自动补全脚本。</p></li><li><p>4. 使用新的 <code>istioctl</code> 导出新版本的 profile 文件 <code>istioctl profile dump demo > demo.yaml</code></p></li><li><p>5. 修改 <code>demo.yaml</code> 文件, 将其中 <code>jwtPolicy</code> 身份验证机构修改为 <code>first-party-jwt</code>。Istio 将默认使用第三方令牌。</p><ul><li><p>5.1  验证是否支持 第三方令牌。<code>kubectl get --raw /api/v1 | jq '.resources[] | select(.name | index("serviceaccounts/token"))'</code></p><ul><li><p>5.1.1 jwtPolicy = <code>third-party-jwt</code> 使用第三方令牌 更安全 Istio 默认使用这个选项。</p></li><li><p>5.1.2  jwtPolicy = <code>first-party-jwt</code> 使用第一方令牌 属性比较不安全。</p></li></ul></li></ul></li><li><p>6. <code>istioctl upgrade -f demo.yaml</code> 命令进行升级。</p></li><li><p>7. 观察 <code>kubernets</code> 中 <code>istio-system</code> 的服务更新完成。</p></li><li><p>8. 重新注入环境中部署的服务, 用以更新注入数据。</p><ul><li><p>8.1 对于自动注入的情况可使用如下命令:</p><ul><li><p>8.1.1 <code>kubectl rollout restart deployment</code></p></li><li><p>8.1.2 <code>kubectl rollout restart statefulset</code></p></li><li><p>8.1.3 <code>kubectl rollout restart daemonset</code></p></li></ul></li><li><p>8.2 对于手动注入的情况( 需要重新 apply 一下服务) :</p><ul><li>8.2.1 <code>kubectl apply -f &lt;(istioctl kube-inject -f nginx-test.yaml)</code></li></ul></li></ul></li><li><p>9. 检查升级, 执行 <code>istioctl version</code> 检查</p><ul><li><p>9.1 <code>client version</code> 版本是否为新版本。</p></li><li><p>9.2 <code>control plane version</code> 版本是否为新版本。</p></li><li><p>9.3 <code>data plane version</code> 中是否全部 <code>proxies</code> 都为新版本。</p></li></ul></li></ul><h2 id=istio-uninstall>Istio UnInstall</h2><ul><li>卸载 Istio 的话其实就是讲 <code>kubernetes</code> 所安装到的组件 <code>delete</code> 掉就可以了</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4

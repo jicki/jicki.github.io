@@ -793,8 +793,9 @@ jicki             Active   4m46s   istio-injection=enabled
 
 ## Istio 流量管理
 
-> Istio 的流量管理 就是配置 HTTP/TCP 路由功能。
+> Istio 的流量管理 就是配置 HTTP/TCP 路由功能。 
 
+> Update Istio Version 1.9.9
 
 * `Istio` 流量
 
@@ -1011,9 +1012,9 @@ nginx-svc-3   10.254.64.165:80                                     26s
 
 * 配置一个 `Virtual Service`
 
-```
+```yaml
 [root@k8s-node-1 istio]# cat nginx-test-vs.yaml 
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: nginx-svc-vs
@@ -1039,11 +1040,9 @@ spec:
     - destination:
         # 匹配的服务版本或子集为 nginx-1
         host: nginx-svc-1.default
-      weight: 80
     - destination:
         # 匹配的服务版本或子集为 nginx-2
         host: nginx-svc-2.default
-      weight: 20
 
 ```
 
@@ -1062,7 +1061,7 @@ nginx-svc-vs              [nginx-svc.default.svc.cluster.local]   3m1s
 
 * 测试以及 kiali 中查看
 
-```
+```yaml
 # 创建一个 busybox 的 deployment 作为客户端
 [root@k8s-node-1 istio]# cat busybox.yaml 
 apiVersion: apps/v1
@@ -1135,17 +1134,417 @@ done
 
 
 
+### Istio Gateway
+
+
+* 创建 一个基于 Nginx Web 服务的 `Istio Gateway`
+
+
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: nginx-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-gw-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - nginx-gateway
+  http:
+  - route:
+    - destination:
+        host: nginx-svc
+        port:
+          number: 80
+```
+
+
+
+* 配置 `DestinationRule`
+
+  * 目标规则: `https://istio.io/latest/zh/docs/reference/config/networking/destination-rule/`
+
+  * 通过 `svc labels` 选择访问
+
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: nginx-destinationrule
+spec:
+  host: nginx-svc
+  subsets:
+  - name: nginx-1
+    labels:
+      web: nginx-1
+  - name: nginx-2
+    labels:
+      web: nginx-2
+  - name: nginx-3
+    labels:
+      web: nginx-3
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-gw-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - nginx-gateway
+  http:
+  - route:
+    - destination:
+        host: nginx-svc
+        port:
+          number: 80
+        subset: nginx-3
+```
 
 
 
 
+### Fault Injection
+
+> 故障注入
+
+* Istio 的故障注入规则可以帮助您识别微服务中有硬编码超时, 导致 服务失败等。此类异常, 而不会影响最终用户。
+
+
+* 故障注入 - 延迟调用, 在使用条件匹配访问 vs-user 用户等于 jicki 的时候 延迟7s 后调用, 延迟比例为 100% 
+
+
+```yaml
+# 在 内部网格中实现 故障注入
+
+[root@k8s-node-1 istio]# cat nginx-vs.yaml
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-svc-vs
+spec:
+  # 客户端访问服务的地址
+  hosts: 
+  - nginx-svc
+  # http协议
+  http:
+  # 如下为 故障注入
+  - fault:
+      delay:
+        # 延迟 7秒
+        fixedDelay: 7s
+        # 延迟比例 100%
+        percentage:
+          value: 100
+  # 如下为匹配条件
+    match:
+    # http 头 包含如下信息
+    - headers:
+        # key = vs-user
+        vs-user:
+          # exact 完全匹配 value = jicki
+          exact: jicki
+    route:
+    - destination:
+        host: nginx-svc-3
+  # 如下为匹配路由规则
+  - route:
+    - destination:
+        # 匹配的服务版本或子集为 nginx-1
+        host: nginx-svc-1
+    - destination:
+        # 匹配的服务版本或子集为 nginx-2
+        host: nginx-svc-2
+```
+
+
+```bash
+time curl --header "vs-user: jicki" http://nginx-svc
+
+
+hello jicki
+real	0m 7.02s
+user	0m 0.00s
+sys	0m 0.00s
+```
+
+
+* 在 外部调用 中实现 故障注入
+
+
+```yaml
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-gw-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - nginx-gateway
+  http:
+  # 如下为 故障注入
+  - fault:
+      delay:
+        # 延迟 7秒
+        fixedDelay: 7s
+        # 延迟比例 100%
+        percentage:
+          value: 100
+    route:
+    - destination:
+        host: nginx-svc
+        port:
+          number: 80
+        subset: nginx-3
+```
 
 
 
 
+### Traffic Shifting
+
+> 流量转移
+
+* 在项目服务中, 通常会有一些新旧版本的逐步迁移, 如流量从微服务的一个版本的逐渐迁移到另一个版本。流量转移适用于web服务以及TCP服务。
+
+  * 通过配置 `destination.weight` 来定义流量的百分比 (只用于网格内的服务)
+
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-svc-vs
+spec:
+  # 客户端访问服务的地址, ( svc名称 + namespace 用于跨 namespace 调用 )
+  hosts: 
+  - nginx-svc.default
+  # http协议
+  http:
+  # 如下为匹配条件
+  - match:
+    # http 头 包含如下信息
+    - headers:
+        # key = vs-user
+        vs-user:
+          # exact 完全匹配 value = jicki
+          exact: jicki
+    route:
+    - destination:
+        host: nginx-svc-3.default
+  # 如下为匹配路由规则
+  - route:
+    - destination:
+        # 匹配的服务版本或子集为 nginx-1
+        host: nginx-svc-1.default
+      # 流量比例
+      weight: 80
+    - destination:
+        # 匹配的服务版本或子集为 nginx-2
+        host: nginx-svc-2.default
+      # 流量比例
+      weight: 20
+```
 
 
 
+
+### Request Timeouts
+
+> 请求超时 
+
+* 通过设置 请求超时 来测试服务的一些特性.
+
+
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-gw-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - nginx-gateway
+  http:
+  - route:
+    - destination:
+        host: nginx-svc
+        port:
+          number: 80
+        subset: nginx-3
+    timeout: 0.01s
+```
+
+
+* Nginx 服务会直接返回 `upstream request timeout` , 这里不需要修改 Nginx 的配置文件设置超时, 通过 vs 配既可实现。
+
+
+
+
+### Circuit Breaking
+
+> 熔断
+
+* 熔断, 是创建弹性微服务应用程序的重要模式。熔断能够使您的应用程序具备应对来自故障、潜在峰值和其他未知网络因素影响的能力。
+
+* 通过配置 `DestinationRule` 中的 `trafficPolicy` 配置熔断策略
+
+  * 可以配置`tcp`与`http`协议的条件, 如下为最大连接数为`1`, 超过`1`的时候就会触发 熔断机制
+
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: nginx-destinationrule
+spec:
+  host: nginx-svc
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1
+      http:
+        http1MaxPendingRequests: 1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutiveErrors: 1
+      interval: 1s
+      baseEjectionTime: 3m
+      maxEjectionPercent: 100
+```
+
+
+* 部署一个 `fortio` 客户端 https://github.com/fortio/fortio
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortio
+  labels:
+    app: fortio
+spec:
+  containers:
+    - name: fortio
+      image: fortio/fortio
+      imagePullPolicy: IfNotPresent
+      args: ["server", "&"]
+```
+
+
+* 触发一下熔断
+
+
+```sh
+kubectl -n jicki exec fortio -c fortio -- /usr/bin/fortio load -c 2 -qps 0 -n 20 -loglevel Warning http://nginx-svc/
+
+
+
+09:18:17 I logger.go:127> Log level is now 3 Warning (was 2 Info)
+Fortio 1.17.0 running at 0 queries per second, 24->24 procs, for 20 calls: http://nginx-svc/
+Starting at max qps with 2 thread(s) [gomax 24] for exactly 20 calls (10 per thread + 0)
+09:18:17 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:18:17 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:18:17 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:18:17 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+Ended after 92.685514ms : 20 calls. qps=215.78
+Aggregated Function Time : count 20 avg 0.0089015828 +/- 0.004691 min 0.001575415 max 0.02210334 sum 0.178031656
+# range, mid point, percentile, count
+>= 0.00157541 <= 0.002 , 0.00178771 , 5.00, 1
+> 0.002 <= 0.003 , 0.0025 , 15.00, 2
+> 0.006 <= 0.007 , 0.0065 , 25.00, 2
+> 0.007 <= 0.008 , 0.0075 , 45.00, 4
+> 0.008 <= 0.009 , 0.0085 , 55.00, 2
+> 0.009 <= 0.01 , 0.0095 , 80.00, 5
+> 0.011 <= 0.012 , 0.0115 , 85.00, 1
+> 0.012 <= 0.014 , 0.013 , 90.00, 1
+> 0.018 <= 0.02 , 0.019 , 95.00, 1
+> 0.02 <= 0.0221033 , 0.0210517 , 100.00, 1
+# target 50% 0.0085
+# target 75% 0.0098
+# target 90% 0.014
+# target 99% 0.0216827
+# target 99.9% 0.0220613
+Sockets used: 6 (for perfect keepalive, would be 2)
+Jitter: false
+Code 200 : 16 (80.0 %)
+Code 503 : 4 (20.0 %)
+Response Header Sizes : count 20 avg 190.55 +/- 95.28 min 0 max 239 sum 3811
+Response Body/Total Sizes : count 20 avg 255.2 +/- 10.03 min 250 max 276 sum 5104
+All done 20 calls (plus 0 warmup) 8.902 ms avg, 215.8 qps
+```
+
+
+* 当使用 2个 连接的时候 只会触发 `Code 503 : 4 (20.0 %)` 
+
+
+```sh
+kubectl -n jicki exec fortio -c fortio -- /usr/bin/fortio load -c 5 -qps 0 -n 20 -loglevel Warning http://nginx-svc/
+
+
+
+09:21:22 I logger.go:127> Log level is now 3 Warning (was 2 Info)
+Fortio 1.17.0 running at 0 queries per second, 24->24 procs, for 20 calls: http://nginx-svc/
+Starting at max qps with 5 thread(s) [gomax 24] for exactly 20 calls (4 per thread + 0)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+09:21:23 W http_client.go:793> Parsed non ok code 503 (HTTP/1.1 503)
+Ended after 64.311585ms : 20 calls. qps=310.99
+Aggregated Function Time : count 20 avg 0.01221322 +/- 0.007708 min 0.003108022 max 0.026839277 sum 0.244264407
+# range, mid point, percentile, count
+>= 0.00310802 <= 0.004 , 0.00355401 , 10.00, 2
+> 0.004 <= 0.005 , 0.0045 , 25.00, 3
+> 0.005 <= 0.006 , 0.0055 , 35.00, 2
+> 0.009 <= 0.01 , 0.0095 , 40.00, 1
+> 0.01 <= 0.011 , 0.0105 , 55.00, 3
+> 0.011 <= 0.012 , 0.0115 , 60.00, 1
+> 0.012 <= 0.014 , 0.013 , 70.00, 2
+> 0.016 <= 0.018 , 0.017 , 80.00, 2
+> 0.02 <= 0.025 , 0.0225 , 85.00, 1
+> 0.025 <= 0.0268393 , 0.0259196 , 100.00, 3
+# target 50% 0.0106667
+# target 75% 0.017
+# target 90% 0.0256131
+# target 99% 0.0267167
+# target 99.9% 0.026827
+Sockets used: 14 (for perfect keepalive, would be 5)
+Jitter: false
+Code 200 : 9 (45.0 %)
+Code 503 : 11 (55.0 %)
+Response Header Sizes : count 20 avg 107.35 +/- 118.7 min 0 max 239 sum 2147
+Response Body/Total Sizes : count 20 avg 264.15 +/- 12.31 min 250 max 276 sum 5283
+All done 20 calls (plus 0 warmup) 12.213 ms avg, 311.0 qps
+
+```
+
+
+* 配置 5个 连接的时候 `Code 503 : 11 (55.0 %)`
 
 
 
