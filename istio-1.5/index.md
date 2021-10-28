@@ -775,7 +775,22 @@ namespace/jicki created
 [root@k8s-node-1 ~]# kubectl label namespace jicki istio-injection=enabled
 namespace/jicki labeled
 
+```
 
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jicki
+  labels:
+    istio-injection: enabled
+```
+
+
+
+
+```
 # 检测注入情况
 [root@k8s-node-1 ~]# istioctl analyze -n jicki
 ✔ No validation issues found when analyzing namespace: jicki.
@@ -1162,6 +1177,7 @@ metadata:
   name: nginx-gw-vs
 spec:
   hosts:
+  # 不绑定 域名 可使用 *
   - "*"
   gateways:
   - nginx-gateway
@@ -1173,6 +1189,7 @@ spec:
           number: 80
 ```
 
+---
 
 
 * 配置 `DestinationRule`
@@ -1217,6 +1234,191 @@ spec:
         subset: nginx-3
 ```
 
+
+--- 
+
+* 基于 TLS 的 Gateway
+
+  * 创建一个 自签 的tls证书
+
+```bash
+# 使用 openssl 创建 根证书 与 私钥  (jicki.cn)
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj '/O=jicki Inc./CN=jicki.cn' -keyout jicki.cn.key -out jicki.cn.crt
+
+Generating a RSA private key
+............+++++
+.....+++++
+writing new private key to 'jicki.cn.key'
+-----
+
+# 输出证书
+
+total 8
+-rw-r--r-- 1 root root 1168 Oct 28 06:12 jicki.cn.crt
+-rw------- 1 root root 1704 Oct 28 06:12 jicki.cn.key
+```
+
+
+* 利用 根证书与密钥 创建 `nginx.jicki.cn` 证书与私钥
+
+```bash
+openssl req -out nginx.jicki.cn.csr -newkey rsa:2048 -nodes -keyout nginx.jicki.cn.key -subj "/CN=nginx.jicki.cn/O=nginx organization"
+
+
+Generating a RSA private key
+.......................................................................................+++++
+........+++++
+writing new private key to 'nginx.jicki.cn.key'
+-----
+
+
+# 创建 crt 证书
+
+openssl x509 -req -days 365 -CA jicki.cn.crt -CAkey jicki.cn.key -set_serial 0 -in nginx.jicki.cn.csr -out nginx.jicki.cn.crt
+
+
+
+Signature ok
+subject=CN = nginx.jicki.cn, O = nginx organization
+Getting CA Private Key
+
+
+# 输出证书
+
+total 20
+-rw-r--r-- 1 root root 1038 Oct 28 06:15 nginx.jicki.cn.crt
+-rw-r--r-- 1 root root  936 Oct 28 06:14 nginx.jicki.cn.csr
+-rw------- 1 root root 1704 Oct 28 06:14 nginx.jicki.cn.key
+-rw-r--r-- 1 root root 1168 Oct 28 06:12 jicki.cn.crt
+-rw------- 1 root root 1704 Oct 28 06:12 jicki.cn.key
+```
+
+
+---
+
+* 创建 Gateway 中使用到的 `Secret`
+
+   * 需要将 Secret 创建于 `istio-system` 这个 namespaces 下.
+
+```bash
+kubectl create -n istio-system secret tls nginx-tls --key=nginx.jicki.cn.key --cert=nginx.jicki.cn.crt
+
+```
+
+```bash
+kubectl -n istio-system get secrets
+
+
+NAME                                               TYPE                                  DATA   AGE
+default-token-pvqnh                                kubernetes.io/service-account-token   3      14d
+istio-ca-secret                                    istio.io/ca-root                      5      14d
+istio-ingressgateway-service-account-token-jbnvz   kubernetes.io/service-account-token   3      14d
+istio-reader-service-account-token-2kwcl           kubernetes.io/service-account-token   3      14d
+istiod-service-account-token-n59qq                 kubernetes.io/service-account-token   3      14d
+kiali-token-fhwkl                                  kubernetes.io/service-account-token   3      14d
+nginx-tls                                          kubernetes.io/tls                     2      8s
+```
+
+
+---
+
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: nginx-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  # 每定义一个 hosts 需要多写一个 -port 段落
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      # 单向 TLS 的模式名称为固定值 SIMPLE  双向 TLS 的模式名称为固定值 MUTUAL
+      mode: SIMPLE
+      credentialName: nginx-tls  # 上面创建的 证书 secret 名称
+    hosts:
+    - "nginx.jicki.cn"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-gw-vs
+spec:
+  hosts:
+  # 不绑定 域名 可使用 *
+  - "nginx.jicki.cn"
+  gateways:
+  - nginx-gateway
+  http:
+  - route:
+    - destination:
+        host: nginx-svc
+        port:
+          number: 80
+```
+
+
+* 测试访问
+
+```bash
+curl -v https://nginx.jicki.cn/ --cacert jicki.cn.crt
+
+
+*   Trying 10.9.9.216:443...
+* TCP_NODELAY set
+* Connected to nginx.jicki.cn (10.9.9.216) port 443 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*   CAfile: jicki.cn.crt
+  CApath: /etc/ssl/certs
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+* SSL connection using TLSv1.3 / TLS_CHACHA20_POLY1305_SHA256
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: CN=nginx.jicki.cn; O=nginx organization
+*  start date: Oct 28 06:15:47 2021 GMT
+*  expire date: Oct 28 06:15:47 2022 GMT
+*  common name: nginx.jicki.cn (matched)
+*  issuer: O=jicki Inc.; CN=jicki.cn
+*  SSL certificate verify ok.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+* Using Stream ID: 1 (easy handle 0x55d575b42e10)
+> GET / HTTP/2
+> Host: nginx.jicki.cn
+> user-agent: curl/7.68.0
+> accept: */*
+> 
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+* old SSL session ID is stale, removing
+* Connection state changed (MAX_CONCURRENT_STREAMS == 2147483647)!
+< HTTP/2 200 
+< server: istio-envoy
+< date: Thu, 28 Oct 2021 06:29:55 GMT
+< content-type: text/html
+< content-length: 12
+< last-modified: Tue, 19 Oct 2021 02:56:01 GMT
+< etag: "616e33c1-c"
+< accept-ranges: bytes
+< x-envoy-upstream-service-time: 15
+< 
+hello jicki
+* Connection #0 to host nginx.jicki.cn left intact
+```
 
 
 
@@ -1549,10 +1751,89 @@ All done 20 calls (plus 0 warmup) 12.213 ms avg, 311.0 qps
 
 
 
+### Mirroring
+
+> 镜像流量
+
+*  创建一个 vs 将默认流量都到 `nginx-svc-1` 中去.
+  * 通过 `mirror` 标签镜像 `nginx-svc-1` 的流量 到 `nginx-svc-2` 中. (mirrorPercent 为镜像流量的百分比)
+ 
+
+```yaml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-svc-vs
+spec:
+  # 客户端访问服务的地址
+  hosts: 
+  - nginx-svc
+  # http协议
+  http:
+  # 如下为匹配条件
+  - match:
+    # http 头 包含如下信息
+    - headers:
+        # key = vs-user
+        vs-user:
+          # exact 完全匹配 value = jicki
+          exact: jicki
+    route:
+    - destination:
+        host: nginx-svc-3
+  # 如下为匹配路由规则
+  - route:
+    - destination:
+        # 匹配的服务版本或子集为 nginx-1
+        host: nginx-svc-1
+      weight: 100
+    mirror:
+      host: nginx-svc-2
+    mirrorPercent: 100
+```
 
 
+* 查看 `nginx-1` 与 `nginx-2` 的日志 - 可以看出各自的不同. 
+
+  * 重点注意这些被镜像的流量是 `即发即弃` 的, 就是说镜像请求的响应会被丢弃。
 
 
+```
+# nginx-1
+
+127.0.0.1 - - [26/Oct/2021:08:24:20 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:23 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:24 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:25 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:25 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:25 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:26 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:26 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:27 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:27 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:27 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+127.0.0.1 - - [26/Oct/2021:08:24:28 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "-"
+
+```
+
+
+```
+# nginx-2
+
+127.0.0.1 - - [26/Oct/2021:08:24:20 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:23 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:24 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:25 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:25 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:25 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:26 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:26 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:27 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:27 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:27 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+127.0.0.1 - - [26/Oct/2021:08:24:28 +0000] "GET / HTTP/1.1" 200 14 "-" "curl/7.30.0" "172.18.16.252"
+
+```
 
 
 
