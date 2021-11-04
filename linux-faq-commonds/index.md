@@ -339,7 +339,7 @@ git pull / push 不输入密码
 ## Mysql FAQ
 
 
-删除mysql 的binlog
+> 删除mysql 的binlog
 
 一：查看备份的日志。
 
@@ -386,6 +386,82 @@ mysql> show binary logs;
 11 rows in set (0.11 sec)
 ```
  
+
+
+---
+
+> 数据库 丢失 `ibdata1` 文件, 数据库 frm 与 ibd 文件还存在
+
+
+* 借助 `Mysql-utilities` 恢复数据
+
+```
+# 安装 mysql-utilities1.6.5 版本即可, 它是基于python2实现的，所以python也不需要升级
+
+wget https://cdn.mysql.com/archives/mysql-utilities/mysql-utilities-1.6.5.tar.gz
+
+tar xvf mysql-utilities-1.6.5.tar.gz
+
+cd mysql-utilities-1.6.5
+
+python setup.py build
+
+python setup.py install
+
+mysqldiff --version
+
+```
+
+*  恢复表结构
+
+```
+mysqlfrm --diagnostic /opt/local/data/autumn2 > createtb.sql
+```
+
+通过 frm 文件生成了建表语句 createtb.sql
+
+然后通过建表语句, 先创建好库, 然后通过 source /backup/createtb.sql，完成数据结构的恢复
+
+使用的数据库版本需要和之前的数据库保持一致, 所使用字符集也需要保持一致, 相关的配置参数也都保持一致.
+
+否则可能会出现相关问题
+
+
+*  恢复数据
+
+
+清理 `autumn2` 数据库中表的数据文件
+
+```
+mysql -uroot -p123456 -e "show tables from autumn2"| grep -v Tables_in_autumn2 | while read a; do mysql -uroot -p123456 -e "alter table autumn2.$a discard tablespace"; done
+
+```
+
+执行成功后，可以到对应的物理文件存储处，会发现没有 idb 文件了
+
+停数据库服务,将有数据旧的idb文件复制到对应的文件存储的地方，再启数据库服务
+
+数据文件导入数据库中
+
+```
+mysql -uroot -p123456 -e "show tables from autumn2"| grep -v Tables_in_autumn2 | while read a; do mysql -uroot -p123456 -e "alter table autumn2.$a import tablespace"; done
+
+```
+
+* 导入完成后，我们可以对表进行检查
+
+```
+mysqlcheck -c autumn2 -uroot -p123456
+autumn2.alcohol_cargo_base_bt OK
+autumn2.userbase OK
+autumn2.worklog OK
+```
+
+
+
+
+
+
 
  
 
