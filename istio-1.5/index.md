@@ -1144,6 +1144,16 @@ done
 
 * 查看 kiali
 
+
+```bash
+# 通过 istioctl 打开 kiali 
+
+istioctl dashboard kiali
+```
+
+
+
+
 ![virutalservice][9]
 
 
