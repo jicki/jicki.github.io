@@ -1854,6 +1854,31 @@ spec:
 
 
 
+## FAQ 
+
+
+### Istio Proxy Limit
+
+
+* 默认 Istio-proxy 资源限制比较低 cpu = 500m  memroy = 512Mi 
+
+  * 修改 k8s 资源文件 添加: `spec.template.metadata.annotations` 
+
+```yaml
+
+  annotations:
+    sidecar.istio.io/proxyCPU: 1000m
+    sidecar.istio.io/proxyLimitCPU: 2000m
+    sidecar.istio.io/proxyMemory: 1024Mi
+    sidecar.istio.io/proxyLimitMemory: 2048Mi
+
+```
+
+
+
+
+
+
 
 
 
