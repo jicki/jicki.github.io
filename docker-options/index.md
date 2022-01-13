@@ -196,3 +196,20 @@ EOF
 
 ```
 
+
+
+## docker build 使用代理
+
+
+  * 在 `build` 镜像的时候使用代理
+
+```
+docker build \
+  --build-arg "http_proxy=http://10.24.96.33:20171" \
+  --build-arg "https_proxy=http://10.24.96.33:20171" \
+  -t "test/image:daili" \
+.
+
+
+```
+
