@@ -100,6 +100,7 @@ cat>/etc/docker/daemon.json<<EOF
   "bip": "172.17.0.1/16",
   "exec-opts": ["native.cgroupdriver=systemd"],
   "registry-mirrors": ["https://dockerhub.azk8s.cn","https://gcr.azk8s.cn","https://quay.azk8s.cn"],
+  "live-restore": true,
   "data-root": "/opt/docker",
   "storage-driver": "overlay2",
   "storage-opts": [
@@ -124,6 +125,7 @@ cat>/etc/docker/daemon.json<<EOF
   "bip": "172.17.0.1/16",
   "exec-opts": ["native.cgroupdriver=systemd"],
   "registry-mirrors": ["https://dockerhub.azk8s.cn","https://gcr.azk8s.cn","https://quay.azk8s.cn"],
+  "live-restore": true,
   "data-root": "/opt/docker",
   "storage-driver": "overlay2",
   "storage-opts": [
@@ -198,7 +200,7 @@ EOF
 
 
 
-## docker build 使用代理
+## docker 使用代理
 
 
   * 在 `build` 镜像的时候使用代理
@@ -211,5 +213,28 @@ docker build \
 .
 
 
+```
+
+
+  * 在配置文件中设置代理
+
+```
+mkdir -p /etc/systemd/system/docker.service.d/
+
+vi /etc/systemd/system/docker.service.d/http-proxy.conf
+
+
+[Service]
+Environment="HTTP_PROXY=http://10.24.96.33:20171"
+Environment="HTTPS_PROXY=http://10.24.96.33:20171/"
+Environment="NO_PROXY=localhost,127.0.0.0/8,10.0.0.0/8,reg.xxxx.com"
+
+```
+
+```
+sudo systemctl daemon-reload
+
+
+sudo systemctl restart docker
 ```
 
