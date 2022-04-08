@@ -1,0 +1,939 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>k8s 1.23.5 to kubespray - 小炒肉</title><meta name=Description content="k8s 1.23.5 to kubespray"><meta property="og:title" content="k8s 1.23.5 to kubespray"><meta property="og:description" content="k8s 1.23.5 to kubespray"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/k8s-1.23.5-kubespray/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2022-04-02T00:00:00+00:00"><meta property="article:modified_time" content="2022-04-02T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="k8s 1.23.5 to kubespray"><meta name=twitter:description content="k8s 1.23.5 to kubespray"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/k8s-1.23.5-kubespray/><link rel=prev href=https://jicki.cn/clickhouse/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"k8s 1.23.5 to kubespray","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/k8s-1.23.5-kubespray\/"},"genre":"posts","keywords":"kubernetes","wordcount":3007,"url":"https:\/\/jicki.cn\/k8s-1.23.5-kubespray\/","datePublished":"2022-04-02T00:00:00+00:00","dateModified":"2022-04-02T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"k8s 1.23.5 to kubespray"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">k8s 1.23.5 to kubespray</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-02>2022-04-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3007 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;<span id=/k8s-1.23.5-kubespray/ class=leancloud_visitors data-flag-title="k8s 1.23.5 to kubespray">
+<i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+</span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#环境说明>环境说明</a></li><li><a href=#配置ssh-key-认证>配置ssh key 认证</a></li><li><a href=#增加-kernel-modules-与-ipvs-modules-配置>增加 Kernel Modules 与 Ipvs Modules 配置</a></li></ul><ul><li><a href=#下载源码>下载源码</a></li><li><a href=#安装-kubespray-依赖>安装 kubespray 依赖</a></li><li><a href=#配置-kubespray>配置 kubespray</a><ul><li><a href=#inventory-配置>inventory 配置</a></li><li><a href=#etcd-配置>etcd 配置</a></li><li><a href=#全局配置>全局配置</a></li><li><a href=#k8s-功能配置>k8s 功能配置</a></li><li><a href=#download-程序与镜像>Download 程序与镜像</a></li></ul></li><li><a href=#安装k8s集群>安装k8s集群</a></li><li><a href=#验证k8s集群>验证k8s集群</a><ul><li><a href=#查看集群状态>查看集群状态</a></li><li><a href=#查看集群组件>查看集群组件</a></li><li><a href=#查看-ipvs>查看 ipvs</a></li><li><a href=#containerd-服务>Containerd 服务</a></li></ul></li></ul><ul><li><a href=#upgrades>upgrades</a></li></ul></nav></div></div><div class=content id=content><h1 id=kubernetes-1235>Kubernetes 1.23.5</h1><blockquote><p>kubespray Deploy a Production Ready Kubernetes Cluster</p><p>kubespray 利用 Ansible 自动部署 更新 kubernetes 集群</p></blockquote><h2 id=环境说明>环境说明</h2><blockquote><p>Ubuntu 18.x</p></blockquote><table><thead><tr><th>节点</th><th>IP</th></tr></thead><tbody><tr><td>kubernetes-1</td><td>10.9.9.91</td></tr><tr><td>kubernetes-2</td><td>10.9.9.92</td></tr><tr><td>kubernetes-3</td><td>10.9.9.93</td></tr><tr><td>kubernetes-4</td><td>10.9.9.96</td></tr></tbody></table><h2 id=配置ssh-key-认证>配置ssh key 认证</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 确保本机也可以 ssh 连接，否则下面部署失败
+
+ssh-keygen -t rsa -N &#34;&#34;
+
+ssh-copy-id -i /root/.ssh/id_rsa.pub 10.9.9.91
+
+ssh-copy-id -i /root/.ssh/id_rsa.pub 10.9.9.92
+
+ssh-copy-id -i /root/.ssh/id_rsa.pub 10.9.9.93
+
+ssh-copy-id -i /root/.ssh/id_rsa.pub 10.9.9.96
+</code></pre></td></tr></table></div></div><h2 id=增加-kernel-modules-与-ipvs-modules-配置>增加 Kernel Modules 与 Ipvs Modules 配置</h2><blockquote><p>由于 Kubernetes 新版本 Service 实现切换到 IPVS，所以需要确保内核加载了 IPVS modules；以下命令将设置系统启动自动加载 IPVS 相关模块， 执行完成后需要重启。</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># sysctl
+
+cat &gt; /etc/sysctl.d/50-kubernetes.conf &lt;&lt;EOF
+net.ipv4.ip_forward=1
+net.bridge.bridge-nf-call-iptables=1
+net.bridge.bridge-nf-call-ip6tables=1
+fs.inotify.max_user_watches=525000
+EOF
+
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># Kernel modules
+
+cat &gt; /etc/modules-load.d/50-kubernetes.conf &lt;&lt;EOF
+# Load some kernel modules needed by kubernetes at boot
+nf_conntrack
+br_netfilter
+ip_vs
+ip_vs_lc
+ip_vs_wlc
+ip_vs_rr
+ip_vs_wrr
+ip_vs_lblc
+ip_vs_lblcr
+ip_vs_dh
+ip_vs_sh
+ip_vs_fo
+ip_vs_nq
+ip_vs_sed
+EOF
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 重启系统后 验证 ipvs 模块
+
+lsmod | grep ip_vs
+
+
+----
+ip_vs_sed              16384  0
+ip_vs_nq               16384  0
+ip_vs_fo               16384  0
+ip_vs_sh               16384  0
+ip_vs_dh               16384  0
+ip_vs_lblcr            16384  0
+ip_vs_lblc             16384  0
+ip_vs_wrr              16384  0
+ip_vs_rr               16384  0
+ip_vs_wlc              16384  0
+ip_vs_lc               16384  0
+ip_vs                 151552  22 ip_vs_wlc,ip_vs_rr,ip_vs_dh,ip_vs_lblcr,ip_vs_sh,ip_vs_fo,ip_vs_nq,ip_vs_lblc,ip_vs_wrr,ip_vs_lc,ip_vs_sed
+nf_defrag_ipv6         20480  1 ip_vs
+nf_conntrack          135168  1 ip_vs
+libcrc32c              16384  3 nf_conntrack,raid456,ip_vs
+---
+
+</code></pre></td></tr></table></div></div><h1 id=kubespray>kubespray</h1><h2 id=下载源码>下载源码</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># git clone 源码
+
+cd /opt/
+
+git clone https://github.com/kubernetes-sigs/kubespray
+
+</code></pre></td></tr></table></div></div><h2 id=安装-kubespray-依赖>安装 kubespray 依赖</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>cd /opt/kubespray
+
+# 安装依赖 ( ansible 4.8.0 )  requirements.txt 默认安装 ansible 5.5.0
+
+
+python3 -m pip -r requirements-2.11.txt
+
+
+Successfully installed MarkupSafe-1.1.1 ansible-4.8.0 ansible-core-2.11.6 cffi-1.15.0 cryptography-2.8 jinja2-2.11.3 jmespath-0.9.5 netaddr-0.7.19 packaging-21.3 pbr-5.4.4 pycparser-2.21 pyparsing-3.0.7 resolvelib-0.5.5 ruamel.yaml-0.16.10 ruamel.yaml.clib-0.2.6
+
+</code></pre></td></tr></table></div></div><h2 id=配置-kubespray>配置 kubespray</h2><h3 id=inventory-配置>inventory 配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># 复制一份 自己的配置
+
+cd /opt/kubespray
+
+cp -rfp inventory/sample inventory/jicki
+
+
+# 修改配置 inventory.ini
+
+cd /opt/kubespray/inventory/jicki
+
+rm -rf inventory.ini
+
+
+vi inventory.ini
+
+[all]
+kubernetes-1 ansible_host=10.9.9.91 ansible_port=22 # ip=10.9.9.91 etcd_member_name=etcd1
+kubernetes-2 ansible_host=10.9.9.92 ansible_port=22 # ip=10.9.9.92 etcd_member_name=etcd2
+kubernetes-3 ansible_host=10.9.9.93 ansible_port=22 # ip=10.9.9.93 etcd_member_name=etcd3
+kubernetes-4 ansible_host=10.9.9.96 ansible_port=22 # ip=10.9.9.96
+# node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
+# node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
+
+# ## configure a bastion host if your nodes are not directly reachable
+# [bastion]
+# bastion ansible_host=x.x.x.x ansible_user=some_user
+
+[kube_control_plane]
+kubernetes-1
+kubernetes-2
+kubernetes-3
+
+[etcd]
+kubernetes-1
+kubernetes-2
+kubernetes-3
+
+[kube_node]
+kubernetes-4
+
+[calico_rr]
+
+[k8s_cluster:children]
+kube_control_plane
+kube_node
+calico_rr
+
+</code></pre></td></tr></table></div></div><h3 id=etcd-配置>etcd 配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>cd /opt/kubespray/inventory/jicki/group_vars
+
+
+cat etcd.yml
+
+
+---
+## Etcd auto compaction retention for mvcc key value store in hour
+etcd_compaction_retention: 1
+
+## Set level of detail for etcd exported metrics, specify &#39;extensive&#39; to include histogram metrics.
+# etcd_metrics: basic
+
+## Etcd is restricted by default to 512M on systems under 4GB RAM, 512MB is not enough for much more than testing.
+## Set this if your etcd nodes have less than 4GB but you want more RAM for etcd. Set to 0 for unrestricted RAM.
+etcd_memory_limit: &#34;2G&#34;
+
+## Etcd has a default of 2G for its space quota. If you put a value in etcd_memory_limit which is less than
+## etcd_quota_backend_bytes, you may encounter out of memory terminations of the etcd cluster. Please check
+## etcd documentation for more information.
+## ===========8G==================== ##
+etcd_quota_backend_bytes: &#34;8589934592&#34;
+
+### ETCD: disable peer client cert authentication.
+# This affects ETCD_PEER_CLIENT_CERT_AUTH variable
+etcd_peer_client_auth: true
+
+</code></pre></td></tr></table></div></div><h3 id=全局配置>全局配置</h3><blockquote><p>all.yml 配置</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>cd /opt/kubespray/inventory/jicki/group_vars/all
+
+cat all.yml  # 注意的配置有如下:
+
+
+## Internal loadbalancers for apiservers
+loadbalancer_apiserver_localhost: true
+# valid options are &#34;nginx&#34; or &#34;haproxy&#34; 
+loadbalancer_apiserver_type: nginx 
+
+</code></pre></td></tr></table></div></div><blockquote><p>containerd.yml 配置</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>cat containerd.yml   # 注意的配置有如下:
+
+containerd_storage_dir: &#34;/opt/containerd&#34;
+containerd_state_dir: &#34;/run/containerd&#34;
+# OOM 评分 
+containerd_oom_score: -999
+
+containerd_snapshotter: &#34;overlayfs&#34;
+
+# 开启 metrics
+containerd_metrics_address: &#34;127.0.0.1:1234&#34;
+
+# logs 最大行数
+containerd_max_container_log_line_size: 16384
+
+</code></pre></td></tr></table></div></div><h3 id=k8s-功能配置>k8s 功能配置</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>cd /opt/kubespray/inventory/jicki/group_vars/k8s-cluster
+
+vi k8s-cluster.yml
+
+
+# 按照自己的需求修改需要注意的是如下部分
+
+
+# Kubernetes internal network for services, unused block of space.
+kube_service_addresses: 10.233.0.0/18
+
+# internal network. When used, it will assign IP
+# addresses from this range to individual pods.
+# This network must be unused in your network infrastructure!
+kube_pods_subnet: 10.233.64.0/18
+
+# internal network node size allocation (optional). This is the size allocated
+# to each node for pod IP address allocation. Note that the number of pods per node is
+# also limited by the kubelet_max_pods variable which defaults to 110.
+#
+# Example:
+# Up to 64 nodes and up to 254 or kubelet_max_pods (the lowest of the two) pods per node:
+#  - kube_pods_subnet: 10.233.64.0/18
+#  - kube_network_node_prefix: 24
+#  - kubelet_max_pods: 110
+#
+# Example:
+# Up to 128 nodes and up to 126 or kubelet_max_pods (the lowest of the two) pods per node:
+#  - kube_pods_subnet: 10.233.64.0/18
+#  - kube_network_node_prefix: 25
+#  - kubelet_max_pods: 110
+kube_network_node_prefix: 24
+
+
+## Container runtime
+## docker for docker, crio for cri-o and containerd for containerd.
+## Default: containerd
+container_manager: containerd
+
+</code></pre></td></tr></table></div></div><h3 id=download-程序与镜像>Download 程序与镜像</h3><blockquote><p>国外镜像在国内无法下载的问题 修改 <code>roles/download/defaults/main.yml</code></p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># gcr and kubernetes image repo define
+#gcr_image_repo: &#34;gcr.io&#34;
+gcr_image_repo: &#34;registry.aliyuncs.com&#34;
+#kube_image_repo: &#34;k8s.gcr.io&#34;
+kube_image_repo: &#34;registry.aliyuncs.com/google_containers&#34;
+
+</code></pre></td></tr></table></div></div><blockquote><p>coredns_image_repo 的问题, <code>registry.aliyuncs.com/google_containers</code> 的下载地址需要修改为下:</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback># coredns_image_repo: &#34;{{ kube_image_repo }}{{&#39;/coredns/coredns&#39; if (coredns_image_is_namespaced | bool) else &#39;/coredns&#39; }}&#34;
+
+coredns_image_repo: &#34;{{ kube_image_repo }}{{&#39;/coredns&#39; if (coredns_image_is_namespaced | bool) else &#39;/coredns&#39; }}&#34;
+
+</code></pre></td></tr></table></div></div><blockquote><p>github.com 下载文件的问题 添加 <code>/etc/hosts</code> 解决可查看 <code>https://github.com/ineo6/hosts</code>
+如果实在下载不到可以提前下载然后分发至每个节点 <code>/tmp/releases</code> 目录下</p></blockquote><hr><blockquote><p>这里有一些镜像存在一些问题需要手动操作一下, 在 <code>registry.aliyuncs.com</code> 镜像并不全
+<code>kube_version: v1.23.5</code></p></blockquote><ul><li>修改如下配置</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>nodelocaldns_version: &#34;1.21.1&#34;
+#nodelocaldns_image_repo: &#34;{{ kube_image_repo }}/dns/k8s-dns-node-cache&#34;
+nodelocaldns_image_repo: &#34;jicki/k8s-dns-node-cache&#34;
+
+dnsautoscaler_version: 1.8.5
+#dnsautoscaler_image_repo: &#34;{{ kube_image_repo }}/cpa/cluster-proportional-autoscaler-{{ image_arch }}&#34;
+dnsautoscaler_image_repo: &#34;jicki/cluster-proportional-autoscaler-amd64&#34;
+</code></pre></td></tr></table></div></div><h2 id=安装k8s集群>安装k8s集群</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=nx>cd</span> <span class=o>/</span><span class=nx>opt</span><span class=o>/</span><span class=nx>kubespray</span>
+
+<span class=nx>ansible</span><span class=o>-</span><span class=nx>playbook</span> <span class=o>-</span><span class=nx>i</span> <span class=nx>inventory</span><span class=o>/</span><span class=nx>jicki</span><span class=o>/</span><span class=nx>inventory</span><span class=p>.</span><span class=nx>ini</span> <span class=o>--</span><span class=nx>become</span> <span class=o>--</span><span class=nx>become</span><span class=o>-</span><span class=nx>user</span><span class=p>=</span><span class=nx>root</span> <span class=nx>cluster</span><span class=p>.</span><span class=nx>yml</span>
+
+
+
+
+<span class=nx>PLAY</span> <span class=nx>RECAP</span> <span class=o>***************************************************************************************************************************************************************************************************</span>
+<span class=nx>kubernetes</span><span class=o>-</span><span class=mi>1</span>               <span class=p>:</span> <span class=nx>ok</span><span class=p>=</span><span class=mi>717</span>  <span class=nx>changed</span><span class=p>=</span><span class=mi>80</span>   <span class=nx>unreachable</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>failed</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>skipped</span><span class=p>=</span><span class=mi>1280</span> <span class=nx>rescued</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>ignored</span><span class=p>=</span><span class=mi>3</span>   
+<span class=nx>kubernetes</span><span class=o>-</span><span class=mi>2</span>               <span class=p>:</span> <span class=nx>ok</span><span class=p>=</span><span class=mi>646</span>  <span class=nx>changed</span><span class=p>=</span><span class=mi>68</span>   <span class=nx>unreachable</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>failed</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>skipped</span><span class=p>=</span><span class=mi>1119</span> <span class=nx>rescued</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>ignored</span><span class=p>=</span><span class=mi>1</span>   
+<span class=nx>kubernetes</span><span class=o>-</span><span class=mi>3</span>               <span class=p>:</span> <span class=nx>ok</span><span class=p>=</span><span class=mi>648</span>  <span class=nx>changed</span><span class=p>=</span><span class=mi>69</span>   <span class=nx>unreachable</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>failed</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>skipped</span><span class=p>=</span><span class=mi>1117</span> <span class=nx>rescued</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>ignored</span><span class=p>=</span><span class=mi>1</span>   
+<span class=nx>kubernetes</span><span class=o>-</span><span class=mi>4</span>               <span class=p>:</span> <span class=nx>ok</span><span class=p>=</span><span class=mi>504</span>  <span class=nx>changed</span><span class=p>=</span><span class=mi>50</span>   <span class=nx>unreachable</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>failed</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>skipped</span><span class=p>=</span><span class=mi>761</span>  <span class=nx>rescued</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>ignored</span><span class=p>=</span><span class=mi>0</span>   
+<span class=nx>localhost</span>                  <span class=p>:</span> <span class=nx>ok</span><span class=p>=</span><span class=mi>4</span>    <span class=nx>changed</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>unreachable</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>failed</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>skipped</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>rescued</span><span class=p>=</span><span class=mi>0</span>    <span class=nx>ignored</span><span class=p>=</span><span class=mi>0</span>   
+
+<span class=nx>Friday</span> <span class=mi>08</span> <span class=nx>April</span> <span class=mi>2022</span>  <span class=mo>03</span><span class=p>:</span><span class=mi>11</span><span class=p>:</span><span class=mi>59</span> <span class=o>+</span><span class=mo>0000</span> <span class=p>(</span><span class=mi>0</span><span class=p>:</span><span class=mo>00</span><span class=p>:</span><span class=mf>00.319</span><span class=p>)</span>       <span class=mi>0</span><span class=p>:</span><span class=mi>42</span><span class=p>:</span><span class=mf>13.720</span> <span class=o>**********</span> 
+<span class=o>==============================================================================</span><span class=p>=</span> 
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>---------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>328.91</span><span class=nx>s</span>
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>---------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>297.09</span><span class=nx>s</span>
+<span class=nx>container</span><span class=o>-</span><span class=nx>engine</span><span class=o>/</span><span class=nx>runc</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>--------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>217.00</span><span class=nx>s</span>
+<span class=nx>container</span><span class=o>-</span><span class=nx>engine</span><span class=o>/</span><span class=nx>nerdctl</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>-----------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>116.73</span><span class=nx>s</span>
+<span class=nx>container</span><span class=o>-</span><span class=nx>engine</span><span class=o>/</span><span class=nx>crictl</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>111.30</span><span class=nx>s</span>
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>---------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>109.08</span><span class=nx>s</span>
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>---------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>108.66</span><span class=nx>s</span>
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>---------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>108.17</span><span class=nx>s</span>
+<span class=nx>container</span><span class=o>-</span><span class=nx>engine</span><span class=o>/</span><span class=nx>containerd</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>---------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>74.74</span><span class=nx>s</span>
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>----------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>74.15</span><span class=nx>s</span>
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>----------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>73.47</span><span class=nx>s</span>
+<span class=nx>download</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>----------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>73.44</span><span class=nx>s</span>
+<span class=nx>container</span><span class=o>-</span><span class=nx>engine</span><span class=o>/</span><span class=nx>nerdctl</span> <span class=p>:</span> <span class=nx>download_file</span> <span class=p>|</span> <span class=nx>Validate</span> <span class=nx>mirrors</span> <span class=o>------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>39.11</span><span class=nx>s</span>
+<span class=nx>kubernetes</span><span class=o>/</span><span class=nx>control</span><span class=o>-</span><span class=nx>plane</span> <span class=p>:</span> <span class=nx>Joining</span> <span class=nx>control</span> <span class=nx>plane</span> <span class=nx>node</span> <span class=nx>to</span> <span class=nx>the</span> <span class=nx>cluster</span><span class=p>.</span> <span class=o>--------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>34.71</span><span class=nx>s</span>
+<span class=nx>kubernetes</span><span class=o>/</span><span class=nx>control</span><span class=o>-</span><span class=nx>plane</span> <span class=p>:</span> <span class=nx>kubeadm</span> <span class=p>|</span> <span class=nx>Initialize</span> <span class=nx>first</span> <span class=nx>master</span> <span class=o>-----------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>32.44</span><span class=nx>s</span>
+<span class=nx>kubernetes</span><span class=o>/</span><span class=nx>kubeadm</span> <span class=p>:</span> <span class=nx>Join</span> <span class=nx>to</span> <span class=nx>cluster</span> <span class=o>-----------------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>31.15</span><span class=nx>s</span>
+<span class=nx>etcd</span> <span class=p>:</span> <span class=nx>reload</span> <span class=nx>etcd</span> <span class=o>-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>21.08</span><span class=nx>s</span>
+<span class=nx>network_plugin</span><span class=o>/</span><span class=nx>calico</span> <span class=p>:</span> <span class=nx>Wait</span> <span class=k>for</span> <span class=nx>calico</span> <span class=nx>kubeconfig</span> <span class=nx>to</span> <span class=nx>be</span> <span class=nx>created</span> <span class=o>-------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>10.58</span><span class=nx>s</span>
+<span class=nx>kubernetes</span><span class=o>/</span><span class=nx>preinstall</span> <span class=p>:</span> <span class=nx>Update</span> <span class=kn>package</span> <span class=nx>management</span> <span class=nf>cache</span> <span class=p>(</span><span class=nx>APT</span><span class=p>)</span> <span class=o>----------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>10.41</span><span class=nx>s</span>
+<span class=nx>etcd</span> <span class=p>:</span> <span class=nx>Configure</span> <span class=p>|</span> <span class=nx>Wait</span> <span class=k>for</span> <span class=nx>etcd</span> <span class=nx>cluster</span> <span class=nx>to</span> <span class=nx>be</span> <span class=nx>healthy</span> <span class=o>------------------------------------------------------------------------------------------------------------------------------------------------</span> <span class=mf>9.89</span><span class=nx>s</span>
+
+
+</code></pre></td></tr></table></div></div><h2 id=验证k8s集群>验证k8s集群</h2><h3 id=查看集群状态>查看集群状态</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-1 ~]# kubectl  get node -o wide
+NAME           STATUS   ROLES                  AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
+kubernetes-1   Ready    control-plane,master   87m   v1.23.5   10.9.9.91     &lt;none&gt;        Ubuntu 18.04.4 LTS   4.15.0-175-generic   containerd://1.6.1
+kubernetes-2   Ready    control-plane,master   86m   v1.23.5   10.9.9.92     &lt;none&gt;        Ubuntu 18.04.4 LTS   4.15.0-175-generic   containerd://1.6.1
+kubernetes-3   Ready    control-plane,master   86m   v1.23.5   10.9.9.93     &lt;none&gt;        Ubuntu 18.04.4 LTS   4.15.0-175-generic   containerd://1.6.1
+kubernetes-4   Ready    &lt;none&gt;                 85m   v1.23.5   10.9.9.96     &lt;none&gt;        Ubuntu 18.04.4 LTS   4.15.0-175-generic   containerd://1.6.1
+
+</code></pre></td></tr></table></div></div><h3 id=查看集群组件>查看集群组件</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-1 ~]# kubectl get all --all-namespaces
+NAMESPACE     NAME                                           READY   STATUS    RESTARTS   AGE
+kube-system   pod/calico-kube-controllers-75fcdd655b-lbhhj   1/1     Running   0          84m
+kube-system   pod/calico-node-lhkbx                          1/1     Running   0          85m
+kube-system   pod/calico-node-lsmxg                          1/1     Running   0          85m
+kube-system   pod/calico-node-n688h                          1/1     Running   0          85m
+kube-system   pod/calico-node-qndjh                          1/1     Running   0          85m
+kube-system   pod/coredns-884c84f48-87z87                    1/1     Running   0          84m
+kube-system   pod/coredns-884c84f48-t4mmt                    1/1     Running   0          83m
+kube-system   pod/dns-autoscaler-5b7fddbc74-zqjpf            1/1     Running   0          84m
+kube-system   pod/kube-apiserver-kubernetes-1                1/1     Running   1          87m
+kube-system   pod/kube-apiserver-kubernetes-2                1/1     Running   1          87m
+kube-system   pod/kube-apiserver-kubernetes-3                1/1     Running   1          86m
+kube-system   pod/kube-controller-manager-kubernetes-1       1/1     Running   1          87m
+kube-system   pod/kube-controller-manager-kubernetes-2       1/1     Running   1          87m
+kube-system   pod/kube-controller-manager-kubernetes-3       1/1     Running   1          86m
+kube-system   pod/kube-proxy-5gccw                           1/1     Running   0          85m
+kube-system   pod/kube-proxy-drh5z                           1/1     Running   0          85m
+kube-system   pod/kube-proxy-r7g22                           1/1     Running   0          85m
+kube-system   pod/kube-proxy-xm4vj                           1/1     Running   0          85m
+kube-system   pod/kube-scheduler-kubernetes-1                1/1     Running   1          87m
+kube-system   pod/kube-scheduler-kubernetes-2                1/1     Running   1          87m
+kube-system   pod/kube-scheduler-kubernetes-3                1/1     Running   1          86m
+kube-system   pod/nginx-proxy-kubernetes-4                   1/1     Running   0          85m
+kube-system   pod/nodelocaldns-b6nk2                         1/1     Running   0          84m
+kube-system   pod/nodelocaldns-f9ddv                         1/1     Running   0          84m
+kube-system   pod/nodelocaldns-p65m8                         1/1     Running   0          84m
+kube-system   pod/nodelocaldns-zdbhg                         1/1     Running   0          84m
+
+NAMESPACE     NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE
+default       service/kubernetes   ClusterIP   10.233.0.1   &lt;none&gt;        443/TCP                  87m
+kube-system   service/coredns      ClusterIP   10.233.0.3   &lt;none&gt;        53/UDP,53/TCP,9153/TCP   84m
+
+NAMESPACE     NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-system   daemonset.apps/calico-node    4         4         4       4            4           kubernetes.io/os=linux   85m
+kube-system   daemonset.apps/kube-proxy     4         4         4       4            4           kubernetes.io/os=linux   87m
+kube-system   daemonset.apps/nodelocaldns   4         4         4       4            4           kubernetes.io/os=linux   84m
+
+NAMESPACE     NAME                                      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   deployment.apps/calico-kube-controllers   1/1     1            1           84m
+kube-system   deployment.apps/coredns                   2/2     2            2           84m
+kube-system   deployment.apps/dns-autoscaler            1/1     1            1           84m
+
+NAMESPACE     NAME                                                 DESIRED   CURRENT   READY   AGE
+kube-system   replicaset.apps/calico-kube-controllers-75fcdd655b   1         1         1       84m
+kube-system   replicaset.apps/coredns-884c84f48                    2         2         2       84m
+kube-system   replicaset.apps/dns-autoscaler-5b7fddbc74            1         1         1       84m
+</code></pre></td></tr></table></div></div><h3 id=查看-ipvs>查看 ipvs</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-1 ~]# ipvsadm -L -n
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  10.233.0.1:443 rr
+  -&gt; 10.9.9.91:6443               Masq    1      1          0         
+  -&gt; 10.9.9.92:6443               Masq    1      2          0         
+  -&gt; 10.9.9.93:6443               Masq    1      1          0         
+TCP  10.233.0.3:53 rr
+  -&gt; 10.233.102.1:53              Masq    1      0          0         
+  -&gt; 10.233.115.1:53              Masq    1      0          0         
+TCP  10.233.0.3:9153 rr
+  -&gt; 10.233.102.1:9153            Masq    1      0          0         
+  -&gt; 10.233.115.1:9153            Masq    1      0          0         
+UDP  10.233.0.3:53 rr
+  -&gt; 10.233.102.1:53              Masq    1      0          0         
+  -&gt; 10.233.115.1:53              Masq    1      0          0         
+
+</code></pre></td></tr></table></div></div><h3 id=containerd-服务>Containerd 服务</h3><ul><li>可使用 <code>nerdctl</code>、<code>crictl</code> 命令操作</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>
+<span class=o>[</span>root@kubernetes-1 ~<span class=o>]</span><span class=c1>#  nerdctl ps</span>
+
+CONTAINER ID    IMAGE                                                                      COMMAND                   CREATED              STATUS    PORTS    NAMES
+0437f7a052c6    registry.aliyuncs.com/google_containers/pause:3.3                          <span class=s2>&#34;/pause&#34;</span>                  <span class=m>2</span> hours ago          Up                 k8s://kube-system/kube-scheduler-kubernetes-1                                     
+11f3bf27b86a    docker.io/jicki/cluster-proportional-autoscaler-amd64:1.8.5                <span class=s2>&#34;/cluster-proportion…&#34;</span>    <span class=m>2</span> hours ago          Up                 k8s://kube-system/dns-autoscaler-5b7fddbc74-zqjpf/autoscaler                      
+25ef1214ce41    registry.aliyuncs.com/google_containers/kube-controller-manager:v1.23.5    <span class=s2>&#34;kube-controller-man…&#34;</span>    <span class=m>2</span> hours ago          Up                 k8s://kube-system/kube-controller-manager-kubernetes-1/kube-controller-manager    
+2a775d1787dc    registry.aliyuncs.com/google_containers/kube-proxy:v1.23.5                 <span class=s2>&#34;/usr/local/bin/kube…&#34;</span>    <span class=m>2</span> hours ago          Up                 k8s://kube-system/kube-proxy-drh5z/kube-proxy                                     
+722ad9ac470e    docker.io/jicki/k8s-dns-node-cache:1.21.1                                  <span class=s2>&#34;/node-cache -locali…&#34;</span>    <span class=m>2</span> hours ago          Up                 k8s://kube-system/nodelocaldns-b6nk2/node-cache                                   
+<span class=m>793809690178</span>    registry.aliyuncs.com/google_containers/pause:3.3                          <span class=s2>&#34;/pause&#34;</span>                  About an hour ago    Up                 k8s://kube-system/kube-apiserver-kubernetes-1                                     
+7f7b8b940f6c    registry.aliyuncs.com/google_containers/pause:3.3                          <span class=s2>&#34;/pause&#34;</span>                  <span class=m>2</span> hours ago          Up                 k8s://kube-system/kube-controller-manager-kubernetes-1                            
+8cdcef52ecec    registry.aliyuncs.com/google_containers/kube-scheduler:v1.23.5             <span class=s2>&#34;kube-scheduler --au…&#34;</span>    <span class=m>2</span> hours ago          Up                 k8s://kube-system/kube-scheduler-kubernetes-1/kube-scheduler                      
+c2227239d213    registry.aliyuncs.com/google_containers/pause:3.3                          <span class=s2>&#34;/pause&#34;</span>                  <span class=m>2</span> hours ago          Up                 k8s://kube-system/dns-autoscaler-5b7fddbc74-zqjpf                                 
+c274f8608188    registry.aliyuncs.com/google_containers/kube-apiserver:v1.23.5             <span class=s2>&#34;kube-apiserver --ad…&#34;</span>    About an hour ago    Up                 k8s://kube-system/kube-apiserver-kubernetes-1/kube-apiserver                      
+c3e197f196f5    registry.aliyuncs.com/google_containers/pause:3.3                          <span class=s2>&#34;/pause&#34;</span>                  <span class=m>2</span> hours ago          Up                 k8s://kube-system/calico-node-qndjh                                               
+c8e32dde7953    registry.aliyuncs.com/google_containers/pause:3.3                          <span class=s2>&#34;/pause&#34;</span>                  <span class=m>2</span> hours ago          Up                 k8s://kube-system/kube-proxy-drh5z                                                
+d1fd556ff7c1    registry.aliyuncs.com/google_containers/pause:3.3                          <span class=s2>&#34;/pause&#34;</span>                  <span class=m>2</span> hours ago          Up                 k8s://kube-system/nodelocaldns-b6nk2                                              
+e47e4d5d1905    quay.io/calico/node:v3.21.4                                                <span class=s2>&#34;start_runit&#34;</span>             <span class=m>2</span> hours ago          Up                 k8s://kube-system/calico-node-qndjh/calico-node                                   
+
+
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@kubernetes-1 ~<span class=o>]</span><span class=c1>#  nerdctl images</span>
+
+
+REPOSITORY                                                         TAG                                                                 IMAGE ID        CREATED           PLATFORM       SIZE         BLOB SIZE
+jicki/k8s-dns-node-cache                                           1.21.1                                                              04c4f6b1f2f2    <span class=m>16</span> seconds ago    linux/amd64    168.8 MiB    40.5 MiB
+nginx                                                              1.21.4                                                              366e9f1ddebd    <span class=m>3</span> hours ago       linux/amd64    823.2 MiB    54.1 MiB
+quay.io/calico/cni                                                 v3.21.4                                                             36acb85e6080    <span class=m>25</span> hours ago      linux/amd64    353.1 MiB    76.8 MiB
+quay.io/calico/kube-controllers                                    v3.21.4                                                             f71a293e43f6    <span class=m>25</span> hours ago      linux/amd64    378.3 MiB    52.1 MiB
+quay.io/calico/node                                                v3.21.4                                                             acb402642ba8    <span class=m>25</span> hours ago      linux/amd64    428.9 MiB    70.6 MiB
+quay.io/calico/pod2daemon-flexvol                                  v3.21.4                                                             baeaa86e5919    <span class=m>25</span> hours ago      linux/amd64    75.9 MiB     8.8 MiB
+registry.aliyuncs.com/google_containers/kube-apiserver             v1.23.5                                                             ddf5bf7196eb    <span class=m>3</span> hours ago       linux/amd64    145.8 MiB    31.1 MiB
+registry.aliyuncs.com/google_containers/kube-controller-manager    v1.23.5                                                             cca0fb3532ab    <span class=m>3</span> hours ago       linux/amd64    136.1 MiB    28.8 MiB
+registry.aliyuncs.com/google_containers/kube-proxy                 v1.23.5                                                             c1f625d115fb    <span class=m>3</span> hours ago       linux/amd64    254.9 MiB    37.5 MiB
+registry.aliyuncs.com/google_containers/kube-scheduler             v1.23.5                                                             489efb65da9e    <span class=m>3</span> hours ago       linux/amd64    67.9 MiB     14.4 MiB
+registry.aliyuncs.com/google_containers/pause                      3.3                                                                 a319ac2280eb    <span class=m>25</span> hours ago      linux/amd64    672.0 KiB    292.5 KiB
+sha256                                                             0184c1613d92931126feb4c548e5da11015513b9e4c104e7305ee8b53b50a9da    a319ac2280eb    <span class=m>25</span> hours ago      linux/amd64    672.0 KiB    292.5 KiB
+sha256                                                             3c53fa8541f95165d3def81704febb85e2e13f90872667f9939dd856dc88e874    c1f625d115fb    <span class=m>3</span> hours ago       linux/amd64    254.9 MiB    37.5 MiB
+sha256                                                             3fc1d62d65872296462b198ab7842d0faf8c336b236c4a0dacfce67bec95257f    ddf5bf7196eb    <span class=m>3</span> hours ago       linux/amd64    145.8 MiB    31.1 MiB
+sha256                                                             5bae806f8f123c54ca6a754c567e8408393740792ba8b89ee3bb6c5f95e6fbe1    04c4f6b1f2f2    <span class=m>17</span> seconds ago    linux/amd64    168.8 MiB    40.5 MiB
+sha256                                                             884d49d6d8c9f40672d20c78e300ffee238d01c1ccb2c132937125d97a596fd7    489efb65da9e    <span class=m>3</span> hours ago       linux/amd64    67.9 MiB     14.4 MiB
+sha256                                                             ab768d7a914ffead3d0fe5da418af51ad8c26037d2f3f72f07021ea1ea95f93a    baeaa86e5919    <span class=m>25</span> hours ago      linux/amd64    75.9 MiB     8.8 MiB
+sha256                                                             b0c9e5e4dbb14459edc593b39add54f5497e42d4eecc8d03bee5daf9537b0dae    cca0fb3532ab    <span class=m>3</span> hours ago       linux/amd64    136.1 MiB    28.8 MiB
+sha256                                                             c59896fc7ca446a841242e4d09b93600dc828a849f615369bd9c69fa65b439bb    acb402642ba8    <span class=m>25</span> hours ago      linux/amd64    428.9 MiB    70.6 MiB
+sha256                                                             c95ddb97ba59c46acef5fbd8c4aa5d7e0a52c63f963e7a43227c4280de6988ed    f71a293e43f6    <span class=m>25</span> hours ago      linux/amd64    378.3 MiB    52.1 MiB
+sha256                                                             f1de15d70851b1b506f4d0800f847bf6767a3a100baf9be8685e78bc3640db28    36acb85e6080    <span class=m>25</span> hours ago      linux/amd64    353.1 MiB    76.8 MiB
+sha256  
+
+
+</code></pre></td></tr></table></div></div><blockquote><p>部署 一个 Nginx <code>deployment</code> 服务</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: nginx
+spec: 
+  replicas: 2
+  selector:
+    matchLabels:
+      name: nginx
+  template: 
+    metadata: 
+      labels: 
+        name: nginx 
+    spec: 
+      containers: 
+        - name: nginx 
+          image: nginx:alpine 
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+---
+
+apiVersion: v1 
+kind: Service
+metadata: 
+  name: nginx-svc 
+spec: 
+  ports: 
+    - port: 80
+      name: http
+      targetPort: 80
+      protocol: TCP 
+  selector: 
+    name: nginx
+
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-1 ~]# kubectl  apply -f nginx-deployment.yaml 
+deployment.apps/nginx created
+service/nginx-svc created
+
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-1 ~]# kubectl get pods -o wide
+NAME                   READY   STATUS    RESTARTS   AGE   IP             NODE           NOMINATED NODE   READINESS GATES
+nginx-5fcd4fb4-l57rz   1/1     Running   0          66s   10.233.127.1   kubernetes-4   &lt;none&gt;           &lt;none&gt;
+nginx-5fcd4fb4-zkhtc   1/1     Running   0          66s   10.233.127.2   kubernetes-4   &lt;none&gt;           &lt;none&gt;
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-1 ~]# kubectl get svc -o wide    
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE    SELECTOR
+kubernetes   ClusterIP   10.233.0.1     &lt;none&gt;        443/TCP   104m   &lt;none&gt;
+nginx-svc    ClusterIP   10.233.58.77   &lt;none&gt;        80/TCP    103s   name=nginx
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-1 ~]# curl -I http://10.233.58.77
+HTTP/1.1 200 OK
+Server: nginx/1.21.6
+Date: Fri, 08 Apr 2022 04:52:57 GMT
+Content-Type: text/html
+Content-Length: 615
+Last-Modified: Tue, 25 Jan 2022 15:26:06 GMT
+Connection: keep-alive
+ETag: &#34;61f0168e-267&#34;
+Accept-Ranges: bytes
+
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>[root@kubernetes-4 ~]# nerdctl ps |grep nginx
+0f9639d0f868    registry.aliyuncs.com/google_containers/pause:3.3             &#34;/pause&#34;                  5 minutes ago    Up                 k8s://default/nginx-5fcd4fb4-l57rz                                                    
+201f8d0a332d    registry.aliyuncs.com/google_containers/pause:3.3             &#34;/pause&#34;                  5 minutes ago    Up                 k8s://default/nginx-5fcd4fb4-zkhtc                                                    
+59092315d085    docker.io/library/nginx:alpine                                &#34;/docker-entrypoint.…&#34;    5 minutes ago    Up                 k8s://default/nginx-5fcd4fb4-l57rz/nginx                                              
+ab92c05fcc53    docker.io/library/nginx:alpine                                &#34;/docker-entrypoint.…&#34;    5 minutes ago    Up                 k8s://default/nginx-5fcd4fb4-zkhtc/nginx 
+
+</code></pre></td></tr></table></div></div><h1 id=upgrades-版本>upgrades 版本</h1><h2 id=upgrades>upgrades</h2><blockquote><p>优雅更新 版本</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>git fetch origin
+git checkout origin/master
+
+ansible-playbook -i inventory/jicki/inventory.ini --become --become-user=root upgrade-cluster.yml -e kube_version=v1.23.6
+
+
+</code></pre></td></tr></table></div></div></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2022-04-02</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/k8s-1.23.5-kubespray/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-title="k8s 1.23.5 to kubespray" data-via=jicki234 data-hashtags=kubernetes><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-hashtag=kubernetes><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 WhatsApp" data-sharer=whatsapp data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-title="k8s 1.23.5 to kubespray" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-title="k8s 1.23.5 to kubespray"><i data-svg-src=/lib/simple-icons/icons/line.min.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-title="k8s 1.23.5 to kubespray"><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 Myspace" data-sharer=myspace data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-title="k8s 1.23.5 to kubespray" data-description="k8s 1.23.5 to kubespray"><i data-svg-src=/lib/simple-icons/icons/myspace.min.svg></i></a><a href=javascript:void(0); title="分享到 Blogger" data-sharer=blogger data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-title="k8s 1.23.5 to kubespray" data-description="k8s 1.23.5 to kubespray"><i class="fab fa-blogger fa-fw"></i></a><a href=javascript:void(0); title="分享到 Evernote" data-sharer=evernote data-url=https://jicki.cn/k8s-1.23.5-kubespray/ data-title="k8s 1.23.5 to kubespray"><i class="fab fa-evernote fa-fw"></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/kubernetes/>kubernetes</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/clickhouse/ class=prev rel=prev title="CliCkHouse 列式数据库-OLAP分析引擎"><i class="fas fa-angle-left fa-fw"></i>CliCkHouse 列式数据库-OLAP分析引擎</a>
+<a href=/golang-study-web-notes/ class=next rel=next title="Go Web编程">Go Web编程<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>友情链接 -- <a href=https://yuerblog.cc target=_blank>鱼儿</a> | <a href=https://yanlong.me target=_blank>何延龙</a> | <a href=https://www.jjcbs.com target=_blank>小柯南</a> | <a href=https://www.cpu7.com target=_blank>cpu 天梯网</a></div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.73.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2020 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://jicki.cn target=_blank>小炒肉</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp><a href=http://beian.miit.gov.cn target=_blank>粤ICP备20055633号</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=/lib/katex/katex.min.css><link rel=stylesheet href=/lib/katex/copy-tex.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script type=text/javascript src=/lib/valine/Valine.min.js></script><script type=text/javascript src=/lib/smooth-scroll/smooth-scroll.min.js></script><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/lunr/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script><script type=text/javascript src=/lib/sharer/sharer.min.js></script><script type=text/javascript src=/lib/katex/katex.min.js></script><script type=text/javascript src=/lib/katex/auto-render.min.js></script><script type=text/javascript src=/lib/katex/copy-tex.min.js></script><script type=text/javascript src=/lib/katex/mhchem.min.js></script><script type=text/javascript src=/lib/cookieconsent/cookieconsent.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":200},"comment":{"valine":{"appId":"1LTTCvDe4Nt8XSdFzejtUsVF-gzGzoHsz","appKey":"cvpPM7sbgOw0pTXbh6YVKrjc","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"lunr"}};</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
