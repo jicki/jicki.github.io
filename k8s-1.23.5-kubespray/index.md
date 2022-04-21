@@ -671,6 +671,180 @@ ab92c05fcc53    docker.io/library/nginx:alpine                                "/
 
 
 
+## Nginx-ingress
+
+> Ingress  https://kubernetes.github.io/ingress-nginx
+
+* 新版变化
+
+  * apiVersion 更新:   `apiVersion: networking.k8s.io/v1` 
+  * 指定:  `--ingress-class=nginx`
+  * `backend:` 写法有变化, 具体看后面例子
+
+---
+
+* Download 
+
+```bash
+
+wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.2/deploy/static/provider/cloud/deploy.yaml
+```
+
+
+* Update Imges
+
+```bash
+image: k8s.gcr.io/ingress-nginx/controller:v1.1.2@sha256:28b11ce69e57843de44e3db6413e98d09de0f6688e33d4bd384002a44f78405c
+
+# 修改为
+
+image: jicki/controller:v1.1.2
+
+
+```
+---
+
+
+```bash
+image: k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+
+# 修改为
+
+image: jicki/kube-webhook-certgen:v1.1.1
+```
+
+---
+
+
+* Edit Config
+
+
+```bash
+# 增加副本数
+spec:
+  replicas: 3
+  minReadySeconds: 0
+  revisionHistoryLimit: 10
+
+
+```
+
+---
+
+
+```bash
+
+# 查询如下:
+    spec:
+      dnsPolicy: ClusterFirst
+
+
+# 修改为如下:
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+
+
+```
+
+
+---
+
+```bash
+# 在如上添加的配置下添加 affinity 与 tolerations
+
+
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - kubernetes-1
+                - kubernetes-2
+                - kubernetes-3
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                    - ingress-nginx
+              topologyKey: "kubernetes.io/hostname"
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+
+```
+
+---
+
+> 创建一个 Nginx 应用, 主要查看 `Ingress` 配置变化
+
+
+```bash
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  serviceName: "nginx"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  labels:
+    app: nginx
+spec:
+  ports:
+    - port: 80
+      name: web
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: nginx
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: nginx.jicki.cn
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-svc
+            port:
+              number: 80
+
+```
+
+
+
 # upgrades 版本
 
 
@@ -687,3 +861,4 @@ ansible-playbook -i inventory/jicki/inventory.ini --become --become-user=root up
 
 
 ```
+

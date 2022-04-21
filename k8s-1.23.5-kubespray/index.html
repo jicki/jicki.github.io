@@ -1,11 +1,11 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>k8s 1.23.5 to kubespray - 小炒肉</title><meta name=Description content="k8s 1.23.5 to kubespray"><meta property="og:title" content="k8s 1.23.5 to kubespray"><meta property="og:description" content="k8s 1.23.5 to kubespray"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/k8s-1.23.5-kubespray/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2022-04-02T00:00:00+00:00"><meta property="article:modified_time" content="2022-04-02T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="k8s 1.23.5 to kubespray"><meta name=twitter:description content="k8s 1.23.5 to kubespray"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/k8s-1.23.5-kubespray/><link rel=prev href=https://jicki.cn/clickhouse/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"k8s 1.23.5 to kubespray","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/k8s-1.23.5-kubespray\/"},"genre":"posts","keywords":"kubernetes","wordcount":3007,"url":"https:\/\/jicki.cn\/k8s-1.23.5-kubespray\/","datePublished":"2022-04-02T00:00:00+00:00","dateModified":"2022-04-02T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"k8s 1.23.5 to kubespray"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>k8s 1.23.5 to kubespray - 小炒肉</title><meta name=Description content="k8s 1.23.5 to kubespray"><meta property="og:title" content="k8s 1.23.5 to kubespray"><meta property="og:description" content="k8s 1.23.5 to kubespray"><meta property="og:type" content="article"><meta property="og:url" content="https://jicki.cn/k8s-1.23.5-kubespray/"><meta property="og:image" content="https://jicki.cn/logo.png"><meta property="article:published_time" content="2022-04-02T00:00:00+00:00"><meta property="article:modified_time" content="2022-04-02T00:00:00+00:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://jicki.cn/logo.png"><meta name=twitter:title content="k8s 1.23.5 to kubespray"><meta name=twitter:description content="k8s 1.23.5 to kubespray"><meta name=application-name content="小炒肉"><meta name=apple-mobile-web-app-title content="小炒肉"><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel=icon href=/images/favicon.ico><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://jicki.cn/k8s-1.23.5-kubespray/><link rel=prev href=https://jicki.cn/clickhouse/><link rel=next href=https://jicki.cn/golang-study-web-notes/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=/lib/fontawesome-free/all.min.css><link rel=stylesheet href=/lib/animate/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"k8s 1.23.5 to kubespray","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/jicki.cn\/k8s-1.23.5-kubespray\/"},"genre":"posts","keywords":"kubernetes","wordcount":3369,"url":"https:\/\/jicki.cn\/k8s-1.23.5-kubespray\/","datePublished":"2022-04-02T00:00:00+00:00","dateModified":"2022-04-02T00:00:00+00:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"小炒肉"},"description":"k8s 1.23.5 to kubespray"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=小炒肉>小炒肉</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
 <a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/posts/>文章</a><a class=menu-item href=/tags/>标签</a><a class=menu-item href=/categories/>分类</a><a class=menu-item href=/about/>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
-<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">k8s 1.23.5 to kubespray</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-02>2022-04-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3007 字&nbsp;
+<i class="fas fa-adjust fa-fw"></i></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class="toc-content always-active" id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">k8s 1.23.5 to kubespray</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://jicki.cn title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw"></i>小炒肉</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-02>2022-04-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3369 字&nbsp;
 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;<span id=/k8s-1.23.5-kubespray/ class=leancloud_visitors data-flag-title="k8s 1.23.5 to kubespray">
 <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
 </span>&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#环境说明>环境说明</a></li><li><a href=#配置ssh-key-认证>配置ssh key 认证</a></li><li><a href=#增加-kernel-modules-与-ipvs-modules-配置>增加 Kernel Modules 与 Ipvs Modules 配置</a></li></ul><ul><li><a href=#下载源码>下载源码</a></li><li><a href=#安装-kubespray-依赖>安装 kubespray 依赖</a></li><li><a href=#配置-kubespray>配置 kubespray</a><ul><li><a href=#inventory-配置>inventory 配置</a></li><li><a href=#etcd-配置>etcd 配置</a></li><li><a href=#全局配置>全局配置</a></li><li><a href=#k8s-功能配置>k8s 功能配置</a></li><li><a href=#download-程序与镜像>Download 程序与镜像</a></li></ul></li><li><a href=#安装k8s集群>安装k8s集群</a></li><li><a href=#验证k8s集群>验证k8s集群</a><ul><li><a href=#查看集群状态>查看集群状态</a></li><li><a href=#查看集群组件>查看集群组件</a></li><li><a href=#查看-ipvs>查看 ipvs</a></li><li><a href=#containerd-服务>Containerd 服务</a></li></ul></li></ul><ul><li><a href=#upgrades>upgrades</a></li></ul></nav></div></div><div class=content id=content><h1 id=kubernetes-1235>Kubernetes 1.23.5</h1><blockquote><p>kubespray Deploy a Production Ready Kubernetes Cluster</p><p>kubespray 利用 Ansible 自动部署 更新 kubernetes 集群</p></blockquote><h2 id=环境说明>环境说明</h2><blockquote><p>Ubuntu 18.x</p></blockquote><table><thead><tr><th>节点</th><th>IP</th></tr></thead><tbody><tr><td>kubernetes-1</td><td>10.9.9.91</td></tr><tr><td>kubernetes-2</td><td>10.9.9.92</td></tr><tr><td>kubernetes-3</td><td>10.9.9.93</td></tr><tr><td>kubernetes-4</td><td>10.9.9.96</td></tr></tbody></table><h2 id=配置ssh-key-认证>配置ssh key 认证</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#环境说明>环境说明</a></li><li><a href=#配置ssh-key-认证>配置ssh key 认证</a></li><li><a href=#增加-kernel-modules-与-ipvs-modules-配置>增加 Kernel Modules 与 Ipvs Modules 配置</a></li></ul><ul><li><a href=#下载源码>下载源码</a></li><li><a href=#安装-kubespray-依赖>安装 kubespray 依赖</a></li><li><a href=#配置-kubespray>配置 kubespray</a><ul><li><a href=#inventory-配置>inventory 配置</a></li><li><a href=#etcd-配置>etcd 配置</a></li><li><a href=#全局配置>全局配置</a></li><li><a href=#k8s-功能配置>k8s 功能配置</a></li><li><a href=#download-程序与镜像>Download 程序与镜像</a></li></ul></li><li><a href=#安装k8s集群>安装k8s集群</a></li><li><a href=#验证k8s集群>验证k8s集群</a><ul><li><a href=#查看集群状态>查看集群状态</a></li><li><a href=#查看集群组件>查看集群组件</a></li><li><a href=#查看-ipvs>查看 ipvs</a></li><li><a href=#containerd-服务>Containerd 服务</a></li></ul></li><li><a href=#nginx-ingress>Nginx-ingress</a></li></ul><ul><li><a href=#upgrades>upgrades</a></li></ul></nav></div></div><div class=content id=content><h1 id=kubernetes-1235>Kubernetes 1.23.5</h1><blockquote><p>kubespray Deploy a Production Ready Kubernetes Cluster</p><p>kubespray 利用 Ansible 自动部署 更新 kubernetes 集群</p></blockquote><h2 id=环境说明>环境说明</h2><blockquote><p>Ubuntu 18.x</p></blockquote><table><thead><tr><th>节点</th><th>IP</th></tr></thead><tbody><tr><td>kubernetes-1</td><td>10.9.9.91</td></tr><tr><td>kubernetes-2</td><td>10.9.9.92</td></tr><tr><td>kubernetes-3</td><td>10.9.9.93</td></tr><tr><td>kubernetes-4</td><td>10.9.9.96</td></tr></tbody></table><h2 id=配置ssh-key-认证>配置ssh key 认证</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
 </span><span class=lnt> 4
@@ -922,6 +922,236 @@ Accept-Ranges: bytes
 201f8d0a332d    registry.aliyuncs.com/google_containers/pause:3.3             &#34;/pause&#34;                  5 minutes ago    Up                 k8s://default/nginx-5fcd4fb4-zkhtc                                                    
 59092315d085    docker.io/library/nginx:alpine                                &#34;/docker-entrypoint.…&#34;    5 minutes ago    Up                 k8s://default/nginx-5fcd4fb4-l57rz/nginx                                              
 ab92c05fcc53    docker.io/library/nginx:alpine                                &#34;/docker-entrypoint.…&#34;    5 minutes ago    Up                 k8s://default/nginx-5fcd4fb4-zkhtc/nginx 
+
+</code></pre></td></tr></table></div></div><h2 id=nginx-ingress>Nginx-ingress</h2><blockquote><p>Ingress <a href=https://kubernetes.github.io/ingress-nginx>https://kubernetes.github.io/ingress-nginx</a></p></blockquote><ul><li><p>新版变化</p><ul><li>apiVersion 更新: <code>apiVersion: networking.k8s.io/v1</code></li><li>指定: <code>--ingress-class=nginx</code></li><li><code>backend:</code> 写法有变化, 具体看后面例子</li></ul></li></ul><hr><ul><li>Download</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>
+wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.2/deploy/static/provider/cloud/deploy.yaml
+</code></pre></td></tr></table></div></div><ul><li>Update Imges</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>image: k8s.gcr.io/ingress-nginx/controller:v1.1.2@sha256:28b11ce69e57843de44e3db6413e98d09de0f6688e33d4bd384002a44f78405c
+
+<span class=c1># 修改为</span>
+
+image: jicki/controller:v1.1.2
+
+
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>image: k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+
+<span class=c1># 修改为</span>
+
+image: jicki/kube-webhook-certgen:v1.1.1
+</code></pre></td></tr></table></div></div><hr><ul><li>Edit Config</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 增加副本数</span>
+spec:
+  replicas: <span class=m>3</span>
+  minReadySeconds: <span class=m>0</span>
+  revisionHistoryLimit: <span class=m>10</span>
+
+
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>
+<span class=c1># 查询如下:</span>
+    spec:
+      dnsPolicy: ClusterFirst
+
+
+<span class=c1># 修改为如下:</span>
+    spec:
+      hostNetwork: <span class=nb>true</span>
+      dnsPolicy: ClusterFirstWithHostNet
+
+
+</code></pre></td></tr></table></div></div><hr><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 在如上添加的配置下添加 affinity 与 tolerations</span>
+
+
+      hostNetwork: <span class=nb>true</span>
+      dnsPolicy: ClusterFirstWithHostNet
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - kubernetes-1
+                - kubernetes-2
+                - kubernetes-3
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                    - ingress-nginx
+              topologyKey: <span class=s2>&#34;kubernetes.io/hostname&#34;</span>
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+
+</code></pre></td></tr></table></div></div><hr><blockquote><p>创建一个 Nginx 应用, 主要查看 <code>Ingress</code> 配置变化</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  serviceName: <span class=s2>&#34;nginx&#34;</span>
+  replicas: <span class=m>1</span>
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  labels:
+    app: nginx
+spec:
+  ports:
+    - port: <span class=m>80</span>
+      name: web
+      targetPort: <span class=m>80</span>
+      protocol: TCP
+  selector:
+    app: nginx
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: nginx.jicki.cn
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-svc
+            port:
+              number: <span class=m>80</span>
 
 </code></pre></td></tr></table></div></div><h1 id=upgrades-版本>upgrades 版本</h1><h2 id=upgrades>upgrades</h2><blockquote><p>优雅更新 版本</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
