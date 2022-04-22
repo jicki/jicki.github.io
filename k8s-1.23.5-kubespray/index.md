@@ -316,6 +316,22 @@ container_manager: containerd
 
 ```
 
+---
+
+> kube_proxy metrics bind
+
+
+```bash
+vi roles/kubernetes/control-plane/defaults/main/kube-proxy.yml
+
+#kube_proxy_metrics_bind_address: 127.0.0.1:10249
+
+kube_proxy_metrics_bind_address: 0.0.0.0:10249
+
+```
+
+
+
 
 
 ### Download 程序与镜像
